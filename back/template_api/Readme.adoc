@@ -1,0 +1,30 @@
+= Template API from futur microservices
+Author Damiot_j <damiot_j@etna-alternance.net>
+v1.0, 2024-06-13
+:toc:
+
+This template is made to be used as a sample for future microservice.
+
+== Dependencies and Use
+
+* Dependencies
+** Typescript: typed programming language that builds on JavaScript, giving you better tooling at any scale. +
+https://www.typescriptlang.org/docs/[Doc^]
+** Express: Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. +
+https://expressjs.com/fr/[Doc^]
+** Morgan: Generate of log for any request +
+https://github.com/expressjs/morgan#readme[Doc^]
+** Winston: Generate of log +
+https://github.com/winstonjs/winston/tree/2.x[Doc^]
+** Sequelize: ORM +
+https://sequelize.org/docs/v6/getting-started/[Doc^]
+** Sequelize-cli: Cli for have easier command for sequelize
+** Eslint:  tool for identifying and fixing problems in JavaScript code, ensuring code quality and adherence to coding standards. +
+https://eslint.org/docs/latest/use/getting-started[Doc^]
+** Prettier:  code formatter that enforces consistent style by parsing your code and reprinting it with its own rules. +
+https://prettier.io/docs/en/[Doc^]
+** Nodemon: Nodemon is a utility that automatically restarts a Node.js application when file changes in the directory are detected, streamlining the development process. +
+https://github.com/remy/nodemon#nodemon[Doc^]
+
+PS: this template is just a sample, if you need any change for our microservice do it
+
