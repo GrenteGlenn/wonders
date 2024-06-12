@@ -10,7 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Country.belongsTo(models.User, {
+        foreignKey: {
+          allowNull: false
+        }
+      }
+      )
     }
   }
   Country.init({
@@ -18,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.STRING,
       allowNull:false,
       unique:true
-    }
+    },
     code: {
       type:DataTypes.STRING,
       allowNull:false,

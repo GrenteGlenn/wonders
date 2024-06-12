@@ -1,6 +1,6 @@
 import User from "./UserInterface";
 
-export default interface Address {
+export default interface AddressInterface {
     id: number;
     name: string;
     address: string;
