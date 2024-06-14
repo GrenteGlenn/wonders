@@ -19,7 +19,17 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE
-      }
+      },
+      userAnswerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'UserAnswers',
+          key: 'id'
+        },
+      },
     });
   },
   async down(queryInterface, Sequelize) {

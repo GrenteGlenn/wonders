@@ -10,17 +10,11 @@ type AddressCreationAttributes = Optional<AddressInterface, 'id'>;
 
 module.exports = (sequelize, DataTypes) => {
   class Address extends Model<AddressCreationAttributes, AddressInterface> {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       Address.hasOne(models.User, {
         foreignKey: 'addressId',
         as: 'user'
       });
-      // define association here
     }
   }
   Address.init({
