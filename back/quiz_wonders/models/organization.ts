@@ -5,7 +5,7 @@ import Status from './status';
 // import UserAnswer from './userAnswer';
 interface OrganizationCreationAttributes extends Optional<Organization, 'id'> { }
 
-class Organization extends Model<OrganizationInterface, OrganizationCreationAttributes> implements OrganizationInterface {
+export default class Organization extends Model<OrganizationInterface, OrganizationCreationAttributes> implements OrganizationInterface {
   public id!: number;
   public userId!: number;
   public statusId!: number;

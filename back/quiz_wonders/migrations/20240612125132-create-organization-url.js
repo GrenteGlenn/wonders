@@ -12,6 +12,25 @@ module.exports = {
       url: {
         type: Sequelize.TEXT
       },
+      organization: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Organization'
+        }
+      },
+      rank: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      partner: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      key: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

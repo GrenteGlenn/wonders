@@ -2,17 +2,20 @@ import { DataTypes, Optional, Model } from "sequelize";
 import connection from '../config/dbConnection';
 import QuizLineInterface from "../src/interfaces/QuizLineInterface";
 import Quiz from "./quiz";
+import Tag from "../src/interfaces/TagInterface";
 
 interface QuizLineCreationAttributes extends Optional<QuizLineInterface, 'id'> { }
 
-class QuizLine extends Model<QuizLineInterface, QuizLineCreationAttributes> implements QuizLineInterface {
-  public id!: number;
-  public question!: string;
-  public isBoolean!: boolean;
-  public isText!: boolean;
-  public quizId!: number;
-  public readonly createdAt?: Date | undefined;
-  public readonly updatedAt?: Date | undefined;
+export default class QuizLine extends Model<QuizLineInterface, QuizLineCreationAttributes> implements QuizLineInterface {
+  declare id: number;
+  declare question: Text;
+  declare isBoolean: boolean;
+  declare isText: boolean;
+  declare quizId: number;
+  declare isRequired: boolean;
+  declare tag : Tag;
+  declare readonly createdAt?: Date | undefined;
+  declare readonly updatedAt?: Date | undefined;
 }
 QuizLine.hasOne(Quiz, {
    foreignKey: {
@@ -28,7 +31,7 @@ QuizLine.init({
     allowNull: false
   },
   question: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false
   },
   isBoolean: {
@@ -38,6 +41,26 @@ QuizLine.init({
   isText: {
     type: DataTypes.BOOLEAN,
     allowNull: false
+  },
+  isRequired: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
+  },
+  quizId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Quizzes',
+      key: 'id'
+    }
+  },
+  tag: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Tags',
+      key: 'id'
+    }
   },
 }, {
   sequelize: connection,

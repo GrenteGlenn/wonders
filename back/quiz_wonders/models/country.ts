@@ -7,11 +7,11 @@ import { Resolver } from 'dns';
 interface CountryCreationAttributes extends Optional<CountryInterface, 'id'> { }
 
 class Country extends Model<CountryInterface, CountryCreationAttributes> implements CountryInterface {
-  public id!: number;
-  public name!: string;
-  public code!: string;
-  public readonly createdAt?: Date | undefined;
-  public readonly updatedAt?: Date | undefined;
+  declare id: number;
+  declare name: string;
+  declare code: string;
+  declare readonly createdAt?: Date | undefined;
+  declare readonly updatedAt?: Date | undefined;
 }
 
 Country.init({

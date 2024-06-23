@@ -5,10 +5,10 @@ import QuizAnswerTextInterface from '../src/interfaces/QuizAnswerTextInterface';
 interface QuizAnswerTextCreationAttributes extends Optional<QuizAnswerTextInterface, 'id'> { }
 
 class QuizAnswerText extends Model<QuizAnswerTextInterface, QuizAnswerTextCreationAttributes> implements QuizAnswerTextInterface {
-  public id!: number;
-  public answer!: Text | null;
-  public readonly createdAt?: Date | undefined;
-  public readonly updatedAt?: Date | undefined;
+  declare id: number;
+  declare answer: Text | null;
+  declare readonly createdAt?: Date | undefined;
+  declare readonly updatedAt?: Date | undefined;
 }
 
 
