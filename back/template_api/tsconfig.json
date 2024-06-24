@@ -19,6 +19,13 @@
     "noFallthroughCasesInSwitch": true,
     "skipLibCheck": true
   },
-  "include": ["./src/**/*.tsx", "./src/**/*.ts"],
+  "include": [
+    "./src/**/*.tsx",
+    "./src/**/*.ts",
+    "./lib/**/*.ts",
+    "./lib/**/*.tsx",
+    "./config/**/*.ts",
+    "./config/**/*.tsx"
+  ],
   "exclude": ["node_modules", "test/**/*.ts"]
 }
