@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Find all directories containing a package.json file
+for dir in $(find . -type d -name "package.json" | sed -e 's/package.json$//'); do
+    (
+        # Change directory to the found directory
+        cd "$dir" || continue
+
+        # Run npm commands
+        npm run format
+        npm run lint
+        npm run test
+    )
+done
