@@ -1,4 +1,4 @@
-import { QueryInterface, DataTypes } from 'sequelize';
+import { QueryInterface } from 'sequelize'
 
 export const up = async (queryInterface: QueryInterface) => {
   await queryInterface.bulkInsert('ResponseKind', [{

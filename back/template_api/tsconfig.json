@@ -20,6 +20,8 @@
     "skipLibCheck": true
   },
   "include": [
+    "./*.tsx",
+    "./*.ts",
     "./src/**/*.tsx",
     "./src/**/*.ts",
     "./lib/**/*.ts",

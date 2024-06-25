@@ -2,16 +2,16 @@ import express, { Express, Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import CustomLogger from './lib/logger'
 import morganMiddleware from './config/morganMiddleware'
-
+import router from './src/routes'
 
 const app: Express = express()
 
+app.use(router)
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(morganMiddleware)
 
 app.get('/', (req: Request, res: Response) => {
-
   CustomLogger.error('This is an error log')
   CustomLogger.warn('This is a warn log')
   CustomLogger.info('This is a info log')
@@ -21,6 +21,6 @@ app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Hello World!' })
 })
 
-app.listen(8080, async () => {
+app.listen(8080, () => {
   console.log('Server is running at http://localhost:8080')
 })

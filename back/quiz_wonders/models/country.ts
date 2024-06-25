@@ -1,8 +1,7 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import { DataTypes, Model, Optional } from 'sequelize'
+import connection from '../config/dbConnection'
 
-import CountryInterface from '../src/interfaces/CountryInterface';
-import { Resolver } from 'dns';
+import CountryInterface from '../src/interfaces/CountryInterface'
 
 interface CountryCreationAttributes extends Optional<CountryInterface, 'id'> { }
 
