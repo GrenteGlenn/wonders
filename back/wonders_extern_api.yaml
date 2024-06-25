@@ -13,6 +13,52 @@ servers:
 
 paths:
   /api/user/{userId}/a/{addressId}:
+    put:
+      description: Edit an user's address
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: addressId
+          description: The Address Id
+          required: true
+          schema:
+            type: string
+      responses:
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+        201:
+          description: Edited
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address edited'
     get:
       description: Get an user's address
       parameters:
