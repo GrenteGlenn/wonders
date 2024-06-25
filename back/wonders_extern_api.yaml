@@ -12,6 +12,106 @@ servers:
       bearerFormat: JWT
 
 paths:
+  /api/user/{userId}/a/{addressId}:
+    get:
+      description: Get an user's address
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: addressId
+          description: The Address Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    $ref: '#/definitions/Address_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+  /api/user/{userId}/a:
+    post:
+      description: Create a new Address for a user
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            $ref: '#/definitions/Address_Definition'
+      responses:
+        200:
+          description: Address Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+    get:
+      description: Get all addresses for a user
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  addresses:
+                    $ref: '#/definitions/Address_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ' No addresses found'
   /api/auth/register:
     post:
       description: Register
@@ -190,6 +290,32 @@ paths:
                     example: "I'm a Teapot"
 
 definitions:
+  Address_Definition:
+    type: object
+    properties:
+      addressId:
+        type: string
+        example: 'uuid'
+      name:
+        type: string
+        example: 'Home'
+      street:
+        type: string
+        example: '1 rue de la Paix'
+      city:
+        type: string
+        example: 'Paris'
+      zipCode:
+        type: string
+        example: '75000'
+      complement:
+        type:
+          - string
+          - null
+        example: 'Apartment 1'
+      country:
+        type: string
+        example: 'France'
   Answer:
     oneOf:
       - type: string
@@ -198,3 +324,7 @@ definitions:
       - type: array
         items:
           type: integer
+  Address_Array_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/Address_Definition'
