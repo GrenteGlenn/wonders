@@ -1,0 +1,24 @@
+openapi: 3.0.3
+info:
+  title: Wonders Backend Public API
+  description: Wonders Backend Public API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+    description: Development server
+paths:
+  /:
+    get:
+      description: New endpoint
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: 'Ok'
+  
