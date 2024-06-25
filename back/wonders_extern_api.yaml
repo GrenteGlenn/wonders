@@ -12,6 +12,97 @@ servers:
       bearerFormat: JWT
 
 paths:
+  /api/auth/register:
+    post:
+      description: Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'John'
+                surname:
+                  type: string
+                  example: 'Doe'
+                birthDate:
+                  type: string
+                  example: '1990-01-01'
+                country:
+                  type: string
+                  example: 'France'
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
+
+      responses:
+        201:
+          description: New response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User created'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Bad Request'
+  /api/auth/login:
+    post:
+      description: Login to the API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
+      responses:
+        401:
+          description: Bad UserName or Password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    example: 'Bad Email or Password'
+        200:
+          description: Login successful
+          headers:
+            Authorization:
+              description: JWT token
+              schema:
+                type: JWT
+              example: 'Bearer eyJhbGciOi'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'eyJhbGciOi'
   /api/quiz/{quizId}/a/{questionId}:
     post:
       description: Answer a quiz's question
@@ -83,6 +174,21 @@ paths:
                           example: 'uuid'
                         required:
                           type: boolean
+  /coffee:
+    get:
+      description: What ? Tea ? Who said Tea ? Do you have Tea ? Tea ? For me ? Me Tea ! All the Tea ! Tea Time is a Me Time !
+      responses:
+        418:
+          description: I'm a TeaPot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "I'm a Teapot"
+
 definitions:
   Answer:
     oneOf:
