@@ -32,22 +32,22 @@ paths:
           description: Not Found
           content:
             application/json:
-            schema:
-              type: object
+              schema:
+                type: object
               properties:
-              message:
-                type: string
-                example: 'User not found'
+                message:
+                  type: string
+                  example: 'User not found'
         403:
           description: Forbidden
           content:
             application/json:
-            schema:
-              type: object
-              properties:
-              message:
-                type: string
-                example: 'Forbidden'
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
     put:
       description: Edit an User
       parameters:
@@ -62,32 +62,32 @@ paths:
           description: Forbidden
           content:
             application/json:
-            schema:
-            type: object
-            properties:
-            message:
-              type: string
-              example: 'Forbidden'
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
         404:
           description: Not Found
           content:
             application/json:
-            schema:
-            type: object
-            properties:
-            message:
-              type: string
-              example: 'User not found'
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
         201:
           description: Edited
           content:
             application/json:
-            schema:
-            type: object
-            properties:
-            message:
-              type: string
-              example: 'User edited'
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User edited'
     delete:
       description: Delete an User
       parameters:
@@ -125,9 +125,9 @@ paths:
               schema:
                 type: object
                 properties:
-                message:
-                  type: string
-                  example: 'User deleted'
+                  message:
+                    type: string
+                    example: 'User deleted'
 
   /api/user/{userId}/a:
     get:
