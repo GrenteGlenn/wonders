@@ -12,6 +12,123 @@ servers:
       bearerFormat: JWT
 
 paths:
+  /api/user/{userId}:
+    get:
+      description: Get an User
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: User Found
+          content:
+            application/json:
+              $ref: '#/definitions/User_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+            schema:
+              type: object
+              properties:
+              message:
+                type: string
+                example: 'User not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+            schema:
+              type: object
+              properties:
+              message:
+                type: string
+                example: 'Forbidden'
+    put:
+      description: Edit an User
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: string
+      responses:
+        403:
+          description: Forbidden
+          content:
+            application/json:
+            schema:
+            type: object
+            properties:
+            message:
+              type: string
+              example: 'Forbidden'
+        404:
+          description: Not Found
+          content:
+            application/json:
+            schema:
+            type: object
+            properties:
+            message:
+              type: string
+              example: 'User not found'
+        201:
+          description: Edited
+          content:
+            application/json:
+            schema:
+            type: object
+            properties:
+            message:
+              type: string
+              example: 'User edited'
+    delete:
+      description: Delete an User
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: string
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                message:
+                  type: string
+                  example: 'User deleted'
+
   /api/user/{userId}/a:
     get:
       description: Get all addresses for a user
@@ -76,16 +193,39 @@ paths:
                   message:
                     type: string
                     example: 'Forbidden'
-  /api/user/{userId}/a/{addressId}:
-    put:
-      description: Edit an user's address
+  /api/address/{addressId}:
+    get:
+      description: Get an user's address
       parameters:
         - in: path
-          name: userId
-          description: The User Id
+          name: addressId
+          description: The Address Id
           required: true
           schema:
             type: string
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    $ref: '#/definitions/Address_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+    put:
+      description: Edit an user's address
+      parameters:
         - in: path
           name: addressId
           description: The Address Id
@@ -123,15 +263,9 @@ paths:
                   message:
                     type: string
                     example: 'Address edited'
-    get:
-      description: Get an user's address
+    delete:
+      description: Delete an user's address
       parameters:
-        - in: path
-          name: userId
-          description: The User Id
-          required: true
-          schema:
-            type: string
         - in: path
           name: addressId
           description: The Address Id
@@ -139,17 +273,18 @@ paths:
           schema:
             type: string
       responses:
-        200:
-          description: Ok
+        403:
+          description: Unauthorized
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  address:
-                    $ref: '#/definitions/Address_Definition'
+                  message:
+                    type: string
+                    example: 'Unauthorized'
         404:
-          description: Not Found
+          description: Address Not Found
           content:
             application/json:
               schema:
@@ -158,6 +293,16 @@ paths:
                   message:
                     type: string
                     example: 'Address not found'
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address deleted'
   /api/auth/register:
     post:
       description: Register
@@ -374,3 +519,24 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/Address_Definition'
+  User_Definition:
+    type: object
+    properties:
+      userId:
+        type: string
+        example: 'uuid'
+      name:
+        type: string
+        example: 'John'
+      surname:
+        type: string
+        example: 'Doe'
+      birthDate:
+        type: string
+        example: '1990-01-01'
+      country:
+        type: string
+        example: 'France'
+      email:
+        type: string
+        example: 'john.doe@nimp.tkt'
