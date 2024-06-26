@@ -27,17 +27,18 @@ paths:
           description: User Found
           content:
             application/json:
-              $ref: '#/definitions/User_Definition'
+              schema:
+                $ref: '#/definitions/User_Definition'
         404:
           description: Not Found
           content:
             application/json:
               schema:
                 type: object
-              properties:
-                message:
-                  type: string
-                  example: 'User not found'
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
         403:
           description: Forbidden
           content:
@@ -57,6 +58,11 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/User_Definition'
       responses:
         403:
           description: Forbidden
@@ -171,7 +177,8 @@ paths:
       requestBody:
         content:
           application/json:
-            $ref: '#/definitions/Address_Definition'
+            schema:
+              $ref: '#/definitions/Address_Definition'
       responses:
         200:
           description: Address Created
@@ -232,6 +239,11 @@ paths:
           required: true
           schema:
             type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Address_Definition'
       responses:
         403:
           description: Forbidden
