@@ -39,7 +39,7 @@ module.exports = {
           model: 'QuizLines'
         }
       },
-      QuizAnswerTexteId: {
+      QuizAnswerTextId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         onDelete: 'CASCADE',

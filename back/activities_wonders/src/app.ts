@@ -1,6 +1,7 @@
-const express = require('express')
+import 'dotenv/config'
+import express from 'express'
+
 const app = express()
-let dotenv = require('dotenv').config()
 
 let port = process.env.PORT
 

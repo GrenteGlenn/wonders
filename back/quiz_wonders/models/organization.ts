@@ -1,7 +1,8 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
-import OrganizationInterface from '../src/interfaces/OrganizationInterface';
-import Status from './status';
+import { DataTypes, Model, Optional } from 'sequelize'
+import connection from '../config/dbConnection'
+import OrganizationInterface from '../src/interfaces/OrganizationInterface'
+import Status from './status'
+
 // import UserAnswer from './userAnswer';
 interface OrganizationCreationAttributes extends Optional<Organization, 'id'> { }
 
@@ -36,6 +37,10 @@ Organization.init({
     allowNull: false
   },
   userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  statusId: {
     type: DataTypes.INTEGER,
     allowNull: false
   },

@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "node src/app.ts",
     "migration:create": "npx sequelize-cli migration:generate",
-    "migration:run": "npx sequelize-cli db:migrate"
+    "migration:run": "npx sequelize-cli db:migrate",
+    "lint": "",
+    "format": "",
+    "test": ""
   },
   "author": "lavren_v",
   "license": "ISC",

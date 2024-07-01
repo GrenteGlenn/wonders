@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+node -v
+# Find all directories containing a package.json file
+for dir in $(find . -name package.json ! -path '*/node_modules/*' | sed -e 's/package.json$//'); do
+    (
+        # Change directory to the found directory
+        cd "$dir" || continue
+
+        # Run npm commands
+        npm run format
+        npm run lint
+        npm run test
+    )
+done
