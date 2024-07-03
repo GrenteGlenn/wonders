@@ -1,0 +1,12 @@
+2024-06-12 16:04:24:424 [31merror[39m: [31mThis is an error log[39m
+2024-06-12 16:04:24:424 [33mwarn[39m: [33mThis is a warn log[39m
+2024-06-12 16:04:24:424 [32minfo[39m: [32mThis is a info log[39m
+2024-06-12 16:04:24:424 [35mhttp[39m: [35mThis is a http log[39m
+2024-06-12 16:04:24:424 [37mdebug[39m: [37mThis is a debug log[39m
+2024-06-12 16:09:55:955 [31merror[39m: [31mThis is an error log[39m
+2024-06-12 16:09:55:955 [33mwarn[39m: [33mThis is a warn log[39m
+2024-06-12 16:09:55:955 [32minfo[39m: [32mThis is a info log[39m
+2024-06-12 16:09:55:955 [35mhttp[39m: [35mThis is a http log[39m
+2024-06-12 16:09:55:955 [37mdebug[39m: [37mThis is a debug log[39m
+2024-06-12 16:09:55:955 [35mhttp[39m: [35mGET / 304 - - 6.968 ms[39m
+[35m[39m
