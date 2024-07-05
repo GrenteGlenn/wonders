@@ -3,7 +3,9 @@ import dotenv from 'dotenv';
 import countryRoutes from './routes/countryRoutes';
 import statusRoutes from './routes/statusRoutes';
 import tagRoutes from './routes/tagRoutes';
-// import quizRoutes from './routes/quizRoutes';
+import quizRoutes from './routes/quizRoutes';
+import organizationRoutes from './routes/organizationRoutes';
+import organizationUrlRoutes from './routes/organizationUrlRoutes'
 import dbConnection from './config/dbConnection';
 
 dotenv.config();
@@ -17,7 +19,9 @@ app.use(express.json());
 app.use('/api', countryRoutes);
 app.use('/api', statusRoutes);
 app.use('/api', tagRoutes);
-// app.use('/api', 'quizRoutes');
+app.use('/api', quizRoutes);
+app.use('/api', organizationRoutes)
+app.use('/api', organizationUrlRoutes)
 
 
 // Route par défaut

@@ -1,8 +1,9 @@
-import { DataTypes, Optional, Model } from "sequelize";
+import { DataTypes, Optional, Model } from 'sequelize';
 import connection from '../config/dbConnection';
-import QuizLineInterface from "../interfaces/QuizLineInterface";
-import Quiz from "./quiz";
-import Tag from "../interfaces/TagInterface";
+import QuizLineInterface from '../interfaces/QuizLineInterface';
+import Quiz from './quiz';
+import TagModel from './tag';
+import Tag from '../interfaces/TagInterface';
 
 interface QuizLineCreationAttributes extends Optional<QuizLineInterface, 'id'> { }
 
@@ -13,16 +14,11 @@ export default class QuizLine extends Model<QuizLineInterface, QuizLineCreationA
   declare isText: boolean;
   declare quizId: number;
   declare isRequired: boolean;
-  declare tag : Tag;
+  declare tag: Tag;
   declare readonly createdAt?: Date | undefined;
   declare readonly updatedAt?: Date | undefined;
 }
-QuizLine.hasOne(Quiz, {
-   foreignKey: {
-    name:'quizId',
-    allowNull: false,
-   }
-   });
+
 QuizLine.init({
   id: {
     type: DataTypes.INTEGER,
@@ -50,7 +46,7 @@ QuizLine.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Quizzes',
+      model: Quiz,
       key: 'id'
     }
   },
@@ -58,13 +54,23 @@ QuizLine.init({
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'Tags',
+      model: TagModel,
       key: 'id'
     }
   },
 }, {
   sequelize: connection,
-  underscored: false,
   modelName: 'QuizLine',
   timestamps: true,
+});
+
+
+QuizLine.belongsTo(Quiz, {
+  foreignKey: 'quizId',
+  as: 'quiz'
+});
+
+QuizLine.belongsTo(TagModel, {
+  foreignKey: 'tag',
+  as: 'tagModel'
 });

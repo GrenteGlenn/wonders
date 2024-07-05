@@ -9,8 +9,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      createdAt: {
-        type: Sequelize.DATE
+      userId: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -20,26 +21,26 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      status: {
+      statusId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       }
     });
-    // await queryInterface.addConstraint('Organizations', {
-    //   type: 'foreign key',
-    //   fields: ["status"],
-    //   name: 'status_id',
-    //   references: {
-    //     table: 'Status',
-    //     field: 'id',
-    //   },
-    //   onUpdate: "CASCADE",
-    //   onDelete: "NO ACTION",
-    //   allowNull: false,
-    // })
+
+    await queryInterface.addConstraint('Organizations', {
+      type: 'foreign key',
+      fields: ["statusId"],
+      name: 'status_id',
+      references: {
+        table: 'Statuses',
+        field: 'id',
+      },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
+    });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('Organizations', 'status_id');
+    await queryInterface.removeConstraint('Organizations', 'status_id_fk');
     await queryInterface.dropTable('Organizations');
   }
 };

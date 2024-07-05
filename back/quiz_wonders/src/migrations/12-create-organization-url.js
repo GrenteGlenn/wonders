@@ -10,9 +10,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       url: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
-      organization: {
+      organizationId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
@@ -40,19 +41,18 @@ module.exports = {
 
     await queryInterface.addConstraint('OrganizationUrls', {
       type: 'foreign key',
-      fields: ["organization"],
-      name: 'organization_id',
+      fields: ["organizationId"],
+      name: 'organization_id_fk',
       references: {
         table: 'Organizations',
         field: 'id',
       },
       onUpdate: "CASCADE",
       onDelete: "NO ACTION",
-      allowNull: false,
-    })
+    });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('OrganizationUrls', 'organization_id');
+    await queryInterface.removeConstraint('OrganizationUrls', 'organization_id_fk');
     await queryInterface.dropTable('OrganizationUrls');
   }
 };

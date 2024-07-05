@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import QuizInterface from '../interfaces/QuizInterface';
+import QuizLine from './quizline';
 
 interface QuizCreationAttributes extends Optional<QuizInterface, 'id'> { }
 
@@ -39,5 +40,10 @@ Quiz.init({
   modelName: 'Quiz',
   timestamps: true,
 });
+
+// Quiz.hasMany(QuizLine, {
+//   foreignKey: 'quizId',
+//   as: 'quiz'
+// });
 
 export default Quiz;

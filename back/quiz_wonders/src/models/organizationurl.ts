@@ -3,26 +3,20 @@ import connection from '../config/dbConnection';
 import OrganizationUrlInterface from '../interfaces/OrganizationUrlInterface';
 import Organization from './organization';
 
-interface OrganizationUrlCreationAttributes extends Optional<OrganizationUrlInterface, 'id'> { }
+interface OrganizationUrlCreationAttributes extends Optional<OrganizationUrlInterface, 'id'> {}
 
-class OrganizationUrl extends Model<OrganizationUrlInterface, OrganizationUrlCreationAttributes> implements OrganizationUrlInterface {
-  public id!: number;
-  public rank!: number;
-  public partner!: string;
-  public key!: string | null;
-  public organisationId!: number;
-  public url!: string;
-  public organizationId!: Organization;
-  public readonly createdAt?: Date;
-  public readonly updatedAt?: Date;
+export default class OrganizationUrl extends Model<OrganizationUrlInterface, OrganizationUrlCreationAttributes> implements OrganizationUrlInterface {
+  declare id: number;
+  declare rank: number;
+  declare partner: string;
+  declare key: string | null;
+  declare organizationId: number;
+  declare url: string | null;
+  declare readonly createdAt?: Date;
+  declare readonly updatedAt?: Date;
 }
-OrganizationUrl.hasOne(Organization, {
-  foreignKey: {
-    name: 'organizationId',
-    allowNull: false,
-  }
-});
 
+// Define the model fields and attributes
 OrganizationUrl.init({
   id: {
     type: DataTypes.INTEGER,
@@ -34,9 +28,13 @@ OrganizationUrl.init({
     type: DataTypes.TEXT,
     allowNull: false
   },
-  organisationId: {
+  organizationId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
+    references: {
+      model: Organization,
+      key: 'id'
+    }
   },
   rank: {
     type: DataTypes.INTEGER,
@@ -50,8 +48,22 @@ OrganizationUrl.init({
     type: DataTypes.TEXT,
     allowNull: true
   },
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: true
+  }
 }, {
   sequelize: connection,
   modelName: 'OrganizationUrl',
   timestamps: true,
+});
+
+// Define associations
+OrganizationUrl.belongsTo(Organization, {
+  foreignKey: 'organizationId',
+  as: 'organization'
 });

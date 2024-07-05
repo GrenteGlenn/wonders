@@ -11,15 +11,9 @@
   "version": "1.0.0",
   "main": "./src/app.js",
   "scripts": {
-<<<<<<< Updated upstream
-    "lint": "",
-    "format": "",
-    "test": ""
-=======
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/app.ts",
     "build": "tsc"
->>>>>>> Stashed changes
   },
   "keywords": [],
   "author": "",

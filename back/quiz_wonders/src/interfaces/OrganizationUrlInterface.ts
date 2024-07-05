@@ -1,7 +1,7 @@
 export default interface OrganisationUrl {
   id: number;
   url: string | null;
-  organisationId: number;
+  organizationId: number;
   rank: number;
   partner: string;
   key: string | null;

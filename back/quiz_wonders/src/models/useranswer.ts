@@ -3,9 +3,9 @@ import connection from '../config/dbConnection';
 import UserAnswerInterface from '../interfaces/UserAnswerInterface';
 import QuizLine from './quizline';
 
-interface UserAnswerCreationAttributes extends Optional<UserAnswerInterface, 'id'> { }
+interface UserAnswerCreationAttributes extends Optional<UserAnswerInterface, 'id'> {}
 
-class UserAnswer extends Model<UserAnswerInterface, UserAnswerCreationAttributes> implements UserAnswerInterface {
+export default class UserAnswer extends Model<UserAnswerInterface, UserAnswerCreationAttributes> implements UserAnswerInterface {
   declare id: number;
   declare date: Date;
   declare userId: number;
@@ -13,13 +13,6 @@ class UserAnswer extends Model<UserAnswerInterface, UserAnswerCreationAttributes
   declare readonly createdAt: Date;
   declare readonly updatedAt?: Date;
 }
-
-UserAnswer.hasOne(QuizLine, {
-  foreignKey: {
-    name: 'quizLineId',
-    allowNull: false,
-  }
-});
 
 UserAnswer.init({
   id: {
@@ -32,17 +25,35 @@ UserAnswer.init({
     type: DataTypes.INTEGER,
     allowNull: false
   },
+  quizLineId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: QuizLine,
+      key: 'id'
+    }
+  },
   createdAt: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: false,
+    defaultValue: DataTypes.NOW
   },
   updatedAt: {
     type: DataTypes.DATE,
-    allowNull: false
+    allowNull: true
   },
-  quizLineId: '',
 }, {
   sequelize: connection,
   modelName: 'UserAnswer',
   timestamps: true,
+});
+
+UserAnswer.belongsTo(QuizLine, {
+  foreignKey: 'quizLineId',
+  as: 'quizLine'
+});
+
+QuizLine.hasMany(UserAnswer, {
+  foreignKey: 'quizLineId',
+  as: 'userAnswers'
 });
