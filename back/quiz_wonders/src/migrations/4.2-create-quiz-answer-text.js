@@ -2,31 +2,27 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Organizations', {
+    await queryInterface.createTable('quiz_answer_texts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      createdAt: {
+      answer: {
+        type: Sequelize.TEXT
+      },
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      statusId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Status'
-        }
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Organizations');
+    await queryInterface.dropTable('quiz_answer_texts');
   }
 };

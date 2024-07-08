@@ -1,7 +1,7 @@
 export default interface UserAnswer {
   id?: number;
-  userId: number;
-  quizLineId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  user_id: number;
+  quiz_line: number;
+  created_at?: Date;
+  updated_at?: Date;
 }

@@ -15,6 +15,10 @@ const sequelizeConnection = new Sequelize(
   {
     host: dbhost,
     dialect: 'postgres',
+    define: {
+      underscored: true,
+      timestamps: true
+    }
   }
 );
 

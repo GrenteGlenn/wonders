@@ -3,6 +3,7 @@ import connection from '../config/dbConnection';
 import QuizLineInterface from '../interfaces/QuizLineInterface';
 import Quiz from './quiz';
 import TagModel from './tag';
+import ResponseKind from './responsekind';
 import Tag from '../interfaces/TagInterface';
 
 interface QuizLineCreationAttributes extends Optional<QuizLineInterface, 'id'> { }
@@ -10,13 +11,29 @@ interface QuizLineCreationAttributes extends Optional<QuizLineInterface, 'id'> {
 export default class QuizLine extends Model<QuizLineInterface, QuizLineCreationAttributes> implements QuizLineInterface {
   declare id: number;
   declare question: Text;
-  declare isBoolean: boolean;
-  declare isText: boolean;
-  declare quizId: number;
-  declare isRequired: boolean;
-  declare tag: Tag;
-  declare readonly createdAt?: Date | undefined;
-  declare readonly updatedAt?: Date | undefined;
+  declare is_boolean?: boolean;
+  declare is_text?: boolean;
+  declare quiz_id: number;
+  declare is_required: boolean;
+  declare tag_id: number;
+  declare response_kind_id: number;
+  declare readonly created_at?: Date | undefined;
+  declare readonly updated_at?: Date | undefined;
+
+  // static associate() {
+  //   this.belongsTo(Quiz, {
+  //     foreignKey: 'quiz_id',
+  //     as: 'quiz'
+  //   });
+  //   this.belongsTo(TagModel, {
+  //     foreignKey: 'tag_id',
+  //     as: 'tag'
+  //   });
+  //   this.belongsTo(ResponseKind, {
+  //     foreignKey: 'response_kind_id',
+  //     as: 'response_kind'
+  //   });
+  // }
 }
 
 QuizLine.init({
@@ -30,19 +47,19 @@ QuizLine.init({
     type: DataTypes.TEXT,
     allowNull: false
   },
-  isBoolean: {
+  is_boolean: {
     type: DataTypes.BOOLEAN,
     allowNull: false
   },
-  isText: {
+  is_text: {
     type: DataTypes.BOOLEAN,
     allowNull: false
   },
-  isRequired: {
+  is_required: {
     type: DataTypes.BOOLEAN,
     allowNull: false
   },
-  quizId: {
+  quiz_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -50,7 +67,7 @@ QuizLine.init({
       key: 'id'
     }
   },
-  tag: {
+  tag_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -58,19 +75,49 @@ QuizLine.init({
       key: 'id'
     }
   },
+  response_kind_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: ResponseKind,
+      key: 'id'
+    }
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW
+  }
 }, {
   sequelize: connection,
+  underscored: true,
   modelName: 'QuizLine',
-  timestamps: true,
+  timestamps: false,
 });
 
 
 QuizLine.belongsTo(Quiz, {
-  foreignKey: 'quizId',
+  foreignKey: 'quiz_id',
   as: 'quiz'
+  // targetKey: 'id',
 });
 
+// Quiz.hasMany(QuizLine, {
+//   foreignKey: 'quiz_id',
+//   as: 'quiz'
+
+// });
+
 QuizLine.belongsTo(TagModel, {
-  foreignKey: 'tag',
-  as: 'tagModel'
+  foreignKey: 'tag_id',
+  targetKey: 'id',
+});
+QuizLine.belongsTo(ResponseKind, {
+  foreignKey: 'response_kind_id',
+  targetKey: 'id',
 });

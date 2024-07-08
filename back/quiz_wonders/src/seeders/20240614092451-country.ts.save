@@ -5,18 +5,18 @@ module.exports = {
     await queryInterface.bulkInsert('Countries', [{
       name: 'France',
       code: 'FR',
-      createdAt: new Date(),
-      updatedAt: new Date()
+      created_at: new Date(),
+      updated_at: new Date()
     }, {
       name: 'Italy',
       code: 'IT',
-      createdAt: new Date(),
-      updatedAt: new Date()
+      created_at: new Date(),
+      updated_at: new Date()
     }, {
       name: 'Germany',
       code: 'DE',
-      createdAt: new Date(),
-      updatedAt: new Date()
+      created_at: new Date(),
+      updated_at: new Date()
     }], {});
   },
 

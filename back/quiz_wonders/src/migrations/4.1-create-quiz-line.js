@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('QuizLines', {
+    await queryInterface.createTable('quiz_lines', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,48 +12,67 @@ module.exports = {
       question: {
         type: Sequelize.TEXT
       },
-      isRequired: {
+      is_required: {
         type: Sequelize.BOOLEAN
       },
-      isText: {
+      is_text: {
         type: Sequelize.BOOLEAN
       },
-      tag: {
+      is_boolean: {
+        type: Sequelize.BOOLEAN
+      },
+      tag_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      quiz: {
+      quiz_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      createdAt: {
+      response_kind_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
     
-    await queryInterface.addConstraint('QuizLines', {
+    await queryInterface.addConstraint('quiz_lines', {
       type: "foreign key",
-      fields: ["tag"],
+      fields: ["tag_id"],
       name: 'tag_id',
       references: {
-        table: 'Tags',
+        table: 'tags',
         field: 'id',
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     });
 
-    await queryInterface.addConstraint('QuizLines', {
+    await queryInterface.addConstraint('quiz_lines', {
       type: "foreign key",
-      fields: ["quiz"],
+      fields: ["response_kind_id"],
+      name: 'response_kind_id',
+      references: {
+        table: 'response_kinds',
+        field: 'id',
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    });
+
+    await queryInterface.addConstraint('quiz_lines', {
+      type: "foreign key",
+      fields: ["quiz_id"],
       name: 'quiz_id',
       references: {
-        table: 'Quizzes',
+        table: 'quizzes',
         field: 'id',
       },
       onUpdate: "CASCADE",
@@ -62,10 +81,9 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     // Remove constraints that depend on QuizLines in other tables
-    await queryInterface.removeConstraint('UserAnswerQuestions', 'quiz_line_id');
-    
-    await queryInterface.removeConstraint('QuizLines', 'quiz_id');
-    await queryInterface.removeConstraint('QuizLines', 'tag_id');
-    await queryInterface.dropTable('QuizLines');
+    await queryInterface.removeConstraint('quiz_lines', 'quiz_id');
+    await queryInterface.removeConstraint('quiz_lines', 'tag_id');
+    await queryInterface.removeConstraint('quiz_lines', 'response_kind_id');
+    await queryInterface.dropTable('quiz_lines');
   }
 };

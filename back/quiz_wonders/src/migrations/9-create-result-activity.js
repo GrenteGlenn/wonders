@@ -5,7 +5,7 @@ const { QueryInterface } = require('sequelize');
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ResultActivities', {
+    await queryInterface.createTable('result_activities', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,29 +15,29 @@ module.exports = {
       test: {
         type: Sequelize.INTEGER
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      resultCity: {
+      result_city: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      activityId: {
+      activity_id: {
         type: Sequelize.INTEGER,
         allowNull: false
       }
     });
-    await queryInterface.addConstraint('ResultActivities', {
+    await queryInterface.addConstraint('result_activities', {
       type: 'foreign key',
-      fields: ["resultCity"],
-      name: 'result_city_id',
+      fields: ["result_city"],
+      name: 'result_city',
       references: {
-        table: 'ResultCities',
+        table: 'result_cities',
         field: 'id',
       },
       onUpdate: "CASCADE",
@@ -46,7 +46,7 @@ module.exports = {
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('ResultActivities','result_city_id')
-    await queryInterface.dropTable('ResultActivities');
+    await queryInterface.removeConstraint('result_activities','result_city')
+    await queryInterface.dropTable('result_activities');
   }
 };

@@ -3,7 +3,14 @@ import QuizLine from "../models/quizline";
 
 export default class QuizController {
     async list() {
-        return await Quiz.findAll();
+        return await Quiz.findAll({
+            include: [
+              {
+                model: QuizLine,
+                as: 'quiz_lines'
+              }
+            ]
+          });
     }
 
     async one(id: number) {
@@ -25,7 +32,7 @@ export default class QuizController {
       }
 
     async new (name: string) {
-        return await Quiz.create({ name, createdAt: new Date(), updatedAt: new Date() });
+        return await Quiz.create({ name, created_at: new Date(), updated_at: new Date() });
     }
 
     async update (id:number , name:string) {

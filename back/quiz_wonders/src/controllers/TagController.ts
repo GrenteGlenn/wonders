@@ -11,7 +11,7 @@ export default class TagController {
     }
 
     async new(name: string) {
-        return await Tag.create({ name });
+        return await Tag.create({ name, created_at: new Date(), updated_at: new Date() });
     }
 
     async update(id: number, name: string) {

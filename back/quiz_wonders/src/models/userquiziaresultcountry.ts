@@ -1,14 +1,14 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import UserQuizIAResultCountryInterface from '../src/interfaces/UserQuizIAResultCountryInterface';
+import UserQuizIAResultCountryInterface from '../interfaces/UserQuizIaResultCountryInterface';
 
 interface UserQuizIAResultCountryCreationAttributes extends Optional<UserQuizIAResultCountryInterface, 'id'> { }
 
 export default class UserQuizIAResultCountry extends Model<UserQuizIAResultCountryInterface, UserQuizIAResultCountryCreationAttributes> implements UserQuizIAResultCountryInterface {
   declare id: number;
-  declare countryId: number;
-  declare createdAt: Date;
-  declare updatedAt: Date;
+  declare country: number;
+  declare created_at: Date;
+  declare updated_at: Date;
 }
 
 UserQuizIAResultCountry.init({
@@ -18,7 +18,7 @@ UserQuizIAResultCountry.init({
     primaryKey: true,
     allowNull: false
   },
-  countryId: {
+  country: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -26,11 +26,11 @@ UserQuizIAResultCountry.init({
         key: 'id'
         }
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     allowNull: false
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     allowNull: false
   }

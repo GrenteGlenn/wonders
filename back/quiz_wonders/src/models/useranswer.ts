@@ -8,10 +8,10 @@ interface UserAnswerCreationAttributes extends Optional<UserAnswerInterface, 'id
 export default class UserAnswer extends Model<UserAnswerInterface, UserAnswerCreationAttributes> implements UserAnswerInterface {
   declare id: number;
   declare date: Date;
-  declare userId: number;
-  declare quizLineId: number;
-  declare readonly createdAt: Date;
-  declare readonly updatedAt?: Date;
+  declare user_id: number;
+  declare quiz_line: number;
+  declare readonly created_at: Date;
+  declare readonly updated_at?: Date;
 }
 
 UserAnswer.init({
@@ -21,11 +21,11 @@ UserAnswer.init({
     primaryKey: true,
     allowNull: false
   },
-  userId: {
+  user_id: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  quizLineId: {
+  quiz_line: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -33,12 +33,12 @@ UserAnswer.init({
       key: 'id'
     }
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     allowNull: true
   },

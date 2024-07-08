@@ -8,10 +8,10 @@ interface ResultCityCreationAttributes extends Optional<ResultCityInterface, 'id
 class ResultCity extends Model<ResultCityInterface, ResultCityCreationAttributes> implements ResultCityInterface {
     declare id: number;
     declare step: number;
-    declare startAt: Date;
-    declare endAt: Date;
-    declare readonly createdAt?: Date;
-    declare readonly updatedAt?: Date;
+    declare start_at: Date;
+    declare end_at: Date;
+    declare readonly created_at?: Date;
+    declare readonly updated_at?: Date;
 }
 
 ResultCity.init({
@@ -25,19 +25,19 @@ ResultCity.init({
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    startAt: {
+    start_at: {
         type: DataTypes.DATE,
         allowNull: false
     },
-    endAt: {
+    end_at: {
         type: DataTypes.DATE,
         allowNull: false
     },
-    createdAt: {
+    created_at: {
         type: DataTypes.DATE,
         allowNull: true
     },
-    updatedAt: {
+    updated_at: {
         type: DataTypes.DATE,
         allowNull: true
     }

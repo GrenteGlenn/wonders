@@ -13,8 +13,12 @@ const sequelizeConnection = new Sequelize(
   dbpassword,
   {
     host: dbhost,
-    dialect: dbdialect
+    dialect: dbdialect,
+    define: {
+      underscored: true,
+      timestamps: true
+    }
   }
-)
+);
 
 export default sequelizeConnection
