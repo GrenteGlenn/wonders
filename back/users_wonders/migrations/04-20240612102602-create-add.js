@@ -7,10 +7,32 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+      },
+      street: {
+        type: Sequelize.STRING,
+      },
+      city: {
+        type: Sequelize.STRING,
+      },
+      zipCode: {
+        type: Sequelize.STRING,
+      },
+      complementary: {
+        type: Sequelize.TEXT,
+      },
+      countryId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+        references: {
+          model: 'Countries',
+          key: 'id',
+        },
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -19,32 +41,20 @@ module.exports = {
         onUpdate: 'CASCADE',
         references: {
           model: 'Users',
-          key: 'id'
+          key: 'id',
         },
-      },
-      street: {
-        type: Sequelize.STRING
-      },
-      city: {
-        type: Sequelize.STRING
-      },
-      zipCode: {
-        type: Sequelize.STRING
-      },
-      complementary: {
-        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('Addresses');
-  }
+  },
 };

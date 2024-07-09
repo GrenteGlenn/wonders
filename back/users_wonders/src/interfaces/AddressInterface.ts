@@ -1,11 +1,13 @@
-import User from "./UserInterface";
+import User from './UserInterface';
+import Country from './CountryInterface';
 
 export default interface AddressInterface {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    country: string;
-    zipCode: string;
-    user: User;
+  id?: number;
+  name: string;
+  street: string;
+  city: string;
+  zipCode: string;
+  complementary: string;
+  countryId: Country;
+  userId: User;
 }

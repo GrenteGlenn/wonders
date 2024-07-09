@@ -1,5 +1,5 @@
-export default interface Country {
-    id: number;
-    name: string;
-    code: string;
+export default interface CountryInterface {
+  id?: number;
+  name: string;
+  code: string;
 }

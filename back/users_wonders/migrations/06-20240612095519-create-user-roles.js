@@ -1,29 +1,29 @@
 'use strict';
-
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  async up(queryInterface, Sequelize) {
     await queryInterface.createTable('UserRoles', {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Users',
-          key: 'id'
+          key: 'id',
         },
-        onDelete: 'CASCADE'
+        onDelete: 'CASCADE',
       },
       roleId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
           model: 'Roles',
-          key: 'id'
+          key: 'id',
         },
-        onDelete: 'CASCADE'
-      }
+        onDelete: 'CASCADE',
+      },
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  async down(queryInterface) {
     await queryInterface.dropTable('UserRoles');
-  }
+  },
 };

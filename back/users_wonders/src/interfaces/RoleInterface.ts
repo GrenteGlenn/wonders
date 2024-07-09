@@ -1,4 +1,4 @@
-export default interface Role {
-    id: number;
-    role: string;
+export default interface RoleInterface {
+  id?: number;
+  role: string;
 }

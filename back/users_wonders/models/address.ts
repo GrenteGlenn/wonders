@@ -1,63 +1,103 @@
 'use strict';
 
-import { Optional } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import AddressInterface from '../src/interfaces/AddressInterface';
+import CountryInterface from '../src/interfaces/CountryInterface';
+import UserInterface from '../src/interfaces/UserInterface';
+import sequelize from '../config/dbConnection';
+import Country from './country';
+import User from './user';
 
-const {
-  Model
-} = require('sequelize');
-type AddressCreationAttributes = Optional<AddressInterface, 'id'>;
+interface AddressCreationAttributes extends Optional<CountryInterface, 'id'> {}
 
-module.exports = (sequelize, DataTypes) => {
-  class Address extends Model<AddressCreationAttributes, AddressInterface> {
-    static associate(models) {
-      Address.hasOne(models.User, {
-        foreignKey: 'addressId',
-        as: 'user'
-      });
-    }
-  }
-  Address.init({
+class Address
+  extends Model<AddressInterface, AddressCreationAttributes>
+  implements AddressInterface
+{
+  declare id: number;
+  declare name: string;
+  declare street: string;
+  declare city: string;
+  declare zipCode: string;
+  declare complementary: string;
+  declare countryId: CountryInterface;
+  declare userId: UserInterface;
+}
+
+Address.init(
+  {
     name: {
-      type:DataTypes.STRING,
-      allowNull:false,
-      unique:false,
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: false,
       validate: {
-        len: [2, 50]
-      }
+        len: [2, 50],
+      },
     },
     street: {
-      type:DataTypes.STRING,
-      allowNull:false,
-      unique:false,
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: false,
       validate: {
-        len: [2, 255]
-      }
+        len: [2, 255],
+      },
     },
     city: {
-      type:DataTypes.STRING,
-      allowNull:false,
-      unique:false,
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: false,
       validate: {
-        len: [2, 50]
-      }
+        len: [2, 50],
+      },
     },
     zipCode: {
-      type:DataTypes.STRING,
-      allowNull:false,
-      unique:false,
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: false,
       validate: {
-        len: [2, 50]
-      }
+        len: [2, 50],
+      },
     },
-    complemntary: {
-      type:DataTypes.TEXT,
-      allowNull:true,
-      unique:false
+    complementary: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      unique: false,
     },
-  }, {
+    countryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Country,
+        key: 'id',
+      },
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: 'id',
+      },
+    },
+  },
+  {
     sequelize,
+    underscored: true,
     modelName: 'Address',
-  });
-  return Address;
-};
+    timestamps: false, // Enables createdAt and updatedAt automatically
+  },
+);
+
+Address.hasOne(Country, {
+  foreignKey: 'countryId',
+});
+
+Country.belongsTo(Address);
+
+Address.hasOne(User, {
+  foreignKey: 'userId',
+});
+
+Country.belongsTo(User);
+
+export default Address;

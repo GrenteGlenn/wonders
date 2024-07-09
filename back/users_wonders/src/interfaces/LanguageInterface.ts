@@ -1,4 +1,4 @@
-export default interface Language {
-    id: number;
-    name: string;
+export default interface LanguageInterface {
+  id?: number;
+  name: string;
 }

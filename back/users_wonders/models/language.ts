@@ -1,27 +1,33 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-  class Language extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
-    static associate(models) {
-      // define association here
-    }
-  }
-  Language.init({
+import { DataTypes, Model, Optional } from 'sequelize';
+import LanguageInterface from '../src/interfaces/LanguageInterface';
+import sequelize from '../config/dbConnection';
+
+interface LanguageCreationAttributes
+  extends Optional<LanguageInterface, 'id'> {}
+
+class Language
+  extends Model<LanguageInterface, LanguageCreationAttributes>
+  implements LanguageInterface
+{
+  declare id: number;
+  declare name: string;
+}
+
+Language.init(
+  {
     name: {
-      type:DataTypes.STRING,
+      type: DataTypes.STRING,
       allowNull: false,
-      unique:true
-    } 
-  }, {
+      unique: true,
+    },
+  },
+  {
     sequelize,
+    underscored: true,
     modelName: 'Language',
-  });
-  return Language;
-};
+    timestamps: false, // Enables createdAt and updatedAt automatically
+  },
+);
+
+export default Language;
