@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "authProvider",
   "version": "1.0.0",
   "description": "api trip planner",
   "main": "./src/app.ts",
@@ -7,8 +7,8 @@
     "dev": "node src/app.ts",
     "migration:create": "npx sequelize-cli migration:generate",
     "migration:run": "npx sequelize-cli db:migrate",
-    "lint": "",
-    "format": "",
+    "lint": "eslint src/**/*.ts",
+    "format": "eslint src/**/*.ts --fix",
     "test": ""
   },
   "author": "lavren_v",
@@ -19,13 +19,24 @@
     "express": "^4.19.2",
     "pg": "^8.11.5",
     "pg-hstore": "^2.3.4",
+    "process": "^0.11.10",
     "sequelize": "^6.37.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.6.0",
     "@types/express": "^4.17.21",
     "@types/node": "^20.14.2",
     "@types/sequelize": "^4.28.20",
+    "globals": "^15.8.0",
+    "prettier": "^3.3.2",
     "sequelize-cli": "^6.6.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.16.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.1",
+    "@typescript-eslint/parser": "^7.13.1",
+    "eslint": "^8",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3"
   }
 }
