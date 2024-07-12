@@ -1,0 +1,17 @@
+# Afficher la version de Node.js
+node -v
+
+# Trouver tous les répertoires contenant un fichier package.json, en excluant node_modules
+$dirs = Get-ChildItem -Path . -Recurse -Filter package.json | Where-Object { $_.FullName -notmatch '\\node_modules\\' } | ForEach-Object { $_.Directory.FullName } | Sort-Object -Unique
+
+# Boucler sur chaque répertoire trouvé
+foreach ($dir in $dirs) {
+    # Changer de répertoire
+    Set-Location -Path $dir
+
+    # Exécuter les commandes npm
+    npm run init
+    npm run format
+    npm run lint
+    npm run test
+}
