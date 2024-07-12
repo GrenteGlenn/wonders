@@ -98,6 +98,6 @@ Address.hasOne(User, {
   foreignKey: 'userId',
 });
 
-Country.belongsTo(User);
+User.belongsTo(Address);
 
 export default Address;

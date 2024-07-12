@@ -12,6 +12,5 @@ export default interface UserInterface {
   updatedAt?: Date;
   birthDate: Date;
   languageId: Language;
-  countryId: Country;
   role?: Role[];
 }
