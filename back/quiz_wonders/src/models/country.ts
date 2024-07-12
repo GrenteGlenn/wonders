@@ -41,7 +41,7 @@ Country.init({
 }, {
   sequelize: connection,
   underscored: true,
-  timestamps: true,
+  timestamps: false,
   modelName: 'country',
 });
 

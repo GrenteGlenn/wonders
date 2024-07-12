@@ -47,4 +47,5 @@ db.status.hasMany(db.organization_urls, {
   foreignKey: 'status'
 })
 
+
 export default db;

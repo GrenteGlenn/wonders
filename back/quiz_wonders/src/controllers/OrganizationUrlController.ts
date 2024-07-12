@@ -10,6 +10,12 @@ export default class OrganizationUrlController {
               {
                 model: Organization,
                 as: 'organization',
+                include: [
+                  {
+                    model: Status,
+                    as: 'status'
+                  }
+                ]
               },
               {
                 model: Status,

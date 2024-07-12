@@ -1,16 +1,24 @@
+import Organization from "../models/organization";
 import QuizLine from "../models/quizline";
 import ResponseKind from "../models/responsekind";
+import Status from "../models/status";
+import Tag from "../models/tag";
 
 export default class QuizLineController {
     async list() {
         return await QuizLine.findAll({
-            include: [
-                {
-                  model: ResponseKind,
-                }
-              ]
+          include: [
+            // {
+            //   model: Tag,
+            //   as: 'tag'
+            // },
+            {
+                model: ResponseKind,
+                as: 'response_kind'
+            }
+          ]
         });
-    }
+      }
 
     async one (id: number) {
         return await QuizLine.findByPk(id);

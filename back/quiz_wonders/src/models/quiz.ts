@@ -45,12 +45,18 @@ Quiz.init({
   sequelize: connection,
   underscored: false,
   modelName: 'Quiz',
-  timestamps: true,
+  tableName: 'quizzes',
+  timestamps: false,
 });
 
-// Quiz.hasMany(QuizLine, {
-//       foreignKey: 'quiz_id',
-//       as: 'quiz_lines'
-//     });
+QuizLine.belongsTo(Quiz, {
+  foreignKey: 'quiz_id',
+  as: 'quiz',
+});
+
+Quiz.hasMany(QuizLine, {
+  foreignKey: 'quiz_id',
+  as: 'quiz_lines',
+});
 
 export default Quiz;

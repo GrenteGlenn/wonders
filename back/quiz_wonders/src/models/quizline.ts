@@ -97,27 +97,27 @@ QuizLine.init({
   sequelize: connection,
   underscored: true,
   modelName: 'QuizLine',
+  tableName: 'quiz_lines',
   timestamps: false,
 });
 
 
-QuizLine.belongsTo(Quiz, {
-  foreignKey: 'quiz_id',
-  as: 'quiz'
-  // targetKey: 'id',
-});
+// QuizLine.belongsTo(Quiz, {
+//   foreignKey: 'quiz_id',
+//   as: 'quiz',
+// });
 
 // Quiz.hasMany(QuizLine, {
 //   foreignKey: 'quiz_id',
-//   as: 'quiz'
-
+//   as: 'quiz_lines',
 // });
 
 QuizLine.belongsTo(TagModel, {
   foreignKey: 'tag_id',
-  targetKey: 'id',
+  as: 'tag',
 });
+
 QuizLine.belongsTo(ResponseKind, {
   foreignKey: 'response_kind_id',
-  targetKey: 'id',
+  as: 'response_kind',
 });
