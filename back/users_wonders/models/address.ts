@@ -8,12 +8,11 @@ import sequelize from '../config/dbConnection';
 import Country from './country';
 import User from './user';
 
-interface AddressCreationAttributes extends Optional<CountryInterface, 'id'> {}
+interface AddressCreationAttributes extends Optional<CountryInterface, 'id'> {
+}
 
-class Address
-  extends Model<AddressInterface, AddressCreationAttributes>
-  implements AddressInterface
-{
+class Address extends Model<AddressInterface, AddressCreationAttributes>
+  implements AddressInterface {
   declare id: number;
   declare name: string;
   declare street: string;
@@ -31,71 +30,71 @@ Address.init(
       allowNull: false,
       unique: false,
       validate: {
-        len: [2, 50],
-      },
+        len: [2, 50]
+      }
     },
     street: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: false,
       validate: {
-        len: [2, 255],
-      },
+        len: [2, 255]
+      }
     },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: false,
       validate: {
-        len: [2, 50],
-      },
+        len: [2, 50]
+      }
     },
     zipCode: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: false,
       validate: {
-        len: [2, 50],
-      },
+        len: [2, 50]
+      }
     },
     complementary: {
       type: DataTypes.TEXT,
       allowNull: true,
-      unique: false,
+      unique: false
     },
     countryId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: Country,
-        key: 'id',
-      },
+        key: 'id'
+      }
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: User,
-        key: 'id',
-      },
-    },
+        key: 'id'
+      }
+    }
   },
   {
     sequelize,
     underscored: true,
     modelName: 'Address',
-    timestamps: false, // Enables createdAt and updatedAt automatically
-  },
+    timestamps: false // Enables createdAt and updatedAt automatically
+  }
 );
 
 Address.hasOne(Country, {
-  foreignKey: 'countryId',
+  foreignKey: 'countryId'
 });
 
 Country.belongsTo(Address);
 
 Address.hasOne(User, {
-  foreignKey: 'userId',
+  foreignKey: 'userId'
 });
 
 User.belongsTo(Address);

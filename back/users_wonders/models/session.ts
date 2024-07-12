@@ -5,12 +5,11 @@ import SessionInterface from '../src/interfaces/SessionInterface';
 import User from './user';
 import Country from './country';
 
-interface SessionCreationAttributes extends Optional<SessionInterface, 'id'> {}
+interface SessionCreationAttributes extends Optional<SessionInterface, 'id'> {
+}
 
-class Session
-  extends Model<SessionInterface, SessionCreationAttributes>
-  implements SessionInterface
-{
+class Session extends Model<SessionInterface, SessionCreationAttributes>
+  implements SessionInterface {
   declare id: number;
   declare token: string;
   declare valid: string;
@@ -22,32 +21,32 @@ Session.init(
     token: {
       type: DataTypes.STRING,
       unique: true,
-      allowNull: false,
+      allowNull: false
     },
     valid: {
       type: DataTypes.BOOLEAN,
       unique: false,
-      allowNull: false,
+      allowNull: false
     },
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: Country,
-        key: 'id',
-      },
-    },
+        key: 'id'
+      }
+    }
   },
   {
     sequelize,
     underscored: true,
     modelName: 'Session',
-    timestamps: false, // Enables createdAt and updatedAt automatically
-  },
+    timestamps: false // Enables createdAt and updatedAt automatically
+  }
 );
 
 Session.hasOne(User, {
-  foreignKey: 'languageId',
+  foreignKey: 'languageId'
 });
 
 User.belongsTo(Session);

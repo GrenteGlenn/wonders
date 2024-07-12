@@ -11,8 +11,7 @@ import Role from './role';
 interface UserCreationAttributes extends Optional<UserInterface, 'id'> {
 }
 
-class User
-  extends Model<UserInterface, UserCreationAttributes>
+class User extends Model<UserInterface, UserCreationAttributes>
   implements UserInterface {
   declare id: number;
   declare first_name: string;
