@@ -8,21 +8,19 @@ import sequelize from '../config/dbConnection';
 import Language from './language';
 import Role from './role';
 
-interface UserCreationAttributes extends Optional<UserInterface, 'id'> {
-}
+interface UserCreationAttributes extends Optional<UserInterface, 'id'> {}
 
-class User extends Model<UserInterface, UserCreationAttributes>
-  implements UserInterface {
+class User extends Model<UserInterface, UserCreationAttributes> implements UserInterface {
   declare id: number;
   declare first_name: string;
   declare last_name: string;
   declare email: string;
   declare password: string;
-  declare readonly createdAt: Date;
-  declare readonly updatedAt: Date;
-  declare birthDate: Date;
-  declare languageId: LanguageInterface;
-  declare role: RoleInterface[];
+  declare readonly created_at: Date;
+  declare readonly updated_at: Date;
+  declare birth_date: Date;
+  declare language_id: LanguageInterface;
+  declare role_id: RoleInterface[];
 }
 
 User.init(
@@ -38,8 +36,8 @@ User.init(
       }
     },
     password: DataTypes.STRING,
-    birthDate: DataTypes.DATE,
-    languageId: {
+    birth_date: DataTypes.DATE,
+    language_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -59,7 +57,7 @@ User.init(
 User.belongsToMany(Role, { through: 'User_Role' });
 
 User.hasOne(Language, {
-  foreignKey: 'languageId'
+  foreignKey: 'language_id'
 });
 
 Language.belongsTo(User);

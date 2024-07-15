@@ -7,9 +7,9 @@ export default interface UserInterface {
   last_name: string;
   email: string;
   password: string;
-  createdAt?: Date;
-  updatedAt?: Date;
-  birthDate: Date;
-  languageId: Language;
-  role?: Role[];
+  created_at?: Date;
+  updated_at?: Date;
+  birth_date: Date;
+  language_id: Language;
+  role_id?: Role[];
 }

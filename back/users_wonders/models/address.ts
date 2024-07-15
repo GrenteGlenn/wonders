@@ -17,9 +17,9 @@ class Address extends Model<AddressInterface, AddressCreationAttributes>
   declare name: string;
   declare street: string;
   declare city: string;
-  declare zipCode: string;
+  declare zip_code: string;
   declare complementary: string;
-  declare countryId: CountryInterface;
+  declare country_id: CountryInterface;
   declare userId: UserInterface;
 }
 
@@ -49,7 +49,7 @@ Address.init(
         len: [2, 50]
       }
     },
-    zipCode: {
+    zip_code: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: false,
@@ -62,7 +62,7 @@ Address.init(
       allowNull: true,
       unique: false
     },
-    countryId: {
+    country_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {

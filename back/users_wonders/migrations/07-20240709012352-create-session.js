@@ -7,20 +7,20 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       token: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       valid: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.BOOLEAN
       },
       user_id: {
-        type: Sequelize.INTEGER,
-      },
+        type: Sequelize.INTEGER
+      }
     });
   },
   async down(queryInterface) {
     await queryInterface.dropTable('Sessions');
-  },
+  }
 };

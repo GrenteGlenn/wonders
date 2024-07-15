@@ -7,16 +7,16 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       role: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true,
-      },
+        unique: true
+      }
     });
   },
   async down(queryInterface) {
     await queryInterface.dropTable('Roles');
-  },
+  }
 };

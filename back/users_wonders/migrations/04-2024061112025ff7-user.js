@@ -29,11 +29,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      birthDate: {
+      birth_date: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      languageId: {
+      language_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         onDelete: 'CASCADE',
@@ -43,11 +43,11 @@ module.exports = {
           key: 'id'
         }
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }

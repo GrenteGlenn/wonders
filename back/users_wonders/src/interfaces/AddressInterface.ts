@@ -6,8 +6,8 @@ export default interface AddressInterface {
   name: string;
   street: string;
   city: string;
-  zipCode: string;
+  zip_code: string;
   complementary: string;
-  countryId: Country;
+  country_id: Country;
   userId: User;
 }
