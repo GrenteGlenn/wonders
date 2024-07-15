@@ -1,5 +1,4 @@
 import Role from './RoleInterface';
-import Country from './CountryInterface';
 import Language from './LanguageInterface';
 
 export default interface UserInterface {
