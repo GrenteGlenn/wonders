@@ -10,14 +10,29 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       token: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       valid: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        allowNull: false
       },
       user_id: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false
       }
+    });
+    await queryInterface.addConstraint('Sessions', {
+      type: 'foreign key',
+      fields: ['user_id'],
+      name: 'user_id',
+      references: {
+        table: 'Users',
+        field: 'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'NO ACTION',
+      allowNull: false
     });
   },
   async down(queryInterface) {

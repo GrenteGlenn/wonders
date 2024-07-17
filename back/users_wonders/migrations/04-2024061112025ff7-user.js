@@ -35,13 +35,7 @@ module.exports = {
       },
       language_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-        references: {
-          model: 'Languages',
-          key: 'id'
-        }
+        allowNull: false
       },
       created_at: {
         allowNull: false,
@@ -51,6 +45,18 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    });
+    await queryInterface.addConstraint('Users', {
+      type: 'foreign key',
+      fields: ['language_id'],
+      name: 'language_id',
+      references: {
+        table: 'Languages',
+        field: 'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'NO ACTION',
+      allowNull: false
     });
   },
   async down(queryInterface) {

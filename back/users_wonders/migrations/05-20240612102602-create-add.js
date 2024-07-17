@@ -26,23 +26,11 @@ module.exports = {
       },
       country_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-        references: {
-          model: 'Countries',
-          key: 'id'
-        }
+        allowNull: false
       },
       user_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-        references: {
-          model: 'Users',
-          key: 'id'
-        }
+        allowNull: false
       },
       created_at: {
         allowNull: false,
@@ -52,6 +40,30 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
+    });
+    await queryInterface.addConstraint('Addresses', {
+      type: 'foreign key',
+      fields: ['country_id'],
+      name: 'country_id',
+      references: {
+        table: 'Countries',
+        field: 'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'NO ACTION',
+      allowNull: false
+    });
+    await queryInterface.addConstraint('Addresses', {
+      type: 'foreign key',
+      fields: ['user_id'],
+      name: 'user_id',
+      references: {
+        table: 'Users',
+        field: 'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'NO ACTION',
+      allowNull: false
     });
   },
   async down(queryInterface) {
