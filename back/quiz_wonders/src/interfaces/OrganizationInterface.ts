@@ -1,8 +1,7 @@
 export default interface Organization {
   id: number;
-  userId: number;
-  statusId: number;
-  // userAnswerId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  user_id: number;
+  status_id: number;
+  created_at?: Date;
+  updated_at?: Date;
 }

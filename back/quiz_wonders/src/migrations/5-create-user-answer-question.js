@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('UserAnswerQuestions', {
+    await queryInterface.createTable('user_answer_questions', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,68 +12,68 @@ module.exports = {
       answer: {
         type: Sequelize.TEXT
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      userAnswer: {
+      user_answer: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      quizLine: {
+      quiz_line: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      quizAnswerText: {
+      quiz_answer_text: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
     });
-    await queryInterface.addConstraint('UserAnswerQuestions', {
+    await queryInterface.addConstraint('user_answer_questions', {
       type: "foreign key",
-      fields: ["quizLine"],
-      name: 'quiz_line_id',
+      fields: ["quiz_line"],
+      name: 'quiz_line',
       references: {
-        table: 'QuizLines',
+        table: 'quiz_lines',
         field: 'id',
       },
       onUpdate: "CASCADE",
       onDelete: "NO ACTION",
       allowNull: false,
     });
-    await queryInterface.addConstraint('UserAnswerQuestions', {
+    await queryInterface.addConstraint('user_answer_questions', {
       type: "foreign key",
-      fields: ["userAnswer"],
-      name: 'user_answer_id',
+      fields: ["user_answer"],
+      name: 'user_answer',
       references: {
-        table: 'UserAnswers',
+        table: 'user_answers',
         field: 'id',
       },
       onUpdate: "CASCADE",
       onDelete: "NO ACTION",
       allowNull: false,
     });
-    // await queryInterface.addConstraint('UserAnswerQuestions', {
-    //   type: "foreign key",
-    //   fields: ["quizLineText"],
-    //   name: 'quiz_line_text_id',
-    //   references: {
-    //     table: 'QuizLineTexts',
-    //     field: 'id',
-    //   },
-    //   onUpdate: "CASCADE",
-    //   onDelete: "NO ACTION",
-    //   allowNull: false,
-    // });
+    await queryInterface.addConstraint('user_answer_questions', {
+      type: "foreign key",
+      fields: ["quiz_answer_text"],
+      name: 'quiz_answer_text',
+      references: {
+        table: 'quiz_answer_texts',
+        field: 'id',
+      },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
+      allowNull: false,
+    });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('UserAnswerQuestions', 'quiz_line_id');
-    await queryInterface.removeConstraint('UserAnswerQuestions', 'user_answer_id');
-    await queryInterface.removeConstraint('UserAnswerQuestions', 'quiz_answer_text_id');
-    await queryInterface.dropTable('UserAnswerQuestions');
+    await queryInterface.removeConstraint('user_answer_questions', 'quiz_line');
+    await queryInterface.removeConstraint('user_answer_questions', 'user_answer');
+    await queryInterface.removeConstraint('user_answer_questions', 'quiz_answer_text');
+    await queryInterface.dropTable('user_answer_questions');
   }
 };

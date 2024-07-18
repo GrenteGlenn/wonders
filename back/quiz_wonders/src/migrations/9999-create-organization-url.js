@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('OrganizationUrls', {
+    await queryInterface.createTable('organization_urls', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      organizationId: {
+      organization_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
@@ -29,22 +29,37 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-      createdAt: {
+      status_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
 
-    await queryInterface.addConstraint('OrganizationUrls', {
+    await queryInterface.addConstraint('organization_urls', {
       type: 'foreign key',
-      fields: ["organizationId"],
-      name: 'organization_id_fk',
+      fields: ["organization_id"],
+      name: 'organization_id',
       references: {
-        table: 'Organizations',
+        table: 'organizations',
+        field: 'id',
+      },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
+    });
+    await queryInterface.addConstraint('organization_urls', {
+      type: 'foreign key',
+      fields: ["status_id"],
+      name: 'status_id',
+      references: {
+        table: 'statuses',
         field: 'id',
       },
       onUpdate: "CASCADE",
@@ -52,7 +67,8 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('OrganizationUrls', 'organization_id_fk');
-    await queryInterface.dropTable('OrganizationUrls');
+    await queryInterface.removeConstraint('organization_urls', 'organization_id');
+    await queryInterface.removeConstraint('organization_urls', 'status_id');
+    await queryInterface.dropTable('organization_urls');
   }
 };

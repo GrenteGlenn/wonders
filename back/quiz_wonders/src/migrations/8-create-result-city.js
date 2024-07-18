@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('ResultCities', {
+    await queryInterface.createTable('result_cities', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,33 +12,33 @@ module.exports = {
       step: {
         type: Sequelize.INTEGER
       },
-      startAt: {
+      start_at: {
         type: Sequelize.DATE
       },
-      endAt: {
+      end_at: {
         type: Sequelize.DATE
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      userQuizIAResultCountry: {
+      user_quiz_ia_result_country: {
         type: Sequelize.INTEGER,
         allowNull: false,
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       }
     });
-    await queryInterface.addConstraint('ResultCities', {
+    await queryInterface.addConstraint('result_cities', {
       type: 'foreign key',
-      fields: ["userQuizIAResultCountry"],
+      fields: ["user_quiz_ia_result_country"],
       name: 'user_quiz_ia_result_country',
       references: {
-        table: 'UserQuizIAResultCountries',
+        table: 'user_quiz_ia_result_countries',
         field: 'id',
       },
       onUpdate: "CASCADE",
@@ -47,7 +47,7 @@ module.exports = {
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('ResultCities','user_quiz_ia_result_country')
-    await queryInterface.dropTable('ResultCities');
+    await queryInterface.removeConstraint('result_cities','user_quiz_ia_result_country')
+    await queryInterface.dropTable('result_cities');
   }
 };

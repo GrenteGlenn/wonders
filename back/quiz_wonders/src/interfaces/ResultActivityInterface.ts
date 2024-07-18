@@ -1,7 +1,7 @@
 export default interface ResultActivity {
   id: number;
   step: number;
-  activityId: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  activity_id: number;
+  created_at?: Date;
+  updated_at?: Date;
 }

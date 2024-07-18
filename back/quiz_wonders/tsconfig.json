@@ -108,6 +108,6 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src/**/*.ts", "src/seeders/20240614092451-country.ts"],
+  "include": ["src/**/*.ts", "src/seeders/20240614092451-country.ts.save", "src/models/index.js", "src/seeders/20240617101055-organizationUrl.ts.save"],
   "exclude": ["node_modules"],                              /* Skip type checking all .d.ts files. */
 }

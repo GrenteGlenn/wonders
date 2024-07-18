@@ -9,8 +9,8 @@ class Country extends Model<CountryInterface, CountryCreationAttributes> impleme
   declare id: number;
   declare name: string;
   declare code: string;
-  declare readonly createdAt?: Date | undefined;
-  declare readonly updatedAt?: Date | undefined;
+  declare readonly created_at?: Date | undefined;
+  declare readonly updated_at?: Date | undefined;
 }
 
 Country.init({
@@ -29,40 +29,20 @@ Country.init({
     type: DataTypes.STRING,
     allowNull: false,
     unique: true
+  },
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false
   }
 }, {
   sequelize: connection,
-  underscored: false,
-  modelName: 'Country',
-  timestamps: true,
+  underscored: true,
+  timestamps: false,
+  modelName: 'country',
 });
 
 export default Country;
-
-
-
-
-// 'use strict';
-// const {
-//   Model
-// } = require('sequelize');
-// module.exports = (sequelize, DataTypes) => {
-//   class Country extends Model {
-//     /**
-//      * Helper method for defining associations.
-//      * This method is not a part of Sequelize lifecycle.
-//      * The `models/index` file will call this method automatically.
-//      */
-//     static associate(models) {
-//       // define association here
-//     }
-//   }
-//   Country.init({
-//     name: DataTypes.STRING,
-//     code: DataTypes.STRING
-//   }, {
-//     sequelize,
-//     modelName: 'Country',
-//   });
-//   return Country;
-// };

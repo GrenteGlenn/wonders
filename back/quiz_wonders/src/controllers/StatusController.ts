@@ -15,7 +15,7 @@ export default class StatusController {
     }
 
     async new(name: string) {
-        const status = await Status.create({ name });
+        const status = await Status.create({ name, created_at: new Date(), updated_at: new Date() });
         return status;
     }
 

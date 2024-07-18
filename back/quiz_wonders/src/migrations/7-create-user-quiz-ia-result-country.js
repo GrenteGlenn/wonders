@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('UserQuizIAResultCountries', {
+    await queryInterface.createTable('user_quiz_ia_result_countries', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,11 +12,11 @@ module.exports = {
       test: {
         type: Sequelize.STRING
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
@@ -25,12 +25,12 @@ module.exports = {
         allowNull: false
       }
     });
-    await queryInterface.addConstraint('UserQuizIAResultCountries', {
+    await queryInterface.addConstraint('user_quiz_ia_result_countries', {
       type: "foreign key",
       fields: ["country"],
-      name: 'country_id',
+      name: 'country',
       references: {
-        table: 'Countries',
+        table: 'countries',
         field: 'id',
       },
       onUpdate: "CASCADE",
@@ -40,7 +40,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('UserQuizIAResultCountries','country_id')
-    await queryInterface.dropTable('UserQuizIAResultCountries');
+    await queryInterface.removeConstraint('user_quiz_ia_result_countries','country')
+    await queryInterface.dropTable('user_quiz_ia_result_countries');
   }
 };

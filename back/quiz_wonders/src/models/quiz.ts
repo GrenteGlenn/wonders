@@ -10,6 +10,13 @@ class Quiz extends Model<QuizInterface, QuizCreationAttributes> implements QuizI
   declare name: string;
   declare readonly createdAt: Date;
   declare readonly updatedAt: Date;
+
+//   static associate() {
+//     this.hasMany(QuizLine, {
+//       foreignKey: 'quiz_id',
+//       as: 'quiz_lines'
+//     });
+//   }
 }
 
 Quiz.init({
@@ -24,12 +31,12 @@ Quiz.init({
     allowNull: false,
     unique: true
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     allowNull: false,
     defaultValue: DataTypes.NOW
@@ -38,12 +45,18 @@ Quiz.init({
   sequelize: connection,
   underscored: false,
   modelName: 'Quiz',
-  timestamps: true,
+  tableName: 'quizzes',
+  timestamps: false,
 });
 
-// Quiz.hasMany(QuizLine, {
-//   foreignKey: 'quizId',
-//   as: 'quiz'
-// });
+QuizLine.belongsTo(Quiz, {
+  foreignKey: 'quiz_id',
+  as: 'quiz',
+});
+
+Quiz.hasMany(QuizLine, {
+  foreignKey: 'quiz_id',
+  as: 'quiz_lines',
+});
 
 export default Quiz;

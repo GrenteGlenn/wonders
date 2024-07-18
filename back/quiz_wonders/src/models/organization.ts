@@ -1,18 +1,25 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import OrganizationInterface from '../interfaces/OrganizationInterface';
-import UserAnswer from './useranswer';
 import Status from './status';
+import UserAnswer from './useranswer';
+import OrganizationUrl from './organizationurl';
 
 interface OrganizationCreationAttributes extends Optional<OrganizationInterface, 'id'> {}
 
-export default class Organization extends Model<OrganizationInterface, OrganizationCreationAttributes> implements OrganizationInterface {
+class Organization extends Model<OrganizationInterface, OrganizationCreationAttributes> implements OrganizationInterface {
   public id!: number;
-  public userId!: number;
-  public statusId!: number;
+  public user_id!: number;
+  public status_id!: number;
   // public userAnswerId!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  // static associate() {
+  //   Organization.belongsTo(Status, {
+  //     foreignKey: 'status_id',
+  //   });
+  // }
 }
 
 Organization.init({
@@ -22,11 +29,11 @@ Organization.init({
     primaryKey: true,
     allowNull: false
   },
-  userId: {
+  user_id: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  statusId: {
+  status_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -34,34 +41,24 @@ Organization.init({
       key: 'id'
     }
   },
-  // userAnswerId: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   references: {
-  //     model: UserAnswer,
-  //     key: 'id'
-  //   }
-  // },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     allowNull: false
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     allowNull: false
   }
 }, {
   sequelize: connection,
-  modelName: 'Organization',
-  timestamps: true,
+  underscored: true,
+  modelName: 'organization',
+  timestamps: false,
 });
 
 Organization.belongsTo(Status, {
-  foreignKey: 'statusId',
-  as: 'status'
-});
+  foreignKey: 'status_id',
+})
 
-// Organization.belongsTo(UserAnswer, {
-//   foreignKey: 'userAnswerId',
-//   as: 'userAnswer'
-// });
+
+export default Organization

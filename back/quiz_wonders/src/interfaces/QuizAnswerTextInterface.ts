@@ -1,6 +1,6 @@
 export default interface QuizAnswerText {
   id?: number;
   answer: Text | null;
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }

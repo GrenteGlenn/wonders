@@ -7,9 +7,9 @@ interface ResultActivityCreationAttributes extends Optional<ResultActivityInterf
 class ResultActivity extends Model<ResultActivityInterface, ResultActivityCreationAttributes> implements ResultActivityInterface {
     declare step: number;
     declare id: number;
-    declare activityId: number;
-    declare readonly createdAt?: Date;
-    declare readonly updatedAt?: Date;
+    declare activity_id: number;
+    declare readonly created_at?: Date;
+    declare readonly updated_at?: Date;
 }
 
 ResultActivity.init({
@@ -19,11 +19,11 @@ ResultActivity.init({
         primaryKey: true,
         allowNull: false
     },
-    activityId: {
+    activity_id: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    createdAt: {
+    created_at: {
         type: DataTypes.DATE,
         allowNull: true
     },
@@ -31,7 +31,7 @@ ResultActivity.init({
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    updatedAt: {
+    updated_at: {
         type: DataTypes.DATE,
         allowNull: true
     }

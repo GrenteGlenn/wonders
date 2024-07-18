@@ -6,9 +6,9 @@ interface ResponseKindCreationAttributes extends Optional<ResponseKindInterface,
 
 class ResponseKind extends Model<ResponseKindInterface, ResponseKindCreationAttributes> implements ResponseKindInterface {
     declare id: number;
-    declare name: string;
-    declare readonly createdAt?: Date;
-    declare readonly updatedAt?: Date;
+    declare type: string;
+    declare readonly created_at?: Date;
+    declare readonly updated_at?: Date;
 }
 
 ResponseKind.init({
@@ -18,22 +18,24 @@ ResponseKind.init({
         primaryKey: true,
         allowNull: false
     },
-    name: {
+    type: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true
     },
-    createdAt: {
+    created_at: {
         type: DataTypes.DATE,
         allowNull: true
     },
-    updatedAt: {
+    updated_at: {
         type: DataTypes.DATE,
         allowNull: true
     }
 }, {
     sequelize: connection,
-    underscored: false,
+    underscored: true,
     modelName: 'ResponseKind',
-    timestamps: true
+    timestamps: false
 });
+
+export default ResponseKind;

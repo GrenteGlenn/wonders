@@ -2,47 +2,45 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('UserQuizIAResults', {
+    await queryInterface.createTable('organizations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      date: {
-        type: Sequelize.DATE
+      user_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      userAnswer: {
+      status_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-      },
+      }
     });
 
-    await queryInterface.addConstraint('UserQuizIAResults', {
+    await queryInterface.addConstraint('organizations', {
       type: 'foreign key',
-      fields: ["userAnswer"],
-      name: 'user_answer_id',
+      fields: ["status_id"],
+      name: 'status_id',
       references: {
-        table: 'UserAnswers',
+        table: 'statuses',
         field: 'id',
       },
       onUpdate: "CASCADE",
       onDelete: "NO ACTION",
-      allowNull: false,
-    })
+    });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('UserQuizIAResults', 'user_answer_id');
-    await queryInterface.dropTable('UserQuizIAResults');
+    await queryInterface.removeConstraint('organizations', 'status_id');
+    await queryInterface.dropTable('organizations');
   }
 };

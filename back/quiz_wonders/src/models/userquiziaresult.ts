@@ -6,10 +6,10 @@ interface UserQuizIAResultCreationAttributes extends Optional<UserQuizIAResultIn
 
 export default class UserQuizIAResult extends Model<UserQuizIAResultInterface, UserQuizIAResultCreationAttributes> implements UserQuizIAResultInterface {
   declare id: number;
-  declare createdAt: Date;
-  declare updatedAt: Date;
-  declare quizResponseId: number;
-  declare userQuizIaResultCountryId: number;
+  declare created_at: Date;
+  declare updated_at?: Date;
+  declare quiz_response: number;
+  declare user_quiz_ia_result_сountry: number;
 }
 
 UserQuizIAResult.init({
@@ -19,15 +19,15 @@ UserQuizIAResult.init({
     primaryKey: true,
     allowNull: false
   },
-  createdAt: {
+  created_at: {
     type: DataTypes.DATE,
     allowNull: false
   },
-  updatedAt: {
+  updated_at: {
     type: DataTypes.DATE,
     allowNull: false
   },
-  quizResponseId: {
+  quiz_response: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
@@ -35,7 +35,7 @@ UserQuizIAResult.init({
       key: 'id'
     }
   },
-  userQuizIaResultCountryId: {
+  user_quiz_ia_result_сountry: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
