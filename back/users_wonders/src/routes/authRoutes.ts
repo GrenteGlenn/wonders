@@ -1,37 +1,23 @@
-import { Router } from 'express';
+import { RequestHandler, Router } from 'express';
+import AuthController from '../controllers/AuthController';
+import UserInterface from '../interfaces/UserInterface';
 
 const router = Router();
 
-// const quizController = new AuthController();
+const authController = new AuthController();
 
-// router.get('/quiz', async (req, res) => {
-//     const quiz = await quizController.list();
-//     res.json(quiz);
-// });
+// router.post('/auth', (async (req, res) => {
+//   const client = await authController.getOne(parseInt(req.params.id, 10));
+//   if (client) {
+//     res.json(client);
+//   }
+// }) as RequestHandler);
 
-// router.get('/quiz-user/:id', async (req, res) => {
-//     const quiz = await quizController.getQuizWithQuestions(parseInt(req.params.id, 10));
-//     res.json(quiz);
-// });
-//
-// router.get('/quiz/:id', async (req, res) => {
-//     const quiz = await quizController.one(parseInt(req.params.id, 10));
-//     res.json(quiz);
-// });
-//
-// router.post('/quiz', async (req, res) => {
-//     const quiz = await quizController.new(req.body.name);
-//     res.json(quiz);
-// });
-//
-// router.put('/quiz/:id', async (req, res) => {
-//     const quiz = await quizController.update(parseInt(req.params.id, 10), req.body.name);
-//     res.json(quiz);
-// });
-//
-// router.delete('/quiz/:id', async (req, res) => {
-//     const quiz = await quizController.remove(parseInt(req.params.id, 10));
-//     res.json(quiz);
-// });
+router.post('/register', (async (req, res) => {
+  const body = <UserInterface>req.body;
+  const client = await authController.getOneByEmail(body.email);
+  if (client) res.json(client);
+  else await authController.new(body);
+}) as RequestHandler);
 
 export default router;
