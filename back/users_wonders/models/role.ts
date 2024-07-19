@@ -29,6 +29,4 @@ Role.init(
   }
 );
 
-Role.belongsToMany(User, { through: 'User_Role' });
-
 export default Role;
