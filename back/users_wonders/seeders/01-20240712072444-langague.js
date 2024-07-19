@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
-    return queryInterface.bulkInsert('Languages', [
+    return queryInterface.bulkInsert('languages', [
       { name: 'Afar' },
       { name: 'Abkhaze' },
       { name: 'Avestique' },
@@ -225,6 +225,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    return queryInterface.bulkDelete('Languages', null, {});
+    return queryInterface.bulkDelete('languages', null, {});
   }
 };

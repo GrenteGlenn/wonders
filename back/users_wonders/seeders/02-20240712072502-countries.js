@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface) {
-    return queryInterface.bulkInsert('Countries', [
+    return queryInterface.bulkInsert('countries', [
       {
         name: 'Afghanistan',
         code: 'AF'
@@ -980,6 +980,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    return queryInterface.bulkDelete('Countries', null, {});
+    return queryInterface.bulkDelete('countries', null, {});
   }
 };

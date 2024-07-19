@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Addresses', {
+    await queryInterface.createTable('addresses', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -41,24 +41,24 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-    await queryInterface.addConstraint('Addresses', {
+    await queryInterface.addConstraint('addresses', {
       type: 'foreign key',
       fields: ['country_id'],
       name: 'country_id',
       references: {
-        table: 'Countries',
+        table: 'countries',
         field: 'id'
       },
       onUpdate: 'CASCADE',
       onDelete: 'NO ACTION',
       allowNull: false
     });
-    await queryInterface.addConstraint('Addresses', {
+    await queryInterface.addConstraint('addresses', {
       type: 'foreign key',
       fields: ['user_id'],
       name: 'user_id',
       references: {
-        table: 'Users',
+        table: 'users',
         field: 'id'
       },
       onUpdate: 'CASCADE',
@@ -67,6 +67,6 @@ module.exports = {
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('Addresses');
+    await queryInterface.dropTable('addresses');
   }
 };
