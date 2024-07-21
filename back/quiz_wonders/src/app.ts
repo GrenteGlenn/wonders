@@ -7,7 +7,7 @@ import quizRoutes from './routes/quizRoutes';
 import organizationRoutes from './routes/organizationRoutes';
 import organizationUrlRoutes from './routes/organizationUrlRoutes'
 import quizLineRoutes from './routes/quizLineRoutes'
-import dbConnection from './config/dbConnection';
+import responseKindRoutes from './routes/responseKindRoutes';
 
 dotenv.config();
 
@@ -24,6 +24,7 @@ app.use('/api', quizRoutes);
 app.use('/api', organizationRoutes)
 app.use('/api', organizationUrlRoutes)
 app.use('/api', quizLineRoutes)
+app.use('/api/response-kind', responseKindRoutes)
 
 
 // Route par défaut

@@ -45,7 +45,9 @@ UserAnswer.init({
 }, {
   sequelize: connection,
   modelName: 'UserAnswer',
-  timestamps: true,
+  tableName: 'user_answers',
+  timestamps: false,
+  underscored: true
 });
 
 UserAnswer.belongsTo(QuizLine, {
