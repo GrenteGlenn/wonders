@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import ResponseKindInterface from '../interfaces/ResponseKindInterface';
+import ResponseKindInterface from '../src/interfaces/ResponseKindInterface';
 
 interface ResponseKindCreationAttributes extends Optional<ResponseKindInterface, 'id'> { }
 

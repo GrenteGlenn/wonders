@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import OrganizationUrlInterface from '../interfaces/OrganizationUrlInterface';
+import OrganizationUrlInterface from '../src/interfaces/OrganizationUrlInterface';
 import Organization from './organization' ;
 import Status from './status';
 

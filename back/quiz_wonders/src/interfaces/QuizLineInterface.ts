@@ -1,4 +1,3 @@
-
 export default interface QuizLineInterface {
   id: number;
   quiz_id: number;

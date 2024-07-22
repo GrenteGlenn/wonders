@@ -1,38 +1,37 @@
-import Status from "../models/status";
+import Status from '../../models/status';
 
 export default class StatusController {
+  async list() {
+    const status = await Status.findAll();
+    console.log(status);
 
-    async list() {
-        const status = await Status.findAll();
-        console.log(status);
-        
-        return status;
-    }
+    return status;
+  }
 
-    async one(id: number) {
-        const status = await Status.findByPk(id);
-        return status;
-    }
+  async one(id: number) {
+    const status = await Status.findByPk(id);
+    return status;
+  }
 
-    async new(name: string) {
-        const status = await Status.create({ name, created_at: new Date(), updated_at: new Date() });
-        return status;
-    }
+  async new(name: string) {
+    const status = await Status.create({ name, created_at: new Date(), updated_at: new Date() });
+    return status;
+  }
 
-    async update(id: number, name: string) {
-        const status = await Status.findByPk(id);
-        if (status) {
-            status.name = name;
-            await status.save();
-        }
-        return status;
+  async update(id: number, name: string) {
+    const status = await Status.findByPk(id);
+    if (status) {
+      status.name = name;
+      await status.save();
     }
+    return status;
+  }
 
-    async remove(id: number) {
-        const status = await Status.findByPk(id);
-        if (status) {
-            await status.destroy();
-        }
-        return status;
+  async remove(id: number) {
+    const status = await Status.findByPk(id);
+    if (status) {
+      await status.destroy();
     }
+    return status;
+  }
 }

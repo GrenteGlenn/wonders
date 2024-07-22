@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import UserQuizIAResultCountryInterface from '../interfaces/UserQuizIaResultCountryInterface';
+import UserQuizIAResultCountryInterface from '../src/interfaces/UserQuizIaResultCountryInterface';
 
 interface UserQuizIAResultCountryCreationAttributes extends Optional<UserQuizIAResultCountryInterface, 'id'> { }
 

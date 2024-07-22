@@ -1,3 +1,3 @@
-import sequelizeConnection from "./config/dbConnection";
+import sequelizeConnection from "../config/dbConnection";
 
 console.log(sequelizeConnection);

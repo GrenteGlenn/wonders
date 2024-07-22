@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import QuizInterface from '../interfaces/QuizInterface';
+import QuizInterface from '../src/interfaces/QuizInterface';
 import QuizLine from './quizline';
 
 interface QuizCreationAttributes extends Optional<QuizInterface, 'id'> { }

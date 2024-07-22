@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import TagInterface from '../interfaces/TagInterface' ;
+import TagInterface from '../src/interfaces/TagInterface' ;
 import QuizLine from './quizline';
 
 interface TagCreationAttributes extends Optional<TagInterface, 'id'> { }
