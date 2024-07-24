@@ -12,6 +12,37 @@ servers:
       bearerFormat: JWT
 
 paths:
+
+  /api/users:
+    get:
+      description: Get all Users
+      responses:
+        200:
+          description: Users Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/User_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Users not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
   /api/user/{userId}:
     get:
       description: Get an User
@@ -134,8 +165,7 @@ paths:
                   message:
                     type: string
                     example: 'User deleted'
-
-  /api/user/{userId}/a:
+  /api/user/{userId}/address:
     get:
       description: Get all addresses for a user
       parameters:
@@ -190,6 +220,76 @@ paths:
                   message:
                     type: string
                     example: 'Address created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+    delete:
+      description: Delete all Address for User
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: string
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User deleted'
+  /api/address:
+    get:
+      description: Get all Address
+      responses:
+        200:
+          description: Address Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Address_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
         403:
           description: Forbidden
           content:
@@ -406,6 +506,7 @@ paths:
                   token:
                     type: string
                     example: 'eyJhbGciOi'
+
   /api/quiz/{quizId}/a/{questionId}:
     post:
       description: Answer a quiz's question
@@ -531,6 +632,10 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/Address_Definition'
+  User_Array_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/User_Definition'
   User_Definition:
     type: object
     properties:
