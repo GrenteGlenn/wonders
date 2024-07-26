@@ -16,8 +16,7 @@
     "build": "tsc",
     "init": "npm install",
     "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix",
-    "test": ""
+    "format": "eslint src/**/*.ts --fix"
   },
   "keywords": [],
   "author": "",
