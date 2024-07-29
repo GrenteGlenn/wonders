@@ -12,7 +12,6 @@ servers:
       bearerFormat: JWT
 
 paths:
-
   /api/users:
     get:
       description: Get all Users
@@ -52,7 +51,7 @@ paths:
           description: The User Id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         200:
           description: User Found
@@ -88,7 +87,7 @@ paths:
           description: The User Id
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         content:
           application/json:
@@ -133,7 +132,7 @@ paths:
           description: The User Id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         403:
           description: Unauthorized
@@ -174,7 +173,7 @@ paths:
           description: The User Id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         200:
           description: Ok
@@ -203,7 +202,7 @@ paths:
           description: The User Id
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         content:
           application/json:
@@ -238,7 +237,7 @@ paths:
           description: The User Id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         403:
           description: Unauthorized
@@ -309,7 +308,7 @@ paths:
           description: The Address Id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         200:
           description: Ok
@@ -338,7 +337,7 @@ paths:
           description: The Address Id
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         content:
           application/json:
@@ -383,7 +382,7 @@ paths:
           description: The Address Id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         403:
           description: Unauthorized
@@ -516,13 +515,13 @@ paths:
           description: The Quiz Id
           required: true
           schema:
-            type: string
+            type: integer
         - in: path
           name: questionId
           description: The Question Id
           required: true
           schema:
-            type: string
+            type: integer
       requestBody:
         content:
           application/json:
@@ -551,7 +550,7 @@ paths:
           description: The Quiz Id
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         404:
           description: Not Found
@@ -574,8 +573,8 @@ paths:
                       type: object
                       properties:
                         questionId:
-                          type: string
-                          example: 'uuid'
+                          type: integer
+                          example: 42
                         required:
                           type: boolean
   /coffee:
@@ -598,8 +597,8 @@ definitions:
     type: object
     properties:
       addressId:
-        type: string
-        example: 'uuid'
+        type: integer
+        example: 42
       name:
         type: string
         example: 'Home'
@@ -640,8 +639,8 @@ definitions:
     type: object
     properties:
       userId:
-        type: string
-        example: 'uuid'
+        type: integer
+        example: 42
       name:
         type: string
         example: 'John'
