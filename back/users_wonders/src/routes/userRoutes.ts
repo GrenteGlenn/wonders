@@ -12,7 +12,6 @@ router.get('/users', (async (req, res) => {
 }) as RequestHandler);
 
 router.get('/users/:id', (async (req, res) => {
-  console.log(req.params);
   const client = await authController.getOne(parseInt(req.params.id, 10));
   res.json(client);
 }) as RequestHandler);

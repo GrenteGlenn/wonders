@@ -8,6 +8,8 @@ export default interface AddressInterface {
   city: string;
   zip_code: string;
   complementary: string;
+  created_at: Date;
+  updated_at: Date;
   country_id: Country;
   userId: User;
 }

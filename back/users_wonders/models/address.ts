@@ -9,10 +9,10 @@ import Country from './country';
 import User from './user';
 
 interface AddressCreationAttributes extends Optional<CountryInterface, 'id'> {
+
 }
 
-class Address extends Model<AddressInterface, AddressCreationAttributes>
-  implements AddressInterface {
+class Address extends Model<AddressInterface, AddressCreationAttributes> implements AddressInterface {
   declare id: number;
   declare name: string;
   declare street: string;
