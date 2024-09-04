@@ -36,10 +36,9 @@ module.exports = {
             onUpdate: "CASCADE",
             onDelete: "CASCADE",
         });
-
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.removeConstraint('pictures', 'picture_id');
-        await queryInterface.dropTable('activityCategory');
+        await queryInterface.removeConstraint('activity_category', 'picture_id');
+        await queryInterface.dropTable('activity_category');
     }
 };

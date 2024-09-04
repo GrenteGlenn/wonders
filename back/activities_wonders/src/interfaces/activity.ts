@@ -4,6 +4,9 @@ export default interface activity {
   url: string;
   description: Text;
   isFree: boolean;
+  duration: number;
+  price: number;
+  partner: string;
   category_id: number;
   created_at?: Date;
   updated_at?: Date;

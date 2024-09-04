@@ -13,6 +13,9 @@ class Activity extends Model<ActivityInterface, ActivityCreationAttributes> impl
     declare url: string;
     declare description: Text;
     declare isFree: boolean;
+    declare duration: number;
+    declare price: number;
+    declare partner: string
     declare category_id: number;
     declare readonly created_at?: Date;
     declare readonly updated_at?: Date;
@@ -41,8 +44,23 @@ Activity.init({
     unique: true
   },
   isFree: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    unique: true
+  },
+  duration: {
+    type: DataTypes.NUMBER,
+    allowNull: false,
+    unique: true
+  },
+  partner: {
     type: DataTypes.STRING,
     allowNull: false,
+    unique: true
+  },
+  price: {
+    type: DataTypes.NUMBER,
+    allowNull: true,
     unique: true
   },
   category_id: {
