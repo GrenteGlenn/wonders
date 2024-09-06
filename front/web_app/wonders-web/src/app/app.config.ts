@@ -3,12 +3,12 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import {  ChevronsLeft, ChevronsRight, LucideAngularModule } from 'lucide-angular';
+import {  ChevronsLeft, ChevronsRight, CircleHelp, Search, UserRound, Settings,Users,Route, LucideAngularModule } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes), 
     provideAnimationsAsync(), 
-    importProvidersFrom(LucideAngularModule.pick({ ChevronsLeft, ChevronsRight }))]
+    importProvidersFrom(LucideAngularModule.pick({ ChevronsLeft, ChevronsRight, CircleHelp, Search, UserRound, Settings, Users, Route }))]
   
 };
