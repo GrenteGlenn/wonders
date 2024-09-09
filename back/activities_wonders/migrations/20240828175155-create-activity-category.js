@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('activity_category', {
+        await queryInterface.createTable('activity_categories', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -25,7 +25,7 @@ module.exports = {
             }
         });
 
-        await queryInterface.addConstraint('activity_category', {
+        await queryInterface.addConstraint('activity_categories', {
             type: "foreign key",
             fields: ["picture_id"],
             name: 'picture_id',
@@ -38,7 +38,7 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.removeConstraint('activity_category', 'picture_id');
-        await queryInterface.dropTable('activity_category');
+        await queryInterface.removeConstraint('activity_categories', 'picture_id');
+        await queryInterface.dropTable('activity_categories');
     }
 };

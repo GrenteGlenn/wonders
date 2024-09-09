@@ -3,7 +3,7 @@ export default interface activity {
   name: string;
   url: string;
   description: Text;
-  isFree: boolean;
+  is_free: boolean;
   duration: number;
   price: number;
   partner: string;

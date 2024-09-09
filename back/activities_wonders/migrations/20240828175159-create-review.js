@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('review', {
+    await queryInterface.createTable('reviews', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      review: {
+      comment: {
         type: Sequelize.STRING,
         allowNull: true,
       },
@@ -34,23 +34,23 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-    await queryInterface.addConstraint('review', {
+    await queryInterface.addConstraint('reviews', {
         type: "foreign key",
         fields: ["activity_id"],
         name: 'activity_id',
         references: {
-            table: 'activity',
+            table: 'activities',
             field: 'id',
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
     });
-    await queryInterface.addConstraint('review', {
+    await queryInterface.addConstraint('reviews', {
         type: "foreign key",
         fields: ["rating_id"],
         name: 'rating_id',
         references: {
-            table: 'rating',
+            table: 'ratings',
             field: 'id',
         },
         onUpdate: "CASCADE",
@@ -58,8 +58,8 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('review', 'activity_id');
-    await queryInterface.removeConstraint('review', 'rating_id');
-    await queryInterface.dropTable('review');
+    await queryInterface.removeConstraint('reviews', 'activity_id');
+    await queryInterface.removeConstraint('reviews', 'rating_id');
+    await queryInterface.dropTable('reviews');
   }
 };

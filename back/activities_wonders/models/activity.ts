@@ -3,6 +3,7 @@ import connection from '../config/dbConnexion'
 
 import ActivityInterface from '../src/interfaces/activity'
 import ActivityCategory from './activityCategory';
+import Review from './review';
 
 interface ActivityCreationAttributes extends Optional<Activity, 'id'> {
 }
@@ -12,7 +13,7 @@ class Activity extends Model<ActivityInterface, ActivityCreationAttributes> impl
     declare name: string;
     declare url: string;
     declare description: Text;
-    declare isFree: boolean;
+    declare is_free: boolean;
     declare duration: number;
     declare price: number;
     declare partner: string
@@ -43,7 +44,7 @@ Activity.init({
     allowNull: false,
     unique: true
   },
-  isFree: {
+  is_free: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     unique: true

@@ -1,0 +1,33 @@
+import Rating from "../../models/rating";
+
+export default class RatingController {
+    async list() {
+        return await Rating.findAll()
+    }
+
+    async one(id: number) {
+        return await Rating.findByPk(id)
+    }
+
+    async new(data: { rating: number }) {
+        return await Rating.create(data as any)
+    }
+
+    async update(id: number, rating: number) {
+        const res = await Rating.findByPk(id);
+        if (res) {
+            res.rating = rating;
+            res.save();
+
+            return res;
+        }
+    }
+
+    async delete(id: number) {
+        const res = await Rating.findByPk(id);
+        if (res) {
+            res.destroy()
+            return res;
+        }
+    }
+}

@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../config/dbConnexion'
+import Review from './review'
 
 import RatingInterface from '../src/interfaces/rating'
 
@@ -32,6 +33,5 @@ Rating.init({
   timestamps: true,
   modelName: 'rating'
 });
-
 
 export default Rating;

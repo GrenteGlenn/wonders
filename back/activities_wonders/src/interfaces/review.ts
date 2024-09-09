@@ -1,10 +1,6 @@
 export default interface Review {
     id: number;
-    name: string;
-    description: Text;
-    isFree: boolean;
-    Price: number;
-    duration: number;
+    comment: Text;
     user_id: number;
     activity_id: number;
     rating_id: number;
