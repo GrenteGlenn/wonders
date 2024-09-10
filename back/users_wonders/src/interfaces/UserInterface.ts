@@ -7,6 +7,8 @@ export default interface UserInterface {
   last_name: string;
   email: string;
   password: string;
+  iv: string;
+  auth_tag: string;
   created_at?: Date;
   updated_at?: Date;
   birth_date: Date;

@@ -16,6 +16,8 @@ class User extends Model<UserInterface, UserCreationAttributes> implements UserI
   declare last_name: string;
   declare email: string;
   declare password: string;
+  declare iv: string;
+  declare auth_tag: string;
   declare readonly created_at: Date;
   declare readonly updated_at: Date;
   declare birth_date: Date;
@@ -36,6 +38,8 @@ User.init(
       }
     },
     password: DataTypes.STRING,
+    iv: DataTypes.STRING,
+    auth_tag: DataTypes.STRING,
     birth_date: DataTypes.DATE,
     language_id: {
       type: DataTypes.INTEGER,

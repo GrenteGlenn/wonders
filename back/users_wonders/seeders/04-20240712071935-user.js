@@ -9,6 +9,8 @@ module.exports = {
         last_name: 'Doe',
         email: 'example@example.com',
         password: '...',
+        iv: '...',
+        auth_tag: '...',
         birth_date: new Date(),
         language_id: 1,
         created_at: new Date(),

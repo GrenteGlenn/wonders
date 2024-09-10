@@ -28,6 +28,8 @@ export default class AuthController {
       client.last_name = user.last_name;
       client.email = user.email;
       client.password = user.password;
+      client.iv = user.iv;
+      client.auth_tag = user.auth_tag;
       client.language_id = user.language_id;
       client.birth_date = user.birth_date;
       await client.save();
