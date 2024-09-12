@@ -10,7 +10,7 @@ export default class PictureController {
   }
 
   async new(data: { path: string }) {
-    const picture = await Picture.create(data as any);
+    const picture = await Picture.create(data as never);
     return picture;
   }
 

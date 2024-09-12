@@ -13,7 +13,7 @@ export default class ActivityCategoryController {
   }
 
   async new(data: { name: string; picture_id: number }) {
-    return await ActivityCategory.create(data as any);
+    return await ActivityCategory.create(data as never);
   }
 
   async update(id: number, name: string, picture_id: number) {

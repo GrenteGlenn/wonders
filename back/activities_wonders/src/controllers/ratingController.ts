@@ -10,7 +10,7 @@ export default class RatingController {
   }
 
   async new(data: { rating: number }) {
-    return await Rating.create(data as any);
+    return await Rating.create(data as never);
   }
 
   async update(id: number, rating: number) {

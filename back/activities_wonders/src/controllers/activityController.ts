@@ -19,7 +19,7 @@ export default class ActivityController {
     partner: string;
     category_id: number;
   }) {
-    return Activity.create(data as any);
+    return Activity.create(data as never);
   }
 
   async update(
@@ -43,7 +43,7 @@ export default class ActivityController {
       activity.price = price;
       activity.partner = partner;
       activity.category_id = category_id;
-      activity.save();
+      await activity.save();
       return activity;
     }
     return 'resource not found';
@@ -52,7 +52,7 @@ export default class ActivityController {
   async delete(id: number) {
     const activity = await Activity.findByPk(id);
     if (activity) {
-      activity.destroy();
+      await activity.destroy();
     }
     return 'resource not found';
   }

@@ -1,14 +1,4 @@
 import Review from '../../models/review';
-import { NullishPropertiesOf } from 'sequelize/types/utils';
-
-interface Data {
-  rating_id: number;
-  user_id: number;
-  activity_id: number;
-  comment: Text;
-}
-
-type DataOmit = Omit<Data, NullishPropertiesOf<Data>>;
 
 export default class ReviewController {
   async list() {
@@ -20,13 +10,7 @@ export default class ReviewController {
   }
 
   async new(data: { rating_id: number; user_id: number; activity_id: number; comment: Text }) {
-    const value: DataOmit = {
-      comment: data.comment,
-      rating_id: data.rating_id,
-      user_id: data.user_id,
-      activity_id: data.activity_id
-    };
-    return await Review.create(value);
+    return await Review.create(data as never);
   }
 
   async update(id: number, rating_id: number, user_id: number, activity_id: number, comment: Text) {
