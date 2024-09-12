@@ -1,4 +1,3 @@
-
 export default interface activityCategory {
   id: number;
   name: string;

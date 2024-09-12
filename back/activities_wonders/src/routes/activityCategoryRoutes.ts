@@ -3,35 +3,45 @@ import ActivityCategoryController from '../controllers/activityCategoryControlle
 
 const router = Router();
 
-const activityCategoryController = new ActivityCategoryController()
+const activityCategoryController = new ActivityCategoryController();
 
-interface RequestBody {
-    path:string
-  }
+interface Body {
+  name: string;
+  picture_id: number;
+}
 
-router.get('/activity-category', async (req, res) => {
-    const activityCategory = await activityCategoryController.list()
-    res.json(activityCategory)
-})
+router.get('/activity-category', (async (req, res) => {
+  const activityCategory = await activityCategoryController.list();
+  res.json(activityCategory);
+}) as RequestHandler);
 
-router.get('/activity-category/:id', async (req, res) => {
-    const activityCategory = await activityCategoryController.one(parseInt(req.params.id, 10))
-    res.json(activityCategory)
-});
+router.get('/activity-category/:id', (async (req, res) => {
+  const activityCategory = await activityCategoryController.one(parseInt(req.params.id, 10));
+  res.json(activityCategory);
+}) as RequestHandler);
 
-router.post('/activity-category', async (req, res) => {
-    const activityCategory = await activityCategoryController.new({ name: req.body.name, picture_id: req.body.picture_id });
-    res.json(activityCategory);
-});
+router.post('/activity-category', (async (req, res) => {
+  const body = <Body>req.body;
+  const activityCategory = await activityCategoryController.new({
+    name: body.name,
+    picture_id: body.picture_id
+  });
+  res.json(activityCategory);
+}) as RequestHandler);
 
-router.put('/activity-category/:id', async (req, res) => {
-    const activityCategory = await activityCategoryController.update(parseInt(req.params.id, 10), req.body.name, req.body.picture_id)
-    res.json(activityCategory)
-})
+router.put('/activity-category/:id', (async (req, res) => {
+  const body = <Body>req.body;
+  const activityCategory = await activityCategoryController.update(
+    parseInt(req.params.id, 10),
+    body.name,
+    body.picture_id
+  );
+  res.json(activityCategory);
+}) as RequestHandler);
 
-router.delete('/activity-category/:id', async (req, res) => {
-    const activityCategory = await activityCategoryController.delete(parseInt(req.params.id, 10))
-    res.json(activityCategory)
-})
+router.delete('/activity-category/:id', (async (req, res) => {
+  const activityCategory = await activityCategoryController.delete(parseInt(req.params.id, 10));
+  res.json(activityCategory);
+}) as RequestHandler);
 
 export default router;
