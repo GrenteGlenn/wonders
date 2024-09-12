@@ -39,7 +39,6 @@ export class NavbarComponent implements OnInit {
   goProfile() {
     this.router.navigate(['profile']);
   }
-  
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
