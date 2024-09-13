@@ -31,6 +31,7 @@ export default class AddressController {
       addresses.city = address.city;
       await addresses.save();
     }
+    return address;
   }
 
   async remove(id: number) {
@@ -38,5 +39,6 @@ export default class AddressController {
     if (address) {
       await address.destroy();
     }
+    return 'Address destroyed';
   }
 }

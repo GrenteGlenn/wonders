@@ -8,7 +8,7 @@ import sequelize from '../config/dbConnection';
 import Country from './country';
 import User from './user';
 
-interface AddressCreationAttributes extends Optional<CountryInterface, 'id'> {
+interface AddressCreationAttributes extends Optional<AddressInterface, 'id'> {
 
 }
 
@@ -20,7 +20,9 @@ class Address extends Model<AddressInterface, AddressCreationAttributes> impleme
   declare zip_code: string;
   declare complementary: string;
   declare country_id: CountryInterface;
-  declare userId: UserInterface;
+  declare user_id: UserInterface;
+  declare readonly created_at: Date;
+  declare readonly updated_at: Date;
 }
 
 Address.init(
@@ -70,13 +72,21 @@ Address.init(
         key: 'id'
       }
     },
-    userId: {
+    user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
         model: User,
         key: 'id'
       }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false
     }
   },
   {

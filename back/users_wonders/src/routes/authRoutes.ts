@@ -2,7 +2,6 @@ import { RequestHandler, Router } from 'express';
 import AuthController from '../controllers/AuthController';
 import UserInterface from '../interfaces/UserInterface';
 import { decryptPassword, encryptPassword } from '../lib/CheckPassword';
-import * as jwt from 'jsonwebtoken';
 import { createJWT, updateJWT } from '../lib/JWT';
 
 const router = Router();
