@@ -28,10 +28,14 @@ export default class AddressController {
   async update(id: number, address: AddressInterface) {
     const addresses = await Address.findByPk(id);
     if (addresses) {
+      addresses.name = address.name;
+      addresses.street = address.street;
       addresses.city = address.city;
+      addresses.zip_code = address.zip_code;
+      addresses.complementary = address.complementary;
       await addresses.save();
     }
-    return address;
+    return addresses;
   }
 
   async remove(id: number) {

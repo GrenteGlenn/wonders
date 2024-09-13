@@ -34,6 +34,7 @@ export default class AuthController {
       client.birth_date = user.birth_date;
       await client.save();
     }
+    return client;
   }
 
   async remove(id: number) {
@@ -41,5 +42,6 @@ export default class AuthController {
     if (client) {
       await client.destroy();
     }
+    return client;
   }
 }
