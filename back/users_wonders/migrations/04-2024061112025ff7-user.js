@@ -29,14 +29,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      iv: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      auth_tag: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       birth_date: {
         type: Sequelize.DATE,
         allowNull: false
