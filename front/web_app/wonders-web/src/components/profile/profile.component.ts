@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import {Dialog, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 
 interface r {
   image: string,
@@ -15,12 +17,15 @@ interface r {
   imports: [
     LucideAngularModule,
     MatCardModule,
-    CommonModule
+    CommonModule,
+    DialogModule
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent {
+  dialog = inject(Dialog);
+
   pseudo: string = 'Stacy';
   email: string = 'stacys@gmail.com';
   username: string = 'Stacy';
@@ -73,5 +78,12 @@ export class ProfileComponent {
       city: 'Kyoto, Japan',
       date: 'Japan'
     }
-  ]
+  ];
+
+  confirmDelete(): void {
+    this.dialog.open(ConfirmDialogComponent, {
+      height: '400px',
+      width: '600px'
+    })
+  }
 }
