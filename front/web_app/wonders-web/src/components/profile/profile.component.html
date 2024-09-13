@@ -9,7 +9,7 @@
   </div>
 </div>
 
-<div class="w-7/12 mx-auto py-10">
+<div class="w-7/12 mx-auto pb-10">
   <div class="mb-6">
     <p class="font-semibold text-2xl">Personal Details</p>
   </div>
@@ -40,15 +40,32 @@
   </div>
 </div>
 
-<div class="w-7/12 mx-auto py-10">
+<div class="w-7/12 mx-auto pb-10">
   <div class="mb-6">
     <p class="font-semibold text-2xl">Trip History</p>
   </div>
-  <div *ngFor="let item of history" class="">
-    <div class="card">
-      <img src="assets/images/history1.png" alt="image journey" width="40" height="40" class="rounded-lg">
+  <div class="grid gap-4 md:grid-cols-4">
+    <div *ngFor="let item of history" class="card mx-4 flex-initial">
+      <img src="assets/images/{{item.image}}" alt="image journey" width="40" height="40" class="rounded-lg">
       <p class="font-medium text-sm">{{ item.city }}</p>
       <p class="text-sm font-light text-gray-500">{{ item.date }}</p>
     </div>
   </div>
+</div>
+
+<div class="w-7/12 mx-auto pb-10">
+  <div class="mb-6">
+    <p class="font-semibold text-2xl">Saved Destinations</p>
+  </div>
+  <div class="grid gap-4 md:grid-cols-4">
+    <div *ngFor="let item of destination" class="card mx-4">
+      <img src="assets/images/{{item.image}}" alt="image journey" width="40" height="40" class="rounded-lg">
+      <p class="font-medium text-sm">{{ item.city }}</p>
+      <p class="text-sm font-light text-gray-500">{{ item.date }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="w-7/12 mx-auto pb-10 text-center">
+  <button class="text-base bg-red-500 hover:bg-red-600 rounded-lg px-4 py-2 font-medium">Delete account</button>
 </div>
