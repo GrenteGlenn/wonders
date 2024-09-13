@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 
 interface r {
+  image: string,
   city: string,
   date: string
 }
@@ -30,20 +31,47 @@ export class ProfileComponent {
 
   history: r[] = [
     {
+      image: 'history1.png',
       city: 'Austin, TX',
       date: '2022'
     },
     {
+      image: 'history2.png',
       city: 'Los Angeles, CA',
       date: '2021'
     },
     {
+      image: 'history3.png',
       city: 'Maui, HI',
       date: '2021'
     },
     {
+      image: 'history4.png',
       city: 'Reno, NV',
       date: '2019'
     }
   ];
+
+  destination: r[] = [
+    {
+      image: 'history3.png',
+      city: 'Maui, Hawaii',
+      date: 'Hawaii'
+    },
+    {
+      image: 'history5.png',
+      city: 'Bora Bora, French Polynesia',
+      date: 'French Polynesia'
+    },
+    {
+      image: 'history6.png',
+      city: 'Aspen, Colorado',
+      date: 'Colorado'
+    },
+    {
+      image: 'history7.png',
+      city: 'Kyoto, Japan',
+      date: 'Japan'
+    }
+  ]
 }
