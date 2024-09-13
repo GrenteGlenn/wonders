@@ -15,18 +15,18 @@ export function createJWT(user: User) {
 export function updateJWT(token: string) {
   const decode = jwt.verify(token, 'secret');
   console.log(decode);
-  // if (decode) {
-  //   return jwt.sign(
-  //     {
-  //       userId: 0,
-  //       email: 'test'
-  //     },
-  //     'secret',
-  //     { expiresIn: '1h' }
-  //   );
-  // } else {
-  //   return null;
-  // }
+  if (decode) {
+    return jwt.sign(
+      {
+        userId: 0,
+        email: 'test'
+      },
+      'secret',
+      { expiresIn: '1h' }
+    );
+  } else {
+    return null;
+  }
 }
 
 export function decryptJWT(token: string) {

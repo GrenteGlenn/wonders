@@ -1,7 +1,7 @@
 import { RequestHandler, Router } from 'express';
 import AuthController from '../controllers/AuthController';
 import UserInterface from '../interfaces/UserInterface';
-import { decryptPassword, encryptPassword } from '../lib/CheckPassword';
+import { checkPassword, decryptPassword, encryptPassword } from '../lib/CheckPassword';
 import { createJWT, updateJWT } from '../lib/JWT';
 
 const router = Router();
@@ -21,8 +21,8 @@ router.post('/auth', (async (req, res, next) => {
   }
 
   if (client) {
-    const password = decryptPassword(client.password, client.iv, client.auth_tag);
-    if (password === body.password) {
+    const isCorrect = await decryptPassword(client.password, body.password,);
+    if (isCorrect) {
       try {
         token = createJWT(client);
         res.status(200).json({
@@ -44,20 +44,16 @@ router.post('/auth', (async (req, res, next) => {
 
 router.post('/refresh', ((req, res) => {
   const token = 'token';
-  updateJWT(token);
-  // if (refresh) res.status(200).json({ refresh });
-  // else res.json('refresh fail');
-  res.json('test');
+  const refresh = updateJWT(token);
+  if (refresh) res.status(200).json({ refresh });
+  else res.json('refresh fail');
 }) as RequestHandler);
 
 router.post('/register', (async (req, res) => {
   const body = <UserInterface>req.body;
-  // const check = checkPassword(body.password);
-  // if (check.score === 1) return res.json(check.feedback);
-  const newPass = encryptPassword(body.password);
-  body.password = newPass.encryptedData;
-  body.iv = newPass.iv;
-  body.auth_tag = newPass.auth_tag;
+  const check = checkPassword(body.password);
+  if (check.score === 1) return res.json(check.feedback);
+  body.password = await encryptPassword(body.password);
   const client = await authController.getOneByEmail(body.email);
   if (client) return res.json('client already registered');
   else await authController.new(body);
