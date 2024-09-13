@@ -2,9 +2,9 @@
   "name": "template_api",
   "version": "1.0.0",
   "description": "Template pour futur microservice",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "nodemon index.ts",
+    "dev": "nodemon src/index.ts",
     "migration:create": "npx sequelize-cli migration:generate",
     "migration:run": "npx sequelize-cli db:migrate",
     "init": "npm install",
