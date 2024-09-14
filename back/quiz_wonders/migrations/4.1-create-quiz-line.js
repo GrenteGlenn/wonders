@@ -12,6 +12,10 @@ module.exports = {
       question: {
         type: Sequelize.TEXT
       },
+      step: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
       is_required: {
         type: Sequelize.BOOLEAN
       },
@@ -82,8 +86,9 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     // Remove constraints that depend on QuizLines in other tables
     await queryInterface.removeConstraint('quiz_lines', 'quiz_id');
-    await queryInterface.removeConstraint('quiz_lines', 'tag_id');
+    // await queryInterface.removeConstraint('quiz_lines', 'tag_id');
     await queryInterface.removeConstraint('quiz_lines', 'response_kind_id');
+    await queryInterface.removeConstraint('quiz_lines', 'tag_id');
     await queryInterface.dropTable('quiz_lines');
   }
 };

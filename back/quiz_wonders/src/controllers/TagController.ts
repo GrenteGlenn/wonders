@@ -1,4 +1,4 @@
-import Tag from '../../models/tag';
+import Tag from '../models/tag';
 export default class TagController {
   async list() {
     return await Tag.findAll();
@@ -9,7 +9,7 @@ export default class TagController {
   }
 
   async new(name: string) {
-    return await Tag.create({ name, created_at: new Date(), updated_at: new Date() });
+    return await Tag.create({ name });
   }
 
   async update(id: number, name: string) {

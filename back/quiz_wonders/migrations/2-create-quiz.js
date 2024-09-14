@@ -2,15 +2,15 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('user_answers', {
+    await queryInterface.createTable('quizzes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      date: {
-        type: Sequelize.DATE
+      name: {
+        type: Sequelize.STRING
       },
       created_at: {
         allowNull: false,
@@ -20,13 +20,27 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      user_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+      tag_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER
       }
     });
+
+    await queryInterface.addConstraint('quizzes', {
+      type: "foreign key",
+      fields: ["tag_id"],
+      name: 'tag_id',
+      references: {
+        table: 'tags',
+        field: 'id',
+      },
+      onUpdate: "CASCADE",
+      onDelete: "NO ACTION",
+    })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('user_answers');
+    
+    await queryInterface.dropTable('quizzes');
+
   }
 };

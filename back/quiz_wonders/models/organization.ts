@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import OrganizationInterface from '../src/interfaces/OrganizationInterface';
+import OrganizationInterface from '../interfaces/OrganizationInterface';
 import Status from './status';
 import UserAnswer from './useranswer';
 import OrganizationUrl from './organizationurl';
@@ -14,12 +14,6 @@ class Organization extends Model<OrganizationInterface, OrganizationCreationAttr
   // public userAnswerId!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-
-  // static associate() {
-  //   Organization.belongsTo(Status, {
-  //     foreignKey: 'status_id',
-  //   });
-  // }
 }
 
 Organization.init({

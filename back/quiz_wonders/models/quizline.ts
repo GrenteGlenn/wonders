@@ -1,39 +1,35 @@
 import { DataTypes, Optional, Model } from 'sequelize';
 import connection from '../config/dbConnection';
-import QuizLineInterface from '../src/interfaces/QuizLineInterface';
-import Quiz from './quiz';
+import QuizLineInterface from '../src/interfaces/QuizLineInterface'
+import Quiz from './quiz';  // Ensure this is correctly imported
 import TagModel from './tag';
 import ResponseKind from './responsekind';
-import Tag from '../src/interfaces/TagInterface';
+import QuizAnswerText from './quizanswertext';
 
 interface QuizLineCreationAttributes extends Optional<QuizLineInterface, 'id'> { }
 
 export default class QuizLine extends Model<QuizLineInterface, QuizLineCreationAttributes> implements QuizLineInterface {
   declare id: number;
-  declare question: Text;
+  declare question: string;
   declare is_boolean?: boolean;
   declare is_text?: boolean;
-  declare quiz_id: number;
+  declare quiz_id?: number;
+  declare step?: number;
   declare is_required: boolean;
   declare tag_id: number;
   declare response_kind_id: number;
   declare readonly created_at?: Date | undefined;
   declare readonly updated_at?: Date | undefined;
 
-  // static associate() {
-  //   this.belongsTo(Quiz, {
-  //     foreignKey: 'quiz_id',
-  //     as: 'quiz'
-  //   });
-  //   this.belongsTo(TagModel, {
-  //     foreignKey: 'tag_id',
-  //     as: 'tag'
-  //   });
-  //   this.belongsTo(ResponseKind, {
-  //     foreignKey: 'response_kind_id',
-  //     as: 'response_kind'
-  //   });
-  // }
+  toJSON() {
+    const values = Object.assign({}, this.get());
+    delete values.created_at;
+    delete values.updated_at;
+    delete values.quiz_id;
+    delete values.tag_id;
+    delete values.response_kind_id;
+    return values;
+  }
 }
 
 QuizLine.init({
@@ -44,11 +40,16 @@ QuizLine.init({
     allowNull: false
   },
   question: {
-    type: DataTypes.TEXT,
-    allowNull: false
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true
   },
   is_boolean: {
     type: DataTypes.BOOLEAN,
+    allowNull: false
+  },
+  step: {
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   is_text: {
@@ -101,20 +102,20 @@ QuizLine.init({
   timestamps: false,
 });
 
-
-// QuizLine.belongsTo(Quiz, {
-//   foreignKey: 'quiz_id',
-//   as: 'quiz',
-// });
-
 // Quiz.hasMany(QuizLine, {
 //   foreignKey: 'quiz_id',
 //   as: 'quiz_lines',
 // });
 
+
+TagModel.hasMany(QuizLine, {
+  foreignKey: 'tag_id',
+  as: 'quiz_lines',
+});
+
 QuizLine.belongsTo(TagModel, {
   foreignKey: 'tag_id',
-  as: 'tag',
+  as: 'tags',
 });
 
 QuizLine.belongsTo(ResponseKind, {

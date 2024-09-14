@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import ResultActivityInterface from '../src/interfaces/ResultActivityInterface';
+import ResultActivityInterface from '../interfaces/ResultActivityInterface';
 
 interface ResultActivityCreationAttributes extends Optional<ResultActivityInterface, 'id'> { }
 

@@ -1,4 +1,4 @@
-import Country from '../../models/country';
+import Country from '../models/country';
 
 class CountryController {
   async list() {
@@ -11,12 +11,12 @@ class CountryController {
     return country;
   }
 
-  async new(name: string, code: string) {
-    const country = await Country.create({ name, code });
+  async new(name: string, code: string, created_at: Date, updated_at: Date) {
+    const country = await Country.create({ name, code, created_at, updated_at });
     return country;
   }
 
-  async update(id: number, name: string, code: string) {
+  async update(id: number, name: string, code: string, created_at: Date, updated_at: Date,) {
     const country = await Country.findByPk(id);
     if (country) {
       country.name = name;

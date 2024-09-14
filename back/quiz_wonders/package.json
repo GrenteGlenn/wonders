@@ -11,12 +11,12 @@
   "version": "1.0.0",
   "main": "./src/app.js",
   "scripts": {
-    "test": "jest",
     "start": "ts-node src/app.ts",
     "build": "tsc",
     "init": "npm install",
     "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix"
+    "format": "eslint src/**/*.ts --fix",
+    "test": "jest -c ./jest.unit.json"
   },
   "keywords": [],
   "author": "",

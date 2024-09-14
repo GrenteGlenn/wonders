@@ -1,5 +1,5 @@
-import Organization from '../../models/organization';
-import Status from '../../models/status';
+import Organization from '../models/organization';
+import Status from '../models/status';
 
 export default class OrganizationController {
   async list() {
@@ -17,19 +17,16 @@ export default class OrganizationController {
     return await Organization.findByPk(id);
   }
 
-  async new(userId: number, status_id: number, user_id: number) {
-    const organization = await Organization.create({ user_id, status_id });
+  async new(status_id: number, user_id: number, created_at: Date, updated_at: Date) {
+    const organization = await Organization.create({ user_id, status_id, created_at, updated_at });
     return organization;
   }
 
-  // userAnswer not use
-
-  async update(id: number, user_id: number, status: number, userAnswer: number) {
-    console.log(userAnswer);
+  async update(id: number, user_id: number, status_id: number, created_at: Date, updated_at: Date) {
     const organization = await Organization.findByPk(id);
     if (organization) {
       organization.user_id = user_id;
-      organization.status_id = status;
+      organization.status_id = status_id;
       await organization.save();
     }
     return organization;

@@ -1,4 +1,4 @@
-import Status from '../../models/status';
+import Status from '../models/status';
 
 export default class StatusController {
   async list() {
@@ -14,7 +14,7 @@ export default class StatusController {
   }
 
   async new(name: string) {
-    const status = await Status.create({ name, created_at: new Date(), updated_at: new Date() });
+    const status = await Status.create({ name });
     return status;
   }
 

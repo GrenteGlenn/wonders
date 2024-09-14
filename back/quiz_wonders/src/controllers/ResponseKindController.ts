@@ -10,7 +10,7 @@ export default class ResponseKindController {
   }
 
   async new(type: string) {
-    return await ResponseKind.create({ type: type, created_at: new Date(), updated_at: new Date() });
+    return await ResponseKind.create({ type: type });
   }
 
   async update(id: number, type: string) {

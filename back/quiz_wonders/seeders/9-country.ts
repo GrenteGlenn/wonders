@@ -1,9 +1,6 @@
-'use strict';
-
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface) {
-    return queryInterface.bulkInsert('countries', [
+  up: async ( queryInterface) => {
+    const countries = [
       {
         name: 'Afghanistan',
         code: 'AF'
@@ -25,7 +22,7 @@ module.exports = {
         code: 'AS'
       },
       {
-        name: 'AndorrA',
+        name: 'Andorra',
         code: 'AD'
       },
       {
@@ -976,10 +973,17 @@ module.exports = {
         name: 'Zimbabwe',
         code: 'ZW'
       }
-    ]);
+    ];
+    console.log(countries)
+    await queryInterface.bulkInsert('countries', countries.map(country => ({
+      name: country.name,
+      code: country.code,
+      created_at: new Date(),
+      updated_at: new Date()
+    })), {});
   },
 
-  async down(queryInterface) {
-    return queryInterface.bulkDelete('countries', null, {});
+  down: async (queryInterface) => {
+    await queryInterface.bulkDelete('countries', {}, {});
   }
 };

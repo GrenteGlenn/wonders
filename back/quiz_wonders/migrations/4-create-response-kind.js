@@ -20,9 +20,15 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE,
         allowNull: false
-      }
+      },
+      // quiz_line_id: {
+      //   type: Sequelize.INTEGER,
+      //   allowNull: false,
+      // }
     });
   },
+
+  
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('response_kinds');
   }

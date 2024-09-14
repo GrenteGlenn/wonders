@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import ResponseKindInterface from '../src/interfaces/ResponseKindInterface';
+import ResponseKindInterface from '../interfaces/ResponseKindInterface';
 
 interface ResponseKindCreationAttributes extends Optional<ResponseKindInterface, 'id'> { }
 
@@ -9,6 +9,13 @@ class ResponseKind extends Model<ResponseKindInterface, ResponseKindCreationAttr
     declare type: string;
     declare readonly created_at?: Date;
     declare readonly updated_at?: Date;
+
+    toJSON() {
+        const values = Object.assign({}, this.get());
+        delete values.created_at;
+        delete values.updated_at;
+        return values;
+      }
 }
 
 ResponseKind.init({
@@ -35,6 +42,7 @@ ResponseKind.init({
     sequelize: connection,
     underscored: true,
     modelName: 'ResponseKind',
+    tableName: 'response_kinds',
     timestamps: false
 });
 

@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import StatusInterface from '../src/interfaces/StatusInterface';
+import StatusInterface from '../interfaces/StatusInterface';
 import { getHeapStatistics } from 'v8';
 import OrganizationUrl from './organizationurl';
 

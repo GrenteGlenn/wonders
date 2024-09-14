@@ -3,15 +3,18 @@ module.exports = {
 up: async(queryInterface) => {
 
     await queryInterface.bulkInsert('quizzes', [{
-      name: 'Cheap travel',
+      name: 'Type of vacation',
+      tag_id: 1,
       created_at: new Date(),
       updated_at: new Date()
     }, {
-      name: 'Fancy travel',
+      name: 'Pricing',
+      tag_id: 1,
       created_at: new Date(),
       updated_at: new Date()
     }, {
-      name: 'Hard travel',
+      name: 'Activities',
+      tag_id: 1,
       created_at: new Date(),
       updated_at: new Date()
     }], {});
