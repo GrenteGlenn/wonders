@@ -3,7 +3,7 @@ import connection from '../config/dbConnexion'
 
 import ActivityCategoryInterface from '../src/interfaces/activityCategory';
 
-interface ActivityCategoryCreationAttributes extends Optional<ActivityCategory, 'id'> {
+interface ActivityCategoryCreationAttributes extends Optional<ActivityCategoryInterface, 'id'> {
 }
 
 class ActivityCategory extends Model<ActivityCategoryInterface, ActivityCategoryCreationAttributes> implements ActivityCategoryInterface {

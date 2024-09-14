@@ -28,6 +28,6 @@ export default class PictureController {
     if (picture) {
       await picture.destroy();
     }
-    return picture;
+    return 'resource had been deleted';
   }
 }

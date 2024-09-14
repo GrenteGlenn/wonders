@@ -54,6 +54,6 @@ export default class ActivityController {
     if (activity) {
       await activity.destroy();
     }
-    return 'resource not found';
+    return 'resource had been deleted';
   }
 }

@@ -5,7 +5,7 @@ import ActivityInterface from '../src/interfaces/activity'
 import ActivityCategory from './activityCategory';
 import Review from './review';
 
-interface ActivityCreationAttributes extends Optional<Activity, 'id'> {
+interface ActivityCreationAttributes extends Optional<ActivityInterface, 'id'> {
 }
 
 class Activity extends Model<ActivityInterface, ActivityCreationAttributes> implements ActivityInterface {

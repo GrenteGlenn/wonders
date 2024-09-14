@@ -5,7 +5,7 @@ import Review from './review'
 import RatingInterface from '../src/interfaces/rating'
 
 
-interface RatingCreationAttributes extends Optional<Rating, 'id'> {
+interface RatingCreationAttributes extends Optional<RatingInterface, 'id'> {
 }
 
 class Rating extends Model<RatingInterface, RatingCreationAttributes> implements RatingInterface {

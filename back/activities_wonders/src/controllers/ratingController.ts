@@ -27,7 +27,7 @@ export default class RatingController {
     const res = await Rating.findByPk(id);
     if (res) {
       await res.destroy();
-      return res;
+      return 'resource had been deleted';
     }
   }
 }

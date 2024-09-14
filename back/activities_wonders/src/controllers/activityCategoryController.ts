@@ -31,5 +31,6 @@ export default class ActivityCategoryController {
     if (activityCategory) {
       await activityCategory.destroy();
     }
+    return 'resource had been deleted';
   }
 }

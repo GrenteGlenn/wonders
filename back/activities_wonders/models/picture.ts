@@ -4,7 +4,7 @@ import connection from '../config/dbConnexion'
 import PictureInterface from '../src/interfaces/picture'
 import ActivityCategory from './activityCategory';
 
-interface PictureCreationAttributes extends Optional<Picture, 'id'> {
+interface PictureCreationAttributes extends Optional<PictureInterface, 'id'> {
 }
 
 class Picture extends Model<PictureInterface, PictureCreationAttributes> implements PictureInterface {

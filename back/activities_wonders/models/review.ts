@@ -5,7 +5,7 @@ import ReviewInterface from '../src/interfaces/review'
 import Activity from './activity';
 import Rating from './rating';
 
-interface ReviewCreationAttributes extends Optional<Review, 'id'> {
+interface ReviewCreationAttributes extends Optional<ReviewInterface, 'id'> {
 }
 
 export default class Review extends Model<ReviewInterface, ReviewCreationAttributes> implements ReviewInterface {

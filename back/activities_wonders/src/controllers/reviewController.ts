@@ -10,7 +10,8 @@ export default class ReviewController {
   }
 
   async new(data: { rating_id: number; user_id: number; activity_id: number; comment: Text }) {
-    return await Review.create(data as never);
+     const review = await Review.create(data);
+     return review;
   }
 
   async update(id: number, rating_id: number, user_id: number, activity_id: number, comment: Text) {
