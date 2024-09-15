@@ -22,21 +22,15 @@ export default class UserAnswerController {
     quiz_line_id: number | undefined,
     quiz_response_id: number | undefined,
     boolean: boolean | undefined,
-    text: string | undefined
+    text: string | undefined,
+    created_at: Date,
+    updated_at: Date
   ) {
     try {
-      return await UserAnswer.create({ quiz_answer_text_id, quiz_line_id, boolean, quiz_response_id, text });
+      return await UserAnswer.create({ quiz_answer_text_id, quiz_line_id, boolean, quiz_response_id, text, created_at, updated_at });
     } catch (error) {
       console.log(error);
       return error;
-    }
-  }
-
-  async delete(id: number) {
-    try {
-      return await UserAnswer.destroy({ where: { id } });
-    } catch (error) {
-      return console.log(error);
     }
   }
 
@@ -46,7 +40,9 @@ export default class UserAnswerController {
     quiz_line_id: number | undefined,
     quiz_response_id: number | undefined,
     boolean: boolean | undefined,
-    text: string | undefined
+    text: string | undefined,
+    created_at: Date,
+    updated_at: Date
   ) {
     try {
       const userAnswer = await UserAnswer.findByPk(id);
@@ -63,18 +59,11 @@ export default class UserAnswerController {
       return console.log(error);
     }
   }
-  //   static async delete(req: any, res: any) {
-  //     try {
-  //       const { id } = req.params;
-  //       const deleted = await UserAnswer.destroy({
-  //         where: { id }
-  //       });
-  //       if (deleted) {
-  //         return res.status(204).send('UserAnswer deleted');
-  //       }
-  //       throw new Error('UserAnswer not found');
-  //     } catch (error) {
-  //       return res.status(500).send(error.message);
-  //     }
-  //   }
+  async delete(id: number) {
+    try {
+      return await UserAnswer.destroy({ where: { id } });
+    } catch (error) {
+      return console.log(error);
+    }
+  }
 }

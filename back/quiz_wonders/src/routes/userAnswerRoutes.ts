@@ -23,7 +23,9 @@ router.post('/user-answer', (async (req, res) => {
       body.quiz_line_id,
       body.quiz_response_id,
       body.boolean,
-      body.text
+      body.text,
+      new Date(),
+      new Date()
     );
     res.json(userAnswer);
   } catch (error) {
@@ -40,7 +42,9 @@ router.put('/user-answer/:id', (async (req, res) => {
       body.quiz_line_id,
       body.quiz_response_id,
       body.boolean,
-      body.text
+      body.text,
+      new Date(),
+      new Date()
     );
     res.json(userAnswer);
   } catch (error) {

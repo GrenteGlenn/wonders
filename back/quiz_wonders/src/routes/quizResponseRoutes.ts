@@ -11,30 +11,50 @@ const router = Router();
 const quizResponseController = new QuizResponseController();
 
 router.get('/quiz-response', (async (req, res) => {
+  try {
   const quizResponses = await quizResponseController.list();
   res.json(quizResponses);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 router.get('/quiz-response/:id', (async (req, res) => {
+  try {
   const quizResponses = await quizResponseController.one(parseInt(req.params.id, 10));
   res.json(quizResponses);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 router.post('/quiz-response', (async (req, res) => {
+  try {
   const body = <Body>req.body;
-  const quizResponses = await quizResponseController.new(body.quiz_id, body.user_id);
+  const quizResponses = await quizResponseController.new(body.quiz_id, body.user_id, new Date(), new Date());
   res.json(quizResponses);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 router.put('/quiz-response/:id', (async (req, res) => {
+  try {
   const body = <Body>req.body;
-  const quizResponses = await quizResponseController.update(parseInt(req.params.id, 10), body.quiz_id, body.user_id);
+  const quizResponses = await quizResponseController.update(parseInt(req.params.id, 10), body.quiz_id, body.user_id, new Date(), new Date());
   res.json(quizResponses);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 router.delete('/quiz-response/:id', (async (req, res) => {
+  try {
   const quizResponses = await quizResponseController.delete(parseInt(req.params.id, 10));
   res.json(quizResponses);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 export default router;

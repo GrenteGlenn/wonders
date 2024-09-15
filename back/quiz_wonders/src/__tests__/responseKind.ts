@@ -14,6 +14,9 @@ describe('ResponseKindController', () => {
     jest.clearAllMocks();
   });
 
+  const created_at = new Date;
+  const updated_at = new Date;
+
   it('should list all responses kinds', async () => {
     const mockResponseKinds = [
       {
@@ -64,14 +67,16 @@ describe('ResponseKindController', () => {
   it('should create a new response kind', async () => {
     const mockResponseKind = {
       id: 1,
-      type: 'Boolean'
+      type: 'Boolean',
+      created_at: created_at,
+      updated_at: updated_at
     };
 
     (ResponseKind.create as jest.Mock).mockResolvedValue(mockResponseKind);
 
-    const result = await controller.new('boolean');
+    const result = await controller.new('boolean', created_at, updated_at);
 
-    expect(ResponseKind.create).toHaveBeenCalledWith({ type: 'boolean' });
+    expect(ResponseKind.create).toHaveBeenCalledWith({ type: 'boolean', created_at: created_at, updated_at: updated_at});
     expect(result).toEqual(mockResponseKind);
   });
 
@@ -79,18 +84,21 @@ describe('ResponseKindController', () => {
     const mockResponseKind = {
       id: 1,
       type: 'Boolean',
+      created_at,
+      updated_at,
       save: jest.fn()
     };
 
     (ResponseKind.findByPk as jest.Mock).mockResolvedValue(mockResponseKind);
 
-    const result = await controller.update(1, 'boolean22222');
+    const result = await controller.update(1, 'boolean22222', created_at, updated_at);
 
     expect(ResponseKind.findByPk).toHaveBeenCalledWith(1);
     expect(mockResponseKind.save).toHaveBeenCalled();
     expect(mockResponseKind.type).toBe('boolean22222');
     expect(result).toEqual(mockResponseKind);
   });
+
   it('should remove a response kind by id', async () => {
     const mockResponseKind = {
       id: 1,

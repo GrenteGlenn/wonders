@@ -14,6 +14,9 @@ describe('CountryController', () => {
     jest.clearAllMocks();
   });
 
+  const created_at = new Date;
+  const updated_at = new Date;
+
   it('sould list all quiz responses', async () => {
     const mockQuizResponse = [
       {
@@ -134,20 +137,20 @@ describe('CountryController', () => {
     expect(result).toEqual(mockQuizResponse);
   });
   it('should create a new quiz response', async () => {
-    const mockQuizResponse = { id: 1, quiz_id: 1, user_id: 2 };
+    const mockQuizResponse = { id: 1, quiz_id: 1, user_id: 2, created_at: created_at, updated_at: updated_at };
     (QuizResponse.create as jest.Mock).mockResolvedValue(mockQuizResponse);
 
-    const result = await controller.new(1, 2);
+    const result = await controller.new(1, 2, created_at, updated_at);
 
     expect(QuizResponse.create).toHaveBeenCalledWith({ quiz_id: 1, user_id: 2 });
     expect(result).toEqual(mockQuizResponse);
   });
 
   it('should update an existing quiz response', async () => {
-    const mockQuizResponse = { id: 1, quiz_id: 1, user_id: 2, save: jest.fn() };
+    const mockQuizResponse = { id: 1, quiz_id: 1, user_id: 2, created_at: created_at, updated_at: updated_at, save: jest.fn() };
 
     (QuizResponse.findByPk as jest.Mock).mockResolvedValue(mockQuizResponse);
-    const result = await controller.update(1, 1, 10);
+    const result = await controller.update(1, 1, 10, created_at, updated_at);
 
     expect(QuizResponse.findByPk).toHaveBeenCalledWith(1);
     expect(mockQuizResponse.save).toHaveBeenCalled();

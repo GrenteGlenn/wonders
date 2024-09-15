@@ -13,30 +13,52 @@ const router = Router();
 const countryController = new CountryController();
 
 router.get('/countries', (async (req, res) => {
-  const countries = await countryController.list();
-  res.json(countries);
+  try {
+    const countries = await countryController.list();
+    res.json(countries);
+  } catch (error) {
+    res.json({ error: error });
+  }
+
 }) as RequestHandler);
 
 router.get('/countries/:id', (async (req, res) => {
-  const country = await countryController.one(parseInt(req.params.id, 10));
-  res.json(country);
+  try {
+    const country = await countryController.one(parseInt(req.params.id, 10));
+    res.json(country);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
 router.post('/countries', (async (req, res) => {
-  const body = <Body>req.body;
-  const country = await countryController.new(body.name, body.code, new Date(), new Date());
-  res.json(country);
+  try {
+    const body = <Body>req.body;
+    const country = await countryController.new(body.name, body.code, new Date(), new Date());
+    res.json(country);
+  } catch (error) {
+    res.json({error: error});
+  }
+
 }) as RequestHandler);
 
 router.put('/countries/:id', (async (req, res) => {
-  const body = <Body>req.body;
-  const country = await countryController.update(parseInt(req.params.id, 10), body.name, body.code, new Date(), new Date());
-  res.json(country);
+  try {
+    const body = <Body>req.body;
+    const country = await countryController.update(parseInt(req.params.id, 10), body.name, body.code, new Date(), new Date());
+    res.json(country);
+  } catch (error) {
+    res.json({error: error});
+  }
 }) as RequestHandler);
 
 router.delete('/countries/:id', (async (req, res) => {
-  const country = await countryController.remove(parseInt(req.params.id, 10));
-  res.json(country);
+  try {
+    const country = await countryController.remove(parseInt(req.params.id, 10));
+    res.json(country);
+  } catch (error) {
+    res.json({error: error});
+  }
 }) as RequestHandler);
 
 export default router;

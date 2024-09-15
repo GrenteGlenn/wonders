@@ -15,16 +15,25 @@ const router = Router();
 const organizationUrlController = new OrganizationUrlController();
 
 router.get('/organization-url', (async (req, res) => {
+  try {
   const organizationUrl = await organizationUrlController.list();
   res.json(organizationUrl);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 router.get('/organization-url/:id', (async (req, res) => {
+  try {
   const organizationUrl = await organizationUrlController.one(parseInt(req.params.id, 10));
   res.json(organizationUrl);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 router.post('/organization-url', (async (req, res) => {
+  try {
   const body = <Body>req.body;
   const organizationUrl = await organizationUrlController.create(
     body.url,
@@ -33,13 +42,16 @@ router.post('/organization-url', (async (req, res) => {
     body.partner,
     body.status_id,
     body.key,
-  
     new Date,
     new Date
   );
   res.json(organizationUrl);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 router.put('/organization-url/:id', (async (req, res) => {
+  try {
   const body = <Body>req.body;
   const organizationUrl = await organizationUrlController.update(
     parseInt(req.params.id, 10),
@@ -51,11 +63,18 @@ router.put('/organization-url/:id', (async (req, res) => {
     body.status_id
   );
   res.json(organizationUrl);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 router.delete('/organization-url/:id', (async (req, res) => {
+  try {
   const organizationUrl = await organizationUrlController.delete(parseInt(req.params.id, 10));
   res.json(organizationUrl);
+} catch (error) {
+  res.json({error: error});
+}
 }) as RequestHandler);
 
 export default router;

@@ -14,6 +14,9 @@ describe('TagController', () => {
     jest.clearAllMocks();
   });
 
+  const created_at = new Date;
+  const updated_at = new Date;
+
   it('should list all tags', async () => {
     const mockTags = [
       { id: 1, name: 'test1' },
@@ -43,21 +46,21 @@ describe('TagController', () => {
   });
 
   it('should create a new tag', async () => {
-    const mockTags = [{ id: 1, name: 'test1' }];
+    const mockTags = [{ id: 1, name: 'test1', created_at: created_at, updated_at: updated_at }];
 
     (Tag.create as jest.Mock).mockResolvedValue(mockTags);
 
-    const result = await controller.new('test1');
+    const result = await controller.new('test1', created_at, updated_at);
 
-    expect(Tag.create).toHaveBeenCalledWith({ name: 'test1' });
+    expect(Tag.create).toHaveBeenCalledWith({ name: 'test1', created_at: created_at, updated_at: updated_at });
     expect(result).toEqual(mockTags);
   });
 
   it('should update a tag', async () => {
-    const mockTag = { id: 1, name: 'test1', save: jest.fn() };
+    const mockTag = { id: 1, name: 'test1',  created_at: created_at, updated_at: updated_at, save: jest.fn() };
     (Tag.findByPk as jest.Mock).mockResolvedValue(mockTag);
 
-    const result = await controller.update(1, 'test2');
+    const result = await controller.update(1, 'test2', created_at, updated_at);
 
     expect(Tag.findByPk).toHaveBeenCalledWith(1);
     expect(mockTag.save).toHaveBeenCalled();

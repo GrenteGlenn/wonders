@@ -14,6 +14,9 @@ describe('UserAnswerController', () => {
         jest.clearAllMocks();
     });
 
+    const created_at = new Date;
+    const updated_at = new Date;
+
     it('should list all user answers', async () => {
         const mockUserAnswer = [
             {
@@ -59,20 +62,20 @@ describe('UserAnswerController', () => {
     });
 
     it('should create a new user answer', async () => {
-        const mockUserAnswer = { id: 1, quiz_response_id: 1, quiz_line_id: 1, boolean: false, text: '', quiz_answer_text_id: 3 };
+        const mockUserAnswer = { id: 1, quiz_response_id: 1, quiz_line_id: 1, boolean: false, text: '', quiz_answer_text_id: 3, created_at: created_at, updated_at: updated_at };
         (UserAnswer.create as jest.Mock).mockResolvedValue(mockUserAnswer);
 
-        const result = await controller.new(1, 1, 3, false, '');
+        const result = await controller.new(1, 1, 3, false, '', created_at, updated_at);
 
-        expect(UserAnswer.create).toHaveBeenCalledWith({  quiz_response_id: 1, quiz_line_id: 1, boolean: false, text: '', quiz_answer_text_id: 3 });
+        expect(UserAnswer.create).toHaveBeenCalledWith({  quiz_response_id: 1, quiz_line_id: 1, boolean: false, text: '', quiz_answer_text_id: 3, created_at: created_at, updated_at: updated_at });
         expect(result).toEqual(mockUserAnswer);
     });
 
     it('should update an existing answer', async () => {
-        const mockUserAnswer = { id: 1, quiz_response_id: 1, quiz_line_id: 1, boolean: false, text: '', quiz_answer_text_id: 3, save: jest.fn() };
+        const mockUserAnswer = { id: 1, quiz_response_id: 1, quiz_line_id: 1, boolean: false, text: '', quiz_answer_text_id: 3,created_at: created_at, updated_at: updated_at, save: jest.fn() };
         (UserAnswer.findByPk as jest.Mock).mockResolvedValue(mockUserAnswer);
 
-        const result = await controller.update(1, 1, 1, 1, false, 'ttt');
+        const result = await controller.update(1, 1, 1, 1, false, 'ttt', created_at, updated_at);
 
         expect(UserAnswer.findByPk).toHaveBeenCalledWith(1);
         expect(mockUserAnswer.save).toHaveBeenCalled();

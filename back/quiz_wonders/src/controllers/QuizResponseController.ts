@@ -37,15 +37,15 @@ export default class QuizResponseController {
     }
   }
 
-  async new(quiz_id: number, user_id: number) {
+  async new(quiz_id: number, user_id: number, created_at: Date, updated_at: Date) {
     try {
-      return await QuizResponse.create({ quiz_id, user_id });
+      return await QuizResponse.create({ quiz_id, user_id, created_at, updated_at });
     } catch (error) {
       return console.log(error);
     }
   }
 
-  async update(id: number, quiz_id: number, user_id: number) {
+  async update(id: number, quiz_id: number, user_id: number, created_at: Date, updated_at: Date) {
     try {
       const quizResponse = await QuizResponse.findByPk(id);
       if (quizResponse) {

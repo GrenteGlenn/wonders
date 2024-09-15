@@ -30,7 +30,7 @@ router.get('/tags/:id', (async (req, res) => {
 router.post('/tags', (async (req, res) => {
   const body = <Body>req.body;
   try {
-    const tag = await tagController.new(body.name);
+    const tag = await tagController.new(body.name, new Date(), new Date());
     res.json(tag);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create tag' });
@@ -40,7 +40,7 @@ router.post('/tags', (async (req, res) => {
 router.put('/tags/:id', (async (req, res) => {
   const body = <Body>req.body;
   try {
-    const tag = await tagController.update(parseInt(req.params.id, 10), body.name);
+    const tag = await tagController.update(parseInt(req.params.id, 10), body.name, new Date(), new Date());
     res.json(tag);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update tag' });

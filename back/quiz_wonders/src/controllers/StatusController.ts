@@ -13,12 +13,12 @@ export default class StatusController {
     return status;
   }
 
-  async new(name: string) {
-    const status = await Status.create({ name });
+  async new(name: string, created_at: Date, updated_at: Date) {
+    const status = await Status.create({ name, created_at, updated_at });
     return status;
   }
 
-  async update(id: number, name: string) {
+  async update(id: number, name: string, created_at: Date, updated_at: Date) {
     const status = await Status.findByPk(id);
     if (status) {
       status.name = name;
