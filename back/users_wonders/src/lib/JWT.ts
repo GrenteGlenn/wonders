@@ -1,6 +1,13 @@
 import User from '../../models/user';
 import * as jwt from 'jsonwebtoken';
 
+interface Data {
+  userId: number;
+  email: string;
+  iat: number;
+  exp: number;
+}
+
 export function createJWT(user: User) {
   return jwt.sign(
     {
@@ -13,13 +20,12 @@ export function createJWT(user: User) {
 }
 
 export function updateJWT(token: string) {
-  const decode = jwt.verify(token, 'secret');
-  console.log(decode);
+  const decode = jwt.verify(token, 'secret') as Data;
   if (decode) {
     return jwt.sign(
       {
-        userId: 0,
-        email: 'test'
+        userId: decode.userId,
+        email: decode.email
       },
       'secret',
       { expiresIn: '1h' }

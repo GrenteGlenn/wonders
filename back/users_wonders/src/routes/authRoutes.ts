@@ -45,8 +45,8 @@ router.post('/auth', (async (req, res, next) => {
 // TODO need fix
 router.post('/refresh', ((req, res) => {
   let refresh;
-  const token = req.headers.authorization;
-  console.log(token);
+  const token = req.headers.authorization?.split(' ')[1];
+  console.log(req.headers.authorization, token);
   if (token) refresh = updateJWT(token);
   if (refresh) res.status(200).json({ refresh });
   else res.json('refresh fail');
