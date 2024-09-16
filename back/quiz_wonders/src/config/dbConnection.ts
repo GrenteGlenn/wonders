@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -8,14 +8,13 @@ const dbpassword = 'root';
 const dbhost = process.env.DB_HOST;
 const dbdialect = process.env.DB_DIALECT as string | any;
 
-const sequelizeConnection = new Sequelize(
-  dbname,
-  dbuser,
-  dbpassword,
-  {
-    host: dbhost,
-    dialect: 'postgres',
+const sequelizeConnection = new Sequelize(dbname, dbuser, dbpassword, {
+  host: dbhost,
+  dialect: 'postgres',
+  define: {
+    underscored: true,
+    timestamps: true
   }
-);
+});
 
 export default sequelizeConnection;

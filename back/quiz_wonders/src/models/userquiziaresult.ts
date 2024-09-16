@@ -2,48 +2,54 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import UserQuizIAResultInterface from '../interfaces/UserQuizIaResultInterface';
 
-interface UserQuizIAResultCreationAttributes extends Optional<UserQuizIAResultInterface, 'id'> { }
+interface UserQuizIAResultCreationAttributes extends Optional<UserQuizIAResultInterface, 'id'> {}
 
-export default class UserQuizIAResult extends Model<UserQuizIAResultInterface, UserQuizIAResultCreationAttributes> implements UserQuizIAResultInterface {
+export default class UserQuizIAResult
+  extends Model<UserQuizIAResultInterface, UserQuizIAResultCreationAttributes>
+  implements UserQuizIAResultInterface
+{
   declare id: number;
-  declare createdAt: Date;
-  declare updatedAt: Date;
-  declare quizResponseId: number;
-  declare userQuizIaResultCountryId: number;
+  declare created_at: Date;
+  declare updated_at?: Date;
+  declare quiz_response: number;
+  declare user_quiz_ia_result_сountry: number;
 }
 
-UserQuizIAResult.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  quizResponseId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'QuizResponses',
-      key: 'id'
+UserQuizIAResult.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    quiz_response: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'QuizResponses',
+        key: 'id'
+      }
+    },
+    user_quiz_ia_result_сountry: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'UserQuizIaResultCountries',
+        key: 'id'
+      }
     }
   },
-  userQuizIaResultCountryId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'UserQuizIaResultCountries',
-      key: 'id'
-    }
+  {
+    sequelize: connection,
+    modelName: 'UserQuizIAResult'
   }
-}, {
-  sequelize: connection,
-  modelName: 'UserQuizIAResult'
-});
+);

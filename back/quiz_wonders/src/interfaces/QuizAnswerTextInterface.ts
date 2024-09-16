@@ -1,6 +1,7 @@
 export default interface QuizAnswerText {
-  id?: number;
-  answer: Text | null;
-  createdAt?: Date;
-  updatedAt?: Date;
+  id: number;
+  answer: string;
+  quiz_line_id: number;
+  created_at?: Date;
+  updated_at?: Date;
 }

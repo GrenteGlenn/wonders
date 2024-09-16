@@ -6,7 +6,11 @@ import tagRoutes from './routes/tagRoutes';
 import quizRoutes from './routes/quizRoutes';
 import organizationRoutes from './routes/organizationRoutes';
 import organizationUrlRoutes from './routes/organizationUrlRoutes'
-import dbConnection from './config/dbConnection';
+import quizLineRoutes from './routes/quizLineRoutes'
+import responseKindRoutes from './routes/responseKindRoutes';
+import quizResponseRoutes from './routes/quizResponseRoutes';
+import userAnswerRoutes from './routes/userAnswerRoutes';
+import quizAnswerTextRoutes from './routes/quizAnswerTextRoutes';
 
 dotenv.config();
 
@@ -22,6 +26,11 @@ app.use('/api', tagRoutes);
 app.use('/api', quizRoutes);
 app.use('/api', organizationRoutes)
 app.use('/api', organizationUrlRoutes)
+app.use('/api', quizLineRoutes)
+app.use('/api/response-kind', responseKindRoutes)
+app.use('/api', userAnswerRoutes);
+app.use('/api', quizResponseRoutes);
+app.use('/api', quizAnswerTextRoutes);
 
 
 // Route par défaut

@@ -1,32 +1,61 @@
-import { Router } from "express";
-import OrganizationController from "../controllers/OrganizationController";
+import { RequestHandler, Router } from 'express';
+import OrganizationController from '../controllers/OrganizationController';
+
+interface Body {
+  user_id: number;
+  status_id: number;
+}
 
 const router = Router();
+
 const organizationController = new OrganizationController();
 
-router.get('/organization', async (req, res) => {
-    const organization = await organizationController.list()
-    res.json(organization); 
-})
-
-router.get('/organization/:id', async (req, res) => {
-    const organization = await organizationController.one(parseInt(req.params.id, 10));
+router.get('/organization', (async (req, res) => {
+  try {
+    const organization = await organizationController.list();
     res.json(organization);
-})
+  } catch (error) {
+    res.json({error: error});
+  }
 
-router.post('/orgnization', async (req, res) =>  {
-    const organization = await organizationController.new(req.body.userId, req.body.statusId, req.body.userAnswerId)
-    res.json(organization);
-})
+}) as RequestHandler);
 
-router.put('/orgnization/:id', async (req, res) =>  {
-    const organization = await organizationController.update(parseInt(req.params.id, 10), req.body.userId, req.body.statusId, req.body.userAnswerId)
-    res.json(organization);
-})
+router.get('/organization/:id', (async (req, res) => {
+  try {
+  const organization = await organizationController.one(parseInt(req.params.id, 10));
+  res.json(organization);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
 
-router.delete('/orgnization/:id', async (req, res) =>  {
-    const organization = await organizationController.delete(parseInt(req.params.id, 10))
-    res.json(organization);
-})
+router.post('/organization', (async (req, res) => {
+  try {
+  const body = <Body>req.body;
+  const organization = await organizationController.new(body.user_id, body.status_id, new Date(), new Date());
+  res.json(organization);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
+
+router.put('/organization/:id', (async (req, res) => {
+  try {
+  const body = <Body>req.body;
+  const organization = await organizationController.update(parseInt(req.params.id, 10), body.user_id, body.status_id, new Date(), new Date());
+  res.json(organization);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
+
+router.delete('/organization/:id', (async (req, res) => {
+  try {
+  const organization = await organizationController.delete(parseInt(req.params.id, 10));
+  res.json(organization);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
 
 export default router;

@@ -1,0 +1,59 @@
+import { RequestHandler, Router } from 'express';
+import ResponseKindController from '../controllers/ResponseKindController';
+
+interface Body {
+  type: string;
+}
+
+const router = Router();
+
+const responseKindController = new ResponseKindController();
+
+router.get('/', (async (req, res) => {
+  try {
+  const response = await responseKindController.list();
+  res.json(response);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
+
+router.get('/:id', (async (req, res) => {
+  try {
+  const response = await responseKindController.one(parseInt(req.params.id, 10));
+  res.json(response);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
+
+router.post('/', (async (req, res) => {
+  try {
+  const body = <Body>req.body;
+  const response = await responseKindController.new(body.type, new Date(), new Date());
+  res.json(response);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
+
+router.put('/:id', (async (req, res) => {
+  try {
+  const body = <Body>req.body;
+  const response = await responseKindController.update(parseInt(req.params.id, 10), body.type, new Date(), new Date());
+  res.json(response);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
+
+router.delete('/:id', (async (req, res) => {
+  try {
+  const response = await responseKindController.remove(parseInt(req.params.id, 10));
+  res.json(response);
+} catch (error) {
+  res.json({error: error});
+}
+}) as RequestHandler);
+
+export default router;

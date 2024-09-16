@@ -1,41 +1,52 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import TagInterface from '../interfaces/TagInterface' ;
+import TagInterface from '../interfaces/TagInterface';
 
-interface TagCreationAttributes extends Optional<TagInterface, 'id'> { }
+interface TagCreationAttributes extends Optional<TagInterface, 'id'> {}
 
-class Tag extends Model<TagInterface, TagCreationAttributes> implements Tag {
-    declare id: number;
-    declare name: string;
-    declare readonly createdAt?: Date;
-    declare readonly updatedAt?: Date;
+class Tag extends Model<TagInterface, TagCreationAttributes> implements TagInterface {
+  declare id: number;
+  declare name: string;
+  declare readonly created_at?: Date;
+  declare readonly updated_at?: Date;
+
+  toJSON() {
+    const values = Object.assign({}, this.get());
+    delete values.created_at;
+    delete values.updated_at;
+    return values;
+  }
 }
 
-Tag.init({
+Tag.init(
+  {
     id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
     },
     name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     },
-    createdAt: {
-        type: DataTypes.DATE,
-        allowNull: true
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     },
-    updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: true
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
-}, {
+  },
+  {
     sequelize: connection,
-    underscored: false,
+    underscored: true,
     modelName: 'Tag',
-    timestamps: true,
-});
+    tableName: 'tags',
+    timestamps: false
+  }
+);
 
 export default Tag;

@@ -1,8 +1,8 @@
 export default interface ResultCity {
   id: number;
   step: number;
-  startAt: Date;
-  endAt: Date;
-  createdAt?: Date;
-  updatedAt?: Date;
+  start_at: Date;
+  end_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }

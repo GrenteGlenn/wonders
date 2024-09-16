@@ -2,68 +2,101 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import OrganizationUrlInterface from '../interfaces/OrganizationUrlInterface';
 import Organization from './organization';
+import Status from './status';
 
 interface OrganizationUrlCreationAttributes extends Optional<OrganizationUrlInterface, 'id'> {}
 
-export default class OrganizationUrl extends Model<OrganizationUrlInterface, OrganizationUrlCreationAttributes> implements OrganizationUrlInterface {
+class OrganizationUrl
+  extends Model<OrganizationUrlInterface, OrganizationUrlCreationAttributes>
+  implements OrganizationUrlInterface
+{
   declare id: number;
   declare rank: number;
   declare partner: string;
   declare key: string | null;
-  declare organizationId: number;
+  declare organization_id: number;
   declare url: string | null;
-  declare readonly createdAt?: Date;
-  declare readonly updatedAt?: Date;
+  declare status_id: number;
+  declare readonly created_at?: Date;
+  declare readonly updated_at?: Date;
+
+  static associate() {
+    // this.belongsTo(Organization, {
+    //   foreignKey: 'organization_id',
+    //   as: 'organization'
+    // });
+    // this.belongsTo(Status, {
+    //   foreignKey: 'status_id',
+    // });
+  }
 }
 
-// Define the model fields and attributes
-OrganizationUrl.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
-  },
-  url: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  organizationId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Organization,
-      key: 'id'
+OrganizationUrl.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    url: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    organization_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Organization,
+        key: 'id'
+      }
+    },
+    status_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Status,
+        key: 'id'
+      }
+    },
+    rank: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    partner: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    key: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   },
-  rank: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  partner: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
-  key: {
-    type: DataTypes.TEXT,
-    allowNull: true
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: true
+  {
+    sequelize: connection,
+    underscored: true,
+    modelName: 'organization_url',
+    timestamps: false
   }
-}, {
-  sequelize: connection,
-  modelName: 'OrganizationUrl',
-  timestamps: true,
-});
-
-// Define associations
+);
 OrganizationUrl.belongsTo(Organization, {
-  foreignKey: 'organizationId',
+  foreignKey: 'organization_id',
   as: 'organization'
 });
+OrganizationUrl.belongsTo(Status, {
+  foreignKey: 'status_id'
+});
+
+Status.hasMany(OrganizationUrl, {
+  foreignKey: 'status_id'
+});
+
+export default OrganizationUrl;

@@ -1,0 +1,32 @@
+import ResponseKind from '../models/responsekind';
+
+export default class ResponseKindController {
+  async list() {
+    return await ResponseKind.findAll();
+  }
+
+  async one(id: number) {
+    return await ResponseKind.findByPk(id);
+  }
+
+  async new(type: string, created_at: Date, updated_at: Date) {
+    return await ResponseKind.create({ type: type, created_at, updated_at });
+  }
+
+  async update(id: number, type: string, created_at: Date, updated_at: Date) {
+    const responseKind = await ResponseKind.findByPk(id);
+    if (responseKind) {
+      responseKind.type = type;
+      await responseKind.save();
+    }
+    return responseKind;
+  }
+
+  async remove(id: number) {
+    const responseKind = await ResponseKind.findByPk(id);
+    if (responseKind) {
+      await responseKind.destroy();
+    }
+    return responseKind;
+  }
+}

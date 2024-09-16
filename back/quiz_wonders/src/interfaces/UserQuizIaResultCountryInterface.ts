@@ -1,6 +1,6 @@
 export default interface UserQuizIaResultCountry {
-    id?: number;
-    countryId: number;
-    createdAt: Date;
-    updatedAt: Date;
+  id?: number;
+  country: number;
+  created_at?: Date;
+  updated_at?: Date;
 }

@@ -1,10 +1,11 @@
 export default interface OrganisationUrl {
   id: number;
   url: string | null;
-  organizationId: number;
+  organization_id: number;
   rank: number;
   partner: string;
+  status_id: number;
   key: string | null;
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }

@@ -2,38 +2,54 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import ResponseKindInterface from '../interfaces/ResponseKindInterface';
 
-interface ResponseKindCreationAttributes extends Optional<ResponseKindInterface, 'id'> { }
+interface ResponseKindCreationAttributes extends Optional<ResponseKindInterface, 'id'> {}
 
-class ResponseKind extends Model<ResponseKindInterface, ResponseKindCreationAttributes> implements ResponseKindInterface {
-    declare id: number;
-    declare name: string;
-    declare readonly createdAt?: Date;
-    declare readonly updatedAt?: Date;
+class ResponseKind
+  extends Model<ResponseKindInterface, ResponseKindCreationAttributes>
+  implements ResponseKindInterface
+{
+  declare id: number;
+  declare type: string;
+  declare readonly created_at?: Date;
+  declare readonly updated_at?: Date;
+
+  toJSON() {
+    const values = Object.assign({}, this.get());
+    delete values.created_at;
+    delete values.updated_at;
+    return values;
+  }
 }
 
-ResponseKind.init({
+ResponseKind.init(
+  {
     id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-        allowNull: false
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
     },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     },
-    createdAt: {
-        type: DataTypes.DATE,
-        allowNull: true
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     },
-    updatedAt: {
-        type: DataTypes.DATE,
-        allowNull: true
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
-}, {
+  },
+  {
     sequelize: connection,
-    underscored: false,
+    underscored: true,
     modelName: 'ResponseKind',
-    timestamps: true
-});
+    tableName: 'response_kinds',
+    timestamps: false
+  }
+);
+
+export default ResponseKind;

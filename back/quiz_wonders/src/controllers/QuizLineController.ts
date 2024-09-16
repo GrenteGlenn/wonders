@@ -1,36 +1,71 @@
-import { DateDataTypeOptions } from "sequelize";
-import QuizLine from "../models/quizline";
+import Quiz from '../models/quiz';
+import QuizLine from '../models/quizline';
+import ResponseKind from '../models/responsekind';
 
 export default class QuizLineController {
-    async list() {
-        return await QuizLine.findAll();
-    }
-
-    async one (id: number) {
-        return await QuizLine.findByPk(id);
-    }
-
-    async new (quiz: number, question: Text, isRequired:boolean, isText: boolean, tag_id: number) {
-        return await QuizLine.create({ quiz, question, isRequired, isText, tag_id});
-    }
-
-    async update (id: number,question: Text, isRequired:boolean, isText: boolean, tag: number) {
-        const quizLine = await QuizLine.findByPk(id);
-        if (quizLine) {
-            quizLine.question = question;
-            quizLine.isRequired = isRequired;
-            quizLine.isText = isText;
-            quizLine.tag = tag;
-            await quizLine.save();
+  async list() {
+    return await QuizLine.findAll({
+      include: [
+        {
+          model: ResponseKind,
+          as: 'response_kind'
+        },
+        {
+          model: Quiz,
+          as: 'quiz'
         }
-        return quizLine;
-    }
+      ]
+    });
+  }
 
-    async remove (id: number) {
-        const quizLine = await QuizLine.findByPk(id);
-        if (quizLine) {
-            await quizLine.destroy();
-        }
-        return quizLine;
+  async one(id: number) {
+    return await QuizLine.findByPk(id);
+  }
+
+  async new(data: {
+    quiz_id: number | undefined;
+    question: string;
+    is_required: boolean;
+    is_text: boolean | undefined;
+    is_boolean: boolean | undefined;
+    tag_id: number | undefined;
+    response_kind_id: number | undefined;
+    step: number | undefined;
+  }) {
+    return await QuizLine.create(data);
+  }
+
+  async update(
+    id: number,
+    quiz_id: number | undefined,
+    question: string,
+    is_required: boolean,
+    is_text: boolean | undefined,
+    is_boolean: boolean | undefined,
+    tag_id: number | undefined,
+    response_kind_id: number | undefined,
+    step: number | undefined
+  ) {
+    const quizLine = await QuizLine.findByPk(id);
+    if (quizLine) {
+      quizLine.question = question;
+      quizLine.is_required = is_required;
+      quizLine.is_text = is_text;
+      quizLine.is_boolean = is_boolean;
+      quizLine.tag_id = tag_id;
+      quizLine.response_kind_id = response_kind_id;
+      quizLine.quiz_id = quiz_id;
+      quizLine.step = step;
+      await quizLine.save();
     }
+    return quizLine;
+  }
+
+  async remove(id: number) {
+    const quizLine = await QuizLine.findByPk(id);
+    if (quizLine) {
+      await quizLine.destroy();
+    }
+    return quizLine;
+  }
 }

@@ -1,6 +1,7 @@
 export default interface QuizInterface {
   id?: number;
   name: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  tag_id?: number;
+  created_at?: Date;
+  updated_at?: Date;
 }

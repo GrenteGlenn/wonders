@@ -1,6 +1,6 @@
 export default interface ResponseKind {
   id: number;
-  name: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  type: string;
+  created_at?: Date;
+  updated_at?: Date;
 }
