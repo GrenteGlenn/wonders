@@ -1,26 +1,61 @@
 import Country from '../../models/country';
+import OpenAiService from '../services/openai';
+
+interface Data {
+  result: Text;
+}
 
 class CountryController {
+  async getDataFromOpenAI(country: string) {
+    return await OpenAiService.openaiCall(country)
+}
+
   async list() {
     const countries = await Country.findAll();
     return countries;
   }
 
   async one(id: number) {
+    const now = Date.now()
     const country = await Country.findByPk(id);
+    if (country) {
+      const diff = Math.abs(country.updated_at as any - now);
+      const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+      if (diffDays > 29) {
+        const res = await this.getDataFromOpenAI(country.name) as Text | unknown;
+        const data = <Data>res;
+        if (data) {
+          country.description = data as unknown as Text;
+          await country.save();
+        }
+      } 
+      console.log(diffDays);
+    }
     return country;
   }
 
-  async new(name: string, code: string, created_at: Date, updated_at: Date) {
-    const country = await Country.create({ name, code, created_at, updated_at });
+  async getCountryDescription(id: number) {
+    const country = await Country.findByPk(id);
+
+    if (country) {
+      return country.getDescription;
+    } else {
+      return null;
+    }
+  }
+
+  async new(name: string, code: string, description: Text, image: string, created_at: Date, updated_at: Date) {
+    const country = await Country.create({ name, code, description, image, created_at, updated_at });
     return country;
   }
 
-  async update(id: number, name: string, code: string, created_at: Date, updated_at: Date,) {
+  async update(id: number, name: string, code: string, description: Text, image: string, created_at: Date, updated_at: Date,) {
     const country = await Country.findByPk(id);
     if (country) {
       country.name = name;
       country.code = code;
+      country.description = description;
+      country.image = image;
       await country.save();
     }
     return country;

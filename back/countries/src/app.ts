@@ -3,6 +3,7 @@ import 'dotenv/config'
 import countryRoutes from './routes/countryRoutes'
 import cityRoutes from './routes/cityRoutes'
 const app = express()
+app.use(express.json());
 
 
 let port = process.env.PORT

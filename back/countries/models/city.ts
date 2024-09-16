@@ -20,12 +20,26 @@ City.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-      allowNull: false
+      allowNull: false,
+      get() {
+        const value = this.getDataValue('id');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('id', value);
+      }
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true
+      unique: true,
+      get() {
+        const value = this.getDataValue('name');
+        return value ? value : null;
+      },
+      set(value: string) {
+        this.setDataValue('name', value);
+      }
     },
     country: {
       type: DataTypes.INTEGER,
@@ -33,15 +47,30 @@ City.init(
       references: {
         model: Country,
         key: 'id'
+      },
+      get() {
+        const value = this.getDataValue('country');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('country', value);
       }
     },
     created_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      get() {
+        const value = this.getDataValue('created_at');
+        return value ? value : null;
+      }
     },
     updated_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
+      get() {
+        const value = this.getDataValue('updated_at');
+        return value ? value : null;
+      }
     }
   },
   {

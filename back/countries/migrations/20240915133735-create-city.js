@@ -16,6 +16,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      image: {
+        type: Sequelize.STRING
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
@@ -29,7 +32,7 @@ module.exports = {
     await queryInterface.addConstraint('cities', {
       type: "foreign key",
       fields: ["country"],
-      name: 'country',
+      name: 'fk_cities_country',
       references: {
         table: 'countries',
         field: 'id',
@@ -39,7 +42,11 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('cities', 'country');
-    await queryInterface.dropTable('Cities');
+    try {
+      await queryInterface.removeConstraint('cities', 'fk_cities_country');
+    } catch (error) {
+      console.warn('Constraint "fk_cities_country" not found or already removed.');
+    }
+    await queryInterface.dropTable('cities');
   }
 };
