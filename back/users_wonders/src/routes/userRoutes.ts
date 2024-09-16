@@ -8,23 +8,23 @@ const authController = new AuthController();
 
 router.get('/users', (async (req, res) => {
   const client = await authController.list();
-  res.json(client);
+  res.status(200).json(client);
 }) as RequestHandler);
 
 router.get('/users/:id', (async (req, res) => {
   const client = await authController.getOne(parseInt(req.params.id, 10));
-  res.json(client);
+  res.status(200).json(client);
 }) as RequestHandler);
 
 router.put('/users/:id', (async (req, res) => {
   const body = <UserInterface>req.body;
   const client = await authController.update(parseInt(req.params.id, 10), body);
-  res.json(client);
+  res.status(200).json(client);
 }) as RequestHandler);
 
 router.delete('/users/:id', (async (req, res) => {
   const client = await authController.remove(parseInt(req.params.id, 10));
-  res.json(client);
+  res.status(200).json(client);
 }) as RequestHandler);
 
 export default router;

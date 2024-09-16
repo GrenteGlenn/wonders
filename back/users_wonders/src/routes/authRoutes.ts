@@ -42,7 +42,6 @@ router.post('/auth', (async (req, res, next) => {
   } else return res.json('password or identifiant incorrect');
 }) as RequestHandler);
 
-// TODO need fix
 router.post('/refresh', ((req, res) => {
   let refresh;
   const token = req.headers.authorization?.split(' ')[1];

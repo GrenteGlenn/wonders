@@ -8,39 +8,39 @@ const addressController = new AddressController();
 
 router.get('/address', (async (req, res) => {
   const address = await addressController.list();
-  res.json(address);
+  res.status(200).json(address);
 }) as RequestHandler);
 
 router.get('/address/:id', (async (req, res) => {
   const address = await addressController.getOne(parseInt(req.params.id, 10));
-  res.json(address);
+  res.status(200).json(address);
 }) as RequestHandler);
 
 router.get('/address/user/:id', (async (req, res) => {
   const address = await addressController.getByUser(parseInt(req.params.id, 10));
-  res.json(address);
+  res.status(200).json(address);
 }) as RequestHandler);
 
 router.get('/address/country/:id', (async (req, res) => {
   const address = await addressController.getByCountry(parseInt(req.params.id, 10));
-  res.json(address);
+  res.status(200).json(address);
 }) as RequestHandler);
 
 router.post('/address/register', (async (req, res) => {
   const body = <AddressInterface>req.body;
   await addressController.new(body);
-  res.json(body);
+  res.status(200).json(body);
 }) as RequestHandler);
 
 router.put('/address/:id', (async (req, res) => {
   const body = <AddressInterface>req.body;
   const address = await addressController.update(parseInt(req.params.id, 10), body);
-  res.json(address);
+  res.status(200).json(address);
 }) as RequestHandler);
 
 router.delete('/address/:id', (async (req, res) => {
   const address = await addressController.remove(parseInt(req.params.id, 10));
-  res.json(address);
+  res.status(200).json(address);
 }) as RequestHandler);
 
 export default router;
