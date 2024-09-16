@@ -1,18 +1,13 @@
-
-import Role from './RoleInterface';
-import Country from './CountryInterface';
 import Language from './LanguageInterface';
 
-export default interface User {
-    id: number;
-    name: string;
-    surname: string;
-    createdAt: Date;
-    updatedAt: Date;
-    birthDate: Date;
-    email: string;
-    password: string;
-    role: Role[];
-    language: Language;
-    country: Country;
+export default interface UserInterface {
+  id?: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  created_at?: Date;
+  updated_at?: Date;
+  birth_date: Date;
+  language_id: Language;
 }

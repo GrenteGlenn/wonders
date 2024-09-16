@@ -1,29 +1,19 @@
 'use strict';
-
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Users', {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('users', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      countryId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-        references: {
-          model: 'Countries',
-          key: 'id'
-        },
-      },
-      surname: {
+      first_name: {
         type: Sequelize.STRING,
         allowNull: false
       },
-      name: {
+      last_name: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -39,21 +29,37 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      birthDate: {
+      birth_date: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      createdAt: {
+      language_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         type: Sequelize.DATE
       }
     });
+    await queryInterface.addConstraint('users', {
+      type: 'foreign key',
+      fields: ['language_id'],
+      name: 'language_id',
+      references: {
+        table: 'languages',
+        field: 'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'NO ACTION',
+      allowNull: false
+    });
   },
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Users');
+  async down(queryInterface) {
+    await queryInterface.dropTable('users');
   }
 };

@@ -1,20 +1,23 @@
-import express = require('express')
-import 'dotenv/config'
+import express, { Express, Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import 'dotenv/config';
+import authRoutes from './routes/authRoutes';
+import userRoutes from './routes/userRoutes';
+import addressRoutes from './routes/adressRoutes';
 
-const app = express()
-let dotenv = require('dotenv').config()
+const app: Express = express();
+const jsonParser = bodyParser.json();
 
-let port = process.env.PORT
+const port = process.env.DB_PORT || 3000;
 
-app.get('/', (req: Request, res: any) => {
-  res.send('Hello World!')
-
-})
-
-app.get('/', function (req: Request, res: any) {
+app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
+app.use('/api', jsonParser, authRoutes);
+app.use('/api', jsonParser, userRoutes);
+app.use('/api', jsonParser, addressRoutes);
+
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});

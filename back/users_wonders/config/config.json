@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
+    "username": "postgres",
+    "password": "postgres",
     "database": "trip_planner",
     "host": "127.0.0.1",
     "port": "5432",
@@ -9,14 +9,14 @@
   },
   "test": {
     "username": "postgres",
-    "password": "root",
+    "password": "postgres",
     "database": "trip_planner",
     "host": "5432",
     "dialect": "postgres"
   },
   "production": {
     "username": "postgres",
-    "password": "root",
+    "password": "postgres",
     "database": "trip_planner",
     "host": "5432",
     "dialect": "postgres"

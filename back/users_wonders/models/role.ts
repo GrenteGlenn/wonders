@@ -1,28 +1,31 @@
 'use strict';
-const { Model } = require('sequelize');
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '../config/dbConnection';
+import RoleInterface from '../src/interfaces/RoleInterface';
 
-module.exports = (sequelize, DataTypes) => {
-  class Role extends Model {
-    static associate(models) {
-      // Define the many-to-many association between Role and User
-      Role.belongsToMany(models.User, {
-        through: 'UserRole',
-        foreignKey: 'roleId',  // The name of the foreign key in the junction table pointing to Role
-        otherKey: 'userId'     // The name of the foreign key in the junction table pointing to User
-      });
-    }
-  }
+interface RoleCreationAttributes extends Optional<RoleInterface, 'id'> {
+}
 
-  Role.init({
+class Role extends Model<RoleInterface, RoleCreationAttributes>
+  implements RoleInterface {
+  declare id: number;
+  declare role: string;
+}
+
+Role.init(
+  {
     role: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false
     }
-  }, {
+  },
+  {
     sequelize,
+    underscored: true,
     modelName: 'Role',
-  });
+    timestamps: false // Enables createdAt and updatedAt automatically
+  }
+);
 
-  return Role;
-};
+export default Role;
