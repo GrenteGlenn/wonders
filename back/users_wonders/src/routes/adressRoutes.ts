@@ -26,9 +26,10 @@ router.get('/address/country/:id', (async (req, res) => {
   res.json(address);
 }) as RequestHandler);
 
-router.post('/register', (async (req) => {
+router.post('/address/register', (async (req, res) => {
   const body = <AddressInterface>req.body;
   await addressController.new(body);
+  res.json(body);
 }) as RequestHandler);
 
 router.put('/address/:id', (async (req, res) => {

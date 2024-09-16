@@ -103,10 +103,4 @@ Address.hasOne(Country, {
 
 Country.belongsTo(Address);
 
-Address.hasOne(User, {
-  foreignKey: 'userId'
-});
-
-User.belongsTo(Address);
-
 export default Address;

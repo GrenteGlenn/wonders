@@ -46,7 +46,7 @@ Session.init(
 );
 
 Session.hasOne(User, {
-  foreignKey: 'languageId'
+  foreignKey: 'userId'
 });
 
 User.belongsTo(Session);

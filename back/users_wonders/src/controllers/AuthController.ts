@@ -21,9 +21,7 @@ export default class AuthController {
     const date = new Date();
     user.created_at = date;
     user.updated_at = date;
-    const client = await User.create(user);
-    console.log(client);
-    return client;
+    return await User.create(user);
   }
 
   async update(id: number, user: UserInterface) {
