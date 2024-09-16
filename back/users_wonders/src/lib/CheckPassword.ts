@@ -25,10 +25,10 @@ export async function encryptPassword(password: string) {
   try {
     return await argon2.hash(password, {
       type: argon2.argon2id,
-      memoryCost: 65536,     // 64MB de mémoire (recommandation de RFC 9106)
-      timeCost: 3,           // 3 itérations (recommandation de RFC 9106)
-      parallelism: 4,         // 4 threads (recommandation de RFC 9106)
-      hashLength: 32,         // Longueur du hash
+      memoryCost: 65536, // 64MB de mémoire (recommandation de RFC 9106)
+      timeCost: 3, // 3 itérations (recommandation de RFC 9106)
+      parallelism: 4, // 4 threads (recommandation de RFC 9106)
+      hashLength: 32 // Longueur du hash
     });
   } catch (err) {
     throw new Error('Erreur lors du hash du mot de passe');

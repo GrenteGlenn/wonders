@@ -9,10 +9,10 @@ module.exports = {
         last_name: 'Doe',
         email: 'example@example.com',
         password: '...',
-        birth_date: new Date(),
-        language_id: 1,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
+        birth_date: new Date(),
+        language_id: 1
       }
     ]);
   },

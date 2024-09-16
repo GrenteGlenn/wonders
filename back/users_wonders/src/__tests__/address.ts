@@ -1,8 +1,6 @@
 import AddressController from '../controllers/AddressController';
 import Address from '../../models/address';
-import assert from 'node:assert';
 import AddressInterface from '../interfaces/AddressInterface';
-import User from '../../models/user';
 
 jest.mock('../../models/address');
 
@@ -121,8 +119,6 @@ describe('Address', () => {
         last_name: 'test',
         email: 'test@gmail.com',
         password: '...',
-        iv: '...',
-        auth_tag: '...',
         created_at: new Date,
         updated_at: new Date,
         birth_date: new Date,
@@ -130,7 +126,6 @@ describe('Address', () => {
           id: 1,
           name: 'Un Truc'
         },
-        role_id: []
       },
       country_id: {
         id: 1,

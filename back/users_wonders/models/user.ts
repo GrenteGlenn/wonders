@@ -3,12 +3,11 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import UserInterface from '../src/interfaces/UserInterface';
 import LanguageInterface from '../src/interfaces/LanguageInterface';
-import RoleInterface from '../src/interfaces/RoleInterface';
 import sequelize from '../config/dbConnection';
 import Language from './language';
-import Role from './role';
 
-interface UserCreationAttributes extends Optional<UserInterface, 'id'> {}
+interface UserCreationAttributes extends Optional<UserInterface, 'id'> {
+}
 
 class User extends Model<UserInterface, UserCreationAttributes> implements UserInterface {
   declare id: number;
@@ -20,7 +19,6 @@ class User extends Model<UserInterface, UserCreationAttributes> implements UserI
   declare readonly updated_at: Date;
   declare birth_date: Date;
   declare language_id: LanguageInterface;
-  declare role_id: RoleInterface[];
 }
 
 User.init(
@@ -53,8 +51,6 @@ User.init(
     timestamps: true // Enables createdAt and updatedAt automatically
   }
 );
-
-User.belongsToMany(Role, { through: 'User_Role' });
 
 User.hasOne(Language, {
   foreignKey: 'language_id'

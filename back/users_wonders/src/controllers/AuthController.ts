@@ -11,14 +11,19 @@ export default class AuthController {
   }
 
   async getOneByEmail(email: string) {
-    return await User.findOne({ where: { email: email } });
+    const user = await User.findOne({ where: { email: email } });
+    console.log(user);
+    if (user) return user;
+    else return null;
   }
 
-  async new(user: UserInterface) {
+  async create(user: UserInterface) {
     const date = new Date();
     user.created_at = date;
     user.updated_at = date;
-    return await User.create(user);
+    const client = await User.create(user);
+    console.log(client);
+    return client;
   }
 
   async update(id: number, user: UserInterface) {
@@ -28,8 +33,8 @@ export default class AuthController {
       client.last_name = user.last_name;
       client.email = user.email;
       client.password = user.password;
-      client.language_id = user.language_id;
       client.birth_date = user.birth_date;
+      client.language_id = user.language_id;
       await client.save();
     }
     return client;

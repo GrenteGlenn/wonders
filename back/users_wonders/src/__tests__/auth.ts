@@ -25,8 +25,6 @@ describe('Auth model', () => {
         last_name: 'test',
         email: 'test@test.com',
         password: '...',
-        iv: '...',
-        auth_tag: '...',
         created_at: new Date(),
         updated_at: new Date(),
         birth_date: new Date(),
@@ -38,8 +36,6 @@ describe('Auth model', () => {
         last_name: 'test',
         email: 'test@test.com',
         password: '...',
-        iv: '...',
-        auth_tag: '...',
         created_at: new Date(),
         updated_at: new Date(),
         birth_date: new Date(),
@@ -62,8 +58,6 @@ describe('Auth model', () => {
         last_name: 'test',
         email: 'test@test.com',
         password: '...',
-        iv: '...',
-        auth_tag: '...',
         created_at: new Date(),
         updated_at: new Date(),
         birth_date: new Date(),
@@ -86,8 +80,6 @@ describe('Auth model', () => {
         last_name: 'test',
         email: 'test@test.com',
         password: '...',
-        iv: '...',
-        auth_tag: '...',
         created_at: new Date(),
         updated_at: new Date(),
         birth_date: new Date(),
@@ -124,15 +116,13 @@ describe('Auth model', () => {
       last_name: 'test',
       email: 'test@test.com',
       password: '...',
-      iv: '...',
-      auth_tag: '...',
       birth_date: new Date(),
       language_id: {}
     };
 
     (User.create as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await controller.new(userData as UserInterface);
+    const result = await controller.create(userData as UserInterface);
 
     expect(User.create).toHaveBeenCalledTimes(1);
     expect(result).toEqual(mockUser);
@@ -145,8 +135,6 @@ describe('Auth model', () => {
       last_name: 'test',
       email: 'test@test.com',
       password: '...',
-      iv: '...',
-      auth_tag: '...',
       created_at: new Date(),
       updated_at: new Date(),
       birth_date: new Date(),
@@ -163,8 +151,6 @@ describe('Auth model', () => {
       last_name: 'test2',
       email: 'test@test.com2',
       password: '...',
-      iv: '...',
-      auth_tag: '...',
       created_at: new Date(),
       updated_at: new Date(),
       birth_date: new Date(),
@@ -196,8 +182,6 @@ describe('Auth model', () => {
       last_name: 'test',
       email: 'test@test.com',
       password: '...',
-      iv: '...',
-      auth_tag: '...',
       created_at: new Date(),
       updated_at: new Date(),
       birth_date: new Date(),

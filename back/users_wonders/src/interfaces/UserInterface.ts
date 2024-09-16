@@ -1,4 +1,3 @@
-import Role from './RoleInterface';
 import Language from './LanguageInterface';
 
 export default interface UserInterface {
@@ -11,5 +10,4 @@ export default interface UserInterface {
   updated_at?: Date;
   birth_date: Date;
   language_id: Language;
-  role_id?: Role[];
 }
