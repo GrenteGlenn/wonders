@@ -4,6 +4,7 @@ import 'dotenv/config';
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import addressRoutes from './routes/adressRoutes';
+import roleRoutes from './routes/roleRoutes';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
@@ -17,6 +18,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api', jsonParser, authRoutes);
 app.use('/api', jsonParser, userRoutes);
 app.use('/api', jsonParser, addressRoutes);
+app.use('/api', jsonParser, roleRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
