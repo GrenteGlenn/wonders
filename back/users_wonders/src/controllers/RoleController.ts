@@ -2,7 +2,6 @@ import Role from '../../models/role';
 import RoleInterface from '../interfaces/RoleInterface';
 
 export default class RoleController {
-
   async list() {
     return await Role.findAll();
   }
@@ -31,5 +30,4 @@ export default class RoleController {
     }
     return 'Role destroyed';
   }
-
 }
