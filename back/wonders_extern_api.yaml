@@ -12,6 +12,143 @@ servers:
       bearerFormat: JWT
 
 paths:
+  /api/auth:
+    post:
+      description: Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
+
+      responses:
+        200:
+          description: Login successful
+          headers:
+            Authorization:
+              description: JWT token
+              schema:
+                type: JWT
+              example: 'Bearer eyJhbGciOi'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'eyJhbGciOi'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Bad Request'
+  /api/register:
+    post:
+      description: Login to the API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'John'
+                surname:
+                  type: string
+                  example: 'Doe'
+                birthDate:
+                  type: string
+                  example: '1990-01-01'
+                country:
+                  type: string
+                  example: 'France'
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
+                language_id:
+                  type: integer
+                  example: 1
+
+      responses:
+        401:
+          description: Bad UserName or Password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    example: 'Bad Email or Password'
+        201:
+          description: New response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User created'
+  /api/refresh:
+    post:
+      description: Login to the API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
+      responses:
+        401:
+          description: Bad UserName or Password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    example: 'Bad Email or Password'
+        200:
+          description: Token Refresh
+          headers:
+            Authorization:
+              description: JWT token
+              schema:
+                type: JWT
+              example: 'Bearer eyJhbGciOi'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'eyJhbGciOi'
   /api/users:
     get:
       description: Get all Users
@@ -92,7 +229,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/definitions/User_Definition'
+              $ref: '#/definitions/User_Put_Definition'
       responses:
         403:
           description: Forbidden
@@ -164,26 +301,16 @@ paths:
                   message:
                     type: string
                     example: 'User deleted'
-  /api/user/{userId}/address:
+  /api/address:
     get:
-      description: Get all addresses for a user
-      parameters:
-        - in: path
-          name: userId
-          description: The User Id
-          required: true
-          schema:
-            type: integer
+      description: Get all Address
       responses:
         200:
-          description: Ok
+          description: Address Found
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  addresses:
-                    $ref: '#/definitions/Address_Array_Definition'
+                $ref: '#/definitions/Address_Array_Definition'
         404:
           description: Not Found
           content:
@@ -193,7 +320,92 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: ' No addresses found'
+                    example: 'Address not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/address/user/{id}:
+    get:
+      description: Get an address by User id
+      parameters:
+        - in: path
+          name: id
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Address Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Address_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/address/country/{id}:
+    get:
+      description: Get an address by country id
+      parameters:
+        - in: path
+          name: id
+          description: The Country Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Address Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Address_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/address/register:
     post:
       description: Create a new Address for a user
       parameters:
@@ -219,76 +431,6 @@ paths:
                   message:
                     type: string
                     example: 'Address created'
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Forbidden'
-    delete:
-      description: Delete all Address for User
-      parameters:
-        - in: path
-          name: userId
-          description: The User Id
-          required: true
-          schema:
-            type: integer
-      responses:
-        403:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Unauthorized'
-        404:
-          description: User Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'User not found'
-        200:
-          description: Deleted
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'User deleted'
-  /api/address:
-    get:
-      description: Get all Address
-      responses:
-        200:
-          description: Address Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/definitions/Address_Array_Definition'
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Address not found'
         403:
           description: Forbidden
           content:
@@ -414,97 +556,6 @@ paths:
                   message:
                     type: string
                     example: 'Address deleted'
-  /api/auth/register:
-    post:
-      description: Register
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                  example: 'John'
-                surname:
-                  type: string
-                  example: 'Doe'
-                birthDate:
-                  type: string
-                  example: '1990-01-01'
-                country:
-                  type: string
-                  example: 'France'
-                email:
-                  type: string
-                  example: 'john.doe@nimp.tkt'
-                password:
-                  type: string
-                  example: 'password'
-
-      responses:
-        201:
-          description: New response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'User created'
-        400:
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Bad Request'
-  /api/auth/login:
-    post:
-      description: Login to the API
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  example: 'john.doe@nimp.tkt'
-                password:
-                  type: string
-                  example: 'password'
-      responses:
-        401:
-          description: Bad UserName or Password
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  reason:
-                    type: string
-                    example: 'Bad Email or Password'
-        200:
-          description: Login successful
-          headers:
-            Authorization:
-              description: JWT token
-              schema:
-                type: JWT
-              example: 'Bearer eyJhbGciOi'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    example: 'eyJhbGciOi'
 
   /api/quiz/{quizId}/a/{questionId}:
     post:
@@ -635,24 +686,48 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/User_Definition'
-  User_Definition:
+  User_Put_Definition:
     type: object
     properties:
-      userId:
-        type: integer
-        example: 42
-      name:
+      first_name:
         type: string
         example: 'John'
-      surname:
+      last_name:
+        type: string
+        example: 'Doe'
+      email:
+        type: string
+        example: 'john.doe@nimp.tkt'
+      password:
         type: string
         example: 'Doe'
       birthDate:
         type: string
         example: '1990-01-01'
-      country:
+      language_id:
+        type: interger
+        example: 1
+  User_Definition:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 42
+      first_name:
         type: string
-        example: 'France'
+        example: 'John'
+      last_name:
+        type: string
+        example: 'Doe'
       email:
         type: string
         example: 'john.doe@nimp.tkt'
+      password:
+        type: string
+        example: 'Doe'
+      birthDate:
+        type: string
+        example: '1990-01-01'
+      language_id:
+        type: interger
+        example: 1
