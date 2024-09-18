@@ -5,6 +5,7 @@ import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import addressRoutes from './routes/adressRoutes';
 import roleRoutes from './routes/roleRoutes';
+import sessionRoutes from './routes/sessionRoutes';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
@@ -19,6 +20,7 @@ app.use('/api', jsonParser, authRoutes);
 app.use('/api', jsonParser, userRoutes);
 app.use('/api', jsonParser, addressRoutes);
 app.use('/api', jsonParser, roleRoutes);
+app.use('/api', jsonParser, sessionRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
