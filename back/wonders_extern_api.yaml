@@ -27,7 +27,6 @@ paths:
                 password:
                   type: string
                   example: 'password'
-
       responses:
         200:
           description: Login successful
@@ -556,6 +555,332 @@ paths:
                   message:
                     type: string
                     example: 'Address deleted'
+  /api/session:
+    get:
+      description: Get all Cookie session
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Session Cookie find
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Session_Array_Definition'
+    post:
+      description: Create a new Session Cookie for a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Session_Cookie_Definition'
+      responses:
+        201:
+          description: Session Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Session created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/session/{id}:
+    get:
+      description: Get a Cookie session
+      parameters:
+        - in: path
+          name: user_id
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Session Cookie find
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Session_Cookie_Definition'
+    put:
+      description: Update a new Session Cookie for a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Session_Cookie_Definition'
+      responses:
+        200:
+          description: Session Update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Session created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+    delete:
+      description: Delete a Cookie session
+      parameters:
+        - in: path
+          name: user_id
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Session Cookie find
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session delete'
+  /api/role:
+    get:
+      description: Get all Role
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Session Cookie find
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Role_Definition'
+    post:
+      description: Create a new Session Cookie for a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Role_Definition'
+      responses:
+        201:
+          description: Session Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Role created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/role/{id}:
+    get:
+      description: Get a Role session
+      parameters:
+        - in: path
+          name: id
+          description: The Role Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Role Cookie find
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Role_Definition'
+    put:
+      description: Update a new Role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Role_Definition'
+      responses:
+        200:
+          description: Role Update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Role created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+    delete:
+      description: Delete a Role
+      parameters:
+        - in: path
+          name: id
+          description: The Role Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Role Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Role not found'
+        200:
+          description: Role delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Role delete'
 
   /api/quiz/{quizId}/a/{questionId}:
     post:
@@ -731,3 +1056,29 @@ definitions:
       language_id:
         type: interger
         example: 1
+  Session_Array_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/Session_Cookie_Definition'
+  Session_Cookie_Definition:
+    type: object
+    properties:
+      token:
+        type: string
+        exemple: 'qshflsqhdlgqs2561'
+      valid:
+        type: boolean
+        exemple: true
+      user_id:
+        type: integer
+        exemple: 1
+  Array_Role_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/Role_Definition'
+  Role_Definition:
+    type: object
+    properties:
+      role:
+        type: string
+        exemple: 'Staff'
