@@ -2,7 +2,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/dbConnection';
 import SessionInterface from '../src/interfaces/SessionInterface';
-import User from './user';
 import Country from './country';
 
 interface SessionCreationAttributes extends Optional<SessionInterface, 'id'> {
@@ -44,11 +43,5 @@ Session.init(
     timestamps: false // Enables createdAt and updatedAt automatically
   }
 );
-
-Session.hasOne(User, {
-  foreignKey: 'userId'
-});
-
-User.belongsTo(Session);
 
 export default Session;
