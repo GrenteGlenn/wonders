@@ -12,7 +12,7 @@ class Session extends Model<SessionInterface, SessionCreationAttributes>
   implements SessionInterface {
   declare id: number;
   declare token: string;
-  declare valid: string;
+  declare valid: boolean;
   declare user_id: number;
 }
 
