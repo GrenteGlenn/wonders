@@ -84,6 +84,6 @@ export class ProfileComponent {
     this.dialog.open(ConfirmDialogComponent, {
       height: '400px',
       width: '600px'
-    })
+    });
   }
 }
