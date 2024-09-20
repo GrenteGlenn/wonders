@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import CountryInterface from '../src/interfaces/CountryInterface';
 import City from './city';
+import Language from './language';
 
 interface CountryCreationAttributes extends Optional<CountryInterface, 'id'> { }
 
@@ -11,6 +12,7 @@ class Country extends Model<CountryInterface, CountryCreationAttributes> impleme
   declare code: string;
   declare image: string;
   declare description?: Text | undefined;
+  declare language: number;
   declare updated_at_description?: Date | undefined;
   declare readonly created_at?: Date | undefined;
   declare updated_at?: Date | undefined;
@@ -91,6 +93,18 @@ Country.init(
         this.setDataValue('description', value);
       }
     },
+    language: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      unique: true,
+      get() {
+        const value = this.getDataValue('language');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('language', value);
+      }
+    },
     updated_at_description: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -123,6 +137,16 @@ Country.init(
     modelName: 'country'
   }
 );
+
+Language.belongsTo(Country, {
+  foreignKey: 'language',
+  as: 'lang'
+});
+
+Country.belongsTo(Language, {
+  foreignKey: 'language',
+  as: 'lang'
+});
 
 Country.hasMany(City, {
   foreignKey: 'country',

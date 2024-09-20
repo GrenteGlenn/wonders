@@ -1,4 +1,5 @@
 import Country from '../../models/country';
+import Language from '../../models/language';
 import OpenAiService from '../services/openai';
 
 interface Data {
@@ -11,13 +12,29 @@ class CountryController {
 }
 
   async list() {
-    const countries = await Country.findAll();
+    const countries = await Country.findAll({
+      include: [
+        {
+          model: Language,
+          as: 'lang',
+          attributes: ['id','name','code']
+        }
+      ]
+    });
     return countries;
   }
 
   async one(id: number) {
     const now = Date.now()
-    const country = await Country.findByPk(id);
+    const country = await Country.findByPk(id, {
+      include: [
+        {
+          model: Language,
+          as: 'lang',
+          attributes: ['id','name','code']
+        }
+      ]
+    });
     if (country) {
       const diff = Math.abs(country.updated_at_description as any - now);
       const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -45,18 +62,19 @@ class CountryController {
     }
   }
 
-  async new(name: string, code: string, description: Text, image: string, created_at: Date, updated_at: Date) {
-    const country = await Country.create({ name, code, description, image, created_at, updated_at });
+  async new(name: string, code: string, description: Text, image: string, language: number, created_at: Date, updated_at: Date) {
+    const country = await Country.create({ name, code, description, image, language, created_at, updated_at });
     return country;
   }
 
-  async update(id: number, name: string, code: string, description: Text, image: string, created_at: Date, updated_at: Date,) {
+  async update(id: number, name: string, code: string, description: Text, image: string, language: number, created_at: Date, updated_at: Date,) {
     const country = await Country.findByPk(id);
     if (country) {
       country.name = name;
       country.code = code;
       country.description = description;
       country.image = image;
+      country.language = language;
       await country.save();
     }
     return country;

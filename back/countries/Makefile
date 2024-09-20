@@ -23,6 +23,6 @@ db-seed-all:
 	@echo "Seeding database..."
 	$(SEQUELIZE) db:seed:all
 
-unit-test: 
+test: 
 	@echo "Controllers tests..."
 	$(JEST)

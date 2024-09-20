@@ -8,6 +8,7 @@ interface Body {
   code: string;
   description: Text;
   image: string;
+  language: number;
   created_at: Date;
   updated_at: Date;
   data: string;
@@ -52,7 +53,7 @@ router.get('/country-description/:id', (async (req, res) => {
 router.post('/countries', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    const country = await countryController.new(body.name, body.code, body.description, body.image, new Date(), new Date());
+    const country = await countryController.new(body.name, body.code, body.description, body.image, body.language, new Date(), new Date());
     res.json(country);
   } catch (error) {
     res.json({error: error});
@@ -76,7 +77,7 @@ router.post('/ai', (async (req, res) => {
 router.put('/countries/:id', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    const country = await countryController.update(parseInt(req.params.id, 10), body.name, body.code, body.description, body.image, new Date(), new Date());
+    const country = await countryController.update(parseInt(req.params.id, 10), body.name, body.code, body.description, body.image, body.language, new Date(), new Date());
     res.json(country);
   } catch (error) {
     res.json({error: error});

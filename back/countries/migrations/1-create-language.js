@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('countries', {
+    await queryInterface.createTable('languages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,17 +15,7 @@ module.exports = {
       code: {
         type: Sequelize.STRING
       },
-      description: {
-        type: Sequelize.TEXT
-      },
-      image: {
-        type: Sequelize.STRING
-      },
       created_at: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updated_at_description: {
         allowNull: false,
         type: Sequelize.DATE
       },
@@ -36,11 +26,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    try {
-      await queryInterface.removeConstraint('cities', 'fk_cities_country');
-    } catch (error) {
-      console.warn('Constraint not found or already removed.');
-    }
-    await queryInterface.dropTable('countries');
+    await queryInterface.dropTable('languages');
   }
 };

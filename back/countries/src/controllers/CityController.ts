@@ -7,7 +7,8 @@ class CityController {
         include: [
             {
                 model: Country,
-                as: 'ctry'
+                as: 'ctry',
+                attributes: ['id', 'name', 'code']
             }
         ]
   });
@@ -15,7 +16,15 @@ class CityController {
   }
 
   async one(id: number) {
-    const city = await City.findByPk(id);
+    const city = await City.findByPk(id, {
+      include: [
+          {
+              model: Country,
+              as: 'ctry',
+              attributes: ['id', 'name', 'code']
+          }
+      ]
+});
     return city;
   }
 
