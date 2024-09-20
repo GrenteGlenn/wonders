@@ -12,8 +12,8 @@
     </div>
 
     <div class="md:flex items-center space-x-4 ">
-        
-        <button class="bg-blue-500 text-white px-4 py-2 rounded-md hidden md:block" matTooltip="Quizz for choose destination" (click)="goQuestion()" >Quizz</button>
+
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-md hidden md:block" (click)="goPlanTrip()" >Plan trip</button>
         <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
             <button matTooltip="help" class="text-black flex"><lucide-icon name="circle-help"></lucide-icon></button>
         </div>
@@ -21,7 +21,7 @@
             <button matTooltip="Plan trip" class="text-black flex"><lucide-icon name="route" (click)="goPlanTrip()"></lucide-icon></button>
         </div>
         <div class="card bg-slate-100 h-full px-3 py-2 rounded-md   ">
-            <button matTooltip="Profile" class="text-black flex "><lucide-icon name="user-round"></lucide-icon></button>
+            <button class="text-black flex "><lucide-icon name="user-round"></lucide-icon></button>
         </div>
         <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
             <button matTooltip="Settings" class="text-black flex "><lucide-icon name="settings"></lucide-icon></button>

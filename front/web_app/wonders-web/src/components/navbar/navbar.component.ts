@@ -23,16 +23,19 @@ export class NavbarComponent {
 
   constructor(private router: Router) {}
   goPlanTrip() {
-    this.router.navigate(['planTrip']); 
+    this.router.navigate(['planTrip']);
   };
   goHomePage(){
-    this.router.navigate(['home']); 
+    this.router.navigate(['home']);
   };
   goQuestion(){
-    this.router.navigate(['question']);  
+    this.router.navigate(['question']);
   };
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+  goProfile(){
+    this.router.navigate(['profile']);
   }
 }
