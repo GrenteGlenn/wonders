@@ -10,7 +10,11 @@ export const routes: Routes = [
     {path: "landingPage", component: LandingPageComponent },
     {path: "home", component: HomePageComponent},
     {path: "planTrip", component: PlanTipComponent},
-    {path: "question", component: QuestionComponent}
+    {path: "question", component: QuestionComponent},
+    {path: "booking", component: BookingComponent},
+    {path: "profile", component: ProfileComponent}
+
+
 ];
 
 

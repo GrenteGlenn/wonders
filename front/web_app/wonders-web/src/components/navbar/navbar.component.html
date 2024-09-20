@@ -20,7 +20,7 @@
         <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
             <button matTooltip="Plan trip" class="text-black flex"><lucide-icon name="route" (click)="goPlanTrip()"></lucide-icon></button>
         </div>
-        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md   ">
+        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md" (click)="goProfile()">
             <button class="text-black flex "><lucide-icon name="user-round"></lucide-icon></button>
         </div>
         <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
@@ -46,7 +46,7 @@
                 <lucide-icon name="CalendarDays" class="mr-3 h-5 w-5"></lucide-icon>
                 Bookings
               </a>
-              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+              <a href="profile" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
                 <lucide-icon name="user-round" class="mr-3 h-5 w-5"></lucide-icon>
                 Profile
               </a>
