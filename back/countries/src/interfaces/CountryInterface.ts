@@ -4,6 +4,7 @@ export default interface CountryInterface {
   code: string;
   image: string;
   description?: Text;
+  updated_at_description?: Date;
   created_at?: Date;
   updated_at?: Date;
 }

@@ -3,7 +3,7 @@ import connection from '../config/dbConnection';
 import CountryInterface from '../src/interfaces/CountryInterface';
 import City from './city';
 
-interface CountryCreationAttributes extends Optional<CountryInterface, 'id'> {}
+interface CountryCreationAttributes extends Optional<CountryInterface, 'id'> { }
 
 class Country extends Model<CountryInterface, CountryCreationAttributes> implements CountryInterface {
   declare id: number;
@@ -11,8 +11,9 @@ class Country extends Model<CountryInterface, CountryCreationAttributes> impleme
   declare code: string;
   declare image: string;
   declare description?: Text | undefined;
+  declare updated_at_description?: Date | undefined;
   declare readonly created_at?: Date | undefined;
-  declare readonly updated_at?: Date | undefined;
+  declare updated_at?: Date | undefined;
 
   get getDescription(): Text | null {
     const value = this.getDataValue('description');
@@ -90,6 +91,14 @@ Country.init(
         this.setDataValue('description', value);
       }
     },
+    updated_at_description: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      get() {
+        const value = this.getDataValue('updated_at_description');
+        return value ? value : null;
+      }
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -123,6 +132,6 @@ Country.hasMany(City, {
 City.belongsTo(Country, {
   foreignKey: 'country',
   as: 'ctry'
-}); 
+});
 
 export default Country;

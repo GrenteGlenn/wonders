@@ -19,13 +19,14 @@ class CountryController {
     const now = Date.now()
     const country = await Country.findByPk(id);
     if (country) {
-      const diff = Math.abs(country.updated_at as any - now);
+      const diff = Math.abs(country.updated_at_description as any - now);
       const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
       if (diffDays > 29) {
         const res = await this.getDataFromOpenAI(country.name) as Text | unknown;
         const data = <Data>res;
         if (data) {
           country.description = data as unknown as Text;
+          country.updated_at_description = new Date();
           await country.save();
         }
       } 
