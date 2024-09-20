@@ -31,6 +31,9 @@ export class NavbarComponent {
   goQuestion(){
     this.router.navigate(['question']);
   };
+  goProfile(){
+    this.router.navigate(['profile']);
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
