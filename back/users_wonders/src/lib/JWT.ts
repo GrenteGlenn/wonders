@@ -1,6 +1,7 @@
 import User from '../../models/user';
 import * as jwt from 'jsonwebtoken';
 
+const SECRET_TOKEN = process.env.DB_NAME;
 const SECRET = process.env.DB_NAME;
 
 interface Data {
@@ -48,6 +49,29 @@ export function updateJWT(token: string) {
 export function decryptJWT(token: string) {
   if (SECRET !== undefined) {
     return jwt.verify(token, SECRET);
+  } else {
+    return 'Secret is undefined';
+  }
+}
+
+export function createToken(user: User) {
+  if (SECRET_TOKEN !== undefined) {
+    return jwt.sign(
+      {
+        userId: user?.id,
+        email: user?.email
+      },
+      SECRET_TOKEN,
+      { expiresIn: '1h' }
+    );
+  } else {
+    return 'Secret is undefined';
+  }
+}
+
+export function decryptToken(token: string) {
+  if (SECRET_TOKEN !== undefined) {
+    return jwt.verify(token, SECRET_TOKEN);
   } else {
     return 'Secret is undefined';
   }

@@ -18,6 +18,7 @@
   "dependencies": {
     "@sequelize/postgres": "^7.0.0-alpha.41",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/nodemailer": "^6.4.16",
     "@zxcvbn-ts/core": "^3.0.4",
     "@zxcvbn-ts/language-common": "^3.0.4",
     "@zxcvbn-ts/language-en": "^3.0.2",
@@ -26,6 +27,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.15",
     "pg": "^8.11.5",
     "pg-hstore": "^2.3.4",
     "process": "^0.11.10",
