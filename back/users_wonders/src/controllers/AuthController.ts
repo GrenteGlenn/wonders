@@ -1,5 +1,6 @@
 import User from '../../models/user';
 import UserInterface from '../interfaces/UserInterface';
+import { encryptPassword } from '../lib/CheckPassword';
 
 export default class AuthController {
   async list() {
@@ -30,9 +31,17 @@ export default class AuthController {
       client.first_name = user.first_name;
       client.last_name = user.last_name;
       client.email = user.email;
-      client.password = user.password;
       client.birth_date = user.birth_date;
       client.language_id = user.language_id;
+      await client.save();
+    }
+    return client;
+  }
+
+  async updatePassword(id: number, password: string) {
+    const client = await User.findByPk(id);
+    if (client) {
+      client.password = await encryptPassword(password);
       await client.save();
     }
     return client;
