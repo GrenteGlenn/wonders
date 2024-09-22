@@ -13,7 +13,6 @@ export default class AuthController {
 
   async getOneByEmail(email: string) {
     const user = await User.findOne({ where: { email: email } });
-    console.log(user);
     if (user) return user;
     else return null;
   }

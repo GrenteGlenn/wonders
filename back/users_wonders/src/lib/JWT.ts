@@ -54,16 +54,9 @@ export function decryptJWT(token: string) {
   }
 }
 
-export function createToken(user: User) {
+export function createToken() {
   if (SECRET_TOKEN !== undefined) {
-    return jwt.sign(
-      {
-        userId: user?.id,
-        email: user?.email
-      },
-      SECRET_TOKEN,
-      { expiresIn: '1h' }
-    );
+    return jwt.sign({}, SECRET_TOKEN, { expiresIn: '1h' });
   } else {
     return 'Secret is undefined';
   }

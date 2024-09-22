@@ -2,21 +2,22 @@ import { RequestHandler, Router } from 'express';
 import AuthController from '../controllers/AuthController';
 import UserInterface from '../interfaces/UserInterface';
 import { checkPassword, decryptPassword, encryptPassword } from '../lib/CheckPassword';
-import { createJWT, createToken, decryptToken, updateJWT } from '../lib/JWT';
+import { createJWT, createToken, updateJWT } from '../lib/JWT';
 import { sendMail } from '../lib/Mailer';
+import ResetPasswordController from '../controllers/ResetPasswordController';
+import { addHours } from '../lib/Date';
 
 const router = Router();
 
 const authController = new AuthController();
+const resetPasswordController = new ResetPasswordController();
 
-interface TokenCustom {
-  userId: number;
-  email: string;
-  iat: number;
-  exp: number;
+interface Body {
+  token: string;
+  password: string;
 }
 
-router.post('/login', (async (req, res, next) => {
+router.post('/auth', (async (req, res, next) => {
   try {
     const body = <UserInterface>req.body;
     let token;
@@ -61,7 +62,6 @@ router.post('/refresh', ((req, res) => {
     if (token) refresh = updateJWT(token);
     if (refresh) res.status(200).json({ refresh });
     else res.json('refresh fail');
-
   } catch (error) {
     res.status(400).json({ error: error });
   }
@@ -77,7 +77,6 @@ router.post('/register', (async (req, res) => {
     if (client) return res.json('client already registered');
     else await authController.create(body);
     res.status(200).json('client created successfully.');
-
   } catch (error) {
     res.status(400).json({ error: error });
   }
@@ -91,7 +90,12 @@ router.get('/send_mail', (async (req, res) => {
     return res.json('User not found');
   }
 
-  const token = createToken(user);
+  const token = createToken();
+  const expired_at = addHours(new Date());
+
+  const resetPassword = { token, created_at: new Date(), expired_at, user_id: user.id };
+
+  await resetPasswordController.create(resetPassword);
 
   const from: string = '<from email ID>';
   const to: string = '<to email id>';
@@ -110,11 +114,17 @@ router.get('/send_mail', (async (req, res) => {
   res.status(200).json(token);
 }) as RequestHandler);
 
-router.post('/forgot_password', (async (req, res) => {
+router.put('/reset_password/:token', (async (req, res) => {
   const body = <Body>req.body;
-  const token = <TokenCustom>decryptToken(body.token);
 
-  await authController.updatePassword(token.userId, body.password);
+  const resetPassword = await resetPasswordController.getOneByToken(req.params.token);
+
+  if (resetPassword)
+    if (new Date() <= resetPassword.expired_at) {
+      await authController.updatePassword(resetPassword.user_id, body.password);
+    } else {
+      return res.json('Reset password link has expired');
+    }
 
   res.status(200).json('Reset password successfully.');
 }) as RequestHandler);
