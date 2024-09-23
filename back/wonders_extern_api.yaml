@@ -2861,7 +2861,7 @@ paths:
                     type: string
                     example: "Tags Update"
     delete:
-      description: "Delete a Tags"
+      description: "Delete a Tag"
       parameters:
         - in: path
           name: id
