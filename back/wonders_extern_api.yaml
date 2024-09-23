@@ -148,7 +148,7 @@ paths:
                   token:
                     type: string
                     example: 'eyJhbGciOi'
-  api/auth/forget_password:
+  api/auth/forgot_password:
     get:
       description: Send a mail to a User with a link for reset the password
       responses:
@@ -3085,91 +3085,6 @@ paths:
                   message:
                     type: string
                     example: "User Answer Delete"
-#  /api/quiz/{quizId}/a/{questionId}:
-#    post:
-#      description: Answer a quiz's question
-#      parameters:
-#        - in: path
-#          name: quizId
-#          description: The Quiz Id
-#          required: true
-#          schema:
-#            type: integer
-#        - in: path
-#          name: questionId
-#          description: The Question Id
-#          required: true
-#          schema:
-#            type: integer
-#      requestBody:
-#        content:
-#          application/json:
-#            schema:
-#              type: object
-#              properties:
-#                answer:
-#                  $ref: '#/definitions/Answer'
-#      responses:
-#        201:
-#          description: Answer Accepted
-#          content:
-#            application/json:
-#              schema:
-#                type: object
-#                properties:
-#                  status:
-#                    type: string
-#                    example: 'Answer Accepted'
-#  /api/quiz/{quizId}:
-#    get:
-#      description: Get a question pool for a quiz
-#      parameters:
-#        - in: path
-#          name: quizId
-#          description: The Quiz Id
-#          required: true
-#          schema:
-#            type: integer
-#      responses:
-#        404:
-#          description: Not Found
-#          content:
-#            application/json:
-#              schema:
-#                type: object
-#                properties:
-#                  message: { type: string, example: 'Quiz not found' }
-#        200:
-#          description: Ok
-#          content:
-#            application/json:
-#              schema:
-#                type: object
-#                properties:
-#                  quiz:
-#                    type: array
-#                    items:
-#                      type: object
-#                      properties:
-#                        questionId:
-#                          type: integer
-#                          example: 42
-#                        required:
-#                          type: boolean
-  /coffee:
-    get:
-      description: What ? Tea ? Who said Tea ? Do you have Tea ? Tea ? For me ? Me Tea ! All the Tea ! Tea Time is a Me Time !
-      responses:
-        418:
-          description: I'm a TeaPot
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "I'm a Teapot"
 
 definitions:
   Address_Definition:
