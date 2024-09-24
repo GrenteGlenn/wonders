@@ -6,29 +6,29 @@ const router = Router();
 
 const roleController = new RoleController();
 
-router.get('/role', (async (req, res) => {
+router.get('/', (async (req, res) => {
   const roles = await roleController.list();
   res.status(200).json(roles);
 }) as RequestHandler);
 
-router.get('/role/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   const roles = await roleController.getOne(parseInt(req.params.id, 10));
   res.status(200).json(roles);
 }) as RequestHandler);
 
-router.post('/role', (async (req, res) => {
+router.post('/', (async (req, res) => {
   const body = <RoleInterface>req.body;
   const roles = await roleController.create(body);
   res.status(200).json(roles);
 }) as RequestHandler);
 
-router.put('/role/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   const body = <RoleInterface>req.body;
   const roles = await roleController.update(parseInt(req.params.id, 10), body);
   res.status(200).json(roles);
 }) as RequestHandler);
 
-router.delete('/role/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   const roles = await roleController.delete(parseInt(req.params.id, 10));
   res.status(200).json(roles);
 }) as RequestHandler);

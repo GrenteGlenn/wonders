@@ -8,7 +8,7 @@ const router = Router();
 
 const authController = new AuthController();
 
-router.post('/auth', (async (req, res, next) => {
+router.post('/login', (async (req, res, next) => {
   const body = <UserInterface>req.body;
   let token;
   let client;
