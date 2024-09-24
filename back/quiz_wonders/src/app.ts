@@ -5,8 +5,8 @@ import statusRoutes from './routes/statusRoutes';
 import tagRoutes from './routes/tagRoutes';
 import quizRoutes from './routes/quizRoutes';
 import organizationRoutes from './routes/organizationRoutes';
-import organizationUrlRoutes from './routes/organizationUrlRoutes'
-import quizLineRoutes from './routes/quizLineRoutes'
+import organizationUrlRoutes from './routes/organizationUrlRoutes';
+import quizLineRoutes from './routes/quizLineRoutes';
 import responseKindRoutes from './routes/responseKindRoutes';
 import quizResponseRoutes from './routes/quizResponseRoutes';
 import userAnswerRoutes from './routes/userAnswerRoutes';
@@ -20,21 +20,20 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Routes
-app.use('/api', countryRoutes);
-app.use('/api', statusRoutes);
-app.use('/api', tagRoutes);
-app.use('/api', quizRoutes);
-app.use('/api', organizationRoutes)
-app.use('/api', organizationUrlRoutes)
-app.use('/api', quizLineRoutes)
-app.use('/api/response-kind', responseKindRoutes)
-app.use('/api', userAnswerRoutes);
-app.use('/api', quizResponseRoutes);
-app.use('/api', quizAnswerTextRoutes);
-
+app.use('/api/countries', countryRoutes);
+app.use('/api/status', statusRoutes);
+app.use('/api/tags', tagRoutes);
+app.use('/api/quiz', quizRoutes);
+app.use('/api/organization', organizationRoutes);
+app.use('/api/organization-url', organizationUrlRoutes);
+app.use('/api/quiz-line', quizLineRoutes);
+app.use('/api/response-kind', responseKindRoutes);
+app.use('/api/user-answer', userAnswerRoutes);
+app.use('/api/quiz-response', quizResponseRoutes);
+app.use('/api/quiz-answer-text', quizAnswerTextRoutes);
 
 // Route par défaut
-app.get('/', async (req: Request, res: Response) => {
+app.get('/', (req: Request, res: Response) => {
   res.json('Hello World!');
 });
 

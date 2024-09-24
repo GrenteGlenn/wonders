@@ -9,7 +9,7 @@ const router = Router();
 
 const tagController = new TagController();
 
-router.get('/tags', (async (req, res) => {
+router.get('/', (async (req, res) => {
   try {
     const tags = await tagController.list();
     res.json(tags);
@@ -18,7 +18,7 @@ router.get('/tags', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/tags/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   try {
     const tag = await tagController.one(parseInt(req.params.id, 10));
     res.json(tag);
@@ -27,7 +27,7 @@ router.get('/tags/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.post('/tags', (async (req, res) => {
+router.post('/', (async (req, res) => {
   const body = <Body>req.body;
   try {
     const tag = await tagController.new(body.name, new Date(), new Date());
@@ -37,7 +37,7 @@ router.post('/tags', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.put('/tags/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   const body = <Body>req.body;
   try {
     const tag = await tagController.update(parseInt(req.params.id, 10), body.name, new Date(), new Date());
@@ -47,7 +47,7 @@ router.put('/tags/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/tags/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
     const tag = await tagController.remove(parseInt(req.params.id, 10));
     res.json(tag);
