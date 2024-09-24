@@ -1,0 +1,3543 @@
+openapi: 3.1.0
+info:
+  title: Wonders Backend Public API
+  description: Wonders Backend Public API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:3000'
+    description: Development server
+    auth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /api/auth/login:
+    post:
+      description: Register
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
+      responses:
+        200:
+          description: Login successful
+          headers:
+            Authorization:
+              description: JWT token
+              schema:
+                type: JWT
+              example: 'Bearer eyJhbGciOi'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'eyJhbGciOi'
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Bad Request'
+  /api/auth/register:
+    post:
+      description: Login to the API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 'John'
+                surname:
+                  type: string
+                  example: 'Doe'
+                birthDate:
+                  type: string
+                  example: '1990-01-01'
+                country:
+                  type: string
+                  example: 'France'
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
+                language_id:
+                  type: integer
+                  example: 1
+
+      responses:
+        401:
+          description: Bad UserName or Password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    example: 'Bad Email or Password'
+        201:
+          description: New response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User created'
+  /api/auth/refresh:
+    post:
+      description: Login to the API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
+      responses:
+        401:
+          description: Bad UserName or Password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    example: 'Bad Email or Password'
+        200:
+          description: Token Refresh
+          headers:
+            Authorization:
+              description: JWT token
+              schema:
+                type: JWT
+              example: 'Bearer eyJhbGciOi'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: 'eyJhbGciOi'
+  api/auth/forgot_password:
+    get:
+      description: Send a mail to a User with a link for reset the password
+      responses:
+        200:
+          description: Mail send to User
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Mail Send'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Users not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+    api/auth/reset_password/{token}:
+    put:
+      description: Change the password of User
+      parameters:
+        - in: path
+          name: token
+          description: token for reset password
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  example: 'new password'
+      responses:
+        200:
+          description: Change the user password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Password Change'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Users not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/users/:
+    get:
+      description: Get all Users
+      responses:
+        200:
+          description: Users Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/User_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Users not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/user/{userId}:
+    get:
+      description: Get an User
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: User Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/User_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+    put:
+      description: Edit an User
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/User_Put_Definition'
+      responses:
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+        201:
+          description: Edited
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User edited'
+    delete:
+      description: Delete an User
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: User Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User not found'
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User deleted'
+  /api/address/:
+    get:
+      description: Get all Address
+      responses:
+        200:
+          description: Address Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Address_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/address/user/{id}:
+    get:
+      description: Get an address by User id
+      parameters:
+        - in: path
+          name: id
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Address Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Address_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/address/country/{id}:
+    get:
+      description: Get an address by country id
+      parameters:
+        - in: path
+          name: id
+          description: The Country Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Address Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Address_Array_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/address/register:
+    post:
+      description: Create a new Address for a user
+      parameters:
+        - in: path
+          name: userId
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Address_Definition'
+      responses:
+        200:
+          description: Address Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/address/{addressId}:
+    get:
+      description: Get an user's address
+      parameters:
+        - in: path
+          name: addressId
+          description: The Address Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    $ref: '#/definitions/Address_Definition'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+    put:
+      description: Edit an user's address
+      parameters:
+        - in: path
+          name: addressId
+          description: The Address Id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Address_Definition'
+      responses:
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+        201:
+          description: Edited
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address edited'
+    delete:
+      description: Delete an user's address
+      parameters:
+        - in: path
+          name: addressId
+          description: The Address Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address not found'
+        200:
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Address deleted'
+  /api/session/:
+    get:
+      description: Get all Cookie session
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Session Cookie find
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Session_Array_Definition'
+    post:
+      description: Create a new Session Cookie for a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Session_Cookie_Definition'
+      responses:
+        201:
+          description: Session Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Session created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/session/{id}:
+    get:
+      description: Get a Cookie session
+      parameters:
+        - in: path
+          name: user_id
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Session Cookie find
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Session_Cookie_Definition'
+    put:
+      description: Update a new Session Cookie for a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Session_Cookie_Definition'
+      responses:
+        200:
+          description: Session Update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Session created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+    delete:
+      description: Delete a Cookie session
+      parameters:
+        - in: path
+          name: user_id
+          description: The User Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Session Cookie find
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session delete'
+  /api/role/:
+    get:
+      description: Get all Role
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Session Cookie find
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Role_Definition'
+    post:
+      description: Create a new Session Cookie for a user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Role_Definition'
+      responses:
+        201:
+          description: Session Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Role created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/role/{id}:
+    get:
+      description: Get a Role session
+      parameters:
+        - in: path
+          name: id
+          description: The Role Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Address Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Cookie Session not found'
+        200:
+          description: Role Cookie find
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Role_Definition'
+    put:
+      description: Update a new Role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Role_Definition'
+      responses:
+        200:
+          description: Role Update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Role created'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+    delete:
+      description: Delete a Role
+      parameters:
+        - in: path
+          name: id
+          description: The Role Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Role Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Role not found'
+        200:
+          description: Role delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Role delete'
+
+  /api/countries:
+    get:
+      description: 'Get All Countries'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Countries Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Countries not found'
+        200:
+          description: Get all Countries
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Country_Definition'
+    post:
+      description: "Create a new country"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Country_Definition'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Countries Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Countries not found'
+        200:
+          description: Countries delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Countries created"
+  /api/countries/{id}:
+    get:
+      description: 'Get one Countries by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Country Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Countries Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Countries not found'
+        200:
+          description: Get a Countries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schema:
+                    $ref: '#/definitions/Country_Definition'
+    put:
+      description: "Update a country"
+      parameters:
+        - in: path
+          name: id
+          description: The Country Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Countries Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Countries not found'
+        200:
+          description: Countries delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Countries Update"
+    delete:
+      description: "Delete a country"
+      parameters:
+        - in: path
+          name: id
+          description: The Country Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Countries Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Countries not found'
+        200:
+          description: Countries delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Countries Delete"
+  /api/organization:
+    get:
+      description: 'Get All Organisation'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation not found'
+        200:
+          description: Get All Organisation
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Organisation_Definitions'
+    post:
+      description: "Create a new Organisation"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Organisation_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation not found'
+        200:
+          description: Organisation Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Organisation created"
+  /api/organization/{id}:
+    get:
+      description: 'Get one Organisation by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Organisation Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation not found'
+        200:
+          description: Organisation delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Organisation_Definitions'
+    put:
+      description: "Update a Organisation"
+      parameters:
+        - in: path
+          name: id
+          description: The Organisation Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation not found'
+        200:
+          description: Organisation Update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Organisation Update"
+    delete:
+      description: "Delete a Organisation"
+      parameters:
+        - in: path
+          name: id
+          description: The Organisation Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation not found'
+        200:
+          description: Organisation delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Organisation Delete"
+  /api/organization-url:
+    get:
+      description: 'Get All Organisation Url'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Url Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation Url not found'
+        200:
+          description: Organisation Url delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Organisation_Url_Definitions'
+    post:
+      description: "Create a new Organisation Url"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Organisation_Url_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Url Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation Url not found'
+        200:
+          description: Organisation Url created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Organisation Url created"
+  /api/organization-url/{id}:
+    get:
+      description: 'Get one Organisation Url by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Organisation Url Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Url Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation Url not found'
+        200:
+          description: get Organisation Url
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Organisation_Url_Definitions'
+    put:
+      description: "Update a Organisation Url"
+      parameters:
+        - in: path
+          name: id
+          description: The Organisation Url Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Url Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation not found'
+        200:
+          description: Organisation Url Update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Organisation Url Update"
+    delete:
+      description: "Delete a Organisation Url"
+      parameters:
+        - in: path
+          name: id
+          description: The Organisation Url Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Organisation Url Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Organisation Url not found'
+        200:
+          description: Organisation Url delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Organisation Url Delete"
+  /api/quiz-answer-text:
+    get:
+      description: 'Get All Quiz Answer Text'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Answer Text Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Answer Text not found'
+        200:
+          description: Quiz Answer Text delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Quiz_Answer_Text_Definitions'
+    post:
+      description: "Create a new Quiz Answer Text"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                answer:
+                  $ref: '#/definitions/Quiz_Answer_Text_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Answer Text Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Answer Text not found'
+        200:
+          description: Quiz Answer Text created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Answer Text created"
+  /api/quiz-answer-text/{id}:
+    get:
+      description: 'Get one Quiz Answer Text by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Answer Text Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Answer Text Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Answer Text not found'
+        200:
+          description: get Organisation Url
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Quiz_Answer_Text_Definitions'
+    put:
+      description: "Update a Quiz Answer Text"
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Answer Text Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Answer Text Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Answer Text not found'
+        200:
+          description: Quiz Answer Text Update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Answer Text Update"
+    delete:
+      description: "Delete a Quiz Answer Text"
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Answer Text Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Answer Text Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Answer Text not found'
+        200:
+          description: Quiz Answer Text delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Answer Text Delete"
+  /api/quiz-line:
+    get:
+      description: 'Get All Quiz Line'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Line Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Line not found'
+        200:
+          description: Get all Quiz Line
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Quiz_Line_Definitions'
+    post:
+      description: "Create a new Quiz Line"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Quiz_Line_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Line Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Line not found'
+        200:
+          description: Quiz Line created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Line created"
+  /api/quiz-line/{id}:
+    get:
+      description: 'Get one Quiz Line by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Line Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Line Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Line not found'
+        200:
+          description: Quiz Line delete
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Quiz_Line_Definitions'
+    put:
+      description: "Update a Quiz Line"
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Line Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Line Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Line not found'
+        200:
+          description: Quiz Line Update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Line Update"
+    delete:
+      description: "Delete a Quiz Line"
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Line Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Line Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Line not found'
+        200:
+          description: Quiz Line delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Line Delete"
+  /api/quiz-response:
+    get:
+      description: 'Get All Quiz Response'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Response Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Response not found'
+        200:
+          description: Quiz Response delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schema:
+                    $ref: '#/definitions/Array_Quiz_Response_Definitions'
+    post:
+      description: "Create a new Quiz Response"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Quiz_Response_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Response Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Response not found'
+        200:
+          description: Quiz Response created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Response created"
+  /api/quiz-response/{id}:
+    get:
+      description: 'Get one Quiz Response by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Response Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Response Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Response not found'
+        200:
+          description: Get Quiz Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Quiz_Response_Definitions'
+    put:
+      description: "Update a Quiz Response"
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Response Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Response Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Response not found'
+        200:
+          description: Quiz Response update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Response Update"
+    delete:
+      description: "Delete a Quiz Response"
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Response Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Response Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Response not found'
+        200:
+          description: Quiz Response delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Response Delete"
+  /api/quiz:
+    get:
+      description: 'Get All Quiz'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz not found'
+        200:
+          description: Get all Quiz
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Quiz_Definitions'
+    post:
+      description: "Create a new Quiz"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Quiz_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz not found'
+        200:
+          description: Quiz Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Response created"
+  /api/quiz/infos/{id}:
+    get:
+      description: 'Get one Quiz infos by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz Response not found'
+        200:
+          description: Get Quiz infos by Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Quiz_Definitions'
+  /api/quiz/user/{id}:
+    get:
+      description: 'Get one Quiz by User Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz not found'
+        200:
+          description: Get Quiz By User Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Quiz_Definitions'
+  /api/quiz/{id}:
+    get:
+      description: 'Get one Quiz by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz not found'
+        200:
+          description: Get Quiz by Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Quiz_Definitions'
+    put:
+      description: "Update a Quiz"
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz not found'
+        200:
+          description: Quiz update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Update"
+    delete:
+      description: "Delete a Quiz"
+      parameters:
+        - in: path
+          name: id
+          description: The Quiz Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Quiz Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz not found'
+        200:
+          description: Quiz delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Delete"
+  /api/response-kind:
+    get:
+      description: 'Get All Response Kind'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Response Kind Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Response Kind not found'
+        200:
+          description: Get all Response Kind
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Quiz_Response_Definitions'
+    post:
+      description: "Create a new Response Kind"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Quiz_Response_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Response Kind Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Response Kind not found'
+        200:
+          description: Response Kind Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Response Kind created"
+  /api/response-kind/{id}:
+    get:
+      description: 'Get one Response Kind by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Response Kind Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Response Kind Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Response Kind not found'
+        200:
+          description: Get Response Kind by Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Quiz_Response_Definitions'
+    put:
+      description: "Update a Response Kind"
+      parameters:
+        - in: path
+          name: id
+          description: The Response Kind Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Response Kind Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Response Kind not found'
+        200:
+          description: Response Kind update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Response Kind Update"
+    delete:
+      description: "Delete a Response Kind"
+      parameters:
+        - in: path
+          name: id
+          description: The Response Kind Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Response Kind Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Response Kind not found'
+        200:
+          description: Response Kind delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Response Kind Delete"
+  /api/status:
+    get:
+      description: 'Get All Status'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Status Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Status not found'
+        200:
+          description: Get all Status
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Status_Definitions'
+    post:
+      description: "Create a new Status"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Status_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Status Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Status not found'
+        200:
+          description: Status Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Status created"
+  /api/status/{id}:
+    get:
+      description: 'Get one Status by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Status Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Status Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Status not found'
+        200:
+          description: Get Status by Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Status_Definitions'
+    put:
+      description: "Update a Status"
+      parameters:
+        - in: path
+          name: id
+          description: The Status Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Status Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Status not found'
+        200:
+          description: Status update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Status Update"
+    delete:
+      description: "Delete a Status"
+      parameters:
+        - in: path
+          name: id
+          description: The Status Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Status Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Status not found'
+        200:
+          description: Status delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Status Delete"
+  /api/tags:
+    get:
+      description: 'Get All Tags'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Tags Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Tags not found'
+        200:
+          description: Get all Tags
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_Tag_Definitions'
+    post:
+      description: "Create a new Tags"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/Tag_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Tags Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Quiz not found'
+        200:
+          description: Tags Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Quiz Response created"
+  /api/tags/{id}:
+    get:
+      description: 'Get one Tags by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The Tags Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Tags Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Tags not found'
+        200:
+          description: Get Tags by Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Tag_Definitions'
+    put:
+      description: "Update a Tags"
+      parameters:
+        - in: path
+          name: id
+          description: The Tags Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Tags Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Tags not found'
+        200:
+          description: Tags update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Tags Update"
+    delete:
+      description: "Delete a Tag"
+      parameters:
+        - in: path
+          name: id
+          description: The Tags Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: Tags Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Tags not found'
+        200:
+          description: Tags delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Tags Delete"
+  /api/user-answer:
+    get:
+      description: 'Get All User Answer'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: User Answer Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Answer not found'
+        200:
+          description: Get all User Answer
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/Array_User_Answer_Definitions'
+    post:
+      description: "Create a new User Answer"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/User_Answer_Definitions'
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: User Answer Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Answer not found'
+        200:
+          description: User Answer Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User Answer created"
+  /api/user-answer/{id}:
+    get:
+      description: 'Get one User Answer by Id'
+      parameters:
+        - in: path
+          name: id
+          description: The User Answer Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: User Answer Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Answer not found'
+        200:
+          description: Get User Answer by Id
+          content:
+            application/json:
+              schema:
+                $ref: '#/definitions/User_Answer_Definitions'
+    put:
+      description: "Update a User Answer"
+      parameters:
+        - in: path
+          name: id
+          description: The User Answer Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: User Answer Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Answer not found'
+        200:
+          description: User Answer update
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User Answer Update"
+    delete:
+      description: "Delete a User Answer"
+      parameters:
+        - in: path
+          name: id
+          description: The User Answer Id
+          required: true
+          schema:
+            type: integer
+      responses:
+        403:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Unauthorized'
+        404:
+          description: User Answer Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'User Answer not found'
+        200:
+          description: User Answer delete
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User Answer Delete"
+
+definitions:
+  Address_Definition:
+    type: object
+    properties:
+      addressId:
+        type: integer
+        example: 42
+      name:
+        type: string
+        example: 'Home'
+      street:
+        type: string
+        example: '1 rue de la Paix'
+      city:
+        type: string
+        example: 'Paris'
+      zipCode:
+        type: string
+        example: '75000'
+      complement:
+        type:
+          - string
+          - null
+        example: 'Apartment 1'
+      country:
+        type: string
+        example: 'France'
+  Answer:
+    oneOf:
+      - type: string
+      - type: integer
+      - type: boolean
+      - type: array
+        items:
+          type: integer
+  Address_Array_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/Address_Definition'
+  User_Array_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/User_Definition'
+  User_Put_Definition:
+    type: object
+    properties:
+      first_name:
+        type: string
+        example: 'John'
+      last_name:
+        type: string
+        example: 'Doe'
+      email:
+        type: string
+        example: 'john.doe@nimp.tkt'
+      password:
+        type: string
+        example: 'Doe'
+      birthDate:
+        type: string
+        example: '1990-01-01'
+      language_id:
+        type: interger
+        example: 1
+  User_Definition:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 42
+      first_name:
+        type: string
+        example: 'John'
+      last_name:
+        type: string
+        example: 'Doe'
+      email:
+        type: string
+        example: 'john.doe@nimp.tkt'
+      password:
+        type: string
+        example: 'Doe'
+      birthDate:
+        type: string
+        example: '1990-01-01'
+      language_id:
+        type: interger
+        example: 1
+  Session_Array_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/Session_Cookie_Definition'
+  Session_Cookie_Definition:
+    type: object
+    properties:
+      token:
+        type: string
+        exemple: 'qshflsqhdlgqs2561'
+      valid:
+        type: boolean
+        exemple: true
+      user_id:
+        type: integer
+        exemple: 1
+  Array_Role_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/Role_Definition'
+  Role_Definition:
+    type: object
+    properties:
+      role:
+        type: string
+        exemple: 'Staff'
+  Array_Country_Definition:
+    type: array
+    items:
+      $ref: '#/definitions/Country_Definition'
+  Country_Definition:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: "France"
+      code:
+        type: string
+        example: "FR"
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Organisation_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Organisation_Definitions'
+  Organisation_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      user_id:
+        type: integer
+        example: 1
+      status_id:
+        type: integer
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Organisation_Url_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Organisation_Url_Definitions'
+  Organisation_Url_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      url:
+        type: string | null
+        example: '1 esplanade michel teulet, 93220 Gagny'
+      organization_id:
+        type: integer
+        example: 1
+      rank:
+        type: integer
+        example: 1
+      partner:
+        type: string
+        example: 'partner'
+      status_id:
+        type: integer
+        example: 1
+      key:
+        type: string | null
+        example: 'hfzahizaidsqljfblqsidpza'
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Quiz_Answer_Text_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Quiz_Answer_Text_Definitions'
+  Quiz_Answer_Text_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      answer:
+        type: string
+        example: ' answer'
+      quiz_line_id:
+        type: integer
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Quiz_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Quiz_Definitions'
+  Quiz_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      url:
+        type: string | null
+        example: 'Ceci est une question'
+      tags_id:
+        type: integer
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Quiz_Line_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Quiz_Line_Definitions'
+  Quiz_Line_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      quiz_id:
+        type: integer
+        example: 1
+      url:
+        type: string | null
+        example: '1 esplanade michel teulet, 93220 Gagny'
+      is_text:
+        type: boolean
+        example: true
+      is_boolean:
+        type: boolean
+        example: false
+      is_required:
+        type: boolean
+        example: true
+      step:
+        type: number
+        example: 1
+      tag_id:
+        type: integer
+        example: 1
+      response_kind_id:
+        type: integer
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Quiz_Response_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Quiz_Response_Definitions'
+  Quiz_Response_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      user_id:
+        type: integer
+        example: 1
+      quiz_id:
+        type: integer
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Result_Activity_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Result_Activity_Definitions'
+  Result_Activity_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      activity_id:
+        type: integer
+        example: 1
+      step:
+        type: number
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Result_City_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Result_City_Definitions'
+  Result_City_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      step:
+        type: number
+        example: 1
+      start_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      end_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Status_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Status_Definitions'
+  Status_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      step:
+        type: string
+        example: "Finish"
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_Tag_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/Tag_Definitions'
+  Tag_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      name:
+        type: string
+        example: "truc"
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_User_Answer_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/User_Answer_Definitions'
+  User_Answer_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      quiz_response_id:
+        type: number
+        example: 1
+      quiz_line_id:
+        type: number
+        example: 1
+      boolean:
+        type: boolean
+        example: true
+      text:
+        type: string
+        example: "truc"
+      quiz_answer_text_id:
+        type: number
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_User_Ia_Result_Country_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/User_Ia_Result_Country_Definitions'
+  User_Ia_Result_Country_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      country:
+        type: number
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+  Array_User_Ia_Quiz_Result_Definitions:
+    type: array
+    items:
+      $ref: '#/definitions/User_Ia_Quiz_Result_Definitions'
+  User_Ia_Quiz_Result_Definitions:
+    type: object
+    properties:
+      id:
+        type: integer
+        example: 1
+      quiz_response:
+        type: number
+        example: 1
+      user_quiz_ia_result_сountry:
+        type: number
+        example: 1
+      created_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
+      updated_at:
+        type: Date
+        example: "Mon Sep 23 2024 13:54:31 GMT+0200"
