@@ -1713,7 +1713,7 @@ paths:
                   message:
                     type: string
                     example: "Quiz Answer Text Delete"
-  /api/quizline:
+  /api/quiz-line:
     get:
       description: 'Get All Quiz Line'
       responses:
@@ -1781,7 +1781,7 @@ paths:
                   message:
                     type: string
                     example: "Quiz Line created"
-  /api/quizline/{id}:
+  /api/quiz-line/{id}:
     get:
       description: 'Get one Quiz Line by Id'
       parameters:
