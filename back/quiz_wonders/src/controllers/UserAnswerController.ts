@@ -27,7 +27,15 @@ export default class UserAnswerController {
     updated_at: Date
   ) {
     try {
-      return await UserAnswer.create({ quiz_answer_text_id, quiz_line_id, boolean, quiz_response_id, text, created_at, updated_at });
+      return await UserAnswer.create({
+        quiz_answer_text_id,
+        quiz_line_id,
+        boolean,
+        quiz_response_id,
+        text,
+        created_at,
+        updated_at
+      });
     } catch (error) {
       console.log(error);
       return error;

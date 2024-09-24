@@ -5,17 +5,17 @@ import UserAnswer from '../interfaces/UserAnswerInterface';
 const router = Router();
 const userAnswerController = new UserAnswerController();
 
-router.get('/user-answer', (async (req, res) => {
+router.get('/', (async (req, res) => {
   const userAnswers = await userAnswerController.list();
   res.json(userAnswers);
 }) as RequestHandler);
 
-router.get('/user-answer/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   const userAnswers = await userAnswerController.one(parseInt(req.params.id, 10));
   res.json(userAnswers);
 }) as RequestHandler);
 
-router.post('/user-answer', (async (req, res) => {
+router.post('/', (async (req, res) => {
   const body = <UserAnswer>req.body;
   try {
     const userAnswer = await userAnswerController.new(
@@ -33,7 +33,7 @@ router.post('/user-answer', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.put('/user-answer/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   const body = <UserAnswer>req.body;
   try {
     const userAnswer = await userAnswerController.update(
@@ -52,7 +52,7 @@ router.put('/user-answer/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/user-answer/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   const userAnswer = await userAnswerController.delete(parseInt(req.params.id, 10));
   res.json(userAnswer);
 }) as RequestHandler);

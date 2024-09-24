@@ -12,17 +12,16 @@ const router = Router();
 
 const countryController = new CountryController();
 
-router.get('/countries', (async (req, res) => {
+router.get('/', (async (req, res) => {
   try {
     const countries = await countryController.list();
     res.json(countries);
   } catch (error) {
     res.json({ error: error });
   }
-
 }) as RequestHandler);
 
-router.get('/countries/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   try {
     const country = await countryController.one(parseInt(req.params.id, 10));
     res.json(country);
@@ -31,33 +30,38 @@ router.get('/countries/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.post('/countries', (async (req, res) => {
+router.post('/', (async (req, res) => {
   try {
     const body = <Body>req.body;
     const country = await countryController.new(body.name, body.code, new Date(), new Date());
     res.json(country);
   } catch (error) {
-    res.json({error: error});
+    res.json({ error: error });
   }
-
 }) as RequestHandler);
 
-router.put('/countries/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    const country = await countryController.update(parseInt(req.params.id, 10), body.name, body.code, new Date(), new Date());
+    const country = await countryController.update(
+      parseInt(req.params.id, 10),
+      body.name,
+      body.code,
+      new Date(),
+      new Date()
+    );
     res.json(country);
   } catch (error) {
-    res.json({error: error});
+    res.json({ error: error });
   }
 }) as RequestHandler);
 
-router.delete('/countries/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
     const country = await countryController.remove(parseInt(req.params.id, 10));
     res.json(country);
   } catch (error) {
-    res.json({error: error});
+    res.json({ error: error });
   }
 }) as RequestHandler);
 

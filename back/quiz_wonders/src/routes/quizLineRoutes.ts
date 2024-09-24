@@ -7,12 +7,12 @@ const router = Router();
 
 const quizLineController = new QuizLineController();
 
-router.get('/quizline', (async (req, res) => {
+router.get('/', (async (req, res) => {
   const quizLine = await quizLineController.list();
   res.json(quizLine);
 }) as RequestHandler);
 
-router.get('/quizline/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   try {
     const quizLine = await quizLineController.one(parseInt(req.params.id, 10));
     res.json(quizLine);
@@ -21,7 +21,7 @@ router.get('/quizline/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.post('/quizline', (async (req, res) => {
+router.post('/', (async (req, res) => {
   const body = <QuizLineInterface>req.body;
   try {
     const quizLine = await quizLineController.new({
@@ -40,7 +40,7 @@ router.post('/quizline', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.put('/quizline/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   const body = <QuizLineInterface>req.body;
   try {
     const quizLine = await quizLineController.update(
@@ -60,7 +60,7 @@ router.put('/quizline/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/quizline/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
     const quizLine = await quizLineController.remove(parseInt(req.params.id, 10));
     res.json(quizLine);
