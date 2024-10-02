@@ -1,5 +1,7 @@
 export default interface ActivityInterface {
   id?: number;
+  longitude: number;
+  latitude: number;
   name: string;
   place_id: string;
   rating: number;

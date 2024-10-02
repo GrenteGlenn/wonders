@@ -11,10 +11,8 @@ import responseKindRoutes from './routes/responseKindRoutes';
 import quizResponseRoutes from './routes/quizResponseRoutes';
 import userAnswerRoutes from './routes/userAnswerRoutes';
 import quizAnswerTextRoutes from './routes/quizAnswerTextRoutes';
-import { Client, Language, LatLng } from '@googlemaps/google-maps-services-js';
-import { apiViator } from './services/Viator';
-import { apiOpenTrip } from './services/OpenTripMap';
 import activityRoute from './routes/activityRoute';
+import { fakeApi } from './services/FakeApi';
 
 dotenv.config();
 
@@ -39,6 +37,7 @@ app.use('/api/activity', activityRoute);
 
 // Route par défaut
 app.get('/', ((req: Request, res: Response) => {
+  fakeApi(80.490044, 84.820918, 50);
   res.json('Hello World!');
 }) as RequestHandler);
 
