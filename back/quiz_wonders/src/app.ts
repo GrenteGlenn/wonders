@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, RequestHandler, Response } from 'express';
 import dotenv from 'dotenv';
 import countryRoutes from './routes/countryRoutes';
 import statusRoutes from './routes/statusRoutes';
@@ -11,6 +11,10 @@ import responseKindRoutes from './routes/responseKindRoutes';
 import quizResponseRoutes from './routes/quizResponseRoutes';
 import userAnswerRoutes from './routes/userAnswerRoutes';
 import quizAnswerTextRoutes from './routes/quizAnswerTextRoutes';
+import { Client, Language, LatLng } from '@googlemaps/google-maps-services-js';
+import { apiViator } from './services/Viator';
+import { apiOpenTrip } from './services/OpenTripMap';
+import activityRoute from './routes/activityRoute';
 
 dotenv.config();
 
@@ -31,11 +35,12 @@ app.use('/api/response-kind', responseKindRoutes);
 app.use('/api/user-answer', userAnswerRoutes);
 app.use('/api/quiz-response', quizResponseRoutes);
 app.use('/api/quiz-answer-text', quizAnswerTextRoutes);
+app.use('/api/activity', activityRoute);
 
 // Route par défaut
-app.get('/', (req: Request, res: Response) => {
+app.get('/', ((req: Request, res: Response) => {
   res.json('Hello World!');
-});
+}) as RequestHandler);
 
 // Démarrer le serveur
 app.listen(port, () => {
