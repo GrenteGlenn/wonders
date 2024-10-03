@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatButtonModule} from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     LucideAngularModule,
-    MatButtonModule, 
+    MatButtonModule,
     MatTooltipModule,
     CommonModule
   ],
@@ -20,25 +20,22 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent {
   isMenuOpen = false;
 
-
   constructor(private router: Router) {}
+
   goPlanTrip() {
     this.router.navigate(['planTrip']);
-  };
-  goHomePage(){
+  }
+  goHomePage() {
     this.router.navigate(['home']);
-  };
-  goQuestion(){
+  }
+  goQuestion() {
     this.router.navigate(['question']);
-  };
-  goProfile(){
+  }
+  goProfile() {
     this.router.navigate(['profile']);
   }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
-  }
-  goProfile(){
-    this.router.navigate(['profile']);
   }
 }
