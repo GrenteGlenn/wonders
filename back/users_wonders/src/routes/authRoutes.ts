@@ -139,49 +139,56 @@ router.put('/reset_password/:token', (async (req, res) => {
 
 router.get('/send_mail', (async (req, res) => {
   const body = <UserInterface>req.body;
+  try {
+    const user = await authController.getOneByEmail(body.email);
+    if (!user) {
+      return res.json('User not found');
+    }
 
-  const user = await authController.getOneByEmail(body.email);
-  if (!user) {
-    return res.json('User not found');
-  }
+    const token = createToken();
+    const expired_at = addHours(new Date());
 
-  const token = createToken();
-  const expired_at = addHours(new Date());
+    const resetPassword = { token, created_at: new Date(), expired_at, user_id: user.id };
 
-  const resetPassword = { token, created_at: new Date(), expired_at, user_id: user.id };
+    await resetPasswordController.create(resetPassword);
 
-  await resetPasswordController.create(resetPassword);
+    const from: string = '<from email ID>';
+    const to: string = '<to email id>';
+    const subject: string = '<subject>';
 
-  const from: string = '<from email ID>';
-  const to: string = '<to email id>';
-  const subject: string = '<subject>';
+    const resetPasswordLink = `http://localhost:3000/reset-password/${token}`;
 
-  const resetPasswordLink = `http://localhost:3000/reset-password/${token}`;
-
-  const mailTemplate = `
+    const mailTemplate = `
     <p>Hello,</p>
     <p>You have requested to reset your password. Please click on the link below to reset your password:</p>
     <a href="${resetPasswordLink}">${resetPasswordLink}</a>
     <p>If you did not request this, please ignore this email.</p>
   `;
 
-  sendMail(from, to, subject, mailTemplate);
-  res.status(200).json(token);
+    sendMail(from, to, subject, mailTemplate);
+    res.status(200).json(token);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
 router.put('/reset_password/:token', (async (req, res) => {
   const body = <Body>req.body;
 
-  const resetPassword = await resetPasswordController.getOneByToken(req.params.token);
+  try {
+    const resetPassword = await resetPasswordController.getOneByToken(req.params.token);
 
-  if (resetPassword)
-    if (new Date() <= resetPassword.expired_at) {
-      await authController.updatePassword(resetPassword.user_id, body.password);
-    } else {
-      return res.json('Reset password link has expired');
-    }
+    if (resetPassword)
+      if (new Date() <= resetPassword.expired_at) {
+        await authController.updatePassword(resetPassword.user_id, body.password);
+      } else {
+        return res.json('Reset password link has expired');
+      }
 
-  res.status(200).json('Reset password successfully.');
+    res.status(200).json('Reset password successfully.');
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
 export default router;
