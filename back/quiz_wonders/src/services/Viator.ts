@@ -1,12 +1,7 @@
 const viator_key = process.env.SECRET_KEY_VIATOR;
 
-interface BodyType {
-  destId: number;
-  topX: string;
-  sortOrder: string;
-}
-
-export function apiViator(query: string, destId?: number) {
+export function apiViator(query: string, destId?: number | null, method?: string) {
+  let body;
   return new Promise((resolve) => {
     let otmAPI = 'https://api.sandbox.viator.com/partner/v1/taxonomy/';
     if (query !== undefined) {
@@ -17,19 +12,21 @@ export function apiViator(query: string, destId?: number) {
 
     console.log(viator_key);
 
-    if (destId !== undefined) {
-      const body: BodyType = {
-        destId,
-        topX: '100-400',
-        sortOrder: 'SEO_ALPHABETICAL'
+    if (method === 'POST') {
+      body = {
+        destId: destId,
+        topX: '1-3',
+        sortOrder: 'RECOMMENDED'
       };
 
       fetch(otmAPI, {
+        method: `${method}`,
         headers: {
           'exp-api-key': `${viator_key}`,
-          'Accept-Language': 'fr'
+          'Accept-Language': 'fr',
+          'Content-Type': 'application/json'
         },
-        body: body as unknown as BodyInit
+        body: JSON.stringify(body)
       })
         .then((response) => response.json())
         .then((data) => resolve(data))
@@ -38,9 +35,11 @@ export function apiViator(query: string, destId?: number) {
         });
     } else {
       fetch(otmAPI, {
+        method: `${method}`,
         headers: {
           'exp-api-key': `${viator_key}`,
-          'Accept-Language': 'fr'
+          'Accept-Language': 'fr',
+          'Content-Type': 'application/json'
         }
       })
         .then((response) => response.json())
@@ -51,3 +50,9 @@ export function apiViator(query: string, destId?: number) {
     }
   });
 }
+
+// const result = await apiViator('destinations', null, 'GET');
+// console.log(result);
+
+/*const attraction = await apiViator('attractions', 24414, 'POST');
+console.log(attraction);*/

@@ -12,7 +12,6 @@ import quizResponseRoutes from './routes/quizResponseRoutes';
 import userAnswerRoutes from './routes/userAnswerRoutes';
 import quizAnswerTextRoutes from './routes/quizAnswerTextRoutes';
 import activityRoute from './routes/activityRoute';
-import { fakeApi } from './services/FakeApi';
 
 dotenv.config();
 
@@ -36,8 +35,7 @@ app.use('/api/quiz-answer-text', quizAnswerTextRoutes);
 app.use('/api/activity', activityRoute);
 
 // Route par défaut
-app.get('/', ((req: Request, res: Response) => {
-  fakeApi(80.490044, 84.820918, 50);
+app.get('/', (async (req: Request, res: Response) => {
   res.json('Hello World!');
 }) as RequestHandler);
 

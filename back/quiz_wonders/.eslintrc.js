@@ -18,5 +18,5 @@ module.exports = {
   rules: {
     'prettier/prettier': 'error'
   },
-  ignorePatterns: ['__tests__', 'migrations', 'config', 'dist', 'node_modules', 'service']
+  ignorePatterns: ['__tests__', 'migrations', 'config', 'dist', 'node_modules']
 };
