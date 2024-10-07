@@ -1,4 +1,4 @@
-export default interface TripDayActivity {
+export default interface TripDayActivityInterface {
     id: number;
     trip_day_id: number;
     activity_id: number;
