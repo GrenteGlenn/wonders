@@ -37,7 +37,11 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('trip_days', 'trip_city_id');
+    try {
+      await queryInterface.removeConstraint('trip_days', 'trip_city_id');
+    } catch(error) {
+      console.warn('Constraint not found')
+    }
     await queryInterface.dropTable('trip_days');
   }
 };

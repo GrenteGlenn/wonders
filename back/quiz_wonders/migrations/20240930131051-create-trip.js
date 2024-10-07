@@ -50,7 +50,11 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('trips', 'transportation_id');
+    try {
+      await queryInterface.removeConstraint('trips', 'transportation_id');
+    } catch (error) {
+      console.warn('Constraint not found')
+    }
     await queryInterface.dropTable('trips');
   }
 };

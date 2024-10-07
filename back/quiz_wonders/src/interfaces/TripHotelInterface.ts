@@ -1,4 +1,4 @@
-export default interface TripHotel {
+export default interface TripHotelInterface {
     id: number;
     trip_city_id: number;
     name: string;
