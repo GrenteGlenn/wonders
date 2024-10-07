@@ -1,6 +1,6 @@
 
 export default interface TripInterface {
-    id: number;
+    id?: number;
     user_id: number;
     country_id: number;
     duration: number;

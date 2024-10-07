@@ -11,6 +11,7 @@ import responseKindRoutes from './routes/responseKindRoutes';
 import quizResponseRoutes from './routes/quizResponseRoutes';
 import userAnswerRoutes from './routes/userAnswerRoutes';
 import quizAnswerTextRoutes from './routes/quizAnswerTextRoutes';
+import tripRoutes from './routes/tripRoutes';
 
 dotenv.config();
 
@@ -31,6 +32,8 @@ app.use('/api/response-kind', responseKindRoutes);
 app.use('/api/user-answer', userAnswerRoutes);
 app.use('/api/quiz-response', quizResponseRoutes);
 app.use('/api/quiz-answer-text', quizAnswerTextRoutes);
+
+app.use('/api/trip', tripRoutes);
 
 // Route par défaut
 app.get('/', (req: Request, res: Response) => {
