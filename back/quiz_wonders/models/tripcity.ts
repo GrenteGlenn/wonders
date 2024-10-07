@@ -82,4 +82,4 @@ Trip.hasMany(TripCity, {
   as: 'trip'
 })
 
-export default Trip;
+export default TripCity;

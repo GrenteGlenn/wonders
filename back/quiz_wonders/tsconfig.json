@@ -106,7 +106,7 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDirs": ["./src", "./"]
   },
   "include": ["src/**/*.ts", "src/seeders/9-country.ts", "src/models/index.js", "src/seeders/11-organizationUrl.ts", "src/test.ts.save"],
   "exclude": ["node_modules"],                              /* Skip type checking all .d.ts files. */
