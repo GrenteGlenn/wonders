@@ -80,7 +80,7 @@ Trip.hasOne(TripTransportation, {
 });
 
 TripTransportation.hasMany(Trip, {
-  foreignKey: 'transportation_id',
+foreignKey: 'transportation_id',
   as: 'trip_transportation',
 });
 

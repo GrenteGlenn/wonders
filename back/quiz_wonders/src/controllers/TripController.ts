@@ -65,5 +65,4 @@ export default class TripController {
           console.error('Error deleting trip:', error);
         }
       }
-      
 }

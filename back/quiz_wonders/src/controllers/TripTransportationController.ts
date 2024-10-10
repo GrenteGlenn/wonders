@@ -1,17 +1,54 @@
+import TripTransportation from '../../models/triptransportation';
+
 export default class TripTransportationController {
     async list() {
-
+        return await TripTransportation.findAll()
     }
-    async one() {
-
+    async one(id: number) {
+        const tripTransportation = await TripTransportation.findByPk(id)
+        if (tripTransportation) {
+            return tripTransportation;
+        }
     }
-    async new() {
-
+    async new(from:Date, to: Date, price: number, url: string, created_at: Date, updated_at: Date) {
+        try {
+            return await TripTransportation.create({ from, to, price, url, created_at, updated_at })
+        } catch(error) {
+            console.error('Error creating trip transportation:', error);
+        }
     }
-    async update() {
-
+    async update(id: number, from:Date, to: Date, price: number, url: string, created_at: Date, updated_at: Date) {
+        try {
+            const tripTransportation = await TripTransportation.findByPk(id);
+            
+            if (!tripTransportation) {
+              return { status: 404, message: 'Trip not found' };
+            }
+        
+            tripTransportation.from = from;
+            tripTransportation.to = to;
+            tripTransportation.price = price;
+            tripTransportation.url = url;
+            tripTransportation.to = to;
+            await tripTransportation.save();
+        
+            return tripTransportation;
+          } catch (error) {
+            console.error('Error updating trip transportation:', error);
+          }
     }
-    async delete() {
-
+    async delete(id: number) {
+        try {
+            const trip = await TripTransportation.findByPk(id);
+        
+            if (!trip) {
+              console.log('Trip transportation not found');
+            } else {
+                await trip.destroy();
+            }
+            console.log('Trip transportation deleted successfully');
+          } catch (error) {
+            console.error('Error deleting trip:', error);
+          }
     }
 }
