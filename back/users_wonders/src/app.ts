@@ -23,5 +23,5 @@ app.use('/api/role', jsonParser, roleRoutes);
 app.use('/api/session', jsonParser, sessionRoutes);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Example app User listening on port ${port}`);
 });
