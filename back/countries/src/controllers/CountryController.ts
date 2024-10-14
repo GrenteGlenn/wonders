@@ -7,8 +7,8 @@ interface Data {
 }
 
 class CountryController {
-  async getDataFromOpenAI(country: string) {
-    return await OpenAiService.openaiCall(country)
+  async getDataFromOpenAI(prompt: string) {
+    return await OpenAiService.openaiCall(prompt)
 }
 
   async list() {
