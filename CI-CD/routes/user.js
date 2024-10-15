@@ -1,7 +1,5 @@
 const axios = require('axios');
 
-// migrate to class
-
 class userUser {
     constructor() {
     }
@@ -35,6 +33,18 @@ class userUser {
         try {
             const response = await axios.put(`${API_BASE_URL}/api/users/${id}`, userData, config);
             // console.log('User updated successfully:', response.data);
+            return response.data;
+        } catch (error) {
+            // throw this error to the caller
+            throw error;
+        }
+    }
+
+    async delete_user(config, API_BASE_URL, id) {
+        console.log('Deleting user...');
+        try {
+            const response = await axios.delete(`${API_BASE_URL}/api/users/${id}`, config);
+            // console.log('User deleted successfully:', response.data);
             return response.data;
         } catch (error) {
             // throw this error to the caller

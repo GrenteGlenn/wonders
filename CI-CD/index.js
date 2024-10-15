@@ -58,6 +58,9 @@ async function registerMultipleUsers(count) {
         let userUpdateData = userData;
         userUpdateData.first_name = faker.person.lastName();
         await userUser.update_user(config, API_BASE_URL, user.userId, userData);
+
+        // Suppression de l'utilisateur
+        await userUser.delete_user(config, API_BASE_URL, user.userId);
     }
 
     const endTime = performance.now();
