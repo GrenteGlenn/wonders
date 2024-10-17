@@ -16,12 +16,12 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');
 });
 
-app.use('/api', jsonParser, authRoutes);
-app.use('/api', jsonParser, userRoutes);
-app.use('/api', jsonParser, addressRoutes);
-app.use('/api', jsonParser, roleRoutes);
-app.use('/api', jsonParser, sessionRoutes);
+app.use('/api/auth', jsonParser, authRoutes);
+app.use('/api/users', jsonParser, userRoutes);
+app.use('/api/address', jsonParser, addressRoutes);
+app.use('/api/role', jsonParser, roleRoutes);
+app.use('/api/session', jsonParser, sessionRoutes);
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Example app User listening on port ${port}`);
 });

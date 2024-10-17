@@ -28,8 +28,26 @@ export default class OrganizationUrlController {
     return await OrganizationUrl.findByPk(id);
   }
 
-  async create(url: string, organization_id: number, rank: number, partner: string, status_id: number, key: string, created_at: Date, updated_at: Date) {
-    const organizationUrl = await OrganizationUrl.create({ url, organization_id, rank, partner, key, status_id, created_at, updated_at });
+  async create(
+    url: string,
+    organization_id: number,
+    rank: number,
+    partner: string,
+    status_id: number,
+    key: string,
+    created_at: Date,
+    updated_at: Date
+  ) {
+    const organizationUrl = await OrganizationUrl.create({
+      url,
+      organization_id,
+      rank,
+      partner,
+      key,
+      status_id,
+      created_at,
+      updated_at
+    });
     return organizationUrl;
   }
 

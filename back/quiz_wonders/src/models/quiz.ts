@@ -70,12 +70,12 @@ Quiz.belongsTo(Tag, {
 
 QuizLine.belongsTo(Quiz, {
   foreignKey: 'quiz_id',
-  as: 'quiz',
+  as: 'quiz'
 });
 
 Quiz.hasMany(QuizLine, {
   foreignKey: 'quiz_id',
-  as: 'quiz_lines',
+  as: 'quiz_lines'
 });
 
 export default Quiz;

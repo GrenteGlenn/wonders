@@ -6,36 +6,60 @@ const router = Router();
 
 const sessionController = new SessionController();
 
-router.get('/session', (async (req, res) => {
-  const sessions = await sessionController.list();
-  res.status(200).json(sessions);
+router.get('/', (async (req, res) => {
+  try {
+    const sessions = await sessionController.list();
+    res.status(200).json(sessions);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.get('/session/:id', (async (req, res) => {
-  const session = await sessionController.getOne(parseInt(req.params.id, 10));
-  res.status(200).json(session);
+router.get('/:id', (async (req, res) => {
+  try {
+    const session = await sessionController.getOne(parseInt(req.params.id, 10));
+    res.status(200).json(session);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.get('/session/user/:id', (async (req, res) => {
-  const session = await sessionController.getByUser(parseInt(req.params.id, 10));
-  res.status(200).json(session);
+router.get('/user/:id', (async (req, res) => {
+  try {
+    const session = await sessionController.getByUser(parseInt(req.params.id, 10));
+    res.status(200).json(session);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.post('/session', (async (req, res) => {
-  const body = <SessionInterface>req.body;
-  const session = await sessionController.create(body);
-  res.status(200).json(session);
+router.post('/', (async (req, res) => {
+  try {
+    const body = <SessionInterface>req.body;
+    const session = await sessionController.create(body);
+    res.status(200).json(session);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.put('/session/:id', (async (req, res) => {
-  const body = <SessionInterface>req.body;
-  const session = await sessionController.update(parseInt(req.params.id, 10), body);
-  res.status(200).json(session);
+router.put('/:id', (async (req, res) => {
+  try {
+    const body = <SessionInterface>req.body;
+    const session = await sessionController.update(parseInt(req.params.id, 10), body);
+    res.status(200).json(session);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.delete('/session/:id', (async (req, res) => {
-  const session = await sessionController.delete(parseInt(req.params.id, 10));
-  res.status(200).json(session);
+router.delete('/:id', (async (req, res) => {
+  try {
+    const session = await sessionController.delete(parseInt(req.params.id, 10));
+    res.status(200).json(session);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
 export default router;

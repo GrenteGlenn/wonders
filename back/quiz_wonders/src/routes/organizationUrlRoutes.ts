@@ -14,67 +14,67 @@ const router = Router();
 
 const organizationUrlController = new OrganizationUrlController();
 
-router.get('/organization-url', (async (req, res) => {
+router.get('/', (async (req, res) => {
   try {
-  const organizationUrl = await organizationUrlController.list();
-  res.json(organizationUrl);
-} catch (error) {
-  res.json({error: error});
-}
+    const organizationUrl = await organizationUrlController.list();
+    res.json(organizationUrl);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
-router.get('/organization-url/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   try {
-  const organizationUrl = await organizationUrlController.one(parseInt(req.params.id, 10));
-  res.json(organizationUrl);
-} catch (error) {
-  res.json({error: error});
-}
+    const organizationUrl = await organizationUrlController.one(parseInt(req.params.id, 10));
+    res.json(organizationUrl);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
-router.post('/organization-url', (async (req, res) => {
+router.post('/', (async (req, res) => {
   try {
-  const body = <Body>req.body;
-  const organizationUrl = await organizationUrlController.create(
-    body.url,
-    body.organization_id,
-    body.rank,
-    body.partner,
-    body.status_id,
-    body.key,
-    new Date,
-    new Date
-  );
-  res.json(organizationUrl);
-} catch (error) {
-  res.json({error: error});
-}
+    const body = <Body>req.body;
+    const organizationUrl = await organizationUrlController.create(
+      body.url,
+      body.organization_id,
+      body.rank,
+      body.partner,
+      body.status_id,
+      body.key,
+      new Date(),
+      new Date()
+    );
+    res.json(organizationUrl);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
-router.put('/organization-url/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   try {
-  const body = <Body>req.body;
-  const organizationUrl = await organizationUrlController.update(
-    parseInt(req.params.id, 10),
-    body.url,
-    body.organization_id,
-    body.rank,
-    body.partner,
-    body.key,
-    body.status_id
-  );
-  res.json(organizationUrl);
-} catch (error) {
-  res.json({error: error});
-}
+    const body = <Body>req.body;
+    const organizationUrl = await organizationUrlController.update(
+      parseInt(req.params.id, 10),
+      body.url,
+      body.organization_id,
+      body.rank,
+      body.partner,
+      body.key,
+      body.status_id
+    );
+    res.json(organizationUrl);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
-router.delete('/organization-url/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
-  const organizationUrl = await organizationUrlController.delete(parseInt(req.params.id, 10));
-  res.json(organizationUrl);
-} catch (error) {
-  res.json({error: error});
-}
+    const organizationUrl = await organizationUrlController.delete(parseInt(req.params.id, 10));
+    res.json(organizationUrl);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
 export default router;

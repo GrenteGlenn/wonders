@@ -6,31 +6,51 @@ const router = Router();
 
 const roleController = new RoleController();
 
-router.get('/role', (async (req, res) => {
-  const roles = await roleController.list();
-  res.status(200).json(roles);
+router.get('/', (async (req, res) => {
+  try {
+    const roles = await roleController.list();
+    res.status(200).json(roles);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.get('/role/:id', (async (req, res) => {
-  const roles = await roleController.getOne(parseInt(req.params.id, 10));
-  res.status(200).json(roles);
+router.get('/:id', (async (req, res) => {
+  try {
+    const roles = await roleController.getOne(parseInt(req.params.id, 10));
+    res.status(200).json(roles);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.post('/role', (async (req, res) => {
-  const body = <RoleInterface>req.body;
-  const roles = await roleController.create(body);
-  res.status(200).json(roles);
+router.post('/', (async (req, res) => {
+  try {
+    const body = <RoleInterface>req.body;
+    const roles = await roleController.create(body);
+    res.status(200).json(roles);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.put('/role/:id', (async (req, res) => {
-  const body = <RoleInterface>req.body;
-  const roles = await roleController.update(parseInt(req.params.id, 10), body);
-  res.status(200).json(roles);
+router.put('/:id', (async (req, res) => {
+  try {
+    const body = <RoleInterface>req.body;
+    const roles = await roleController.update(parseInt(req.params.id, 10), body);
+    res.status(200).json(roles);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.delete('/role/:id', (async (req, res) => {
-  const roles = await roleController.delete(parseInt(req.params.id, 10));
-  res.status(200).json(roles);
+router.delete('/:id', (async (req, res) => {
+  try {
+    const roles = await roleController.delete(parseInt(req.params.id, 10));
+    res.status(200).json(roles);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
 export default router;

@@ -6,25 +6,41 @@ const router = Router();
 
 const authController = new AuthController();
 
-router.get('/users', (async (req, res) => {
-  const client = await authController.list();
-  res.status(200).json(client);
+router.get('/', (async (req, res) => {
+  try {
+    const client = await authController.list();
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.get('/users/:id', (async (req, res) => {
-  const client = await authController.getOne(parseInt(req.params.id, 10));
-  res.status(200).json(client);
+router.get('/:id', (async (req, res) => {
+  try {
+    const client = await authController.getOne(parseInt(req.params.id, 10));
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.put('/users/:id', (async (req, res) => {
-  const body = <UserInterface>req.body;
-  const client = await authController.update(parseInt(req.params.id, 10), body);
-  res.status(200).json(client);
+router.put('/:id', (async (req, res) => {
+  try {
+    const body = <UserInterface>req.body;
+    const client = await authController.update(parseInt(req.params.id, 10), body);
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
-router.delete('/users/:id', (async (req, res) => {
-  const client = await authController.remove(parseInt(req.params.id, 10));
-  res.status(200).json(client);
+router.delete('/:id', (async (req, res) => {
+  try {
+    const client = await authController.remove(parseInt(req.params.id, 10));
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(400).json({ error: error });
+  }
 }) as RequestHandler);
 
 export default router;
