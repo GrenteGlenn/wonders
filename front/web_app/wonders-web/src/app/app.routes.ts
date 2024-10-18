@@ -5,6 +5,8 @@ import { HomePageComponent } from '../components/home-page/home-page.component';
 import { QuestionComponent } from '../components/question/question.component';
 import { ProfileComponent } from '../components/profile/profile.component';
 import { BookingComponent } from '../components/booking/booking.component';
+import { DestinationComponent } from '../components/destination/destination.component';
+import { FormActivitiesComponent } from '../components/form-activities/form-activities.component';
 
 export const routes: Routes = [
     {path: "landingPage", component: LandingPageComponent },
@@ -12,9 +14,9 @@ export const routes: Routes = [
     {path: "planTrip", component: PlanTipComponent},
     {path: "question", component: QuestionComponent},
     {path: "booking", component: BookingComponent},
-    {path: "profile", component: ProfileComponent}
-
-
+    {path: "profile", component: ProfileComponent},
+    {path: "destination", component: DestinationComponent},
+    {path: "activities", component: FormActivitiesComponent}
 ];
 
 

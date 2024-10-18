@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [
     LucideAngularModule,
-    MatButtonModule, 
+    MatButtonModule,
     MatTooltipModule,
     CommonModule
   ],
@@ -34,7 +34,6 @@ export class NavbarComponent {
   goProfile(){
     this.router.navigate(['profile']);
   }
-  
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
