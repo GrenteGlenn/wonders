@@ -1,0 +1,36 @@
+<div class="grid grid-cols-1 justify-items-center max-w-2xl mx-auto my-10 py-10 border rounded-md shadow-md">
+  <h1 class="text-2xl font-medium mb-16">Register</h1>
+  <p class="justify-self-start text-red-500 ml-4 mb-2">champs obligatoire *</p>
+  <div class="justify-self-start px-12 w-full">
+    <div class="mb-4">
+      <label for="lb_email">Email <i class="text-red-500">*</i></label> <br>
+      <input type="text" [(ngModel)]="user.email" id="lb_email" class="w-full border border-gray-300 rounded-md p-2">
+    </div>
+    <div class="mb-4">
+      <label for="lb_password">Password <i class="text-red-500">*</i></label> <br>
+      <input type="password" [(ngModel)]="user.password" id="lb_password" class="w-full border border-gray-300 rounded-md p-2">
+    </div>
+    <div class="mb-4">
+      <label for="lb_firstname">Firstname <i class="text-red-500">*</i></label> <br>
+      <input type="text" [(ngModel)]="user.first_name" id="lb_firstname" class="w-full border border-gray-300 rounded-md p-2">
+    </div>
+    <div class="mb-4">
+      <label for="lb_lastname">Lastname <i class="text-red-500">*</i></label> <br>
+      <input type="text" [(ngModel)]="user.last_name" id="lb_lastname" class="w-full border border-gray-300 rounded-md p-2">
+    </div>
+    <div class="mb-4">
+      <label for="lb_birthday">Birthday <i class="text-red-500">*</i></label> <br>
+      <input type="date" [(ngModel)]="user.birth_date" id="lb_birthday" class="w-full border border-gray-300 rounded-md p-2">
+    </div>
+    <div class="mb-4">
+      <label for="lb_country">Country <i class="text-red-500">*</i></label> <br>
+      <input type="text" [(ngModel)]="user.country" id="lb_country" class="w-full border border-gray-300 rounded-md p-2">
+    </div>
+    <!-- <div class="mb-4">
+      <label for="lb_language">Language <i class="text-red-500">*</i></label> <br>
+      <input type="text" [(ngModel)]="email" id="lb_language" class="w-full border border-gray-300 rounded-md p-2">
+    </div> -->
+  </div>
+  <button (click)="clickRegister()" class="px-16 py-2 font-medium bg-blue-500 hover:bg-blue-600 rounded-md text-white mt-8">Sign up</button>
+  <p class="mt-2">Already have an account? <a href="login" class="text-cyan-500 underline">log in now</a></p>
+</div>
