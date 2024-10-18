@@ -1,7 +1,7 @@
-import ResponseKind from '../models/responsekind';
+import ResponseKind from '../../models/responsekind';
 import ResponseKindController from '../controllers/ResponseKindController';
 
-jest.mock('../models/responsekind');
+jest.mock('../../models/responsekind');
 
 describe('ResponseKindController', () => {
   let controller: ResponseKindController;

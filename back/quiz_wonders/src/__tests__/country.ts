@@ -1,7 +1,7 @@
 import CountryController from '../controllers/CountryController';
-import Country from '../models/country';
+import Country from '../../models/country';
 
-jest.mock('../models/country');
+jest.mock('../../models/country');
 
 describe('CountryController', () => {
   let controller: CountryController;

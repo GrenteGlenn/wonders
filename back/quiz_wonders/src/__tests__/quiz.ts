@@ -1,8 +1,8 @@
-import Quiz from '../models/quiz';
+import Quiz from '../../models/quiz';
 import QuizController from '../controllers/QuizController';
 
 // Mock du modèle Quiz
-jest.mock('../models/quiz');
+jest.mock('../../models/quiz');
 
 describe('QuizController', () => {
   let controller: QuizController;

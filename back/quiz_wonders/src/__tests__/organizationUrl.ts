@@ -1,7 +1,7 @@
-import OrganizationUrl from '../models/organizationurl';
+import OrganizationUrl from '../../models/organizationurl';
 import OrganizationUrlController from '../controllers/OrganizationUrlController';
 
-jest.mock('../models/organizationurl');
+jest.mock('../../models/organizationurl');
 
 describe('OrganizationUrlController', () => {
   let controller: OrganizationUrlController;

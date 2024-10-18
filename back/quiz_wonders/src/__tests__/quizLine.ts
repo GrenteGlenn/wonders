@@ -1,7 +1,7 @@
-import QuizLine from '../models/quizline';
+import QuizLine from '../../models/quizline';
 import QuizLineController from '../controllers/QuizLineController';
 
-jest.mock('../models/quizline');
+jest.mock('../../models/quizline');
 
 describe('QuizLineController', () => {
   let controller: QuizLineController;

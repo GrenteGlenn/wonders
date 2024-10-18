@@ -1,4 +1,4 @@
-import UserAnswer from '../models/useranswer';
+import UserAnswer from '../../models/useranswer';
 
 export default class UserAnswerController {
   async list() {

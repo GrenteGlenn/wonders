@@ -1,4 +1,4 @@
-import QuizAnswerText from '../models/quizanswertext';
+import QuizAnswerText from '../../models/quizanswertext';
 
 export default class QuizAnswerTextController {
   async list() {

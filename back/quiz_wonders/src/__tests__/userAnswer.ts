@@ -1,7 +1,7 @@
-import UserAnswer from "../models/useranswer";
+import UserAnswer from "../../models/useranswer";
 import UserAnswerController from "../controllers/UserAnswerController";
 
-jest.mock('../models/useranswer')
+jest.mock('../../models/useranswer')
 
 describe('UserAnswerController', () => {
     let controller: UserAnswerController;

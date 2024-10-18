@@ -1,7 +1,7 @@
-import Status from '../models/status';
+import Status from '../../models/status';
 import StatusController from '../controllers/StatusController';
 
-jest.mock('../models/status');
+jest.mock('../../models/status');
 
 describe('QuizResponseController', () => {
   let controller: StatusController;

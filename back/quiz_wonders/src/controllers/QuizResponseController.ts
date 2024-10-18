@@ -1,7 +1,7 @@
-import QuizAnswerText from '../models/quizanswertext';
-import QuizLine from '../models/quizline';
-import QuizResponse from '../models/quizresponse';
-import UserAnswer from '../models/useranswer';
+import QuizAnswerText from '../../models/quizanswertext';
+import QuizLine from '../../models/quizline';
+import QuizResponse from '../../models/quizresponse';
+import UserAnswer from '../../models/useranswer';
 
 export default class QuizResponseController {
   async list() {
