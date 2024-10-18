@@ -8,6 +8,8 @@ import { ProfileComponent } from '../components/profile/profile.component';
 import { authGuard } from './common/auth.guard';
 import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
+import { DestinationComponent } from '../components/destination/destination.component';
+import { FormActivitiesComponent } from '../components/form-activities/form-activities.component';
 
 export const routes: Routes = [
     {path: "landingPage", component: LandingPageComponent},
@@ -17,9 +19,9 @@ export const routes: Routes = [
     {path: "booking", component: BookingComponent},
     {path: "profile", component: ProfileComponent, canActivate: [authGuard]},
     {path: "login", component: LoginComponent},
-    {path: "register", component: RegisterComponent}
-
-
+    {path: "register", component: RegisterComponent},
+    {path: "destination", component: DestinationComponent},
+    {path: "activities", component: FormActivitiesComponent}
 ];
 
 
