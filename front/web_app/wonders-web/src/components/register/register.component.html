@@ -1,0 +1,29 @@
+<div>
+  <label for="lb_email">Email</label>
+  <input type="text" [(ngModel)]="user.email" id="lb_email">
+</div>
+<div>
+  <label for="lb_password">Password</label>
+  <input type="password" [(ngModel)]="user.password" id="lb_password">
+</div>
+<div>
+  <label for="lb_firstname">Firstname</label>
+  <input type="text" [(ngModel)]="user.first_name" id="lb_firstname">
+</div>
+<div>
+  <label for="lb_lastname">Lastname</label>
+  <input type="text" [(ngModel)]="user.last_name" id="lb_lastname">
+</div>
+<div>
+  <label for="lb_birthday">Birthday</label>
+  <input type="date" [(ngModel)]="user.birth_date" id="lb_birthday">
+</div>
+<div>
+  <label for="lb_country">Country</label>
+  <input type="text" [(ngModel)]="user.country" id="lb_country">
+</div>
+<!-- <div>
+  <label for="lb_language">Language</label>
+  <input type="text" [(ngModel)]="email" id="lb_language">
+</div> -->
+<button (click)="clickRegister()">Sign up</button>
