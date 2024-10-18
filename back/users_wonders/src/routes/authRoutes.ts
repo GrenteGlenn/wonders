@@ -17,7 +17,7 @@ interface Body {
   password: string;
 }
 
-router.post('/auth', (async (req, res, next) => {
+router.post('/login', (async (req, res, next) => {
   try {
     const body = <UserInterface>req.body;
     let token;
