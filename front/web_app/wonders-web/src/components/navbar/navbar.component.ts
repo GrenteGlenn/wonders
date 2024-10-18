@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { AuthentificationService } from '../../app/service/auth/authentification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,10 +18,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   isMenuOpen = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private _authService: AuthentificationService) {}
+
+  ngOnInit(): void {
+
+  }
 
   goPlanTrip() {
     this.router.navigate(['planTrip']);
@@ -37,5 +42,9 @@ export class NavbarComponent {
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  disconnect() {
+    this._authService.logout();
   }
 }

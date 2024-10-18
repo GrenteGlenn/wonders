@@ -1,9 +1,9 @@
-export interface UserRegister {
-  name: string,
-  surname: string,
-  birthDate: string,
-  country: string,
+export interface User {
   email: string,
-  password: string
+  password?: string,
+  first_name: string,
+  last_name: string,
+  birth_date: Date,
+  country: string,
   language_id: number
 }
