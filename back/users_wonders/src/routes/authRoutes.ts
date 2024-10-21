@@ -56,15 +56,11 @@ router.post('/login', (async (req, res, next) => {
 }) as RequestHandler);
 
 router.post('/refresh', ((req, res) => {
-  try {
-    let refresh;
-    const token = req.headers.authorization?.split(' ')[1];
-    if (token) refresh = updateJWT(token);
-    if (refresh) res.status(200).json({ refresh });
-    else res.json('refresh fail');
-  } catch (error) {
-    res.status(400).json({ error: error });
-  }
+  let refresh;
+  const token = req.headers.authorization?.split(' ')[1];
+  if (token) refresh = updateJWT(token);
+  if (refresh) res.status(200).json({ refresh });
+  else res.json('refresh fail');
 }) as RequestHandler);
 
 router.post('/register', (async (req, res) => {
