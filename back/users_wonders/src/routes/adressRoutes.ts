@@ -44,7 +44,6 @@ router.get('/country/:id', (async (req, res) => {
 
 router.post('/register', (async (req, res) => {
   try {
-
     const body = <AddressInterface>req.body;
     await addressController.new(body);
     res.status(200).json(body);
@@ -55,7 +54,6 @@ router.post('/register', (async (req, res) => {
 
 router.put('/:id', (async (req, res) => {
   try {
-
     const body = <AddressInterface>req.body;
     const address = await addressController.update(parseInt(req.params.id, 10), body);
     res.status(200).json(address);
@@ -66,7 +64,6 @@ router.put('/:id', (async (req, res) => {
 
 router.delete('/:id', (async (req, res) => {
   try {
-
     const address = await addressController.remove(parseInt(req.params.id, 10));
     res.status(200).json(address);
   } catch (error) {
