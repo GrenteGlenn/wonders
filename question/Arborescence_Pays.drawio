@@ -89,6 +89,45 @@
             <mxPoint x="440" y="1720" as="targetPoint" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-7" value="Choix de la ville" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="1720" width="168.5" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-8" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.38;exitY=1.018;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="GmcLS__iIEoWOP5ZrVnr-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="1860" as="sourcePoint" />
+            <mxPoint x="418" y="1920" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-9" value="&lt;span id=&quot;docs-internal-guid-6beadd47-7fff-369b-dff2-458776160d11&quot;&gt;&lt;span style=&quot;font-size: 11pt; font-family: Lexend, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;&quot;&gt;Quelle est votre principale préférence en matière d&#39;activités ?&lt;/span&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#33FF33;" vertex="1" parent="1">
+          <mxGeometry x="335.75" y="1920" width="168.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-10" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="GmcLS__iIEoWOP5ZrVnr-9" target="GmcLS__iIEoWOP5ZrVnr-13">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="1860" as="sourcePoint" />
+            <mxPoint x="420" y="2100" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-13" value="&lt;span id=&quot;docs-internal-guid-0999190e-7fff-ba7b-3110-a97fe92c577e&quot;&gt;&lt;span style=&quot;font-size: 11pt; font-family: Lexend, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;&quot;&gt;Préférez-vous des activités en groupe ou en solo ?&lt;/span&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#33FF33;" vertex="1" parent="1">
+          <mxGeometry x="341.5" y="2100" width="161.5" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-14" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="GmcLS__iIEoWOP5ZrVnr-13" target="GmcLS__iIEoWOP5ZrVnr-15">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="392.25" y="2060" as="sourcePoint" />
+            <mxPoint x="422.25" y="2250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-15" value="&lt;span id=&quot;docs-internal-guid-017e544e-7fff-4585-a5d9-210db983a584&quot;&gt;&lt;p style=&quot;line-height:1.3800000000000001;margin-top:12pt;margin-bottom:2pt;&quot; dir=&quot;ltr&quot;&gt;&lt;span style=&quot;font-size: 11pt; font-family: Lexend, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;&quot;&gt;Quel est votre budget pour les activités par jour ?&lt;/span&gt;&lt;/p&gt;&lt;div&gt;&lt;span style=&quot;font-size: 11pt; font-family: Lexend, sans-serif; background-color: transparent; font-weight: 700; font-variant-numeric: normal; font-variant-east-asian: normal; font-variant-alternates: normal; font-variant-position: normal; vertical-align: baseline; white-space-collapse: preserve;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#33FF33;" vertex="1" parent="1">
+          <mxGeometry x="349.5" y="2260" width="148.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-16" value="Liste d&#39;activité" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="1">
+          <mxGeometry x="349.5" y="2480" width="169.25" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="GmcLS__iIEoWOP5ZrVnr-17" value="" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=74.625;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="GmcLS__iIEoWOP5ZrVnr-15" target="GmcLS__iIEoWOP5ZrVnr-16">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="392.25" y="2540" as="sourcePoint" />
+            <mxPoint x="442.25" y="2490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
