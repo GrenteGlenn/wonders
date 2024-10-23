@@ -13,8 +13,7 @@ interface Body {
 }
 
 interface Pays {
-  anglais: boolean;
-  langue: string;
+  langue: Array<string>;
   climat: string;
   paysage: string;
   activity: Array<string>;
@@ -103,9 +102,7 @@ router.post('/ai_get_country', (async (req, res) => {
     const body = <Pays>req.body;
     console.log(body);
 
-    const langue = body.anglais
-      ? `Je souhaite visiter un ou des pays qui parle ${body.langue} et qui parle anglais.`
-      : `Je souhaite visiter un ou des pays qui parle ${body.langue}.`;
+    const langue =`Je souhaite visiter un ou des pays qui parle ${body.langue.join(', ')}.`;
     const climat = `Qui a un climat ${body.climat}.`;
     const paysage = `Qui a des paysage de type ${body.paysage}.`;
     const activity = `Qui propose ce type d'activité : ${body.activity.join(', ')}.`;
