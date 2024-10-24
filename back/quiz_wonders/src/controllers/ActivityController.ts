@@ -1,3 +1,5 @@
+const google_key = process.env.SECRET_KEY_GOOGLE;
+
 class ActivityController {
   list() {
     const activity = [
@@ -23,6 +25,18 @@ class ActivityController {
       }
     ];
     return activity;
+  }
+
+  async google(location: string, radius: number, language: string) {
+    let value = {};
+    await fetch(
+      `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${location}&radius=${radius}&Accept-Language=${language}&type=tourist_attraction&key=${google_key}`
+    )
+      .then((response) => {
+        value = response.json();
+      })
+      .catch((e) => console.log(e));
+    return value;
   }
 }
 

@@ -1,12 +1,14 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import ActivityInterface from '../interfaces/ActivityInterface';
+import ActivityInterface from '../src/interfaces/ActivityInterface';
 
 interface ActivityCreationAttributes extends Optional<ActivityInterface, 'id'> {}
 
 class Activity extends Model<ActivityInterface, ActivityCreationAttributes> implements ActivityInterface {
   declare id: number;
   declare name: string;
+  declare latitude: number;
+  declare longitude: number;
   declare place_id: string;
   declare address: string;
   declare price_level: number;
@@ -25,6 +27,14 @@ Activity.init(
     },
     name: {
       type: DataTypes.STRING,
+      allowNull: false
+    },
+    longitude: {
+      type: DataTypes.NUMBER,
+      allowNull: false
+    },
+    latitude: {
+      type: DataTypes.NUMBER,
       allowNull: false
     },
     place_id: {
