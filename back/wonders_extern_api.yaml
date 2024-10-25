@@ -63,15 +63,15 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                first_name:
                   type: string
                   example: 'John'
-                surname:
+                last_name:
                   type: string
                   example: 'Doe'
                 birthDate:
                   type: string
-                  example: '1990-01-01'
+                  example: '2024-07-19T00:22:05.916Z'
                 country:
                   type: string
                   example: 'France'
@@ -148,41 +148,7 @@ paths:
                   token:
                     type: string
                     example: 'eyJhbGciOi'
-  api/auth/forgot_password:
-    get:
-      description: Send a mail to a User with a link for reset the password
-      responses:
-        200:
-          description: Mail send to User
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Mail Send'
-        404:
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Users not found'
-        403:
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: 'Forbidden'
-    api/auth/reset_password/{token}:
+  api/auth/reset_password/{token}:
     put:
       description: Change the password of User
       parameters:
@@ -223,6 +189,46 @@ paths:
                   message:
                     type: string
                     example: 'Users not found'
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Forbidden'
+  /api/auth/send_mail:
+    get:
+      description: Send Email for reset password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/definitions/User_Array_Definition'
+      responses:
+        200:
+          description: Email Send
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: '7f8a1c3e-d5b6-47e3-9c0b-1c2a4f9e8d12'
+        404:
+          description: Erreur Mailer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Mailer Erreur'
         403:
           description: Forbidden
           content:
