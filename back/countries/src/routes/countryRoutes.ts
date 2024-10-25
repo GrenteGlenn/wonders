@@ -1,5 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import CountryController from '../controllers/CountryController';
+import country from '../../models/country';
 
 interface Body {
   name: string;
@@ -98,11 +99,13 @@ router.post('/ai', (async (req, res) => {
 }) as RequestHandler);
 
 router.post('/ai_get_country', (async (req, res) => {
+  let result: any[] = [];
+
   try {
     const body = <Pays>req.body;
     console.log(body);
 
-    const langue =`Je souhaite visiter un ou des pays qui parle ${body.langue.join(', ')}.`;
+    const langue = `Je souhaite visiter un ou des pays qui parle ${body.langue.join(', ')}.`;
     const climat = `Qui a un climat ${body.climat}.`;
     const paysage = `Qui a des paysage de type ${body.paysage}.`;
     const activity = `Qui propose ce type d'activité : ${body.activity.join(', ')}.`;
@@ -116,7 +119,14 @@ router.post('/ai_get_country', (async (req, res) => {
       `Le réponse ne doit être une liste de pays en format d'un array comme cette exemple [pays1, pays2 ...]`;
 
     const countryData = await countryController.getDataFromOpenAI(prompt);
-    res.json({ data: countryData });
+    if (countryData !== null) {
+      const arrayCountry = countryData.replace('[', '').replace(']', '').split(',');
+      for (const element of arrayCountry) {
+        const image: any = await fetchImages(element, 'country');
+        result = [{ pays: element, img_full: image.items.link, img_small: image.image.thumbnailLink }, ...result];
+      }
+    }
+    res.json({ data: result });
   } catch (error) {
     console.error('Error in /ai route:', error);
     res.status(500).json({ error: error as any });
