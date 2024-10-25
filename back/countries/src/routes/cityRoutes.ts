@@ -1,5 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import CityController from '../controllers/CityController';
+import CountryController from '../controllers/CountryController';
 
 interface Body {
   name: string;
@@ -8,23 +9,28 @@ interface Body {
   updated_at: Date;
 }
 
+interface Ville {
+  activity: Array<string>;
+  pays: Array<string>;
+}
+
 const router = Router();
 
-const countryController = new CityController();
+const cityController = new CityController();
+const countryController = new CountryController();
 
 router.get('/cities', (async (req, res) => {
   try {
-    const cities = await countryController.list();
+    const cities = await cityController.list();
     res.json(cities);
   } catch (error) {
     res.json({ error: error });
   }
-
 }) as RequestHandler);
 
 router.get('/cities/:id', (async (req, res) => {
   try {
-    const country = await countryController.one(parseInt(req.params.id, 10));
+    const country = await cityController.one(parseInt(req.params.id, 10));
     res.json(country);
   } catch (error) {
     res.json({ error: error });
@@ -34,30 +40,68 @@ router.get('/cities/:id', (async (req, res) => {
 router.post('/cities', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    const country = await countryController.new(body.name, body.country, new Date(), new Date());
+    const country = await cityController.new(body.name, body.country, new Date(), new Date());
     res.json(country);
   } catch (error) {
-    res.json({error: error});
+    res.json({ error: error });
   }
-
 }) as RequestHandler);
 
 router.put('/cities/:id', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    const country = await countryController.update(parseInt(req.params.id, 10), body.name, body.country, new Date(), new Date());
+    const country = await cityController.update(
+      parseInt(req.params.id, 10),
+      body.name,
+      body.country,
+      new Date(),
+      new Date()
+    );
     res.json(country);
   } catch (error) {
-    res.json({error: error});
+    res.json({ error: error });
   }
 }) as RequestHandler);
 
 router.delete('/cities/:id', (async (req, res) => {
   try {
-    const country = await countryController.remove(parseInt(req.params.id, 10));
+    const country = await cityController.remove(parseInt(req.params.id, 10));
     res.json(country);
   } catch (error) {
-    res.json({error: error});
+    res.json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/ai_get_city', (async (req, res) => {
+  let result: any[] = [];
+
+  try {
+    const body = <Ville>req.body;
+    console.log(body);
+
+    const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple [{ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ...]`;
+
+    const cityData = await countryController.getDataFromOpenAI(prompt);
+    let arrayCity = cityData?.split(',').map(async (item) => {
+      item.replace('{', '').replace('}', '');
+      const data = item.split(',');
+      const city = data[0].split(':');
+      const country = data[1].split(':');
+      const image = await fetchImages(city[1], 'city');
+      result = [
+        {
+          pays: country,
+          city: city,
+          img_full: image.items.link,
+          img_small: image.image.thumbnailLink
+        },
+        ...result
+      ];
+    });
+    res.json({ data: cityData });
+  } catch (error) {
+    console.error('Error in /ai route:', error);
+    res.status(500).json({ error: error as any });
   }
 }) as RequestHandler);
 

@@ -21,11 +21,6 @@ interface Pays {
   populaire: boolean;
 }
 
-interface Ville {
-  activity: Array<string>;
-  pays: Array<string>;
-}
-
 interface Ai {
   country: string;
 }
@@ -119,29 +114,20 @@ router.post('/ai_get_country', (async (req, res) => {
       `Le réponse ne doit être une liste de pays en format d'un array comme cette exemple [pays1, pays2 ...]`;
 
     const countryData = await countryController.getDataFromOpenAI(prompt);
-    if (countryData !== null) {
-      const arrayCountry = countryData.replace('[', '').replace(']', '').split(',');
+    const arrayCountry = countryData?.replace('[', '').replace(']', '').split(',');
+    if (arrayCountry !== undefined)
       for (const element of arrayCountry) {
         const image: any = await fetchImages(element, 'country');
-        result = [{ pays: element, img_full: image.items.link, img_small: image.image.thumbnailLink }, ...result];
+        result = [
+          {
+            pays: element,
+            img_full: image.items.link,
+            img_small: image.image.thumbnailLink
+          },
+          ...result
+        ];
       }
-    }
     res.json({ data: result });
-  } catch (error) {
-    console.error('Error in /ai route:', error);
-    res.status(500).json({ error: error as any });
-  }
-}) as RequestHandler);
-
-router.post('/ai_get_city', (async (req, res) => {
-  try {
-    const body = <Ville>req.body;
-    console.log(body);
-
-    const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple [{ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ...]`;
-
-    const countryData = await countryController.getDataFromOpenAI(prompt);
-    res.json({ data: countryData });
   } catch (error) {
     console.error('Error in /ai route:', error);
     res.status(500).json({ error: error as any });
