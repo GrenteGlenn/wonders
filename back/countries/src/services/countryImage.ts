@@ -1,15 +1,12 @@
-// Paramètres de l'API
-const apiKey = process.env.GOOGLE_KEY;  // Remplace par ta clé API Google
-const cx = process.env.CX;  // Remplace par ton identifiant CX de moteur de recherche personnalisé
-const query = 'landscape France';  // Remplace 'France' par le pays que tu veux rechercher
-const searchType = 'image';
-const numResults = 1;  // Nombre de résultats que tu veux récupérer (max 10 par requête)
+async function fetchImages(target: string = 'France', type: string) {
+  const apiKey = process.env.GOOGLE_KEY; // Remplace par ta clé API Google
+  const cx = process.env.CX; // Remplace par ton identifiant CX de moteur de recherche personnalisé
+  const query = type === 'city' ? `Monument ${target}` : `${target}`; // Remplace 'France' par le pays que tu veux rechercher
+  const searchType = 'image';
+  const numResults = 1; // Nombre de résultats que tu veux récupérer (max 10 par requête)
 
-// URL de l'API Google Custom Search
-const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&cx=${cx}&key=${apiKey}&searchType=${searchType}&num=${numResults}`;
+  const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&cx=${cx}&key=${apiKey}&searchType=${searchType}&num=${numResults}`;
 
-// Fonction pour faire la requête à l'API
-async function fetchImages() {
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -28,6 +25,3 @@ async function fetchImages() {
     console.error('Erreur lors de la récupération des images:', error);
   }
 }
-
-// Appeler la fonction
-fetchImages();
