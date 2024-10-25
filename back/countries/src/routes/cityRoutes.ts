@@ -1,8 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import CityController from '../controllers/CityController';
 import CountryController from '../controllers/CountryController';
-import { fetchImages } from '../services/countryImage';
-import { get_city_fake } from '../Api/City';
 
 interface Body {
   name: string;
@@ -16,18 +14,12 @@ interface Ville {
   pays: Array<string>;
 }
 
-interface Result {
-  pays: string[];
-  city: string[];
-  img_full: string;
-}
-
 const router = Router();
 
 const cityController = new CityController();
 const countryController = new CountryController();
 
-router.get('/', (async (req, res) => {
+router.get('/cities', (async (req, res) => {
   try {
     const cities = await cityController.list();
     res.json(cities);
@@ -36,7 +28,7 @@ router.get('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/:id', (async (req, res) => {
+router.get('/cities/:id', (async (req, res) => {
   try {
     const country = await cityController.one(parseInt(req.params.id, 10));
     res.json(country);
@@ -45,7 +37,7 @@ router.get('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.post('/', (async (req, res) => {
+router.post('/cities', (async (req, res) => {
   try {
     const body = <Body>req.body;
     const country = await cityController.new(body.name, body.country, new Date(), new Date());
@@ -55,7 +47,7 @@ router.post('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.put('/:id', (async (req, res) => {
+router.put('/cities/:id', (async (req, res) => {
   try {
     const body = <Body>req.body;
     const country = await cityController.update(
@@ -71,7 +63,7 @@ router.put('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/cities/:id', (async (req, res) => {
   try {
     const country = await cityController.remove(parseInt(req.params.id, 10));
     res.json(country);
@@ -81,55 +73,35 @@ router.delete('/:id', (async (req, res) => {
 }) as RequestHandler);
 
 router.post('/ai_get_city', (async (req, res) => {
-  let result: Result[] | [] = [];
+  let result: any[] = [];
 
   try {
     const body = <Ville>req.body;
+    console.log(body);
 
-    const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville:ville1,pays:pays1},{ville:ville2,pays:pays1} ... et sans texte et saut de ligne`;
+    const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple [{ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ...]`;
 
     const cityData = await countryController.getDataFromOpenAI(prompt);
-    console.log('city', cityData);
-    const arrayCity = cityData?.split('}');
-    if (arrayCity !== undefined)
-      for (const item of arrayCity) {
-        if (item === '') break;
-        const data = item.replace('{', '').replace('}', '').split(',');
-        if (data[0] === '') {
-          data.splice(0, 1);
-        }
-        const city = data[0].split(':');
-        const country = data[1].split(':');
-        const image = await fetchImages(city[1], 'city');
-        let value;
-        if (image) value = image.items;
-        if (value)
-          result = [
-            {
-              pays: country,
-              city: city,
-              img_full: value[0].link
-            },
-            ...result
-          ];
-      }
-    res.json({ data: result });
+    let arrayCity = cityData?.split(',').map(async (item) => {
+      item.replace('{', '').replace('}', '');
+      const data = item.split(',');
+      const city = data[0].split(':');
+      const country = data[1].split(':');
+      const image = await fetchImages(city[1], 'city');
+      result = [
+        {
+          pays: country,
+          city: city,
+          img_full: image.items.link,
+          img_small: image.image.thumbnailLink
+        },
+        ...result
+      ];
+    });
+    res.json({ data: cityData });
   } catch (error) {
     console.error('Error in /ai route:', error);
-    res.status(500).json({ error: error });
-  }
-}) as RequestHandler);
-
-router.post('/ai_get_city_fake', ((req, res) => {
-  const body = <Ville>req.body;
-
-  try {
-    const cityData = get_city_fake(body);
-
-    res.status(200).json(cityData);
-  } catch (error) {
-    console.error('Error in /ai route:', error);
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error as any });
   }
 }) as RequestHandler);
 
