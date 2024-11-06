@@ -1,27 +1,28 @@
-import express from 'express'
-import 'dotenv/config'
-import countryRoutes from './routes/countryRoutes'
-import cityRoutes from './routes/cityRoutes'
-import languageRoutes from './routes/languageRoutes'
-const app = express()
-app.use(express.json());
+import express, { Express, Request, Response } from 'express';
+import bodyParser from 'body-parser';
+import 'dotenv/config';
+import countryRoutes from './routes/countryRoutes';
+import cityRoutes from './routes/cityRoutes';
+import languageRoutes from './routes/languageRoutes';
 
+const app: Express = express();
+const jsonParser = bodyParser.json();
+// app.use(express.json());
 
-let port = process.env.PORT
+const port = process.env.PORT;
 
-app.use('/api', countryRoutes);
-app.use('/api', cityRoutes);
-app.use('/api', languageRoutes);
+app.use('/api/countries', jsonParser, countryRoutes);
+app.use('/api/cities', jsonParser, cityRoutes);
+app.use('/api/languages', jsonParser, languageRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Hello World! This is Quiz Wonders micro service')
+app.get('/', (req: Request, res: Response) => {
+  res.send('Hello World! This is Quiz Wonders micro service');
+});
 
-})
-
-app.get('/test', function(req, res) {
-  res.send('Hello World!')
-})
+app.get('/test', function (req: Request, res: Response) {
+  res.send('Hello World!');
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});

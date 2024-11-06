@@ -1,4 +1,4 @@
-async function fetchImages(target: string = 'France', type: string) {
+export async function fetchImages(target: string = 'France', type: string) {
   const apiKey = process.env.GOOGLE_KEY; // Remplace par ta clé API Google
   const cx = process.env.CX; // Remplace par ton identifiant CX de moteur de recherche personnalisé
   const query = type === 'city' ? `Monument ${target}` : `${target}`; // Remplace 'France' par le pays que tu veux rechercher

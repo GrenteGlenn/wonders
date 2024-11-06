@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import CountryController from '../controllers/CountryController';
-import country from '../../models/country';
+import { fetchImages } from '../services/countryImage';
 
 interface Body {
   name: string;
@@ -29,7 +29,7 @@ const router = Router();
 
 const countryController = new CountryController();
 
-router.get('/countries', (async (req, res) => {
+router.get('/', (async (req, res) => {
   try {
     const countries = await countryController.list();
     res.json(countries);
@@ -38,7 +38,7 @@ router.get('/countries', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/countries/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   try {
     const country = await countryController.one(parseInt(req.params.id, 10));
     res.json(country);
@@ -56,7 +56,7 @@ router.get('/country-description/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.post('/countries', (async (req, res) => {
+router.post('/', (async (req, res) => {
   try {
     const body = <Body>req.body;
     const country = await countryController.new(
@@ -77,7 +77,6 @@ router.post('/countries', (async (req, res) => {
 router.post('/ai', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    console.log(body);
 
     const prompt = `Je souhaite visiter ${body.name}. Peux-tu me donner des informations intéressantes sur ce pays,
              telles que les monuments célèbres, la culture locale, la gastronomie typique, ainsi que les activités incontournables ?
@@ -89,7 +88,7 @@ router.post('/ai', (async (req, res) => {
     res.json({ data: countryData });
   } catch (error) {
     console.error('Error in /ai route:', error);
-    res.status(500).json({ error: error as any });
+    res.status(500).json({ error: error });
   }
 }) as RequestHandler);
 
@@ -98,31 +97,27 @@ router.post('/ai_get_country', (async (req, res) => {
 
   try {
     const body = <Pays>req.body;
-    console.log(body);
 
-    const langue = `Je souhaite visiter un ou des pays qui parle ${body.langue.join(', ')}.`;
-    const climat = `Qui a un climat ${body.climat}.`;
-    const paysage = `Qui a des paysage de type ${body.paysage}.`;
-    const activity = `Qui propose ce type d'activité : ${body.activity.join(', ')}.`;
     const populaire = body.populaire ? `Qui est une destination populaire.` : `Qui est une destination populaire.`;
     const prompt =
-      langue +
-      climat +
-      paysage +
-      activity +
+      `Je souhaite visiter un ou des pays qui parle ${body.langue.join(', ')}. 
+      Qui a un climat ${body.climat}. 
+      Qui a des paysage de type ${body.paysage}. 
+      Qui propose ce type d'activité : ${body.activity.join(', ')}.` +
       populaire +
-      `Le réponse ne doit être une liste de pays en format d'un array comme cette exemple [pays1, pays2 ...]`;
+      `Le réponse ne doit être une liste de pays en format d'un array comme cette exemple [pays1, pays2 ...] sans texte`;
 
     const countryData = await countryController.getDataFromOpenAI(prompt);
     const arrayCountry = countryData?.replace('[', '').replace(']', '').split(',');
     if (arrayCountry !== undefined)
       for (const element of arrayCountry) {
-        const image: any = await fetchImages(element, 'country');
+        const image = await fetchImages(element, 'country');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const value: Array<any> = image.items;
         result = [
           {
             pays: element,
-            img_full: image.items.link,
-            img_small: image.image.thumbnailLink
+            img_full: value[0].link
           },
           ...result
         ];
@@ -130,11 +125,11 @@ router.post('/ai_get_country', (async (req, res) => {
     res.json({ data: result });
   } catch (error) {
     console.error('Error in /ai route:', error);
-    res.status(500).json({ error: error as any });
+    res.status(500).json({ error: error });
   }
 }) as RequestHandler);
 
-router.put('/countries/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   try {
     const body = <Body>req.body;
     const country = await countryController.update(
@@ -153,7 +148,7 @@ router.put('/countries/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/countries/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
     const country = await countryController.remove(parseInt(req.params.id, 10));
     res.json(country);
