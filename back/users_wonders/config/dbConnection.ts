@@ -11,8 +11,8 @@ const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
   host: dbhost,
   dialect: dbdialect,
   define: {
-    timestamps: false,
-  },
+    timestamps: false
+  }
 });
 
 export default sequelize;

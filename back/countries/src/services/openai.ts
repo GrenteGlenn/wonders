@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI();
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 export default class OpenAiService {
   static async openaiCall(prompt: string) {
@@ -19,7 +19,7 @@ export default class OpenAiService {
         throw new Error('No choices returned from OpenAI');
       }
     } catch (e) {
-      console.error('An error occured:', e);
+      console.error('An error occurred:', e);
       throw e;
     }
   }
