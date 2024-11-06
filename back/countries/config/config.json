@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "root",
-    "password": "root",
+    "username": "postgres",
+    "password": "postgres",
     "database": "country_wonders",
     "host": "127.0.0.1",
     "port": "5432",
