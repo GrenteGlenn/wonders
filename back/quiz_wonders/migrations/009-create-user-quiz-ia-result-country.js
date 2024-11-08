@@ -25,22 +25,9 @@ module.exports = {
         allowNull: false
       }
     });
-    await queryInterface.addConstraint('user_quiz_ia_result_countries', {
-      type: "foreign key",
-      fields: ["country"],
-      name: 'country',
-      references: {
-        table: 'countries',
-        field: 'id',
-      },
-      onUpdate: "CASCADE",
-      onDelete: "NO ACTION",
-      allowNull: false,
-    })
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('user_quiz_ia_result_countries','country')
     await queryInterface.dropTable('user_quiz_ia_result_countries');
   }
 };
