@@ -1,6 +1,7 @@
 import { RequestHandler, Router } from 'express';
 import CountryController from '../controllers/CountryController';
 import { fetchImages } from '../services/countryImage';
+import { get_country_fake } from '../Api/Country';
 
 interface Body {
   name: string;
@@ -123,6 +124,18 @@ router.post('/ai_get_country', (async (req, res) => {
         ];
       }
     res.json({ data: result });
+  } catch (error) {
+    console.error('Error in /ai route:', error);
+    res.status(500).json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/ai_get_country_fake', ((req, res) => {
+  const body = <Pays>req.body;
+  try {
+    const countryData = get_country_fake(body);
+
+    res.status(200).json(countryData);
   } catch (error) {
     console.error('Error in /ai route:', error);
     res.status(500).json({ error: error });
