@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environmentUsers } from '../../../environments/environment';
 import { User } from '../../model/User';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface ReponseToken {
   success: boolean,
@@ -18,7 +18,7 @@ export interface ReponseToken {
 })
 export class AuthentificationService {
 
-  private url = environmentUsers.API_URL;
+  private url = environment.quizzApiUrl;
 
   public user: Observable<string>;
   public userSubject: BehaviorSubject<string>;
