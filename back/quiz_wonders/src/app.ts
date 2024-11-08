@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
-import countryRoutes from './routes/countryRoutes';
 import statusRoutes from './routes/statusRoutes';
 import tagRoutes from './routes/tagRoutes';
 import quizRoutes from './routes/quizRoutes';
@@ -26,7 +25,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Routes
-app.use('/api/countries', countryRoutes);
 app.use('/api/status', statusRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/quiz', quizRoutes);

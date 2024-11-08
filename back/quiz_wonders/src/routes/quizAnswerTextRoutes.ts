@@ -13,18 +13,18 @@ const quizAnswerTextController = new QuizAnswerTextController();
 router.get('/', (async (req, res) => {
   try {
     const quizAnswerTexts = await quizAnswerTextController.list();
-    res.json(quizAnswerTexts);
+    res.status(200).json(quizAnswerTexts);
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
 router.get('/:id', (async (req, res) => {
   try {
     const quizAnswerTexts = await quizAnswerTextController.one(parseInt(req.params.id, 10));
-    res.json(quizAnswerTexts);
+    quizAnswerTexts ? res.status(200).json(quizAnswerTexts) : res.status(404).json({'code': '404', "message": 'entry does not exists'});
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
@@ -32,9 +32,9 @@ router.post('/', (async (req, res) => {
   try {
     const body = <Body>req.body;
     const quizAnswerTexts = await quizAnswerTextController.new(body.answer, body.quiz_line_id, new Date(), new Date());
-    res.json(quizAnswerTexts);
+    quizAnswerTexts ? res.status(201).json(quizAnswerTexts) : res.status(400).json({'code': '400', 'message': 'an error occured while creating resource'});
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
@@ -48,18 +48,22 @@ router.put('/:id', (async (req, res) => {
       new Date(),
       new Date()
     );
-    res.json(quizAnswerTexts);
+    quizAnswerTexts ? res.status(200).json(quizAnswerTexts) : res.status(404).json({'code': '404', "message": 'entry does not exists'});
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
 router.delete('/:id', (async (req, res) => {
   try {
     const quizAnswerTexts = await quizAnswerTextController.delete(parseInt(req.params.id, 10));
-    res.json(quizAnswerTexts);
+    if(quizAnswerTexts) {
+      res.status(204).json(quizAnswerTexts);
+    } else {
+      res.status(404).json({'code': '404', "message": 'entry does not exists'});
+    }
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 

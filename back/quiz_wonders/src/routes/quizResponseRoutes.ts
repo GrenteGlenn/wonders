@@ -13,18 +13,18 @@ const quizResponseController = new QuizResponseController();
 router.get('/', (async (req, res) => {
   try {
     const quizResponses = await quizResponseController.list();
-    res.json(quizResponses);
+    res.status(200).json(quizResponses);
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
 router.get('/:id', (async (req, res) => {
   try {
     const quizResponses = await quizResponseController.one(parseInt(req.params.id, 10));
-    res.json(quizResponses);
+    quizResponses ? res.status(200).json(quizResponses) : res.status(404).json({'code': '404', "message": 'entry does not exists'})
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
@@ -32,9 +32,9 @@ router.post('/', (async (req, res) => {
   try {
     const body = <Body>req.body;
     const quizResponses = await quizResponseController.new(body.quiz_id, body.user_id, new Date(), new Date());
-    res.json(quizResponses);
+    quizResponses ? res.status(201).json(quizResponses) : res.status(400).json({'code': '400', 'message': 'an error occured while creating resource'});
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
@@ -48,18 +48,18 @@ router.put('/:id', (async (req, res) => {
       new Date(),
       new Date()
     );
-    res.json(quizResponses);
+    quizResponses ? res.status(200).json(quizResponses) : res.status(404).json({'code': '404', "message": 'entry does not exists'});
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
 router.delete('/:id', (async (req, res) => {
   try {
     const quizResponses = await quizResponseController.delete(parseInt(req.params.id, 10));
-    res.json(quizResponses);
+    quizResponses ? res.status(204).json(quizResponses) : res.status(404).json({'code': '404', "message": 'entry does not exists'})
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 

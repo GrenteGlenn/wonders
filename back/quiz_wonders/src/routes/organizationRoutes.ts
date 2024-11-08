@@ -13,18 +13,22 @@ const organizationController = new OrganizationController();
 router.get('/', (async (req, res) => {
   try {
     const organization = await organizationController.list();
-    res.json(organization);
+    res.status(200).json(organization);
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
 router.get('/:id', (async (req, res) => {
   try {
     const organization = await organizationController.one(parseInt(req.params.id, 10));
-    res.json(organization);
+    if(organization) {
+      res.status(200).json(organization);
+    } else {
+      res.status(404).json({'code': '404', "message": 'entry does not exists'})
+    }
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
@@ -32,9 +36,9 @@ router.post('/', (async (req, res) => {
   try {
     const body = <Body>req.body;
     const organization = await organizationController.new(body.user_id, body.status_id, new Date(), new Date());
-    res.json(organization);
+    organization ? res.status(201).json(organization) : res.status(400).json({'code': '400', 'message': 'an error occured while creating resource'});
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
@@ -48,18 +52,22 @@ router.put('/:id', (async (req, res) => {
       new Date(),
       new Date()
     );
-    res.json(organization);
+    res.status(200).json(organization);
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
 router.delete('/:id', (async (req, res) => {
   try {
     const organization = await organizationController.delete(parseInt(req.params.id, 10));
-    res.json(organization);
+    if(organization) {
+      res.status(204).json(organization);
+    } else {
+      res.status(404).json({ 'code': '500','message': 'entry doen not exists'});
+    }
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ 'code': '500','message': error });
   }
 }) as RequestHandler);
 
