@@ -1,9 +1,15 @@
-import { Component } from '@angular/core';
+// components/question/question.component.ts
+
+import { Component, OnInit } from '@angular/core';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { QuestionnaireService } from '../../app/service/questionnaire/questionnaire.service';
+import { QuizQuestion } from '../../app/model/Question';
+
+
 
 @Component({
   selector: 'app-question',
@@ -17,37 +23,32 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css']
 })
-export class QuestionComponent {
-  percent: number = 0;
+export class QuestionComponent implements OnInit {
+  questions: QuizQuestion[] = [];
   currentQuestionIndex: number = 0;
   showResults = false;
   selectedAnswers: string[] = [];
+  percent: number = 0;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private questionnaireService: QuestionnaireService
+  ) {}
 
-  results: any[] = [
-    { title: "Londres", class: "londre" },
-    { title: "Paris", class: "paris" },
-    { title: "Japon", class: "japon" }
-  ];
+  ngOnInit() {
+    this.loadQuizQuestions();
+  }
 
-  questions: any[] = [
-    {
-      title: 'Quel climat préférez-vous ?',
-      options: ['Chaud', 'Tempéré', 'Froid', 'Tropical']
-    },
-    {
-      title: 'Quel type de vacances préférez-vous ?',
-      options: ['Plage', 'Montagne', 'Ville', 'Campagne']
-    },
-    {
-      title: 'Quel type de transport souhaitez-vous prendre ?',
-      options: ['Avion', 'Train', 'Voiture', 'Bateau']
-    }
-  ];
-
-  showResult() {
-    this.showResults = true;
+  loadQuizQuestions() {
+    this.questionnaireService.getPricingQuizWithAnswers().subscribe({
+      next: (questions) => {
+        this.questions = questions;
+        this.updateProgress();
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des questions:', error);
+      }
+    });
   }
 
   previousQuestion() {
@@ -66,6 +67,10 @@ export class QuestionComponent {
 
   updateProgress() {
     this.percent = ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
+  }
+
+  showResult() {
+    this.showResults = true;
   }
 
   navigateToPlanTrip(destination: string) {

@@ -14,7 +14,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     importProvidersFrom(LucideAngularModule.pick({ ChevronsLeft, ChevronsRight, CircleHelp, Search, UserRound, Settings, Users, Route, Map, CalendarDays, MessageCircle, Plane, Bed, TreePalm, Shield, MapPin, MailOpen })),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([authInterceptor]))
+    provideHttpClient(withInterceptors([authInterceptor])),
+    
   ]
 
 };
