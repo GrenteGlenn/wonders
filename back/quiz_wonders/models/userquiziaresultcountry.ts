@@ -18,13 +18,10 @@ UserQuizIAResultCountry.init({
     primaryKey: true,
     allowNull: false
   },
-  country: {
+  country_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    references: {
-        model: 'Countries',
-        key: 'id'
-        }
+   
   },
   created_at: {
     type: DataTypes.DATE,
