@@ -2,6 +2,7 @@ import { RequestHandler, Router } from 'express';
 import CityController from '../controllers/CityController';
 import CountryController from '../controllers/CountryController';
 import { fetchImages } from '../services/countryImage';
+import { get_city_fake } from '../Api/City';
 
 interface Body {
   name: string;
@@ -105,6 +106,19 @@ router.post('/ai_get_city', (async (req, res) => {
         ];
       }
     res.json({ data: result });
+  } catch (error) {
+    console.error('Error in /ai route:', error);
+    res.status(500).json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/ai_get_city_fake', ((req, res) => {
+  const body = <Ville>req.body;
+
+  try {
+    const cityData = get_city_fake(body);
+
+    res.status(200).json(cityData);
   } catch (error) {
     console.error('Error in /ai route:', error);
     res.status(500).json({ error: error });
