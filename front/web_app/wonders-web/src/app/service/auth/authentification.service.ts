@@ -26,7 +26,7 @@ export class AuthentificationService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) 
+  constructor(private http: HttpClient, private router: Router)
   {
     this.userSubject = new BehaviorSubject<string>(localStorage.getItem('UserToken') ?? '');
     this.user = this.userSubject.asObservable();
