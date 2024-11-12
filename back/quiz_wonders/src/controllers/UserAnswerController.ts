@@ -2,19 +2,11 @@ import UserAnswer from '../models/useranswer';
 
 export default class UserAnswerController {
   async list() {
-    try {
       return await UserAnswer.findAll();
-    } catch (error) {
-      return console.log(error);
-    }
   }
 
   async one(id: number) {
-    try {
       return await UserAnswer.findByPk(id);
-    } catch (error) {
-      return console.log(error);
-    }
   }
 
   async new(
