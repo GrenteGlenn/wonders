@@ -58,7 +58,7 @@ router.delete('/:id', (async (req, res) => {
   try {
     const quizAnswerTexts = await quizAnswerTextController.delete(parseInt(req.params.id, 10));
     if(quizAnswerTexts) {
-      res.status(204).json(quizAnswerTexts);
+      res.status(204);
     } else {
       res.status(404).json({'code': '404', "message": 'entry does not exists'});
     }
