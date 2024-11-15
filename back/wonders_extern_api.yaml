@@ -65,7 +65,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Bad Request'
+                    example: 'Error! Something went wrong.'
   /api/auth/register:
     post:
       description: Login to the API
@@ -107,7 +107,17 @@ paths:
                 properties:
                   reason:
                     type: string
-                    example: 'Bad Email or Password'
+                    example: 'Error! Something went wrong.'
+        403:
+          description: Email already use
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reason:
+                    type: string
+                    example: 'client already registered'
         201:
           description: New response
           content:
@@ -117,7 +127,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'User created'
+                    example: 'client created successfully.'
   /api/auth/refresh:
     post:
       description: Login to the API
@@ -219,7 +229,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/definitions/User_Array_Definition'
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: 'john.doe@nimp.tkt'
+                password:
+                  type: string
+                  example: 'password'
       responses:
         200:
           description: Email Send
@@ -240,7 +257,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Mailer Erreur'
+                    example: 'Error! Something went wrong.'
         403:
           description: Forbidden
           content:
@@ -250,7 +267,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Forbidden'
+                    example: 'User not found'
   /api/users/:
     get:
       description: Get all Users
@@ -270,7 +287,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'Users not found'
+                    example: 'Error! Something went wrong.'
         403:
           description: Forbidden
           content:
@@ -307,7 +324,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'User not found'
+                    example: 'Error! Something went wrong.'
         403:
           description: Forbidden
           content:
@@ -352,7 +369,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: 'User not found'
+                    example: 'Error! Something went wrong.'
         201:
           description: Edited
           content:
@@ -3192,6 +3209,12 @@ definitions:
       language_id:
         type: interger
         example: 1
+      createdAt:
+        type: string
+        example: "2024-11-15T07:42:10.777Z"
+      updatedAt:
+        type: string
+        example: "2024-11-15T07:42:10.777Z"
   Session_Array_Definition:
     type: array
     items:

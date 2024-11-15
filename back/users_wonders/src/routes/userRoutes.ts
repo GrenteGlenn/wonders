@@ -11,7 +11,7 @@ router.get('/', (async (req, res) => {
     const client = await authController.list();
     res.status(200).json(client);
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(404).json('Error! Something went wrong.');
   }
 }) as RequestHandler);
 
@@ -20,7 +20,7 @@ router.get('/:id', (async (req, res) => {
     const client = await authController.getOne(parseInt(req.params.id, 10));
     res.status(200).json(client);
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(404).json('Error! Something went wrong.');
   }
 }) as RequestHandler);
 
@@ -30,16 +30,16 @@ router.put('/:id', (async (req, res) => {
     const client = await authController.update(parseInt(req.params.id, 10), body);
     res.status(200).json(client);
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(401).json('Error! Something went wrong.');
   }
 }) as RequestHandler);
 
 router.delete('/:id', (async (req, res) => {
   try {
     const client = await authController.remove(parseInt(req.params.id, 10));
-    res.status(200).json(client);
+    res.status(202).json(client);
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(401).json('Error! Something went wrong.');
   }
 }) as RequestHandler);
 

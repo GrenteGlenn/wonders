@@ -51,7 +51,7 @@ router.post('/login', (async (req, res, next) => {
       } else return res.status(401).json('password or identifiant incorrect');
     } else return res.status(401).json('password or identifiant incorrect');
   } catch (error) {
-    res.status(400).json({ error: error });
+    res.status(401).json('Error! Something went wrong.');
   }
 }) as RequestHandler);
 
@@ -70,7 +70,7 @@ router.post('/register', (async (req, res) => {
     if (check.score === 1) return res.json(check.feedback);
     body.password = await encryptPassword(body.password);
     const client = await authController.getOneByEmail(body.email);
-    if (client) return res.status(401).json('client already registered');
+    if (client) return res.status(403).json('client already registered');
     else await authController.create(body);
     res.status(201).json('client created successfully.');
   } catch (error) {
@@ -83,7 +83,7 @@ router.get('/send_mail', (async (req, res) => {
   try {
     const user = await authController.getOneByEmail(body.email);
     if (!user) {
-      return res.json('User not found');
+      return res.status(403).json('User not found');
     }
 
     const token = createToken();
@@ -107,9 +107,9 @@ router.get('/send_mail', (async (req, res) => {
   `;
 
     sendMail(from, to, subject, mailTemplate);
-    res.status(200).json(token);
+    res.status(200).json({ token: token });
   } catch (error) {
-    res.status(401).json('Error! Something went wrong1.');
+    res.status(401).json('Error! Something went wrong.');
   }
 }) as RequestHandler);
 
