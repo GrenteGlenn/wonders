@@ -41,9 +41,21 @@ paths:
               schema:
                 type: object
                 properties:
-                  token:
-                    type: string
-                    example: 'eyJhbGciOi'
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      userId:
+                        type: number
+                        example: 1
+                      email:
+                        type: string
+                        example: 'exemple@gmail.com'
+                      token:
+                        type: string
+                        example: 'eyJhbGciOi'
         400:
           description: Bad Request
           content:
