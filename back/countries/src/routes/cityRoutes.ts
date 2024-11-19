@@ -85,18 +85,16 @@ router.post('/ai_get_city', (async (req, res) => {
 
   try {
     const body = <Ville>req.body;
-    console.log(body);
 
-    const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ... et sans texte et saut de ligne`;
-
-    console.log(prompt);
+    const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville:ville1,pays:pays1},{ville:ville2,pays:pays1} ... et sans texte et saut de ligne`;
 
     const cityData = await countryController.getDataFromOpenAI(prompt);
+    console.log('city', cityData);
     const arrayCity = cityData?.split('}');
     if (arrayCity !== undefined)
       for (const item of arrayCity) {
         if (item === '') break;
-        const data = item.split(',');
+        const data = item.replace('{', '').replace('}', '').split(',');
         if (data[0] === '') {
           data.splice(0, 1);
         }
