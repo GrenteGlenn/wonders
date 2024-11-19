@@ -1,3 +1,5 @@
+import { CustomSearchResponse } from '../interfaces/FetchExterne';
+
 export async function fetchImages(target: string = 'France', type: string) {
   const apiKey = process.env.GOOGLE_KEY; // Remplace par ta clé API Google
   const cx = process.env.CX; // Remplace par ton identifiant CX de moteur de recherche personnalisé
@@ -8,19 +10,12 @@ export async function fetchImages(target: string = 'France', type: string) {
   const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&cx=${cx}&key=${apiKey}&searchType=${searchType}&num=${numResults}`;
 
   try {
-    const response = await fetch(url);
+    const response: Response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Erreur HTTP: ${response.status}`);
     }
-    const data = await response.json();
-
-    // Afficher les résultats
-    data.items.forEach((item: any) => {
-      console.log(`Title: ${item.title}`);
-      console.log(`Image URL: ${item.link}`);
-      console.log(`Context Link: ${item.image.contextLink}`);
-      console.log('--------------------------------------');
-    });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const data: Promise<CustomSearchResponse> = await response.json();
 
     return data;
   } catch (error) {
