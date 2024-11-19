@@ -16,6 +16,12 @@ interface Ville {
   pays: Array<string>;
 }
 
+interface Result {
+  pays: string[];
+  city: string[];
+  img_full: string;
+}
+
 const router = Router();
 
 const cityController = new CityController();
@@ -75,13 +81,15 @@ router.delete('/:id', (async (req, res) => {
 }) as RequestHandler);
 
 router.post('/ai_get_city', (async (req, res) => {
-  let result: any[] = [];
+  let result: Result[] | [] = [];
 
   try {
     const body = <Ville>req.body;
     console.log(body);
 
     const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ... et sans texte et saut de ligne`;
+
+    console.log(prompt);
 
     const cityData = await countryController.getDataFromOpenAI(prompt);
     const arrayCity = cityData?.split('}');
@@ -95,15 +103,17 @@ router.post('/ai_get_city', (async (req, res) => {
         const city = data[0].split(':');
         const country = data[1].split(':');
         const image = await fetchImages(city[1], 'city');
-        const value: Array<any> = image.items;
-        result = [
-          {
-            pays: country,
-            city: city,
-            img_full: value[0].link
-          },
-          ...result
-        ];
+        let value;
+        if (image) value = image.items;
+        if (value)
+          result = [
+            {
+              pays: country,
+              city: city,
+              img_full: value[0].link
+            },
+            ...result
+          ];
       }
     res.json({ data: result });
   } catch (error) {

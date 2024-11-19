@@ -22,8 +22,9 @@ interface Pays {
   populaire: boolean;
 }
 
-interface Ai {
-  country: string;
+interface Result {
+  pays: string;
+  img_full: string;
 }
 
 const router = Router();
@@ -94,7 +95,7 @@ router.post('/ai', (async (req, res) => {
 }) as RequestHandler);
 
 router.post('/ai_get_country', (async (req, res) => {
-  let result: any[] = [];
+  let result: Result[] | [] = [];
 
   try {
     const body = <Pays>req.body;
@@ -113,15 +114,16 @@ router.post('/ai_get_country', (async (req, res) => {
     if (arrayCountry !== undefined)
       for (const element of arrayCountry) {
         const image = await fetchImages(element, 'country');
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const value: Array<any> = image.items;
-        result = [
-          {
-            pays: element,
-            img_full: value[0].link
-          },
-          ...result
-        ];
+        let value;
+        if (image) value = image.items;
+        if (value)
+          result = [
+            {
+              pays: element,
+              img_full: value[0].link
+            },
+            ...result
+          ];
       }
     res.json({ data: result });
   } catch (error) {
