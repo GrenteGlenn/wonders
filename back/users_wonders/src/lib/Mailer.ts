@@ -12,10 +12,10 @@ export const sendMail = (from: string, to: string, subject: string, html: string
   });
 
   const mailOptions = {
-    from: from,
-    to: to,
-    subject: subject,
-    html: html
+    from,
+    to,
+    subject,
+    html
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
