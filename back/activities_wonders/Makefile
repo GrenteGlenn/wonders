@@ -1,7 +1,7 @@
 SEQUELIZE=npx sequelize-cli
 JEST=npx jest
 
-.PHONY: db-all
+.PHONY: db-all db-migrate-undo-all db-migrate db-seed-all unit-test db-and-tests
 
 db-all: db-migrate-undo-all db-migrate db-seed-all
 
