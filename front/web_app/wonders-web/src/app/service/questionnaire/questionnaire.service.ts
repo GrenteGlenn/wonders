@@ -1,17 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD
 import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Country } from '../../model/countries';
 import { QuizAnswer, QuizLine, QuizQuestion, QuizResponseCreate, UserAnswerCreate } from '../../model/Question';
 import { AuthentificationService } from '../auth/authentification.service';
-=======
-import { forkJoin, map, Observable } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { Country } from '../../model/countries';
-import { QuizAnswer, QuizLine, QuizQuestion } from '../../model/Question';
->>>>>>> [Add]connexion api quizz + visuel
 
 @Injectable({
   providedIn: 'root'
