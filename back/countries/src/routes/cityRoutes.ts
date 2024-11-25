@@ -17,8 +17,8 @@ interface Ville {
 }
 
 interface Result {
-  pays: string[];
-  city: string[];
+  pays: string;
+  city: string;
   img_full: string;
 }
 
@@ -83,9 +83,8 @@ router.post('/ai_get_city', (async (req, res) => {
 
     const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ... et sans texte et saut de ligne`;
 
-    console.log(prompt);
-
     const cityData = await countryController.getDataFromOpenAI(prompt);
+    console.log(cityData);
     const arrayCity = cityData?.split('}');
     if (arrayCity !== undefined)
       for (const item of arrayCity) {
@@ -102,8 +101,8 @@ router.post('/ai_get_city', (async (req, res) => {
         if (value)
           result = [
             {
-              pays: country,
-              city: city,
+              pays: country[1],
+              city: city[1],
               img_full: value[0].link
             },
             ...result
