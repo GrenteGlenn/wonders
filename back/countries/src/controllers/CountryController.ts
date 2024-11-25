@@ -3,7 +3,7 @@ import Language from '../../models/language';
 import OpenAiService from '../services/openai';
 
 interface Data {
-  result: Text;
+  result: string;
 }
 
 class CountryController {
@@ -36,13 +36,13 @@ class CountryController {
       ]
     });
     if (country) {
-      const diff = Math.abs((country.updated_at_description as any) - now);
-      const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-      if (diffDays > 29) {
-        const res = (await this.getDataFromOpenAI(country.name)) as Text | unknown;
-        const data = <Data>res;
-        if (data) {
-          country.description = data as unknown as Text;
+      let diffDays;
+      if (typeof country.updated_at_description === 'number')
+        diffDays = Math.floor(Math.abs(country.updated_at_description - now) / (1000 * 60 * 60 * 24));
+      if (diffDays !== undefined && diffDays > 29) {
+        const res = await this.getDataFromOpenAI(country.name);
+        if (res) {
+          country.description = res as unknown as Text;
           country.updated_at_description = new Date();
           await country.save();
         }
@@ -71,20 +71,11 @@ class CountryController {
     created_at: Date,
     updated_at: Date
   ) {
-    const country = await Country.create({ name, code, description, image, language, created_at, updated_at });
+    const country = await Country.create({ name, code, description, image, language, updated_at });
     return country;
   }
 
-  async update(
-    id: number,
-    name: string,
-    code: string,
-    description: Text,
-    image: string,
-    language: number,
-    created_at: Date,
-    updated_at: Date
-  ) {
+  async update(id: number, name: string, code: string, description: Text, image: string, language: number) {
     const country = await Country.findByPk(id);
     if (country) {
       country.name = name;
