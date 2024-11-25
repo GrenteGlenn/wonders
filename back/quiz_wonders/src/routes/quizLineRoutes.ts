@@ -34,8 +34,9 @@ router.post('/', (async (req, res) => {
       question: body.question,
       is_required: body.is_required,
       is_text: body.is_text,
+      mutiple_type_answer: body.mutiple_type_answer,
+      parent: body.parent,
       is_boolean: body.is_boolean,
-      tag_id: body.tag_id,
       response_kind_id: body.response_kind_id,
       step: body.step
     });
@@ -55,7 +56,8 @@ router.put('/:id', (async (req, res) => {
       body.is_required,
       body.is_text,
       body.is_boolean,
-      body.tag_id,
+      body.mutiple_type_answer,
+      body.parent,
       body.response_kind_id,
       body.step
     );

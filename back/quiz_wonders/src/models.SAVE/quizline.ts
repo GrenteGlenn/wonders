@@ -18,8 +18,8 @@ export default class QuizLine
   declare quiz_id?: number;
   declare step?: number;
   declare is_required: boolean;
-  declare tag_id: number | undefined;
-  declare response_kind_id: number | undefined;
+  declare mutiple_type_answer: boolean;
+  declare response_kind_id: number;
   declare readonly created_at?: Date | undefined;
   declare readonly updated_at?: Date | undefined;
 
@@ -28,7 +28,6 @@ export default class QuizLine
     delete values.created_at;
     delete values.updated_at;
     delete values.quiz_id;
-    delete values.tag_id;
     delete values.response_kind_id;
     return values;
   }
@@ -71,13 +70,9 @@ QuizLine.init(
         key: 'id'
       }
     },
-    tag_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: TagModel,
-        key: 'id'
-      }
+    mutiple_type_answer: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
     },
     response_kind_id: {
       type: DataTypes.INTEGER,
@@ -110,11 +105,6 @@ QuizLine.init(
 TagModel.hasMany(QuizLine, {
   foreignKey: 'quiz_id',
   as: 'quiz_lines'
-});
-
-QuizLine.belongsTo(TagModel, {
-  foreignKey: 'tag_id',
-  as: 'tags'
 });
 
 QuizLine.belongsTo(ResponseKind, {

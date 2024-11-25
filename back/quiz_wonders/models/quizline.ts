@@ -1,7 +1,7 @@
 import { DataTypes, Optional, Model } from 'sequelize';
 import connection from '../config/dbConnection';
 import QuizLineInterface from '../src/interfaces/QuizLineInterface'
-import Quiz from './quiz';  // Ensure this is correctly imported
+import Quiz from './quiz';
 import TagModel from './tag';
 import ResponseKind from './responsekind';
 import QuizAnswerText from './quizanswertext';
@@ -16,7 +16,8 @@ export default class QuizLine extends Model<QuizLineInterface, QuizLineCreationA
   declare quiz_id?: number;
   declare step?: number;
   declare is_required: boolean;
-  declare tag_id: number;
+  declare mutiple_type_answer: boolean;
+  declare parent?: boolean;
   declare response_kind_id: number;
   declare readonly created_at?: Date | undefined;
   declare readonly updated_at?: Date | undefined;
@@ -26,8 +27,6 @@ export default class QuizLine extends Model<QuizLineInterface, QuizLineCreationA
     delete values.created_at;
     delete values.updated_at;
     delete values.quiz_id;
-    delete values.tag_id;
-    delete values.response_kind_id;
     return values;
   }
 }
@@ -44,6 +43,10 @@ QuizLine.init({
     allowNull: false,
     unique: true
   },
+  mutiple_type_answer: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false
+  },
   is_boolean: {
     type: DataTypes.BOOLEAN,
     allowNull: false
@@ -56,6 +59,14 @@ QuizLine.init({
     type: DataTypes.BOOLEAN,
     allowNull: false
   },
+  parent: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: QuizLine,
+      key: 'id'
+    }
+  },
   is_required: {
     type: DataTypes.BOOLEAN,
     allowNull: false
@@ -65,14 +76,6 @@ QuizLine.init({
     allowNull: false,
     references: {
       model: Quiz,
-      key: 'id'
-    }
-  },
-  tag_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: TagModel,
       key: 'id'
     }
   },
@@ -102,23 +105,10 @@ QuizLine.init({
   timestamps: false,
 });
 
-// Quiz.hasMany(QuizLine, {
-//   foreignKey: 'quiz_id',
-//   as: 'quiz_lines',
-// });
-
-
-TagModel.hasMany(QuizLine, {
-  foreignKey: 'tag_id',
-  as: 'quiz_lines',
-});
-
-QuizLine.belongsTo(TagModel, {
-  foreignKey: 'tag_id',
-  as: 'tags',
-});
-
 QuizLine.belongsTo(ResponseKind, {
   foreignKey: 'response_kind_id',
   as: 'response_kind',
 });
+
+QuizLine.hasMany(QuizLine, { as: 'childrens', foreignKey: 'parent' });
+QuizLine.belongsTo(QuizLine, { as: 'Parent', foreignKey: 'parent' });

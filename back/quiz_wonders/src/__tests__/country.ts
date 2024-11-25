@@ -1,5 +1,5 @@
 import CountryController from '../controllers/CountryController';
-import Country from '../models/country';
+import Country from '../models.SAVE/country';
 
 jest.mock('../models/country');
 

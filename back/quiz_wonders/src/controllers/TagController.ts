@@ -1,4 +1,4 @@
-import Tag from '../models/tag';
+import Tag from '../../models/tag';
 export default class TagController {
   async list() {
     return await Tag.findAll();

@@ -1,8 +1,8 @@
-import Quiz from '../models/quiz';
-import QuizAnswerText from '../models/quizanswertext';
-import QuizLine from '../models/quizline';
-import ResponseKind from '../models/responsekind';
-import Tag from '../models/tag';
+import Quiz from '../../models/quiz';
+import QuizAnswerText from '../../models/quizanswertext';
+import QuizLine from '../../models/quizline';
+import ResponseKind from '../../models/responsekind';
+import Tag from '../../models/tag';
 
 export default class QuizController {
   async listWithInfos() {

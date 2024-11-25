@@ -1,5 +1,5 @@
-import Organization from '../models/organization';
-import Status from '../models/status';
+import Organization from '../../models/organization';
+import Status from '../../models/status';
 
 export default class OrganizationController {
   async list() {

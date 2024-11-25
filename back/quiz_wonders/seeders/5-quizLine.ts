@@ -8,9 +8,9 @@ module.exports = {
       step: 1,
       is_text: true,
       is_required: true,
-      tag_id: 1,
       quiz_id: 2,
       response_kind_id:3,
+      mutiple_type_answer: true,
       created_at: new Date(),
       updated_at: new Date()
     }], {});
@@ -19,11 +19,12 @@ module.exports = {
       question: 'How much will you spend during your trip',
       is_boolean: false,
       step: 2,
+      parent: 1,
       is_text: true,
       is_required: true,
-      tag_id: 1,
       quiz_id: 2,
       response_kind_id: 3,
+      mutiple_type_answer: false,
       created_at: new Date(),
       updated_at: new Date()
     }], {});
@@ -32,11 +33,12 @@ module.exports = {
       question: 'What types of places you like ?',
       is_boolean: false,
       step: 3,
+      parent: 1,
       is_text: true,
       is_required: true,
-      tag_id: 1,
       quiz_id: 3,
       response_kind_id: 2,
+      mutiple_type_answer: true,
       created_at: new Date(),
       updated_at: new Date()
     }], {});
@@ -47,9 +49,10 @@ module.exports = {
       step: 4,
       is_text: true,
       is_required: true,
-      tag_id: 1,
+      parent: 1,
       quiz_id: 2,
       response_kind_id: 2,
+      mutiple_type_answer: true,
       created_at: new Date(),
       updated_at: new Date()
     }], {});
@@ -60,9 +63,9 @@ module.exports = {
       step: 5,
       is_text: true,
       is_required: true,
-      tag_id: 1,
       quiz_id: 2,
       response_kind_id: 2,
+      mutiple_type_answer: true,
       created_at: new Date(),
       updated_at: new Date()
     }], {
@@ -73,10 +76,10 @@ module.exports = {
       is_boolean: false,
       step: 6,
       is_text: true,
-      is_required: true,
       quiz_id: 2,
+      is_required: true,
       response_kind_id: 2,
-      tag_id: 1,
+      mutiple_type_answer: true,
       created_at: new Date(),
       updated_at: new Date()
     }], {});
@@ -87,9 +90,10 @@ module.exports = {
       step: 7,
       is_text: true,
       is_required: true,
-      tag_id: 1,
+      parent: 1,
       quiz_id: 2,
       response_kind_id: 2,
+      mutiple_type_answer: false,
       created_at: new Date(),
       updated_at: new Date()
     }], {});
