@@ -153,9 +153,7 @@ router.put('/:id', (async (req, res) => {
       body.code,
       body.description,
       body.image,
-      body.language,
-      new Date(),
-      new Date()
+      body.language
     );
     res.json(country);
   } catch (error) {
