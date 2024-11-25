@@ -2,10 +2,6 @@ import Country from '../../models/country';
 import Language from '../../models/language';
 import OpenAiService from '../services/openai';
 
-interface Data {
-  result: string;
-}
-
 class CountryController {
   async getDataFromOpenAI(prompt: string) {
     return await OpenAiService.openaiCall(prompt);
