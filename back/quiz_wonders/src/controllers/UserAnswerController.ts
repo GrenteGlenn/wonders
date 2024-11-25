@@ -11,8 +11,8 @@ export default class UserAnswerController {
 
   async new(
     quiz_answer_text_id: number | undefined,
-    quiz_line_id: number | undefined,
-    quiz_response_id: number | undefined,
+    quiz_line_id: number,
+    quiz_response_id: number,
     boolean: boolean | undefined,
     text: string | undefined,
     created_at: Date,
@@ -29,7 +29,6 @@ export default class UserAnswerController {
         updated_at
       });
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
@@ -37,8 +36,8 @@ export default class UserAnswerController {
   async update(
     id: number,
     quiz_answer_text_id: number | undefined,
-    quiz_line_id: number | undefined,
-    quiz_response_id: number | undefined,
+    quiz_line_id: number,
+    quiz_response_id: number,
     boolean: boolean | undefined,
     text: string | undefined
   ) {

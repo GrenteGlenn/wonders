@@ -1,5 +1,4 @@
 import Tag from '../../models/tag';
-
 export default class TagController {
   async list() {
     return await Tag.findAll();
@@ -13,7 +12,7 @@ export default class TagController {
     return await Tag.create({ name, created_at, updated_at });
   }
 
-  async update(id: number, name: string) {
+  async update(id: number, name: string, created_at: Date, updated_at: Date) {
     const tag = await Tag.findByPk(id);
     if (tag) {
       tag.name = name;
