@@ -17,17 +17,17 @@ interface Body {
   path: string;
 }
 
-router.get('/activity', (async (req, res) => {
+router.get('/', (async (req, res) => {
   const activity = await activityController.list();
   res.json(activity);
 }) as RequestHandler);
 
-router.get('/activity/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   const activity = await activityController.one(parseInt(req.params.id, 10));
   res.json(activity);
 }) as RequestHandler);
 
-router.post('/activity', (async (req, res) => {
+router.post('/', (async (req, res) => {
   const body = <Body>req.body;
   const activity = await activityController.new({
     name: body.name,
@@ -42,7 +42,7 @@ router.post('/activity', (async (req, res) => {
   res.json(activity);
 }) as RequestHandler);
 
-router.put('/activity/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   const body = <Body>req.body;
   const activity = await activityController.update(
     parseInt(req.params.id, 10),
@@ -59,7 +59,7 @@ router.put('/activity/:id', (async (req, res) => {
   res.json(activity);
 }) as RequestHandler);
 
-router.delete('/activity/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   const activity = await activityController.delete(parseInt(req.params.id, 10));
   res.json(activity);
 }) as RequestHandler);
