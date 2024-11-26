@@ -2,14 +2,10 @@ import Country from '../../models/country';
 import Language from '../../models/language';
 import OpenAiService from '../services/openai';
 
-interface Data {
-  result: Text;
-}
-
 class CountryController {
-  async getDataFromOpenAI(country: string) {
-    return await OpenAiService.openaiCall(country)
-}
+  async getDataFromOpenAI(prompt: string) {
+    return await OpenAiService.openaiCall(prompt);
+  }
 
   async list() {
     const countries = await Country.findAll({
@@ -17,7 +13,7 @@ class CountryController {
         {
           model: Language,
           as: 'lang',
-          attributes: ['id','name','code']
+          attributes: ['id', 'name', 'code']
         }
       ]
     });
@@ -25,29 +21,28 @@ class CountryController {
   }
 
   async one(id: number) {
-    const now = Date.now()
+    const now = Date.now();
     const country = await Country.findByPk(id, {
       include: [
         {
           model: Language,
           as: 'lang',
-          attributes: ['id','name','code']
+          attributes: ['id', 'name', 'code']
         }
       ]
     });
     if (country) {
-      const diff = Math.abs(country.updated_at_description as any - now);
-      const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
-      if (diffDays > 29) {
-        const res = await this.getDataFromOpenAI(country.name) as Text | unknown;
-        const data = <Data>res;
-        if (data) {
-          country.description = data as unknown as Text;
+      let diffDays;
+      if (typeof country.updated_at_description === 'number')
+        diffDays = Math.floor(Math.abs(country.updated_at_description - now) / (1000 * 60 * 60 * 24));
+      if (diffDays !== undefined && diffDays > 29) {
+        const res = await this.getDataFromOpenAI(country.name);
+        if (res) {
+          country.description = res as unknown as Text;
           country.updated_at_description = new Date();
           await country.save();
         }
-      } 
-      console.log(diffDays);
+      }
     }
     return country;
   }
@@ -62,12 +57,20 @@ class CountryController {
     }
   }
 
-  async new(name: string, code: string, description: Text, image: string, language: number, created_at: Date, updated_at: Date) {
-    const country = await Country.create({ name, code, description, image, language, created_at, updated_at });
+  async new(
+    name: string,
+    code: string,
+    description: Text,
+    image: string,
+    language: number,
+    created_at: Date,
+    updated_at: Date
+  ) {
+    const country = await Country.create({ name, code, description, image, language, updated_at });
     return country;
   }
 
-  async update(id: number, name: string, code: string, description: Text, image: string, language: number, created_at: Date, updated_at: Date,) {
+  async update(id: number, name: string, code: string, description: Text, image: string, language: number) {
     const country = await Country.findByPk(id);
     if (country) {
       country.name = name;

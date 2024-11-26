@@ -2,69 +2,61 @@ import { RequestHandler, Router } from 'express';
 import LanguageController from '../controllers/LanguageController';
 
 interface Body {
-    name: string;
-    code: string;
-    created_at: Date;
-    updated_at: Date;
-}
-
-interface Ai {
-    country: string;
+  name: string;
+  code: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 const router = Router();
 
 const languageController = new LanguageController();
 
-router.get('/languages', (async (req, res) => {
-    try {
-        const languages = await languageController.list();
-        res.json(languages);
-    } catch (error) {
-        res.json({ error: error });
-    }
-
+router.get('/', (async (req, res) => {
+  try {
+    const languages = await languageController.list();
+    res.json(languages);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
-router.get('/languages/:id', (async (req, res) => {
-    try {
-        const languages = await languageController.one(parseInt(req.params.id, 10));
-        res.json(languages);
-    } catch (error) {
-        res.json({ error: error });
-    }
+router.get('/:id', (async (req, res) => {
+  try {
+    const languages = await languageController.one(parseInt(req.params.id, 10));
+    res.json(languages);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
-
-router.post('/languages', (async (req, res) => {
-    try {
-        const body = <Body>req.body;
-        const language = await languageController.create(body.name, body.code, new Date(), new Date());
-        res.json(language);
-    } catch (error) {
-        res.json({ error: error });
-    }
-
+router.post('/', (async (req, res) => {
+  try {
+    const body = <Body>req.body;
+    const language = await languageController.create(body.name, body.code, new Date(), new Date());
+    res.json(language);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
-
-router.put('/languages/:id', (async (req, res) => {
-    try {
-        const body = <Body>req.body;
-        const language = await languageController.update(parseInt(req.params.id, 10), body.name, body.code, new Date());
-        res.json(language);
-    } catch (error) {
-        res.json({ error: error });
-    }
+router.put('/:id', (async (req, res) => {
+  try {
+    const body = <Body>req.body;
+    const language = await languageController.update(parseInt(req.params.id, 10), body.name, body.code, new Date());
+    res.json(language);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
-router.delete('/languages/:id', (async (req, res) => {
-    try {
-        const language = await languageController.delete(parseInt(req.params.id, 10));
-        res.json(language);
-    } catch (error) {
-        res.json({ error: error });
-    }
+router.delete('/:id', (async (req, res) => {
+  try {
+    const language = await languageController.delete(parseInt(req.params.id, 10));
+    res.json(language);
+  } catch (error) {
+    res.json({ error: error });
+  }
 }) as RequestHandler);
 
 export default router;

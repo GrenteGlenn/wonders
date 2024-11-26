@@ -8,9 +8,7 @@ import sequelize from '../config/dbConnection';
 import Country from './country';
 import User from './user';
 
-interface AddressCreationAttributes extends Optional<AddressInterface, 'id'> {
-
-}
+interface AddressCreationAttributes extends Optional<AddressInterface, 'id'> {}
 
 class Address extends Model<AddressInterface, AddressCreationAttributes> implements AddressInterface {
   declare id: number;
