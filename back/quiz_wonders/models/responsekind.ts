@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import sequelize from '../config/dbConnection';
 import ResponseKindInterface from '../src/interfaces/ResponseKindInterface';
 
 interface ResponseKindCreationAttributes extends Optional<ResponseKindInterface, 'id'> {}
@@ -44,7 +44,7 @@ ResponseKind.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     underscored: true,
     modelName: 'ResponseKind',
     tableName: 'response_kinds',

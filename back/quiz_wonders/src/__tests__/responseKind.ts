@@ -14,8 +14,8 @@ describe('ResponseKindController', () => {
     jest.clearAllMocks();
   });
 
-  const created_at = new Date;
-  const updated_at = new Date;
+  const created_at = new Date();
+  const updated_at = new Date();
 
   it('should list all responses kinds', async () => {
     const mockResponseKinds = [
@@ -76,7 +76,11 @@ describe('ResponseKindController', () => {
 
     const result = await controller.new('boolean', created_at, updated_at);
 
-    expect(ResponseKind.create).toHaveBeenCalledWith({ type: 'boolean', created_at: created_at, updated_at: updated_at});
+    expect(ResponseKind.create).toHaveBeenCalledWith({
+      type: 'boolean',
+      created_at: created_at,
+      updated_at: updated_at
+    });
     expect(result).toEqual(mockResponseKind);
   });
 
@@ -91,7 +95,7 @@ describe('ResponseKindController', () => {
 
     (ResponseKind.findByPk as jest.Mock).mockResolvedValue(mockResponseKind);
 
-    const result = await controller.update(1, 'boolean22222', created_at, updated_at);
+    const result = await controller.update(1, 'boolean22222');
 
     expect(ResponseKind.findByPk).toHaveBeenCalledWith(1);
     expect(mockResponseKind.save).toHaveBeenCalled();

@@ -10,25 +10,20 @@ export default class QuizController {
       include: [
         {
           model: QuizLine,
-          as: 'quiz_lines',
           include: [
             {
-              model: ResponseKind,
-              as: 'response_kind'
+              model: ResponseKind
             },
             {
-              model: QuizAnswerText,
-              as: 'quiz_answer_texts'
+              model: QuizAnswerText
             },
             {
-              model: Tag,
-              as: 'tags'
+              model: Tag
             }
           ]
         },
         {
-          model: Tag,
-          as: 'tags'
+          model: Tag
         }
       ]
     });
@@ -47,25 +42,20 @@ export default class QuizController {
       include: [
         {
           model: QuizLine,
-          as: 'quiz_lines',
           include: [
             {
-              model: ResponseKind,
-              as: 'response_kind'
+              model: ResponseKind
             },
             {
-              model: QuizAnswerText,
-              as: 'quiz_answer_texts'
+              model: QuizAnswerText
             },
             {
-              model: Tag,
-              as: 'tags'
+              model: Tag
             }
           ]
         },
         {
-          model: Tag,
-          as: 'tags'
+          model: Tag
         }
       ]
     });
@@ -76,8 +66,7 @@ export default class QuizController {
       where: { id: quizId },
       include: [
         {
-          model: QuizLine,
-          as: 'quizLines'
+          model: QuizLine
         }
       ]
     });
@@ -89,7 +78,7 @@ export default class QuizController {
     return await Quiz.create({ name, tag_id, created_at, updated_at });
   }
 
-  async update(id: number, name: string, tag_id: number, created_at: Date, updated_at: Date) {
+  async update(id: number, name: string, tag_id: number) {
     const quiz = await Quiz.findByPk(id);
     if (quiz) {
       quiz.name = name;

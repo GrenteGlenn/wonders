@@ -12,17 +12,17 @@ const router = Router();
 
 const reviewController = new ReviewController();
 
-router.get('/review', (async (req, res) => {
+router.get('/', (async (req, res) => {
   const review = await reviewController.list();
   res.json(review);
 }) as RequestHandler);
 
-router.get('/review/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   const review = await reviewController.one(parseInt(req.params.id, 10));
   res.json(review);
 }) as RequestHandler);
 
-router.post('/review', (async (req, res) => {
+router.post('/', (async (req, res) => {
   const body = <Body>req.body;
   const review = await reviewController.new({
     comment: body.review,
@@ -33,7 +33,7 @@ router.post('/review', (async (req, res) => {
   res.json(review);
 }) as RequestHandler);
 
-router.put('/review/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   const body = <Body>req.body;
   const review = await reviewController.update(
     parseInt(req.params.id, 10),
@@ -45,7 +45,7 @@ router.put('/review/:id', (async (req, res) => {
   res.json(review);
 }) as RequestHandler);
 
-router.delete('/review/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   const review = await reviewController.delete(parseInt(req.params.id, 10));
   res.json(review);
 }) as RequestHandler);

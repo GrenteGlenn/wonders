@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import sequelize from '../config/dbConnection';
 import UserQuizIAResultInterface from '../src/interfaces/UserQuizIaResultInterface';
 
 interface UserQuizIAResultCreationAttributes extends Optional<UserQuizIAResultInterface, 'id'> {}
@@ -49,7 +49,7 @@ UserQuizIAResult.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     modelName: 'UserQuizIAResult'
   }
 );

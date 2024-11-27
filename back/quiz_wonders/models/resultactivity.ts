@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import sequelize from '../config/dbConnection';
 import ResultActivityInterface from '../src/interfaces/ResultActivityInterface';
 
 interface ResultActivityCreationAttributes extends Optional<ResultActivityInterface, 'id'> {}
@@ -41,7 +41,7 @@ ResultActivity.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     underscored: false,
     modelName: 'ResultActivity',
     timestamps: true

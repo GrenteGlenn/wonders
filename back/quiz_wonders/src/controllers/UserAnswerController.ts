@@ -48,9 +48,7 @@ export default class UserAnswerController {
     quiz_line_id: number | undefined,
     quiz_response_id: number | undefined,
     boolean: boolean | undefined,
-    text: string | undefined,
-    created_at: Date,
-    updated_at: Date
+    text: string | undefined
   ) {
     try {
       const userAnswer = await UserAnswer.findByPk(id);
@@ -67,6 +65,7 @@ export default class UserAnswerController {
       return console.log(error);
     }
   }
+
   async delete(id: number) {
     try {
       return await UserAnswer.destroy({ where: { id } });

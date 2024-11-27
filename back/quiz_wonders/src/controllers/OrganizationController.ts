@@ -6,8 +6,7 @@ export default class OrganizationController {
     return await Organization.findAll({
       include: [
         {
-          model: Status,
-          as: 'status'
+          model: Status
         }
       ]
     });
@@ -17,12 +16,12 @@ export default class OrganizationController {
     return await Organization.findByPk(id);
   }
 
-  async new(status_id: number, user_id: number, created_at: Date, updated_at: Date) {
+  async new(user_id: number, status_id: number, created_at: Date, updated_at: Date) {
     const organization = await Organization.create({ user_id, status_id, created_at, updated_at });
     return organization;
   }
 
-  async update(id: number, user_id: number, status_id: number, created_at: Date, updated_at: Date) {
+  async update(id: number, user_id: number, status_id: number) {
     const organization = await Organization.findByPk(id);
     if (organization) {
       organization.user_id = user_id;

@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import sequelize from '../config/dbConnection';
 import UserAnswerInterface from '../src/interfaces/UserAnswerInterface';
 import QuizLine from './quizline';
 import QuizResponse from './quizresponse';
@@ -78,7 +78,7 @@ UserAnswer.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     modelName: 'UserAnswer',
     tableName: 'user_answers',
     timestamps: false,
@@ -87,21 +87,17 @@ UserAnswer.init(
 );
 
 UserAnswer.belongsTo(QuizLine, {
-  foreignKey: 'quiz_line_id',
-  as: 'quiz_line'
+  foreignKey: 'quiz_line_id'
 });
 
 QuizLine.hasMany(UserAnswer, {
-  foreignKey: 'quiz_line_id',
-  as: 'user_answers'
+  foreignKey: 'quiz_line_id'
 });
 
 UserAnswer.belongsTo(QuizAnswerText, {
-  foreignKey: 'quiz_answer_text_id',
-  as: 'quiz_answer_texts'
+  foreignKey: 'quiz_answer_text_id'
 });
 
 QuizAnswerText.hasMany(UserAnswer, {
-  foreignKey: 'quiz_response_id',
-  as: 'user_answers'
+  foreignKey: 'quiz_response_id'
 });

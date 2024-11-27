@@ -14,8 +14,8 @@ describe('OrganizationController', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-  const created_at = new Date;
-  const updated_at = new Date;
+  const created_at = new Date();
+  const updated_at = new Date();
 
   it('should list all organizations', async () => {
     const mockOrganizations = [
@@ -41,10 +41,10 @@ describe('OrganizationController', () => {
   });
 
   it('should create a new organization', async () => {
-    const mockOrganization = { id: 1, user_id: 1, status_id: 1 , created_at: created_at, updated_at: updated_at};
+    const mockOrganization = { id: 1, user_id: 1, status_id: 1, created_at: created_at, updated_at: updated_at };
     (Organization.create as jest.Mock).mockResolvedValue(mockOrganization);
 
-    const result = await controller.new(1, 1 , created_at, updated_at);
+    const result = await controller.new(1, 1, created_at, updated_at);
 
     expect(Organization.create).toHaveBeenCalledWith({ user_id: 1, status_id: 1, created_at, updated_at });
     expect(result).toEqual(mockOrganization);
@@ -55,12 +55,13 @@ describe('OrganizationController', () => {
       id: 1,
       user_id: 1,
       status_id: 1,
-      created_at: created_at, updated_at: updated_at,
+      created_at: created_at,
+      updated_at: updated_at,
       save: jest.fn().mockResolvedValue(true)
     };
     (Organization.findByPk as jest.Mock).mockResolvedValue(mockOrganization);
 
-    const result = await controller.update(1, 2, 3, created_at, updated_at);
+    const result = await controller.update(1, 2, 3);
 
     expect(Organization.findByPk).toHaveBeenCalledWith(1);
     expect(mockOrganization.save).toHaveBeenCalled();

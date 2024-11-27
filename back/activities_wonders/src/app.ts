@@ -1,25 +1,25 @@
 import 'dotenv/config';
 import express from 'express';
 
-import pictureRoutes from './routes/picturesRoutes'
-import activityCategoryRoutes from './routes/activityCategoryRoutes'
-import activityRoutes from './routes/activityRoutes'
-import ratingRoutes from './routes/ratingRoutes'
-import reviewRoutes from './routes/reviewRoutes'
+import pictureRoutes from './routes/picturesRoutes';
+import activityCategoryRoutes from './routes/activityCategoryRoutes';
+import activityRoutes from './routes/activityRoutes';
+import ratingRoutes from './routes/ratingRoutes';
+import reviewRoutes from './routes/reviewRoutes';
+import activityApiRoute from './routes/activityApiRoute';
 
 const app = express();
-const prefix = '/api';
 
 const port = process.env.PORT;
 app.use(express.json());
 // Routes
 
-app.use(prefix, pictureRoutes)
-app.use(prefix, activityCategoryRoutes)
-app.use(prefix, activityRoutes)
-app.use(prefix, ratingRoutes)
-app.use(prefix, reviewRoutes)
-
+app.use('/api/picture', pictureRoutes);
+app.use('/api/activity-category', activityCategoryRoutes);
+app.use('/api/activity', activityRoutes);
+app.use('/api/rating', ratingRoutes);
+app.use('/api/review', reviewRoutes);
+app.use('/api/activityApi', activityApiRoute);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');

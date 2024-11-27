@@ -10,15 +10,12 @@ export default class QuizResponseController {
         include: [
           {
             model: UserAnswer,
-            as: 'userAnswer',
             include: [
               {
-                model: QuizLine,
-                as: 'quiz_line'
+                model: QuizLine
               },
               {
-                model: QuizAnswerText,
-                as: 'quiz_answer_texts'
+                model: QuizAnswerText
               }
             ]
           }
@@ -45,7 +42,7 @@ export default class QuizResponseController {
     }
   }
 
-  async update(id: number, quiz_id: number, user_id: number, created_at: Date, updated_at: Date) {
+  async update(id: number, quiz_id: number, user_id: number) {
     try {
       const quizResponse = await QuizResponse.findByPk(id);
       if (quizResponse) {

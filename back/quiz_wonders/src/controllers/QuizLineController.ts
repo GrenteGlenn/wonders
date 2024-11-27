@@ -7,12 +7,10 @@ export default class QuizLineController {
     return await QuizLine.findAll({
       include: [
         {
-          model: ResponseKind,
-          as: 'response_kind'
+          model: ResponseKind
         },
         {
-          model: Quiz,
-          as: 'quiz'
+          model: Quiz
         }
       ]
     });
@@ -22,6 +20,7 @@ export default class QuizLineController {
     return await QuizLine.findByPk(id);
   }
 
+  // bug commence la creation a id 1
   async new(data: {
     quiz_id: number | undefined;
     question: string;

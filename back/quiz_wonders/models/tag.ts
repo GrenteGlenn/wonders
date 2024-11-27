@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import sequelize from '../config/dbConnection';
 import TagInterface from '../src/interfaces/TagInterface';
 
 interface TagCreationAttributes extends Optional<TagInterface, 'id'> {}
@@ -41,10 +41,9 @@ Tag.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     underscored: true,
     modelName: 'Tag',
-    tableName: 'tags',
     timestamps: false
   }
 );

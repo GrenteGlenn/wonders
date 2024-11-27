@@ -9,29 +9,29 @@ interface Body {
   path: string;
 }
 
-router.get('/picture', (async (req, res) => {
+router.get('/', (async (req, res) => {
   const picture = await pictureController.list();
   res.json(picture);
 }) as RequestHandler);
 
-router.get('/picture/:id', (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   const picture = await pictureController.one(parseInt(req.params.id, 10));
   res.json(picture);
 }) as RequestHandler);
 
-router.post('/picture', (async (req, res) => {
+router.post('/', (async (req, res) => {
   const body = <Body>req.body;
   const picture = await pictureController.new({ path: body.path });
   res.json(picture);
 }) as RequestHandler);
 
-router.put('/picture/:id', (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   const body = <Body>req.body;
   const picture = await pictureController.update(parseInt(req.params.id, 10), body.path);
   res.json(picture);
 }) as RequestHandler);
 
-router.delete('/picture/:id', (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   const picture = await pictureController.delete(parseInt(req.params.id, 10));
   res.json(picture);
 }) as RequestHandler);

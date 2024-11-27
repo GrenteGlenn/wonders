@@ -2,7 +2,7 @@
   "development": {
     "username": "postgres",
     "password": "postgres",
-    "database": "trip_planner",
+    "database": "quiz_wonders",
     "host": "127.0.0.1",
     "port": "5432",
     "dialect": "postgres"

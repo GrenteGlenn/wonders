@@ -14,8 +14,8 @@ describe('QuizAnswerTextController', () => {
     jest.clearAllMocks();
   });
 
-  const created_at = new Date;
-  const updated_at = new Date;
+  const created_at = new Date();
+  const updated_at = new Date();
 
   it(' should list all quiz responses', async () => {
     const mockQuizAnswerTexts = [{ id: 1, answer: 'test', quiz_line_id: 1 }];
@@ -36,7 +36,13 @@ describe('QuizAnswerTextController', () => {
   });
 
   it('should create a new quiz answer', async () => {
-    const mockQuizAnswerText = { id: 1, answer: 'France', quiz_line_id: 1, created_at: created_at, updated_at: updated_at };
+    const mockQuizAnswerText = {
+      id: 1,
+      answer: 'France',
+      quiz_line_id: 1,
+      created_at: created_at,
+      updated_at: updated_at
+    };
     (QuizAnswerText.create as jest.Mock).mockResolvedValue(mockQuizAnswerText);
 
     const result = await controller.new('France', 1, created_at, updated_at);
@@ -49,7 +55,7 @@ describe('QuizAnswerTextController', () => {
     const mockQuizAnswerText = { id: 1, answer: 'France', quiz_line_id: 1, created_at, updated_at, save: jest.fn() };
     (QuizAnswerText.update as jest.Mock).mockResolvedValue(mockQuizAnswerText);
 
-    const result = await controller.update(1, 'France', 16, created_at, updated_at);
+    const result = await controller.update(1, 'France', 16);
 
     expect(QuizAnswerText.findByPk).toHaveBeenCalledWith(1);
     expect(mockQuizAnswerText.save).toHaveBeenCalled();

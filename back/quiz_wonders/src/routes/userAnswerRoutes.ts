@@ -42,9 +42,7 @@ router.put('/:id', (async (req, res) => {
       body.quiz_line_id,
       body.quiz_response_id,
       body.boolean,
-      body.text,
-      new Date(),
-      new Date()
+      body.text
     );
     res.json(userAnswer);
   } catch (error) {

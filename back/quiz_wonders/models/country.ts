@@ -1,7 +1,8 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+'use strict';
 
+import { DataTypes, Model, Optional } from 'sequelize';
 import CountryInterface from '../src/interfaces/CountryInterface';
+import sequelize from '../config/dbConnection';
 
 interface CountryCreationAttributes extends Optional<CountryInterface, 'id'> {}
 
@@ -41,7 +42,7 @@ Country.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     underscored: true,
     timestamps: false,
     modelName: 'country'
