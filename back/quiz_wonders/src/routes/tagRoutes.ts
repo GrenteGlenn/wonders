@@ -40,7 +40,7 @@ router.post('/', (async (req, res) => {
 router.put('/:id', (async (req, res) => {
   const body = <Body>req.body;
   try {
-    const tag = await tagController.update(parseInt(req.params.id, 10), body.name, new Date(), new Date());
+    const tag = await tagController.update(parseInt(req.params.id, 10), body.name);
     res.json(tag);
   } catch (error) {
     res.status(500).json({ error: 'Failed to update tag' });

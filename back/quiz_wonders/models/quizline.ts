@@ -1,5 +1,5 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import sequelize from '../config/dbConnection';
 import QuizLineInterface from '../src/interfaces/QuizLineInterface';
 import Quiz from './quiz';
 import TagModel from './tag';
@@ -99,7 +99,7 @@ QuizLine.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     underscored: true,
     modelName: 'QuizLine',
     tableName: 'quiz_lines',
@@ -108,16 +108,13 @@ QuizLine.init(
 );
 
 TagModel.hasMany(QuizLine, {
-  foreignKey: 'quiz_id',
-  as: 'quiz_lines'
+  foreignKey: 'quiz_id'
 });
 
 QuizLine.belongsTo(TagModel, {
-  foreignKey: 'tag_id',
-  as: 'tags'
+  foreignKey: 'tag_id'
 });
 
 QuizLine.belongsTo(ResponseKind, {
-  foreignKey: 'response_kind_id',
-  as: 'response_kind'
+  foreignKey: 'response_kind_id'
 });

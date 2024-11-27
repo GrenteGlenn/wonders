@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import sequelize from '../config/dbConnection';
 import QuizAnswerTextInterface from '../src/interfaces/QuizAnswerTextInterface';
 import QuizLine from './quizline';
 
@@ -51,12 +51,12 @@ QuizAnswerText.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     underscored: true,
     modelName: 'QuizAnswerText',
     timestamps: false
   }
 );
 
-QuizLine.hasMany(QuizAnswerText, { as: 'quiz_answer_texts', foreignKey: 'quiz_line_id' });
-QuizAnswerText.belongsTo(QuizLine, { as: 'quiz_line', foreignKey: 'quiz_line_id' });
+QuizLine.hasMany(QuizAnswerText, { foreignKey: 'quiz_line_id' });
+QuizAnswerText.belongsTo(QuizLine, { foreignKey: 'quiz_line_id' });

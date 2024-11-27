@@ -1,11 +1,11 @@
 {
-  "name": "authProvider",
+  "name": "user_wonders",
   "version": "1.0.0",
   "description": "api trip planner",
   "main": "./src/app.ts",
   "type": "commonjs",
   "scripts": {
-    "dev": "ts-node src/app.ts",
+    "start": "ts-node src/app.ts",
     "migration:run": "npx sequelize-cli db:migrate",
     "migration:seeder": "npx sequelize-cli db:seed:all",
     "migration:undo:all": "npx sequelize-cli db:migrate:undo:all",

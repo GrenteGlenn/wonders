@@ -16,7 +16,7 @@ class CountryController {
     return country;
   }
 
-  async update(id: number, name: string, code: string, created_at: Date, updated_at: Date) {
+  async update(id: number, name: string, code: string) {
     const country = await Country.findByPk(id);
     if (country) {
       country.name = name;

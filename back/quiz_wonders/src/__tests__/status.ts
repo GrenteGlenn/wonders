@@ -14,8 +14,8 @@ describe('QuizResponseController', () => {
     jest.clearAllMocks();
   });
 
-  const created_at = new Date;
-  const updated_at = new Date;
+  const created_at = new Date();
+  const updated_at = new Date();
 
   it(' should list all status', async () => {
     const mockStatus = [
@@ -63,7 +63,7 @@ describe('QuizResponseController', () => {
     const mockStatus = { id: 1, name: 'done', created_at: created_at, updated_at: updated_at, save: jest.fn() };
     (Status.findByPk as jest.Mock).mockResolvedValue(mockStatus);
 
-    const result = await controller.update(1, 'test222', created_at, updated_at);
+    const result = await controller.update(1, 'test222');
 
     expect(Status.findByPk).toHaveBeenCalledWith(1);
     expect(mockStatus.save).toHaveBeenCalled();

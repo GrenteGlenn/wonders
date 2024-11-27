@@ -1,5 +1,7 @@
+'use strict';
+
 import { DataTypes, Model, Optional } from 'sequelize';
-import connection from '../config/dbConnection';
+import sequelize from '../config/dbConnection';
 import OrganizationInterface from '../src/interfaces/OrganizationInterface';
 import Status from './status';
 
@@ -53,7 +55,7 @@ Organization.init(
     }
   },
   {
-    sequelize: connection,
+    sequelize,
     underscored: true,
     modelName: 'organization',
     timestamps: false

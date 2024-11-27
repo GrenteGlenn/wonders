@@ -44,9 +44,7 @@ router.put('/:id', (async (req, res) => {
     const quizAnswerTexts = await quizAnswerTextController.update(
       parseInt(req.params.id, 10),
       body.answer,
-      body.quiz_line_id,
-      new Date(),
-      new Date()
+      body.quiz_line_id
     );
     res.json(quizAnswerTexts);
   } catch (error) {

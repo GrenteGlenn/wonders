@@ -43,13 +43,7 @@ router.post('/', (async (req, res) => {
 router.put('/:id', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    const country = await countryController.update(
-      parseInt(req.params.id, 10),
-      body.name,
-      body.code,
-      new Date(),
-      new Date()
-    );
+    const country = await countryController.update(parseInt(req.params.id, 10), body.name, body.code);
     res.json(country);
   } catch (error) {
     res.json({ error: error });

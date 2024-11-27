@@ -15,8 +15,8 @@ describe('QuizController', () => {
     jest.clearAllMocks();
   });
 
-  const created_at = new Date;
-  const updated_at = new Date;
+  const created_at = new Date();
+  const updated_at = new Date();
 
   it('should list all quizzes', async () => {
     const mockQuizzes = [
@@ -52,10 +52,17 @@ describe('QuizController', () => {
   });
 
   it('should update an existing quiz', async () => {
-    const mockQuiz = { id: 1, name: 'New Quiz', tag_id: 1, created_at: created_at, updated_at: updated_at, save: jest.fn() };
+    const mockQuiz = {
+      id: 1,
+      name: 'New Quiz',
+      tag_id: 1,
+      created_at: created_at,
+      updated_at: updated_at,
+      save: jest.fn()
+    };
     (Quiz.findByPk as jest.Mock).mockResolvedValue(mockQuiz);
 
-    const result = await controller.update(1, 'Updated Quiz', 2, created_at, updated_at);
+    const result = await controller.update(1, 'Updated Quiz', 2);
 
     expect(Quiz.findByPk).toHaveBeenCalledWith(1);
     expect(mockQuiz.save).toHaveBeenCalled();

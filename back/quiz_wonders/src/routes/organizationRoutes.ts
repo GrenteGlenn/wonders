@@ -41,13 +41,7 @@ router.post('/', (async (req, res) => {
 router.put('/:id', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    const organization = await organizationController.update(
-      parseInt(req.params.id, 10),
-      body.user_id,
-      body.status_id,
-      new Date(),
-      new Date()
-    );
+    const organization = await organizationController.update(parseInt(req.params.id, 10), body.user_id, body.status_id);
     res.json(organization);
   } catch (error) {
     res.json({ error: error });

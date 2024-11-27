@@ -40,7 +40,7 @@ router.post('/', (async (req, res) => {
 router.put('/:id', (async (req, res) => {
   try {
     const body = <Body>req.body;
-    const status = await statusController.update(parseInt(req.params.id, 10), body.name, new Date(), new Date());
+    const status = await statusController.update(parseInt(req.params.id, 10), body.name);
     res.json(status);
   } catch (error) {
     res.json({ error: error });
