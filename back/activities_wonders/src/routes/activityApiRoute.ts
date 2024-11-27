@@ -1,5 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import ActivityApiController from '../controllers/activityApiController';
+import { fakeApi } from '../services/FakeApi';
 
 interface Google {
   latitude: number;
@@ -34,22 +35,20 @@ router.post('/get_activity', (async (req, res) => {
       body.activity,
       body.max
     );
-    console.log(activity);
     res.json(activity);
   } catch (error) {
     res.json({ error: error });
   }
 }) as RequestHandler);
 
-// router.post('/get_activity_fake', (async (req, res) => {
-// const body = <Google>req.body;
-// const location = `${body.longitude}2C${body.latitude}`;
-// try {
-//   const activity = await activityController.google(location, body.radius, body.language);
-//   res.json(activity);
-// } catch (error) {
-//   res.json({ error: error });
-// }
-// }) as RequestHandler);
+router.post('/get_activity_fake', (async (req, res) => {
+  const body = <Google>req.body;
+  try {
+    const activity = fakeApi(body.longitude, body.latitude, body.radius);
+    res.json(activity);
+  } catch (error) {
+    res.json({ error: error });
+  }
+}) as RequestHandler);
 
 export default router;

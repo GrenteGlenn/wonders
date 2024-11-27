@@ -4,9 +4,6 @@ import ActivityApiInterface from '../interfaces/activityApiInterface';
 
 const data = require('./data.json');
 
-// Rayon de la Terre en km
-const R = 6371.0;
-
 /**
  * Convertit des degrés en radians
  * @param degrees - Valeur en degrés
@@ -20,14 +17,14 @@ function degToRad(degrees: number): number {
  * Calcule la boîte englobante (bounding box) pour un point donné
  * @param lat - Latitude du point central
  * @param lon - Longitude du point central
- * @param raduis - Distance en km autour du point
+ * @param radius - Distance en km autour du point
  * @returns result - Array qui rentre dans la boite englobante
  */
-export function fakeApi(lon: number, lat: number, raduis: number) {
+export function fakeApi(lon: number, lat: number, radius: number) {
   const result: ActivityApiInterface[] = [];
 
-  const delta_lat = raduis / 111.0;
-  const delta_lon = raduis / (111.0 * Math.cos(degToRad(lat)));
+  const delta_lat = radius / 111.0;
+  const delta_lon = radius / (111.0 * Math.cos(degToRad(lat)));
 
   const min_lat = lat - delta_lat;
   const max_lat = lat + delta_lat;
