@@ -231,8 +231,12 @@ class ActivityApiController {
 
       // Récursion avec `next_page_token`
       if (value.length === max) return value;
-      const recursiveResults = await this.get_activity(location, radius, language, activity, max, data.next_page_token);
-      return [...value, ...recursiveResults];
+      let recursiveResults: Result[];
+      if (data.next_page_token) {
+        recursiveResults = await this.get_activity(location, radius, language, activity, max, data.next_page_token);
+        return [...value, ...recursiveResults];
+      }
+      return value;
     } else {
       const response = await fetch(
         `https://maps.googleapis.com/maps/api/place/nearbysearch/json?pagetoken=${token}&key=${google_key}`
