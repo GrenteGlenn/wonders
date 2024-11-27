@@ -1,11 +1,11 @@
 SEQUELIZE=npx sequelize-cli
 JEST=npx jest
 
-.PHONY: db-all
+.PHONY: db-all db-migrate-undo-all db-migrate db-seed-all test db-create db-and-tests
 
 db-all: db-migrate-undo-all db-migrate db-seed-all
 
-db-and-tests : db-all unit-test
+db-and-tests : db-all test
 
 db-create:
 	@echo "database creation"

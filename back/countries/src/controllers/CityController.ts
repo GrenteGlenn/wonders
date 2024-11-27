@@ -4,27 +4,27 @@ import Country from '../../models/country';
 class CityController {
   async list() {
     const countries = await City.findAll({
-        include: [
-            {
-                model: Country,
-                as: 'ctry',
-                attributes: ['id', 'name', 'code']
-            }
-        ]
-  });
+      include: [
+        {
+          model: Country,
+          as: 'ctry',
+          attributes: ['id', 'name', 'code']
+        }
+      ]
+    });
     return countries;
   }
 
   async one(id: number) {
     const city = await City.findByPk(id, {
       include: [
-          {
-              model: Country,
-              as: 'ctry',
-              attributes: ['id', 'name', 'code']
-          }
+        {
+          model: Country,
+          as: 'ctry',
+          attributes: ['id', 'name', 'code']
+        }
       ]
-});
+    });
     return city;
   }
 
@@ -33,7 +33,7 @@ class CityController {
     return city;
   }
 
-  async update(id: number, name: string, country: number, created_at: Date, updated_at: Date,) {
+  async update(id: number, name: string, country: number) {
     const city = await City.findByPk(id);
     if (city) {
       city.name = name;

@@ -1,7 +1,7 @@
 SEQUELIZE=npx sequelize-cli
 JEST=npx jest
 
-.PHONY: start
+.PHONY: start start-activities start-quiz start-countries start-users
 
 start: start-activities start-quiz
 
