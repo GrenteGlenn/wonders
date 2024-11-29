@@ -132,7 +132,6 @@ export class QuestionComponent implements OnInit {
 
    saveOrUpdateAnswer() {
     if (!this.selectedAnswers[this.currentQuestionIndex] || !this.quizResponseId) return;
-
     const currentQuestion = this.questions[this.currentQuestionIndex];
     const selectedAnswer = currentQuestion.answers.find(
       answer => answer.answer === this.selectedAnswers[this.currentQuestionIndex]
@@ -152,7 +151,6 @@ export class QuestionComponent implements OnInit {
     const existingAnswer = this.userAnswers.find(
       answer => answer.quiz_line_id === currentQuestion.questionData.id
     );
-
     if (existingAnswer) {
       console.log('Mise à jour de la réponse existante ID:', existingAnswer.id);
       this.questionnaireService.updateUserAnswer(existingAnswer.id, answerData).subscribe({

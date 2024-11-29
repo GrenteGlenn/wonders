@@ -19,7 +19,7 @@ export class QuestionnaireService {
 
   ) { }
 
-  //Obtenir les countries
+  //Get les countries
   getCountries(): Observable<Country[]> {
     return this.http.get<Country[]>(`${this.apiUrl}/api/countries`);
   }
@@ -55,7 +55,6 @@ export class QuestionnaireService {
       user_id: userId,
       quiz_id: quiz_id
     };
-
     return this.http.post<any>(`${this.apiUrl}/api/quiz-response`, quizResponse);
   }
 
@@ -105,6 +104,4 @@ export class QuestionnaireService {
         })
       );
     }
-
-
 }
