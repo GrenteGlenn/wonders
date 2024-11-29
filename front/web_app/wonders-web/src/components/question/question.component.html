@@ -10,18 +10,19 @@
     </mat-progress-bar>
   </div>
   
-  <h1 class="flex w-full mt-6 items-center justify-center text-sm !important">
+  <span class="flex w-full py-10 items-center justify-center text-md !important">
     {{questions[currentQuestionIndex].questionData.question}}
-  </h1>
+  </span>
 
   <div *ngFor="let answer of questions[currentQuestionIndex].answers; let i = index" 
-       class="w-full flex py-4 px-6 rounded-md border mt-5">
+     class="w-full flex py-4 px-6 rounded-md border mt-5">
     <input [id]="'radio-' + i" 
-           type="radio" 
-           [value]="answer.answer" 
-           name="question-option" 
-           [(ngModel)]="selectedAnswers[currentQuestionIndex]"
-           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          type="radio" 
+          [value]="answer.answer" 
+          name="question-option" 
+          [(ngModel)]="selectedAnswers[currentQuestionIndex]"
+          (ngModelChange)="onAnswerSelected(answer.answer, questions[currentQuestionIndex])"
+          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
     <label [for]="'radio-' + i" class="ms-2 text-sm font-medium text-gray-900">
       {{answer.answer}}
     </label>    
