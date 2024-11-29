@@ -1,4 +1,4 @@
-import Country from '../models/country';
+import Country from '../../models/country';
 
 class CountryController {
   async list() {

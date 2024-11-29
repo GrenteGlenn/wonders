@@ -1,6 +1,6 @@
-import Quiz from '../models/quiz';
-import QuizLine from '../models/quizline';
-import ResponseKind from '../models/responsekind';
+import Quiz from '../../models/quiz';
+import QuizLine from '../../models/quizline';
+import ResponseKind from '../../models/responsekind';
 
 export default class QuizLineController {
   async list() {

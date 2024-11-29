@@ -1,6 +1,6 @@
-import Organization from '../models/organization';
-import OrganizationUrl from '../models/organizationurl';
-import Status from '../models/status';
+import Organization from '../../models/organization';
+import OrganizationUrl from '../../models/organizationurl';
+import Status from '../../models/status';
 
 export default class OrganizationUrlController {
   async list() {

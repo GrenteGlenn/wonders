@@ -1,12 +1,10 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-
-import QuizLine from './quizline';
-import Tag from './tag';
 import QuizInterface from '../src/interfaces/QuizInterface';
+import Tag from './tag';
+import QuizLine from './quizline';
 
-interface QuizCreationAttributes extends Optional<QuizInterface, 'id'> {
-}
+interface QuizCreationAttributes extends Optional<QuizInterface, 'id'> {}
 
 class Quiz extends Model<QuizInterface, QuizCreationAttributes> implements QuizInterface {
   declare id: number;
@@ -24,42 +22,50 @@ class Quiz extends Model<QuizInterface, QuizCreationAttributes> implements QuizI
   }
 }
 
-Quiz.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  tag_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Tag,
-      key: 'id'
+Quiz.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    tag_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Tag,
+        key: 'id'
+      }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
     }
   },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
+  {
+    sequelize: connection,
+    underscored: true,
+    modelName: 'Quiz',
+    tableName: 'quizzes',
+    timestamps: false
   }
-}, {
-  sequelize: connection,
-  underscored: true,
-  modelName: 'Quiz',
-  tableName: 'quizzes',
-  timestamps: false
+);
+
+Quiz.belongsTo(Tag, {
+  foreignKey: 'tag_id',
+  as: 'tags'
 });
 
 QuizLine.belongsTo(Quiz, {
@@ -70,11 +76,6 @@ QuizLine.belongsTo(Quiz, {
 Quiz.hasMany(QuizLine, {
   foreignKey: 'quiz_id',
   as: 'quiz_lines'
-});
-
-Quiz.belongsTo(Tag, {
-  foreignKey: 'tag_id',
-  as: 'tags'
 });
 
 export default Quiz;

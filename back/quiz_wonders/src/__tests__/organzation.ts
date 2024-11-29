@@ -1,8 +1,8 @@
-import Organization from '../models/organization';
+import Organization from '../../models/organization';
 import OrganizationController from '../controllers/OrganizationController';
 
 // Mock du modèle Organization
-jest.mock('../models/organization');
+jest.mock('../../models/organization');
 
 describe('OrganizationController', () => {
   let controller: OrganizationController;

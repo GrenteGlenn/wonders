@@ -1,7 +1,7 @@
-import QuizAnswerText from '../models/quizanswertext';
+import QuizAnswerText from '../../models/quizanswertext';
 import QuizAnswerTextController from '../controllers/QuizAnswerTextController';
 
-jest.mock('../models/quizanswertext');
+jest.mock('../../models/quizanswertext');
 
 describe('QuizAnswerTextController', () => {
   let controller: QuizAnswerTextController;

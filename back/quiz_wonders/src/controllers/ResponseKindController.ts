@@ -1,4 +1,4 @@
-import ResponseKind from '../models/responsekind';
+import ResponseKind from '../../models/responsekind';
 
 export default class ResponseKindController {
   async list() {

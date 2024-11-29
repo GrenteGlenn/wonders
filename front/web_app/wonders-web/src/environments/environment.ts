@@ -1,13 +1,9 @@
 //A changer en fonction
 
-// API Users
-export const environmentUsers = {
+export const environment = {
     production: false,
-    // API_URL: 'http://localhost:3000'
-    API_URL: 'https://oo44c4sc8ookc0k88kckg800.turing.etna.cafe'
-};
-// API quizz
-export const environmentQuizz = {
-    production: false,
-    API_URL: 'http://localhost:3001'
-};
+    userApiUrl: 'https://oo44c4sc8ookc0k88kckg800.turing.etna.cafe',
+    // quizzApiUrl: 'https://quizz_wonder.turing.etna.cafe'
+    quizzApiUrl: '/quizz-api'  // Changé pour utiliser le chemin proxy
+
+  };

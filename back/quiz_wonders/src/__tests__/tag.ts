@@ -1,7 +1,7 @@
-import Tag from '../models/tag';
+import Tag from '../../models/tag';
 import TagController from '../controllers/TagController';
 
-jest.mock('../models/tag');
+jest.mock('../../models/tag');
 
 describe('TagController', () => {
   let controller: TagController;
