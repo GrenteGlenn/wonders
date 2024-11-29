@@ -29,3 +29,16 @@ export interface QuizQuestion {
   questionData: QuizLine;
   answers: QuizAnswer[];
 }
+
+export interface QuizResponseCreate {
+  user_id: number;
+  quiz_id: number;
+}
+
+export interface UserAnswerCreate {
+  quiz_answer_text_id: number;
+  quiz_line_id: number;
+  quiz_response_id: number;
+  boolean: boolean;
+  text: string;
+}

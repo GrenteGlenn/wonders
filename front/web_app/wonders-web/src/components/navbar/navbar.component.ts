@@ -20,11 +20,14 @@ import { AuthentificationService } from '../../app/service/auth/authentification
 })
 export class NavbarComponent implements OnInit {
   isMenuOpen = false;
+  isAuthenticated = false;
 
   constructor(private router: Router, private _authService: AuthentificationService) {}
 
   ngOnInit(): void {
-
+    this._authService.isAuthenticated$.subscribe(
+      isAuth => this.isAuthenticated = isAuth
+    );
   }
 
   goPlanTrip() {
@@ -46,5 +49,9 @@ export class NavbarComponent implements OnInit {
 
   disconnect() {
     this._authService.logout();
+  }
+
+  login() {
+    this.router.navigate(['login']);
   }
 }
