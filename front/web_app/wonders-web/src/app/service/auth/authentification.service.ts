@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../../model/User';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
 
 export interface ReponseToken {
   success: boolean,
@@ -18,14 +19,19 @@ export interface ReponseToken {
 })
 export class AuthentificationService {
 
-  private url = environment.quizzApiUrl;
+  private url = environment.userApiUrl;
 
   public user: Observable<string>;
   public userSubject: BehaviorSubject<string>;
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) 
+  {
     this.userSubject = new BehaviorSubject<string>(localStorage.getItem('UserToken') ?? '');
     this.user = this.userSubject.asObservable();
+    const token = localStorage.getItem('UserToken');
+    this.isAuthenticatedSubject.next(!!token);
   }
 
   // Route pour enregistrer un utilisateur
@@ -41,5 +47,17 @@ export class AuthentificationService {
   logout(): void {
     localStorage.removeItem('UserToken');
     this.userSubject.next('');
+    this.isAuthenticatedSubject.next(false);
+    this.router.navigate(['/login']);
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('UserToken');
+  }
+
+  setAuthenticated(token: string): void {
+    localStorage.setItem('UserToken', token);
+    this.userSubject.next(token);
+    this.isAuthenticatedSubject.next(true);
   }
 }
