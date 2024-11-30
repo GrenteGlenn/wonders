@@ -15,8 +15,12 @@ start-quiz:
 	cd quiz_wonders/ && npm start
 
 start-countries:
-	@echo "start counteries microservice"
-	cd countries/ && npm start
+	@echo "start countries microservice"
+	cd countries_wonders/ && npm start
+
+start-fly-hotel:
+	@echo "start fly hotel microservice"
+	cd fly_hotel_wonders/ && npm start
 
 start-users:
 	@echo "start users microservice"
