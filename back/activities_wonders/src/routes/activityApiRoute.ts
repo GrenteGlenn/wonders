@@ -15,6 +15,7 @@ const router = Router();
 
 const activityController = new ActivityApiController();
 
+// Va être supprimé, car n'a plus d'utilité
 router.get('/', ((req, res) => {
   try {
     const activity = activityController.list();
