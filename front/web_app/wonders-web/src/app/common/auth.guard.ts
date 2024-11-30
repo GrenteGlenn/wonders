@@ -10,7 +10,7 @@ class PermissionsService {
     let token = localStorage.getItem('UserToken');
     if (token)
       return true;
-    this.router.navigate(['/login']);
+    this.router.navigate(['login'], { queryParams: { returnUrl: state.url }});
     return false;
   }
 }
