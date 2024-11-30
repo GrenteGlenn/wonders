@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../app/model/User';
 import { AuthentificationService } from '../../app/service/auth/authentification.service';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,6 +12,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
+  returnUrl: string = '/'
   user: User = {
     email: '',
     password: '',
@@ -21,17 +23,27 @@ export class RegisterComponent implements OnInit {
     language_id: 1
   }
 
-  constructor(private _authService: AuthentificationService) {}
+  constructor(
+    private _authService: AuthentificationService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     // Il manque la récupération de la liste des pays quand elle sera disponible
   }
 
   clickRegister(): void {
     this._authService.register(this.user).subscribe({
       next: (data) => {
-        console.log('REMOVE ME, user created');
+        this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl }});
       }
     })
+  }
+
+  href(event: Event): void {
+    event.preventDefault();
+    this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl }});
   }
 }
