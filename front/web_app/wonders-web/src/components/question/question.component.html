@@ -1,51 +1,51 @@
 <div class="w-8/12 mx-auto py-10" *ngIf="!showResults && questions.length > 0">
   <span>Question {{currentQuestionIndex + 1}}/{{questions.length}}</span>
   <div class="progressBar">
-    <mat-progress-bar 
-      class="custom-progress-bar" 
-      mode="determinate" 
-      [color]="'primary'" 
-      [value]="percent" 
+    <mat-progress-bar
+      class="custom-progress-bar"
+      mode="determinate"
+      [color]="'primary'"
+      [value]="percent"
       style="margin-top: 1em;">
     </mat-progress-bar>
   </div>
-  
+
   <span class="flex w-full py-10 items-center justify-center text-md !important">
     {{questions[currentQuestionIndex].questionData.question}}
   </span>
 
-  <div *ngFor="let answer of questions[currentQuestionIndex].answers; let i = index" 
+  <div *ngFor="let answer of questions[currentQuestionIndex].answers; let i = index"
      class="w-full flex py-4 px-6 rounded-md border mt-5">
-    <input [id]="'radio-' + i" 
-          type="radio" 
-          [value]="answer.answer" 
-          name="question-option" 
+    <input [id]="'radio-' + i"
+          type="radio"
+          [value]="answer.answer"
+          name="question-option"
           [(ngModel)]="selectedAnswers[currentQuestionIndex]"
           (ngModelChange)="onAnswerSelected(answer.answer, questions[currentQuestionIndex])"
           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
     <label [for]="'radio-' + i" class="ms-2 text-sm font-medium text-gray-900">
       {{answer.answer}}
-    </label>    
+    </label>
   </div>
 
-  <button *ngIf="currentQuestionIndex > 0" 
-          class="bg-slate-300 rounded-md py-2 px-5 float-start mt-10" 
+  <button *ngIf="currentQuestionIndex > 0"
+          class="bg-slate-300 rounded-md py-2 px-5 float-start mt-10"
           (click)="previousQuestion()">
     Précédent
   </button>
-  
-  <button *ngIf="currentQuestionIndex < questions.length - 1" 
+
+  <button *ngIf="currentQuestionIndex < questions.length - 1"
           [disabled]="!selectedAnswers[currentQuestionIndex]"
           [ngClass]="{'bg-blue-500 text-white': selectedAnswers[currentQuestionIndex], 'bg-gray-300 text-gray-500': !selectedAnswers[currentQuestionIndex]}"
-          class="rounded-md py-2 px-5 float-end mt-10" 
+          class="rounded-md py-2 px-5 float-end mt-10"
           (click)="nextQuestion()">
     Next
   </button>
 
-  <button *ngIf="currentQuestionIndex === questions.length - 1" 
+  <button *ngIf="currentQuestionIndex === questions.length - 1"
           [disabled]="!selectedAnswers[currentQuestionIndex]"
           [ngClass]="{'bg-green-500 text-white': selectedAnswers[currentQuestionIndex], 'bg-gray-300 text-gray-500': !selectedAnswers[currentQuestionIndex]}"
-          class="rounded-md py-2 px-5 float-end mt-10" 
+          class="rounded-md py-2 px-5 float-end mt-10"
           (click)="showResult()">
     Terminer
   </button>
