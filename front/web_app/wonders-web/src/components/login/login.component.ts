@@ -15,7 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
-  returnUrl: string = '/';
+  returnUrl: string = '/home';
 
   constructor(
     private _authService: AuthentificationService,
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     }
     this.email = '';
     this.password = '';
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
   }
 
   // Pour l'instant aucune vérification n'est mis en place.
