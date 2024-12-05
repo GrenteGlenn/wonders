@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
-  returnUrl: string = '/'
+  returnUrl: string = '/home'
   user: User = {
     email: '',
     password: '',
@@ -30,7 +30,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
     // Il manque la récupération de la liste des pays quand elle sera disponible
   }
 
