@@ -1,6 +1,6 @@
 {
     "/quizz-api": {
-      "target": "https://quizz_wonder.turing.etna.cafe",
+      "target": "http://quizz_wonder.turing.etna.cafe",
       "secure": false,
       "changeOrigin": true,
       "pathRewrite": {
