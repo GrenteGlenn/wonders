@@ -1,0 +1,15 @@
+FROM node
+WORKDIR /app
+
+RUN git clone https://Deploy:glpat-jPd6p3MUo2mpo1cxxXxz@rendu-git.etna-alternance.net/module-9654/activity-52094/group-1036742.git .
+
+RUN cd ./back/quiz_wonders/ && npm install && echo '{"development":{"username":"gpe","password":"","database":"quizz_wonders","host":"infra.turing.etna.cafe","port":"5433","dialect":"postgres"}}' > ./config/config.json
+RUN cd ./back/quiz_wonders/ && npm install && echo "DB_NAME=quizz_wonders\nDB_USER=gpe\nDB_PASSWORD=\nDB_HOST=infra.turing.etna.cafe\nDB_PORT=5433\nDB_DIALECT=postgres\nJWT_SECRET_KEY=\nPORT=3001" > .env
+RUN cd ./back/quiz_wonders/ && npx sequelize-cli db:migrate
+
+CMD cd ./back/quiz_wonders/ && npm run start
+ET oui il y a pas les cléfs / mdp aller discord il sont dessus
+https://quizz_wonder.turing.etna.cafe
+
+w et non
+3001:3001
