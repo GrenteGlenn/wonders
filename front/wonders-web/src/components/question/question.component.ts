@@ -30,8 +30,8 @@ export class QuestionComponent implements OnInit {
   percent: number = 0;
   quizResponseId: number | null = null;
   userAnswers: any[] = [];
-
-  proposalCountries: AIProposalCountry[] = []
+  proposalCountries: AIProposalCountry[] = [];
+  isProposalLoading: boolean = true;
 
 
   constructor(
@@ -231,9 +231,13 @@ export class QuestionComponent implements OnInit {
     }
     this.questionnaireService.getAIProposition(answerUser).subscribe({
       next: (suggestion) => {
-        console.log("suggestion", suggestion);
-        this.proposalCountries = suggestion.data;
-        console.log("proposal", this.proposalCountries);
+        for (let i=0; i < 3; i++) {
+          this.proposalCountries[i] = suggestion.data[i];
+        }
+        this.isProposalLoading = false;
+        // console.log("Remove us :");
+        // console.log("suggestion", suggestion);
+        // console.log("proposal", this.proposalCountries);
       },
       error: (error) => {
         console.log('Erreur lors de la récupération des propositions de pays');
