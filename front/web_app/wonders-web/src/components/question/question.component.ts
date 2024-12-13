@@ -30,6 +30,21 @@ export class QuestionComponent implements OnInit {
   quizResponseId: number | null = null;
   userAnswers: any[] = [];
 
+  fakeResult = [
+    {
+      pays: "Norvège",
+      img_full: "https://www.norvege-inedite.com/uploads/sites/32/2019/08/adobestock_199048393-1-730x520.jpeg"
+    },
+    {
+      pays: "Suède",
+      img_full: "https://static.nationalgeographic.fr/files/styles/image_3200/public/nordics_awl_clkrm45666_hr.webp?w=1600&h=900"
+    },
+    {
+      pays: "Lituanie",
+      img_full: "https://www.laquotidienne.fr/wp-content/uploads/2015/05/lituanie.jpg"
+    }
+  ]
+
 
   constructor(
     private router: Router,

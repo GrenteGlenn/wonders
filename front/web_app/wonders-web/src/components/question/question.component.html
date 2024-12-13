@@ -59,5 +59,9 @@
       <!-- <div *ngFor="let result of results" [ngClass]="['bg-white shadow-lg rounded-lg  cardTransition hover:cursor-pointer', result.class]" (click)="navigateToPlanTrip(result.title)">
         <h2 class="text-xl font-semibold  text-center text-black">{{result.title}}</h2>
       </div> -->
+      <div *ngFor="let result of fakeResult" class="bg-white shadow-lg rounded-lg  cardTransition hover:cursor-pointer">
+        <img src={{result.img_full}} alt="picture of one country" width="100%" height="100%" class="myImg">
+        <h2 class="text-xl font-semibold  text-center text-black">{{result.pays}}</h2>
+      </div>
     </div>
   </div>
