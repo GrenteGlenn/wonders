@@ -1,7 +1,6 @@
 import Quiz from '../../models/quiz';
 import QuizLine from '../../models/quizline';
 import ResponseKind from '../../models/responsekind';
- // Récupérer uniquement les éléments racines (sans parent)
 
 export default class QuizLineController {
   async list() {

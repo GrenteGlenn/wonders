@@ -21,10 +21,10 @@ module.exports = {
       transportation_id: {
         type: Sequelize.INTEGER
       },
-      from: {
+      from_date: {
         type: Sequelize.DATE
       },
-      to: {
+      to_date: {
         type: Sequelize.DATE
       },
       created_at: {
@@ -40,7 +40,7 @@ module.exports = {
     await queryInterface.addConstraint('trips', {
       type: 'foreign key',
       fields: ["transportation_id"],
-      name: 'transportation_id',
+      name: 'transportation',
       references: {
         table: 'trip_transportations',
         field: 'id',
@@ -48,6 +48,18 @@ module.exports = {
       onUpdate: "CASCADE",
       onDelete: "NO ACTION",
     });
+
+  // await queryInterface.addConstraint('trip_day_activities', {
+  //   type: 'foreign key',
+  //   fields: ["trip_day_id"],
+  //   name: 'trip_day',
+  //   references: {
+  //     table: 'trip_days',
+  //     field: 'id',
+  //   },
+  //   onUpdate: "CASCADE",
+  //   onDelete: "NO ACTION",
+  // });
   },
   async down(queryInterface, Sequelize) {
     try {

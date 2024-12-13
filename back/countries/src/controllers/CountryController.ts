@@ -47,7 +47,6 @@ class CountryController {
           await country.save();
         }
       } 
-      console.log(diffDays);
     }
     return country;
   }

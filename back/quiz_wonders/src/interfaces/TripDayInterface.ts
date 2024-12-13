@@ -1,7 +1,7 @@
-export default interface TripDay {
+export default interface TripDayInterface {
     id: number;
-    user_id: number;
     trip_city_id: number;
+    date: Date;
     created_at: Date;
     updated_at: Date;
 }

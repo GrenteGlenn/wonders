@@ -1,16 +1,16 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import TripCityInterface from '../src/interfaces/TripCityInterface';
+import TripDayInterface from '../src/interfaces/TripDayInterface';
 import TripTransportation from './triptransportation';
 import Trip from './trip';
+import TripCity from './tripcity';
 
-interface TripCreationAttributes extends Optional<TripCityInterface, 'id'> { }
+interface TripCreationAttributes extends Optional<TripDayInterface, 'id'> { }
 
-class TripDay extends Model<TripCityInterface, TripCreationAttributes> implements TripCityInterface {
+class TripDay extends Model<TripDayInterface, TripCreationAttributes> implements TripDayInterface {
   declare id: number;
-  declare trip_id: number;
-  declare transportation_id: number;
-  declare city_id: number;
+  declare trip_city_id: number;
+  declare date: Date;
   declare readonly created_at: Date;
   declare readonly updated_at: Date;
 
@@ -27,25 +27,17 @@ TripDay.init({
     primaryKey: true,
     allowNull: false
   },
-  trip_id: {
+  trip_city_id: {
     type: DataTypes.NUMBER,
     allowNull: false,
     references: {
-      model: Trip,
+      model: TripDay,
       key: 'id'
     }
   },
-  city_id: {
-    type: DataTypes.NUMBER,
+  date: {
+    type: DataTypes.DATE,
     allowNull: false
-  },
-  transportation_id: {
-    type: DataTypes.NUMBER,
-    allowNull: false,
-    references: {
-      model: TripTransportation,
-      key: 'id'
-    }
   },
   created_at: {
     type: DataTypes.DATE,
@@ -63,23 +55,23 @@ TripDay.init({
   timestamps: false,
 });
 
-// TripCity.hasOne(TripTransportation, {
-//   foreignKey: 'transportation_id',
-//   as: 'trip_transportation',
-// });
+TripCity.hasOne(TripTransportation, {
+  foreignKey: 'transportation_id',
+  as: 'trip_transportation',
+});
 
-// TripTransportation.hasMany(TripCity, {
-//   foreignKey: 'transportation_id',
-//   as: 'trip_transportation',
-// });
+TripTransportation.hasMany(TripCity, {
+  foreignKey: 'transportation_id',
+  as: 'trip_transportation',
+});
 
-// TripCity.hasOne(Trip, {
-//   foreignKey: 'trip_id',
-//   as: 'trip'
-// })
-// Trip.hasMany(TripCity, {
-//   foreignKey: 'trip_id',
-//   as: 'trip'
-// })
+TripCity.hasOne(Trip, {
+  foreignKey: 'trip_id',
+  as: 'trip'
+})
+Trip.hasMany(TripCity, {
+  foreignKey: 'trip_id',
+  as: 'trip'
+})
 
 export default TripDay;

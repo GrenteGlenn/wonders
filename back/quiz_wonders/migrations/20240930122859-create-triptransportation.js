@@ -9,11 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      from: {
+      from_date: {
         type: Sequelize.DATE,
         allowNull: false
       },
-      to: {
+      to_date: {
         type: Sequelize.DATE,
         allowNull: false
       },

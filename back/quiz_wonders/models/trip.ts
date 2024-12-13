@@ -7,13 +7,12 @@ interface TripCreationAttributes extends Optional<TripInterface, 'id'> { }
 
 class Trip extends Model<TripInterface, TripCreationAttributes> implements TripInterface {
   declare id: number;
-  declare from: Date;
-  declare to: Date;
   declare user_id: number;
-  declare transportation_id: number;
   declare country_id: number;
   declare duration: number;
-  declare url: string;
+  declare from_date: Date;
+  declare to_date: Date;
+  declare transportation_id: number;
   declare readonly created_at: Date;
   declare readonly updated_at: Date;
 
@@ -30,28 +29,28 @@ Trip.init({
     primaryKey: true,
     allowNull: false
   },
-  from: {
+  from_date: {
     type: DataTypes.DATE,
     allowNull: false
   },
-  to: {
+  to_date: {
     type: DataTypes.DATE,
     allowNull: false
   },
   user_id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   country_id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   duration: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   transportation_id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: TripTransportation,
@@ -68,20 +67,20 @@ Trip.init({
   }
 }, {
   sequelize: connection,
-  underscored: true,
+  underscored: false,
   modelName: 'Trip',
   tableName: 'trips',
   timestamps: false,
 });
 
-Trip.hasOne(TripTransportation, {
+Trip.belongsTo(TripTransportation, {
   foreignKey: 'transportation_id',
-  as: 'trip_transportation',
+  as: 'trip_transportation'
 });
 
 TripTransportation.hasMany(Trip, {
-foreignKey: 'transportation_id',
-  as: 'trip_transportation',
+  foreignKey: 'transportation_id',
+  as: 'trip_transportation'
 });
 
 export default Trip;

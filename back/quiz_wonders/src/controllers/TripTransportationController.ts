@@ -10,14 +10,14 @@ export default class TripTransportationController {
             return tripTransportation;
         }
     }
-    async new(from:Date, to: Date, price: number, url: string, created_at: Date, updated_at: Date) {
+    async new(from_date:Date, to_date: Date, price: number, url: string, created_at: Date, updated_at: Date) {
         try {
-            return await TripTransportation.create({ from, to, price, url, created_at, updated_at })
+            return await TripTransportation.create({ from_date, to_date, price, url, created_at, updated_at })
         } catch(error) {
             console.error('Error creating trip transportation:', error);
         }
     }
-    async update(id: number, from:Date, to: Date, price: number, url: string, created_at: Date, updated_at: Date) {
+    async update(id: number, from_date:Date, to_date: Date, price: number, url: string, created_at: Date, updated_at: Date) {
         try {
             const tripTransportation = await TripTransportation.findByPk(id);
             
@@ -25,11 +25,10 @@ export default class TripTransportationController {
               return { status: 404, message: 'Trip not found' };
             }
         
-            tripTransportation.from = from;
-            tripTransportation.to = to;
+            tripTransportation.from_date = from_date;
+            tripTransportation.to_date = to_date;
             tripTransportation.price = price;
             tripTransportation.url = url;
-            tripTransportation.to = to;
             await tripTransportation.save();
         
             return tripTransportation;

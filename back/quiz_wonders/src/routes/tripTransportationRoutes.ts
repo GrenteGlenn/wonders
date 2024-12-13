@@ -27,7 +27,7 @@ router.get('/:id', async (req, res) => {
   router.post('/', (async (req, res) => {
     try {
       const body = <TripTrasportationInterface>req.body;
-      const tripTrasportation = await tripTransportationController.new(body.from, body.to, body.price, body.url, new Date(), new Date());
+      const tripTrasportation = await tripTransportationController.new(body.from_date, body.to_date, body.price, body.url, new Date(), new Date());
       tripTrasportation ? res.status(201).json(tripTrasportation) : res.status(400).json({'code': '400', 'message': 'an error occured while creating resource'});
     } catch (error) {
       res.status(500).json({ 'code': '500','message': error });
@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
   router.put('/:id', (async (req, res) => {
     const body = <TripTrasportationInterface>req.body;
     try {
-      const tripTrasportation = await tripTransportationController.update(parseInt(req.params.id, 10), body.from, body.to, body.price, body.url, new Date(), new Date());
+      const tripTrasportation = await tripTransportationController.update(parseInt(req.params.id, 10), body.from_date, body.to_date, body.price, body.url, new Date(), new Date());
       tripTrasportation ? res.status(200).json(tripTrasportation) : res.status(404).json({'code': '404', "message": 'entry does not exists'});
     } catch (error) {
       res.status(500).json({ 'code': '500','message': error });
@@ -45,7 +45,6 @@ router.get('/:id', async (req, res) => {
   }) as RequestHandler);
 
   router.delete('/:id', (async (req, res) => {
-    const body = <TripTrasportationInterface>req.body;
     try {
       const trip = await tripTransportationController.delete(parseInt(req.params.id, 10));
       res.status(204);

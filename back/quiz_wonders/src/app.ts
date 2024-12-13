@@ -14,7 +14,7 @@ import tripRoutes from './routes/tripRoutes';
 import tripCityRoutes from './routes/tripCityRoutes';
 import tripDayRoutes from './routes/tripDayRoutes';
 import tripHotelRoutes from './routes/tripHotelRoutes';
-import tripActivityRoutes from './routes/tripHotelRoutes';
+import tripDayActivityRoutes from './routes/tripDayActivityRoutes';
 import tripTransportationRoutes from './routes/tripTransportationRoutes';
 
 dotenv.config();
@@ -38,11 +38,10 @@ app.use('/api/quiz-answer-text', quizAnswerTextRoutes);
 
 app.use('/api/trip-transportation', tripTransportationRoutes);
 app.use('/api/trip', tripRoutes);
-// TODO
-// app.use('/api/trip-city', tripRoutes);
-// app.use('/api/trip-day', tripRoutes);
-// app.use('/api/trip-hotel', tripRoutes);
-// app.use('/api/trip-day-activity', tripRoutes);
+app.use('/api/trip-city', tripCityRoutes);
+app.use('/api/trip-day', tripDayRoutes);
+app.use('/api/trip-day-activity', tripDayActivityRoutes);
+app.use('/api/trip-hotel', tripHotelRoutes);
 
 // Route par défaut
 app.get('/', (req: Request, res: Response) => {

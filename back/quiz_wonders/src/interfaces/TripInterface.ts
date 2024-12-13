@@ -4,8 +4,8 @@ export default interface TripInterface {
     user_id: number;
     country_id: number;
     duration: number;
-    from: Date;
-    to: Date;
+    from_date: Date;
+    to_date: Date;
     transportation_id: number;
     created_at: Date;
     updated_at: Date;
