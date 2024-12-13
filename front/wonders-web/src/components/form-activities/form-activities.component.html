@@ -1,0 +1,34 @@
+<div class="w-8/12 mx-auto py-10">
+  <p class="text-4xl font-bold mb-4">{{city}}</p>
+
+  <div class="mb-12">
+    <p class="font-semibold text-xl">Date</p>
+    <mat-form-field>
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate placeholder="Start date">
+        <input matEndDate placeholder="End date">
+      </mat-date-range-input>
+      <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <!-- <input type="date" name="" id=""> -->
+  </div>
+
+  <div class="mb-12">
+    <p class="font-semibold text-xl">Explore {{city}}</p>
+    <div *ngFor="let category of categories" class="m-4 border-perso">
+      <input type="checkbox" id="{{category}}"><label for="{{category}}" class="ml-4">{{category}}</label>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <p class="font-semibold text-xl">Group size</p>
+    <input [(ngModel)]="grSize" type="text" placeholder="Number of people" class="m-4 bg-slate-100 p-3 pr-48 rounded-lg">
+  </div>
+  <div class="text-center">
+    <button class="px-48 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg" (click)="send()">Search</button>
+  </div>
+</div>

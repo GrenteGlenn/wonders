@@ -1,0 +1,19 @@
+<div class="w-7/12 mx-auto py-10">
+  <div class="relative">
+    <img src="{{mainDest.image}}" alt="main image destination" class="rounded-lg w-full h-96 object-cover">
+    <div class="absolute bottom-0 left-0 m-16">
+      <p class="font-bold text-5xl text-white">{{mainDest.title}}</p>
+      <p class="text-base font-light text-white">{{mainDest.subtitle}}</p>
+    </div>
+  </div>
+</div>
+
+<div class="w-7/12 mx-auto py-10">
+  <div class="grid grid-cols-5">
+    <div *ngFor="let item of activities" class="mb-8">
+      <img src="{{item.image}}" alt="image destination" class="mb-2" width="176" height="99">
+      <p class="text-base">{{item.title}}</p>
+      <p class="text-sm font-light text-gray-500">{{item.subtitle}}</p>
+    </div>
+  </div>
+</div>

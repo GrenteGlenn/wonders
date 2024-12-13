@@ -1,0 +1,71 @@
+<div class="w-7/12 mx-auto py-10">
+  <div class="grid gap-4 auto-cols-max grid-flow-auto">
+      <img class="rounded-full row-span-5 col-start-1" src="assets/images/profile.png" alt="profile image" width="128" height="128">
+      <div class="row-start-2 col-start-2 row-span-3">
+        <p class="text-2xl font-semibold">{{ pseudo }}</p>
+        <p class="text-base font-light text-gray-500">{{ email }}</p>
+      </div>
+      <button class="col-start-12 row-start-2 ml-96 bg-gray-200 hover:bg-gray-300 rounded-lg px-16 py-2 text-sm font-medium">Edit profile</button>
+  </div>
+</div>
+
+<div class="w-7/12 mx-auto py-10">
+  <div class="mb-6">
+    <p class="font-semibold text-2xl">Personal Details</p>
+  </div>
+  <div class="grid auto-cols-max grid-flow-auto gap-x-4 mb-4">
+    <img src="assets/images/profile2.png" alt="second image profile" class="rounded-full row-span-3 col-start-1" width="56" height="56">
+    <div class="row-start-2 col-start-2">
+      <p class="text-base">{{ username }} {{ surname }}</p>
+      <p class="text-sm font-light text-gray-500">{{ gender }}, age {{ age }}</p>
+    </div>
+  </div>
+  <div class="grid auto-cols-max grid-flow-auto gap-x-4 mb-4">
+    <div class="row-span-3 col-start-1 bg-gray-200 rounded-lg w-14 h-14 flex items-center justify-center">
+      <lucide-icon name="map-pin" class="size-6"></lucide-icon>
+    </div>
+    <div class="row-start-2 col-start-2">
+      <p class="text-base">Location</p>
+      <p class="text-sm font-light text-gray-500">{{ country }}</p>
+    </div>
+  </div>
+  <div class="grid auto-cols-max grid-flow-auto gap-x-4 mb-4">
+    <div class="row-span-3 col-start-1 bg-gray-200 w-14 h-14 rounded-lg flex items-center justify-center">
+      <lucide-icon name="mail-open" class="size-6"></lucide-icon>
+    </div>
+    <div class="row-start-2 col-start-2">
+      <p class="text-base">Email</p>
+      <p class="text-sm font-light text-gray-500">{{ email }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="w-7/12 mx-auto pb-10">
+  <div class="mb-6">
+    <p class="font-semibold text-2xl">Trip History</p>
+  </div>
+  <div class="grid gap-4 md:grid-cols-4">
+    <div *ngFor="let item of history" class="card mx-4 flex-initial">
+      <img src="assets/images/{{item.image}}" alt="image journey" width="40" height="40" class="rounded-lg">
+      <p class="font-medium text-sm">{{ item.city }}</p>
+      <p class="text-sm font-light text-gray-500">{{ item.date }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="w-7/12 mx-auto pb-10">
+  <div class="mb-6">
+    <p class="font-semibold text-2xl">Saved Destinations</p>
+  </div>
+  <div class="grid gap-4 md:grid-cols-4">
+    <div *ngFor="let item of destination" class="card mx-4">
+      <img src="assets/images/{{item.image}}" alt="image journey" width="40" height="40" class="rounded-lg">
+      <p class="font-medium text-sm">{{ item.city }}</p>
+      <p class="text-sm font-light text-gray-500">{{ item.date }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="w-7/12 mx-auto pb-10 text-center">
+  <button class="text-base bg-red-500 hover:bg-red-600 rounded-lg px-4 py-2 font-medium" (click)="confirmDelete()">Delete account</button>
+</div>
