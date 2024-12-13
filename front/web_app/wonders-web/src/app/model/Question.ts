@@ -16,7 +16,7 @@ export interface QuizLine {
   is_text: boolean;
   is_required: boolean;
   response_kind: ResponseKind;
-  quiz: Quiz;
+  Quiz: Quiz;
 }
 
 export interface QuizAnswer {
