@@ -24,26 +24,11 @@ export class QuestionComponent implements OnInit {
   questions: QuizQuestion[] = [];
   currentQuestionIndex: number = 0;
   showResults = false;
-  selectedAnswers: any[] = [];
+  selectedAnswers: any[] = []; 
   userAnswersMap: Map<number, any> = new Map();
   percent: number = 0;
   quizResponseId: number | null = null;
   userAnswers: any[] = [];
-
-  fakeResult = [
-    {
-      pays: "Norvège",
-      img_full: "https://www.norvege-inedite.com/uploads/sites/32/2019/08/adobestock_199048393-1-730x520.jpeg"
-    },
-    {
-      pays: "Suède",
-      img_full: "https://static.nationalgeographic.fr/files/styles/image_3200/public/nordics_awl_clkrm45666_hr.webp?w=1600&h=900"
-    },
-    {
-      pays: "Lituanie",
-      img_full: "https://www.laquotidienne.fr/wp-content/uploads/2015/05/lituanie.jpg"
-    }
-  ]
 
 
   constructor(
@@ -56,21 +41,21 @@ export class QuestionComponent implements OnInit {
     if (this.authService.isAuthenticated()) {
       // Charge d'abord les questions, puis les réponses
       this.loadQuizQuestions().then(() => {
-        // this.loadUserAnswers();
+        this.loadUserAnswers();
       });
     } else {
       this.loadQuizQuestions();
     }
   }
 
-
+  
 
   loadUserAnswers() {
     this.questionnaireService.getUserAllAnswers().subscribe({
       next: (answers) => {
         console.log('Réponses utilisateur chargées:', answers);
         // Filtre les réponses pour ne garder que celles du quiz actuel
-        this.userAnswers = answers.filter((answer: { quiz_line_id: number; }) =>
+        this.userAnswers = answers.filter((answer: { quiz_line_id: number; }) => 
           this.questions.some(q => q.questionData.id === answer.quiz_line_id)
         );
         this.populateExistingAnswers();
@@ -147,14 +132,14 @@ export class QuestionComponent implements OnInit {
 
    saveOrUpdateAnswer() {
     if (!this.selectedAnswers[this.currentQuestionIndex] || !this.quizResponseId) return;
-
+  
     const currentQuestion = this.questions[this.currentQuestionIndex];
     const selectedAnswer = currentQuestion.answers.find(
       answer => answer.answer === this.selectedAnswers[this.currentQuestionIndex]
     );
-
+  
     if (!selectedAnswer) return;
-
+  
     const answerData: Partial<UserAnswerCreate> = {
       quiz_answer_text_id: Number(selectedAnswer.id),
       quiz_line_id: Number(currentQuestion.questionData.id),
@@ -167,7 +152,7 @@ export class QuestionComponent implements OnInit {
     const existingAnswer = this.userAnswers.find(
       answer => answer.quiz_line_id === currentQuestion.questionData.id
     );
-
+  
     if (existingAnswer) {
       console.log('Mise à jour de la réponse existante ID:', existingAnswer.id);
       this.questionnaireService.updateUserAnswer(existingAnswer.id, answerData).subscribe({

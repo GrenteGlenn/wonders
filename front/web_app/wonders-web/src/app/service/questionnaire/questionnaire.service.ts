@@ -12,7 +12,7 @@ import { AuthentificationService } from '../auth/authentification.service';
 export class QuestionnaireService {
 
   private apiUrl = environment.quizzApiUrl;
-
+  
   constructor(
     private http: HttpClient,
     private authService: AuthentificationService
@@ -26,7 +26,7 @@ export class QuestionnaireService {
 
   getQuizLines(): Observable<QuizLine[]> {
     return this.http.get<QuizLine[]>(`${this.apiUrl}/api/quiz-line`).pipe(
-      map(lines => lines.filter(line => line.Quiz.name === 'Type of vacation')
+      map(lines => lines.filter(line => line.quiz.name === 'Type of vacation')
           .sort((a, b) => a.step - b.step))
     );
   }
@@ -55,7 +55,7 @@ export class QuestionnaireService {
       user_id: userId,
       quiz_id: quiz_id
     };
-
+    
     return this.http.post<any>(`${this.apiUrl}/api/quiz-response`, quizResponse);
   }
 
@@ -69,11 +69,11 @@ export class QuestionnaireService {
       const userId = this.getUserIdFromToken();
       return this.http.get(`${this.apiUrl}/api/user-answer?user_id=${userId}`);
     }
-
+  
     // Extrait l'ID utilisateur du token
     private getUserIdFromToken(): number {
       const token = localStorage.getItem('UserToken');
-      // Décodage du token JWT
+      // Décodage du token JWT 
       if (token) {
         const tokenData = JSON.parse(atob(token.split('.')[1]));
         return tokenData.userId;
@@ -105,6 +105,6 @@ export class QuestionnaireService {
         })
       );
     }
-
+    
 
 }
