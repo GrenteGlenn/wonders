@@ -26,7 +26,7 @@ export class QuestionnaireService {
 
   getQuizLines(): Observable<QuizLine[]> {
     return this.http.get<QuizLine[]>(`${this.apiUrl}/api/quiz-line`).pipe(
-      map(lines => lines.filter(line => line.Quiz.name === 'Type of vacation')
+      map(lines => lines.filter(line => line.quiz.name === 'Type of vacation')
           .sort((a, b) => a.step - b.step))
     );
   }
