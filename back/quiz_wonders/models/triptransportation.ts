@@ -1,13 +1,14 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import TripTransportationInterface from '../src/interfaces/TripTransportationInterface';
+import Trip from './trip';
 
 interface TripTransportationCreationAttributes extends Optional<TripTransportationInterface, 'id'> { }
 
 class TripTransportation extends Model<TripTransportationInterface, TripTransportationCreationAttributes> implements TripTransportationInterface {
   declare id: number;
-  declare from: Date;
-  declare to: Date;
+  declare from_date: Date;
+  declare to_date: Date;
   declare price: number;
   declare url: string;
   declare readonly created_at: Date;
@@ -26,16 +27,16 @@ TripTransportation.init({
     primaryKey: true,
     allowNull: false
   },
-  from: {
+  from_date: {
     type: DataTypes.DATE,
     allowNull: false
   },
-  to: {
+  to_date: {
     type: DataTypes.DATE,
     allowNull: false
   },
   price: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   url: {
@@ -52,10 +53,10 @@ TripTransportation.init({
   }
 }, {
   sequelize: connection,
-  underscored: true,
-  modelName: 'TripTransportation',
   tableName: 'trip_transportations',
+  modelName: 'TripTransportation',
   timestamps: false,
+  underscored: true,
 });
 
 export default TripTransportation;

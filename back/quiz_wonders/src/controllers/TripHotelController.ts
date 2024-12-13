@@ -11,7 +11,7 @@ export default class TripHotelController {
         const tripHotel = await TripHotel.create({ trip_city_id, name, from, price, to, url, created_at, updated_at });
         return tripHotel;
     }
-    async update(id: number, trip_city_id: number, name: string, from: Date, price: number, to: Date, url: string, created_at: Date, updated_at: Date) {
+    async update(id: number, trip_city_id: number, name: string, from: Date, price: number, to: Date, url: string, updated_at: Date) {
         const tripHotel = await TripHotel.findByPk(id);
         if (tripHotel) {
             tripHotel.name = name;

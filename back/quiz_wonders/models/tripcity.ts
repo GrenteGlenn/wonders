@@ -63,23 +63,20 @@ TripCity.init({
   timestamps: false,
 });
 
-TripCity.hasOne(TripTransportation, {
-  foreignKey: 'transportation_id',
-  as: 'trip_transportation',
-});
+// TripCity.hasOne(TripTransportation, {
+//   foreignKey: 'transportation_id',
+//   as: 'trip_transportation',
+// });
 
-TripTransportation.hasMany(TripCity, {
-  foreignKey: 'transportation_id',
-  as: 'trip_transportation',
-});
+// TripTransportation.hasMany(TripCity, {
+//   foreignKey: 'transportation_id'
+// });
 
-TripCity.hasOne(Trip, {
-  foreignKey: 'trip_id',
-  as: 'trip'
-})
-Trip.hasMany(TripCity, {
-  foreignKey: 'trip_id',
-  as: 'trip'
-})
+// TripCity.hasOne(Trip, {
+//   foreignKey: 'trip_id'
+// })
+// Trip.hasMany(TripCity, {
+//   foreignKey: 'trip_id'
+// })
 
 export default TripCity;
