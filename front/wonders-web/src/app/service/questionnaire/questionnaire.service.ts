@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { Country } from '../../model/Country';
 import { QuizAnswer, QuizLine, QuizQuestion, QuizResponseCreate, UserAnswerCreate } from '../../model/Question';
 import { AuthentificationService } from '../auth/authentification.service';
-import { AIProposalCountry, AIQuizzCountry } from '../../model/AI';
+import { AIQuizzCountry } from '../../model/AI';
 import { AnswerAI } from '../../model/Answer';
 
 @Injectable({
