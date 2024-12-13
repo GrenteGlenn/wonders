@@ -41,4 +41,5 @@ export interface UserAnswerCreate {
   quiz_response_id: number;
   boolean: boolean;
   text: string;
+  quiz: Quiz;
 }
