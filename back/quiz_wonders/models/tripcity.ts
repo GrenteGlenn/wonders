@@ -3,6 +3,7 @@ import connection from '../config/dbConnection';
 import TripCityInterface from '../src/interfaces/TripCityInterface';
 import TripTransportation from './triptransportation';
 import Trip from './trip';
+import TripDay from './tripday';
 
 interface TripCreationAttributes extends Optional<TripCityInterface, 'id'> { }
 
@@ -20,6 +21,7 @@ class TripCity extends Model<TripCityInterface, TripCreationAttributes> implemen
   }
 }
 
+
 TripCity.init({
   id: {
     type: DataTypes.INTEGER,
@@ -28,7 +30,7 @@ TripCity.init({
     allowNull: false
   },
   trip_id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: Trip,
@@ -36,11 +38,11 @@ TripCity.init({
     }
   },
   city_id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   transportation_id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
       model: TripTransportation,
@@ -58,25 +60,16 @@ TripCity.init({
 }, {
   sequelize: connection,
   underscored: true,
-  modelName: 'Trip',
-  tableName: 'trips',
-  timestamps: false,
+  modelName: 'TripCity',
+  tableName: 'trip_cities',
+  timestamps: false
 });
 
-// TripCity.hasOne(TripTransportation, {
-//   foreignKey: 'transportation_id',
-//   as: 'trip_transportation',
-// });
 
-// TripTransportation.hasMany(TripCity, {
-//   foreignKey: 'transportation_id'
-// });
+Trip.hasMany(TripCity, { foreignKey: 'trip_id', as: 'cities' });
+TripCity.belongsTo(Trip, { foreignKey: 'trip_id', as: 'trip' });
 
-// TripCity.hasOne(Trip, {
-//   foreignKey: 'trip_id'
-// })
-// Trip.hasMany(TripCity, {
-//   foreignKey: 'trip_id'
-// })
+TripTransportation.hasMany(TripCity, { foreignKey: 'transportation_id', as: 'cities' });
+TripCity.belongsTo(TripTransportation, { foreignKey: 'transportation_id', as: 'transportation' });
 
 export default TripCity;

@@ -1,8 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import TripDayInterface from '../src/interfaces/TripDayInterface';
-import TripTransportation from './triptransportation';
-import Trip from './trip';
 import TripCity from './tripcity';
 
 interface TripCreationAttributes extends Optional<TripDayInterface, 'id'> { }
@@ -28,10 +26,10 @@ TripDay.init({
     allowNull: false
   },
   trip_city_id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: TripDay,
+      model: TripCity,
       key: 'id'
     }
   },
@@ -55,23 +53,13 @@ TripDay.init({
   timestamps: false,
 });
 
-TripCity.hasOne(TripTransportation, {
-  foreignKey: 'transportation_id',
-  as: 'trip_transportation',
+
+TripCity.hasMany(TripDay, {
+  foreignKey: 'trip_city_id',
+  as: "tripCity"
 });
-
-TripTransportation.hasMany(TripCity, {
-  foreignKey: 'transportation_id',
-  as: 'trip_transportation',
+TripDay.belongsTo(TripCity, {
+  foreignKey: 'trip_city_id',
+  as: "cityTrip"
 });
-
-TripCity.hasOne(Trip, {
-  foreignKey: 'trip_id',
-  as: 'trip'
-})
-Trip.hasMany(TripCity, {
-  foreignKey: 'trip_id',
-  as: 'trip'
-})
-
 export default TripDay;
