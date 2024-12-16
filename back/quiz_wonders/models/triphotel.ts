@@ -69,14 +69,14 @@ TripHotel.init({
   timestamps: false,
 });
 
-// TripHotel.hasOne(TripCity, {
-//   foreignKey: 'trip_city_id',
-//   as: 'trip_city',
-// });
+TripHotel.belongsTo(TripCity, {
+  foreignKey: 'trip_city_id',
+  as: 'trip_city',
+});
 
-// TripCity.hasMany(TripHotel, {
-//   foreignKey: 'trip_city_id',
-//   as: 'trip_city',
-// });
+TripCity.hasMany(TripHotel, {
+  foreignKey: 'trip_city_id',
+  as: 'trip_city',
+});
 
 export default TripHotel;

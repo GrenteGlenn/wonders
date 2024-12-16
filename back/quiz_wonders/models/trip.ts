@@ -80,7 +80,7 @@ Trip.belongsTo(TripTransportation, {
 
 TripTransportation.hasMany(Trip, {
   foreignKey: 'transportation_id',
-  as: 'trip_transportation'
+  as: 'trip_destinations'
 });
 
 export default Trip;

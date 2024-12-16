@@ -26,11 +26,15 @@ TripDayActivity.init({
     allowNull: false
   },
   trip_day_id: {
-    type: DataTypes.DATE,
-    allowNull: false
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: TripDay,
+      key: 'id'
+    }
   },
   activity_id: {
-    type: DataTypes.NUMBER,
+    type: DataTypes.INTEGER,
     allowNull: false
   },
   created_at: {
@@ -49,14 +53,14 @@ TripDayActivity.init({
   timestamps: false,
 });
 
-TripDayActivity.hasOne(TripDay, {
+TripDayActivity.belongsTo(TripDay, {
   foreignKey: 'trip_day_id',
-  as: 'trip_day',
+  as: 'tripDay'
 });
 
 TripDay.hasMany(TripDayActivity, {
   foreignKey: 'trip_day_id',
-  as: 'trip_day',
+  as: 'activities'
 });
 
 export default TripDayActivity;
