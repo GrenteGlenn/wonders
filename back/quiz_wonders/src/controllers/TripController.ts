@@ -1,7 +1,40 @@
 import Trip from '../../models/trip';
 import TripTransportation from '../../models/triptransportation';
+import TripCity from '../../models/tripcity';
 
 export default class TripController {
+  async fullTrips() {
+    return await Trip.findAll({
+      attributes: {
+        exclude: ['created_at', 'updated_at', 'transportation_id']
+      },
+      include: [
+        {
+          model: TripTransportation,
+          as: 'trip_transportation',
+          attributes: {
+            exclude: ['created_at', 'updated_at']
+          }
+        }
+      ]
+    })
+  }
+  async fullTrip(id: number) {
+    return await Trip.findOne(id, {
+      attributes: {
+        exclude: ['created_at', 'updated_at', 'transportation_id']
+      },
+      include: [
+        {
+          model: TripTransportation,
+          as: 'trip_transportation',
+          attributes: {
+            exclude: ['created_at', 'updated_at']
+          }
+        }
+      ]
+    })
+  }
   async list() {
     return await Trip.findAll()
   }

@@ -21,14 +21,6 @@ module.exports = {
       updated_at: {
         type: Sequelize.DATE
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
     });
     await queryInterface.addConstraint('trip_day_activities', {
       type: 'foreign key',
