@@ -7,7 +7,7 @@ const dbpassword = process.env.DB_PASS as string
 const dbhost = process.env.DB_HOST
 const dbdialect = process.env.DB_DIALECT as Dialect | undefined
 
-const sequelizeConnection = new Sequelize(
+const sequelize = new Sequelize(
   dbname,
   dbuser,
   dbpassword,
@@ -21,4 +21,4 @@ const sequelizeConnection = new Sequelize(
   }
 );
 
-export default sequelizeConnection
+export default sequelize

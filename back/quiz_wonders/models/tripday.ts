@@ -56,7 +56,7 @@ TripDay.init({
 
 TripCity.hasMany(TripDay, {
   foreignKey: 'trip_city_id',
-  as: "tripCity"
+  as: "tripCityDays"
 });
 TripDay.belongsTo(TripCity, {
   foreignKey: 'trip_city_id',

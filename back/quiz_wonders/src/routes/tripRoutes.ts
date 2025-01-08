@@ -22,7 +22,6 @@ router.get('/', async (req, res) => {
       res.status(500).json({ 'code': '500','message': error });
     }
   });
-
 router.get('/:id', async (req, res) => {
     try {
       const trip = await tripController.one(parseInt(req.params.id, 10));
@@ -31,6 +30,24 @@ router.get('/:id', async (req, res) => {
       res.status(500).json({ 'code': '500','message': error });
     }
   });
+router.get('/users-full-trips', async (req, res) => {
+    try {
+      const trip = await tripController.fullTrips();
+      res.status(200).json(trip)
+    } catch (error) {
+      res.status(500).json({ 'code': '500','message': error });
+    }
+  });
+
+  router.get('/user-full-trip/:id', async (req, res) => {
+    try {
+      const trip = await tripController.fullTrip(parseInt(req.params.id, 10));
+      trip ? res.status(200).json(trip) : res.status(404).json({'code': '404', "message": 'entry does not exists'})
+    } catch (error) {
+      res.status(500).json({ 'code': '500','message': error });
+    }
+  });
+
 
   router.post('/', (async (req, res) => {
     try {
