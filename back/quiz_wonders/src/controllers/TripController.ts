@@ -1,26 +1,22 @@
 import Trip from '../../models/trip';
 import TripTransportation from '../../models/triptransportation';
 import TripCity from '../../models/tripcity';
+import TripDay from '../../models/tripday';
+import TripDayActivity from '../../models/tripdayactivity';
+import api from '../services/api/countriesService'
 
 export default class TripController {
+
   async fullTrips() {
-    return await Trip.findAll({
-      attributes: {
-        exclude: ['created_at', 'updated_at', 'transportation_id']
-      },
-      include: [
-        {
-          model: TripTransportation,
-          as: 'trip_transportation',
-          attributes: {
-            exclude: ['created_at', 'updated_at']
-          }
-        }
-      ]
-    })
+    const trips = await Trip.findAll();
+
+    return trips;
   }
+
   async fullTrip(id: number) {
-    return await Trip.findOne(id, {
+    const activites = await api.get('/fact');
+    return await Trip.findOne({
+      where: { id: id },
       attributes: {
         exclude: ['created_at', 'updated_at', 'transportation_id']
       },
@@ -29,12 +25,45 @@ export default class TripController {
           model: TripTransportation,
           as: 'trip_transportation',
           attributes: {
-            exclude: ['created_at', 'updated_at']
+            exclude: ['id', 'created_at', 'updated_at']
           }
-        }
+        },
+        {
+          model: TripCity,
+          as: 'cities',
+          attributes: {
+            exclude: ['trip_city_id', 'transportation_id','created_at', 'updated_at'],
+          },
+          include: [
+            {
+              model: TripDay,
+              as: 'tripCityDays',
+              attributes: {
+                exclude: ['created_at', 'updated_at'],
+              },
+              include : [
+                {
+                  model: TripDayActivity,
+                  as: 'activities',
+                  attributes: {
+                    exclude: ['trip_day_id', 'created_at', 'updated_at'],
+                  },
+                }
+              ]
+            },
+            {
+              model: TripTransportation,
+              as: 'transportation',
+              attributes: {
+                exclude: ['created_at', 'updated_at']
+              }
+            }
+          ]
+        },
       ]
     })
   }
+
   async list() {
     return await Trip.findAll()
   }
