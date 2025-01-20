@@ -4,11 +4,32 @@ stages:
 variables:
   NODE_ENV: dev
 
+# Manque fly, activities
 lint_back_user:
   stage: lint
   image: node:22
   script:
     - cd back/users_wonders
+    - npm install
+    - npm run lint
+  tags:
+    - PLI
+
+lint_back_quizz:
+  stage: lint
+  image: node:22
+  script:
+    - cd back/quiz_wonders
+    - npm install
+    - npm run lint
+  tags:
+    - PLI
+
+lint_back_country:
+  stage: lint
+  image: node:22
+  script:
+    - cd back/countries_wonders
     - npm install
     - npm run lint
   tags:
