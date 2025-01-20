@@ -11,4 +11,4 @@ lint_back_user:
     - npm install
     - npm run lint
   tags:
-    - pli
+    - PLI
