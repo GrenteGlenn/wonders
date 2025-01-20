@@ -6,6 +6,7 @@ variables:
 
 lint_back_user:
   stage: lint
+  image: node:22
   script:
     - cd back/users_wonders
     - npm install
