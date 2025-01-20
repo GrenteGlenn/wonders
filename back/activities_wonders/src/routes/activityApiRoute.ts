@@ -42,7 +42,7 @@ router.post('/get_activity', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.post('/get_activity_fake', (async (req, res) => {
+router.post('/get_activity_fake', ((req, res) => {
   const body = <Google>req.body;
   try {
     const activity = fakeApi(body.longitude, body.latitude, body.radius);
