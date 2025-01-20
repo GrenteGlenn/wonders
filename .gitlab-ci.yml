@@ -1,0 +1,14 @@
+stages:
+  - lint
+
+variables:
+  NODE_ENV: dev
+
+lint_back_user:
+  stage: lint
+  script:
+    - cd back/users_wonders
+    - npm install
+    - npm run lint
+  tags:
+    - pli
