@@ -21,7 +21,6 @@ function degToRad(degrees: number): number {
  */
 export function fakeApi(lon: number, lat: number, radius: number) {
   const result: ActivityApiInterface[] = [];
-  const typedData: ActivityApiInterface[] | undefined = data;
 
   const delta_lat = radius / 111.0;
   const delta_lon = radius / (111.0 * Math.cos(degToRad(lat)));
@@ -31,12 +30,12 @@ export function fakeApi(lon: number, lat: number, radius: number) {
   const min_lon = lon - delta_lon;
   const max_lon = lon + delta_lon;
 
-  for (let i = 0; i < typedData.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     if (
-      typedData[i].latitude > min_lat &&
-      typedData[i].latitude < max_lat &&
-      typedData[i].longitude > min_lon &&
-      typedData[i].longitude < max_lon
+      data[i].latitude > min_lat &&
+      data[i].latitude < max_lat &&
+      data[i].longitude > min_lon &&
+      data[i].longitude < max_lon
     ) {
       result.push({
         id: data[i].id,
