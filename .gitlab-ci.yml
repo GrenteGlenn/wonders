@@ -34,3 +34,13 @@ lint_back_country:
     - npm run lint
   tags:
     - PLI
+
+lint_back_activities:
+  stage: lint
+  image: node:22
+  script:
+    - cd back/activities_wonders
+    - npm install
+    - npm run lint
+  tags:
+    - PLI
