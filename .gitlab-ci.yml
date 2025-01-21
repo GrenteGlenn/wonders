@@ -14,6 +14,9 @@ lint_back_user:
     - npm run lint
   tags:
     - PLI
+  rules:
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_MERGE_REQUEST_ID
 
 lint_back_quizz:
   stage: lint
