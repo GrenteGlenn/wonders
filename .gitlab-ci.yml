@@ -46,7 +46,8 @@ lint_back_quizz:
   tags:
     - PLI
   rules:
-    - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 lint_back_country:
   stage: lint
@@ -57,6 +58,9 @@ lint_back_country:
     - npm run lint
   tags:
     - PLI
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 lint_back_activities:
   stage: lint
@@ -67,3 +71,6 @@ lint_back_activities:
     - npm run lint
   tags:
     - PLI
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
