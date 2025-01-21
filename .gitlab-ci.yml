@@ -1,5 +1,7 @@
 stages:
   - lint
+  - .pre
+  
 
 workflow:
   rules:
