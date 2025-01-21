@@ -1,6 +1,7 @@
 workflow:
   rules:
     - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 stages:
   - lint
@@ -130,6 +131,7 @@ lint_back_user:
   script:
     - cd back/users_wonders
     - npm install
+    #- npm run lint
   tags:
     - PLI
   rules:
