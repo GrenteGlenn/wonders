@@ -14,6 +14,8 @@ variables:
 
 job1:
   stage: pre
+  tags:
+    - PLI
   script:
     - echo "This job runs in merge request pipelines"
   rules:
