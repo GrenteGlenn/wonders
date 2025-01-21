@@ -19,6 +19,9 @@ lint_back_user:
     - npm run lint
   tags:
     - PLI
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_PIPELINE_SOURCE == "push"
 
 lint_back_quizz:
   stage: lint
