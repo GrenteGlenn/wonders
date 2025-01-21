@@ -1,6 +1,6 @@
 workflow:
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_PIPELINE_SOURCE == "push"'
 
 stages:
@@ -134,8 +134,6 @@ lint_back_user:
     - npm run lint
   tags:
     - PLI
-  only:
-    - merge_requests
 
 lint_back_quizz:
   stage: lint
