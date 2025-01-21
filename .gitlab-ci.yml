@@ -132,7 +132,7 @@ lint_back_user:
   script:
     - cd back/users_wonders
     - npm install
-    #- npm run lint
+    - npm run lint
   tags:
     - PLI
   rules:
