@@ -134,6 +134,8 @@ lint_back_user:
     - npm run lint
   tags:
     - PLI
+  only:
+    - merge_requests
 
 lint_back_quizz:
   stage: lint
