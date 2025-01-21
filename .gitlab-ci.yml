@@ -10,6 +10,14 @@ workflow:
 variables:
   NODE_ENV: dev
 
+job1:
+  stage: .pre
+  script:
+    - echo "This job runs in merge request pipelines"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+
 # Manque fly, activities
 lint_back_user:
   stage: lint
