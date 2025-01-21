@@ -5,14 +5,14 @@ workflow:
 
 stages:
   - lint
-  - .pre
+  - pre
   
 
 variables:
   NODE_ENV: dev
 
 job1:
-  stage: .pre
+  stage: pre
   script:
     - echo "This job runs in merge request pipelines"
   rules:
