@@ -5,6 +5,8 @@ workflow:
 
 stages:
   - lint
+  - .pre
+  
 
 variables:
   NODE_ENV: dev
