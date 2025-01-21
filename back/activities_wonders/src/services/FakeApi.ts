@@ -51,5 +51,6 @@ export function fakeApi(lon: number, lat: number, radius: number) {
     }
   }
 
+
   return result;
 }
