@@ -1,3 +1,8 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: '$CI_PIPELINE_SOURCE == "push"'
+
 stages:
   - lint
   - pre
@@ -116,7 +121,6 @@ lint_back_activities:
 stages:
   - lint
 
-
 variables:
   NODE_ENV: dev
 
@@ -130,11 +134,6 @@ lint_back_user:
     - npm run lint
   tags:
     - PLI
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
-
 
 lint_back_quizz:
   stage: lint
@@ -145,10 +144,6 @@ lint_back_quizz:
     - npm run lint
   tags:
     - PLI
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
 
 lint_back_country:
   stage: lint
@@ -159,10 +154,6 @@ lint_back_country:
     - npm run lint
   tags:
     - PLI
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
 
 lint_back_activities:
   stage: lint
@@ -173,6 +164,3 @@ lint_back_activities:
     - npm run lint
   tags:
     - PLI
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
