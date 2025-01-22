@@ -127,7 +127,7 @@ router.post('/ai_get_country', (async (req, res) => {
           });
         result = [
           {
-            pays: element,
+            pays: element.trim(),
             img_full: image
           },
           ...result

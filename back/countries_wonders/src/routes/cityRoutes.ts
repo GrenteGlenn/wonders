@@ -106,8 +106,8 @@ router.post('/ai_get_city', (async (req, res) => {
           });
         result = [
           {
-            pays: country[1],
-            city: city[1],
+            pays: country[1].trim(),
+            city: city[1].trim(),
             img_full: image
           },
           ...result
