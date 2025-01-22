@@ -24,7 +24,7 @@ interface Pays {
 
 interface Result {
   pays: string;
-  img_full: string;
+  img_full: string | null;
 }
 
 const router = Router();
@@ -110,20 +110,28 @@ router.post('/ai_get_country', (async (req, res) => {
       `Le réponse ne doit être une liste de pays en format d'un array comme cette exemple [pays1, pays2 ...] sans texte`;
 
     const countryData = await countryController.getDataFromOpenAI(prompt);
+    console.log(countryData);
     const arrayCountry = countryData?.replace('[', '').replace(']', '').split(',');
     if (arrayCountry !== undefined)
       for (const element of arrayCountry) {
-        const image = await fetchImages(element, 'country');
-        let value;
-        if (image) value = image.items;
-        if (value)
-          result = [
-            {
-              pays: element,
-              img_full: value[0].link
-            },
-            ...result
-          ];
+        let image = null;
+        await fetchImages(element, 'country')
+          .then((e) => {
+            if (e != undefined) {
+              image = e.items[0].link;
+            }
+          })
+          .catch((error) => {
+            console.error('Error in /ai route:', error);
+            res.status(404).json(error);
+          });
+        result = [
+          {
+            pays: element,
+            img_full: image
+          },
+          ...result
+        ];
       }
     res.json({ data: result });
   } catch (error) {
