@@ -1,6 +1,6 @@
 import ActivityApiInterface from '../interfaces/activityApiInterface';
 
-const data: ActivityApiInterface[] = require('./data.json');
+import data from './data.json';
 
 /**
  * Convertit des degrés en radians
@@ -36,7 +36,18 @@ export function fakeApi(lon: number, lat: number, radius: number) {
       data[i].longitude > min_lon &&
       data[i].longitude < max_lon
     ) {
-      result.push(data[i]);
+      result.push({
+        id: data[i].id,
+        latitude: data[i].latitude,
+        longitude: data[i].longitude,
+        address: data[i].address,
+        name: data[i].name,
+        place_id: data[i].place_id,
+        rating: data[i].rating,
+        price_level: data[i].price_level,
+        created_at: new Date(data[i].created_at),
+        updated_at: new Date(data[i].updated_at)
+      });
     }
   }
 
