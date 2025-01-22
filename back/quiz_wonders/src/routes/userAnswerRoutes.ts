@@ -1,6 +1,14 @@
 import { RequestHandler, Router } from 'express';
 import UserAnswerController from '../controllers/UserAnswerController';
 import UserAnswer from '../interfaces/UserAnswerInterface';
+interface UpdatedFields {
+  quiz_answer_text_id?: number;
+  quiz_line_id: number;
+  quiz_response_id: number;
+  boolean?: boolean;
+  text?: string;
+  updated_at: Date;
+}
 
 const router = Router();
 const userAnswerController = new UserAnswerController();
@@ -43,24 +51,42 @@ router.post('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.put('/:id', (async (req, res) => {
-  const body = <UserAnswer>req.body;
+router.patch('/:id', (async (req, res) => {
+  const body = req.body;
   try {
+    // Créer l'objet updatedFields avec les données du corps de la requête
+    const updatedFields: UpdatedFields = {
+      quiz_answer_text_id: body.quiz_answer_text_id,
+      quiz_line_id: body.quiz_line_id,
+      quiz_response_id: body.quiz_response_id,
+      boolean: body.boolean,
+      text: body.text,
+      updated_at: new Date(),
+    };
+
+    // Supprimer les champs undefined
+    Object.keys(updatedFields).forEach((key) => {
+      if (updatedFields[key as keyof UpdatedFields] === undefined) {
+        delete updatedFields[key as keyof UpdatedFields];
+      }
+    });
+
+    // Appeler le contrôleur pour mettre à jour l'utilisateur
     const userAnswer = await userAnswerController.update(
       parseInt(req.params.id, 10),
-      body.quiz_answer_text_id,
-      body.quiz_line_id,
-      body.quiz_response_id,
-      body.boolean,
-      body.text,
-      new Date(),
-      new Date()
+      updatedFields
     );
-    userAnswer ? res.status(200).json(userAnswer) : res.status(404).json({'code': '404', "message": 'entry does not exists'});
+
+    if (userAnswer) {
+      res.status(200).json(userAnswer);  // Réponse avec les données mises à jour
+    } else {
+      res.status(404).json({ code: '404', message: 'Entry does not exist' });
+    }
   } catch (error) {
     res.status(500).json({ error: 'Failed to update user answer' });
   }
 }) as RequestHandler);
+
 
 router.delete('/:id', (async (req, res) => {
   try{

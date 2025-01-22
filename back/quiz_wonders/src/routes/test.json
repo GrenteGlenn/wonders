@@ -1,0 +1,140 @@
+{
+    "id": 1,
+    "from_date": "2025-01-08T07:34:26.087Z",
+    "to_date": "2025-01-08T07:34:26.087Z",
+    "user_id": 1,
+    "country_id": 1,
+    "duration": 15,
+    "trip_transportation": {
+        "from_date": "2025-01-08T07:34:26.080Z",
+        "to_date": "2025-01-08T07:34:26.080Z",
+        "price": 175,
+        "url": "https://wwws.airfrance.fr/?utm_medium=SEA&utm_source=GOO&utm_campaign=FR_BRD_CNV_BrandName&utm_content=9254315150_34971934_3461728324_Brandname%20-%20Pure%20Brand&utm_term=air%20france&gad_source=1&gclid=Cj0KCQiAvP-6BhDyARIsAJ3uv7Y94UkihKlzPQft45eYY_mCeDC0Siai0Hr-b8TgSxAcCr_2lctXTb0aAojKEALw_wcB&gclsrc=aw.ds"
+    },
+    "cities": [
+        {
+            "id": 2,
+            "trip_id": 1,
+            "city_id": 15,
+            "tripCityDays": [
+                {
+                    "id": 1,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 3,
+                            "activity_id": 22
+                        }
+                    ]
+                },
+                {
+                    "id": 4,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 5,
+                            "activity_id": 9
+                        }
+                    ]
+                },
+                {
+                    "id": 7,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 8,
+                            "activity_id": 8
+                        }
+                    ]
+                },
+                {
+                    "id": 10,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 11,
+                            "activity_id": 29
+                        }
+                    ]
+                },
+                {
+                    "id": 13,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 14,
+                            "activity_id": 33
+                        }
+                    ]
+                },
+                {
+                    "id": 16,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 17,
+                            "activity_id": 25
+                        }
+                    ]
+                },
+                {
+                    "id": 19,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 20,
+                            "activity_id": 30
+                        }
+                    ]
+                },
+                {
+                    "id": 22,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 23,
+                            "activity_id": 5
+                        }
+                    ]
+                },
+                {
+                    "id": 25,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 26,
+                            "activity_id": 3
+                        }
+                    ]
+                },
+                {
+                    "id": 28,
+                    "trip_city_id": 2,
+                    "date": "2025-01-08T07:34:26.100Z",
+                    "activities": [
+                        {
+                            "id": 29,
+                            "activity_id": 28
+                        }
+                    ]
+                }
+            ],
+            "transportation": {
+                "id": 1,
+                "from_date": "2025-01-08T07:34:26.080Z",
+                "to_date": "2025-01-08T07:34:26.080Z",
+                "price": 175,
+                "url": "https://wwws.airfrance.fr/?utm_medium=SEA&utm_source=GOO&utm_campaign=FR_BRD_CNV_BrandName&utm_content=9254315150_34971934_3461728324_Brandname%20-%20Pure%20Brand&utm_term=air%20france&gad_source=1&gclid=Cj0KCQiAvP-6BhDyARIsAJ3uv7Y94UkihKlzPQft45eYY_mCeDC0Siai0Hr-b8TgSxAcCr_2lctXTb0aAojKEALw_wcB&gclsrc=aw.ds"
+            }
+        }
+    ]
+}
