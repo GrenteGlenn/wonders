@@ -14,8 +14,8 @@ export default class UserAnswer extends Model<UserAnswerInterface, UserAnswerCre
   declare quiz_answer_text_id: number | undefined;
   declare text: string | undefined;
   declare boolean: boolean| undefined;
-  declare readonly created_at: Date;
-  declare readonly updated_at?: Date;
+  declare created_at: Date;
+  declare updated_at?: Date;
 }
 
 UserAnswer.init({
