@@ -89,7 +89,7 @@ router.post('/ai', (async (req, res) => {
     const countryData = await countryController.getDataFromOpenAI(prompt);
     res.json({ data: countryData });
   } catch (error) {
-    console.error('Error in /ai route:', error);
+    console.error('Error in /ai route :', error);
     res.status(500).json({ error: error });
   }
 }) as RequestHandler);
