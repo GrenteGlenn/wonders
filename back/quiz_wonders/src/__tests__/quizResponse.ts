@@ -1,7 +1,7 @@
-import QuizResponse from '../models/quizresponse';
+import QuizResponse from '../../models/quizresponse';
 import QuizResponseController from '../controllers/QuizResponseController';
 
-jest.mock('../models/quizresponse');
+jest.mock('../../models/quizresponse');
 
 describe('CountryController', () => {
   let controller: QuizResponseController;
