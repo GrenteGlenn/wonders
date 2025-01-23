@@ -9,6 +9,7 @@
       style="margin-top: 1em;">
     </mat-progress-bar>
   </div>
+
   <span class="flex w-full py-10 items-center justify-center text-md !important">
     {{questions[currentQuestionIndex].questionData.question}}
   </span>
@@ -51,13 +52,17 @@
 </div>
 
 
-  <div *ngIf="showResults" class="w-8/12 mx-auto py-10">
-    <h1 class="text-3xl font-bold text-center mb-10">Félicitations ! Vous avez terminé le questionnaire</h1>
-    <h2 class="text-xl text-center mb-10">Voici les 3 destinations proposées d'après le questionnaire</h2>
-    <h2 class="text-xl text-center mb-10">Veuillez en selectionner une</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- <div *ngFor="let result of results" [ngClass]="['bg-white shadow-lg rounded-lg  cardTransition hover:cursor-pointer', result.class]" (click)="navigateToPlanTrip(result.title)">
-        <h2 class="text-xl font-semibold  text-center text-black">{{result.title}}</h2>
-      </div> -->
+<div *ngIf="showResults" class="w-8/12 mx-auto py-10">
+  <h1 class="text-3xl font-bold text-center mb-10">Félicitations ! Vous avez terminé le questionnaire</h1>
+  <h2 class="text-xl text-center mb-10">Voici les 3 destinations proposées d'après le questionnaire</h2>
+  <h2 class="text-xl text-center mb-10">Veuillez en selectionner une</h2>
+  <div *ngIf="isProposalLoading" class="flex justify-center">
+    <img src="assets/loading.gif" alt="loading proposal">
+  </div>
+  <div *ngIf="!isProposalLoading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div *ngFor="let suggestion of proposalCountries" class="bg-white shadow-lg rounded-lg  cardTransition hover:cursor-pointer">
+      <img src={{suggestion.img_full}} alt="picture of one country" width="100%" height="100%" class="myImg">
+      <h2 class="text-xl font-semibold  text-center text-black">{{suggestion.pays}}</h2>
     </div>
   </div>
+</div>

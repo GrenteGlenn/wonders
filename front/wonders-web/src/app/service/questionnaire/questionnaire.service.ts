@@ -2,9 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { forkJoin, map, Observable, switchMap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Country } from '../../model/countries';
+import { Country } from '../../model/Country';
 import { QuizAnswer, QuizLine, QuizQuestion, QuizResponseCreate, UserAnswerCreate } from '../../model/Question';
 import { AuthentificationService } from '../auth/authentification.service';
+import { AIQuizzCountry } from '../../model/AI';
+import { AnswerAI } from '../../model/Answer';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,7 @@ import { AuthentificationService } from '../auth/authentification.service';
 export class QuestionnaireService {
 
   private apiUrl = environment.quizzApiUrl;
+  private aiUrl = environment.aiApiUrl;
 
   constructor(
     private http: HttpClient,
@@ -26,7 +29,7 @@ export class QuestionnaireService {
 
   getQuizLines(): Observable<QuizLine[]> {
     return this.http.get<QuizLine[]>(`${this.apiUrl}/api/quiz-line`).pipe(
-      map(lines => lines.filter(line => line.quiz.name === 'Type of vacation')
+      map(lines => lines.filter(line => line.Quiz.name === 'Type of vacation')
           .sort((a, b) => a.step - b.step))
     );
   }
@@ -55,6 +58,7 @@ export class QuestionnaireService {
       user_id: userId,
       quiz_id: quiz_id
     };
+
     return this.http.post<any>(`${this.apiUrl}/api/quiz-response`, quizResponse);
   }
 
@@ -104,4 +108,10 @@ export class QuestionnaireService {
         })
       );
     }
+
+    // Obtenir les suggestions de l'AI pour le pays
+    getAIProposition(answerUser: AIQuizzCountry): Observable<AnswerAI> {
+      return this.http.post<AnswerAI>(`${this.aiUrl}/api/countries/ai_get_country`, answerUser);
+    }
+
 }

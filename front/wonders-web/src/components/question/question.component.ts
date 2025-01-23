@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { QuestionnaireService } from '../../app/service/questionnaire/questionnaire.service';
 import { QuizQuestion, UserAnswerCreate } from '../../app/model/Question';
 import { AuthentificationService } from '../../app/service/auth/authentification.service';
+import { AIProposalCountry, AIQuizzCountry } from '../../app/model/AI';
 
 @Component({
   selector: 'app-question',
@@ -29,6 +30,8 @@ export class QuestionComponent implements OnInit {
   percent: number = 0;
   quizResponseId: number | null = null;
   userAnswers: any[] = [];
+  proposalCountries: AIProposalCountry[] = [];
+  isProposalLoading: boolean = true;
 
 
   constructor(
@@ -41,7 +44,7 @@ export class QuestionComponent implements OnInit {
     if (this.authService.isAuthenticated()) {
       // Charge d'abord les questions, puis les réponses
       this.loadQuizQuestions().then(() => {
-        this.loadUserAnswers();
+        // this.loadUserAnswers();
       });
     } else {
       this.loadQuizQuestions();
@@ -132,6 +135,7 @@ export class QuestionComponent implements OnInit {
 
    saveOrUpdateAnswer() {
     if (!this.selectedAnswers[this.currentQuestionIndex] || !this.quizResponseId) return;
+
     const currentQuestion = this.questions[this.currentQuestionIndex];
     const selectedAnswer = currentQuestion.answers.find(
       answer => answer.answer === this.selectedAnswers[this.currentQuestionIndex]
@@ -151,6 +155,7 @@ export class QuestionComponent implements OnInit {
     const existingAnswer = this.userAnswers.find(
       answer => answer.quiz_line_id === currentQuestion.questionData.id
     );
+
     if (existingAnswer) {
       console.log('Mise à jour de la réponse existante ID:', existingAnswer.id);
       this.questionnaireService.updateUserAnswer(existingAnswer.id, answerData).subscribe({
@@ -199,6 +204,7 @@ export class QuestionComponent implements OnInit {
 
   showResult() {
     this.saveOrUpdateAnswer();
+    this.askProposalCountry();
     this.showResults = true;
   }
 
@@ -213,5 +219,30 @@ export class QuestionComponent implements OnInit {
 
   navigateToPlanTrip(destination: string) {
     this.router.navigate(['/planTrip'], { queryParams: { destination: destination } });
+  }
+
+  askProposalCountry() {
+    const answerUser: AIQuizzCountry = {
+      langue: ['français', 'anglais'],
+      climat: 'froid',
+      paysage: 'montagneux',
+      activity: [],
+      populaire: false
+    }
+    this.questionnaireService.getAIProposition(answerUser).subscribe({
+      next: (suggestion) => {
+        for (let i=0; i < 3; i++) {
+          this.proposalCountries[i] = suggestion.data[i];
+        }
+        this.isProposalLoading = false;
+        // console.log("Remove us :");
+        // console.log("suggestion", suggestion);
+        // console.log("proposal", this.proposalCountries);
+      },
+      error: (error) => {
+        console.log('Erreur lors de la récupération des propositions de pays');
+        console.log(error);
+      }
+    })
   }
 }

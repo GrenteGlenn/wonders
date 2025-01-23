@@ -1,0 +1,33 @@
+.cardTransition{
+  transition: 1s ease;
+  height: 30em;
+  margin-top: 5em;
+  background-size: cover;
+
+}
+.cardTransition:hover {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.2);
+  transform: scale(1.1);
+  transition: 0.5s ease;
+}
+
+.londre{
+  padding-top: 10em;
+  color: white;
+  background-image: url(../../../public/assets/images/londre.avif);
+}
+.paris{
+  padding-top: 10em;
+  color: white;
+  background-image: url(../../../public/assets/images/paris.avif);
+}
+.japon{
+  padding-top: 10em;
+  color: white;
+  background-image: url(../../../public/assets/images/japon.avif);
+}
+
+.myImg{
+  height: 25em;
+}
