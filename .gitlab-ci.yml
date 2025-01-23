@@ -1,76 +1,95 @@
 stages:
   - lint
-  - pre
 
 workflow:
   rules:
     - if: $CI_COMMIT_BRANCH
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
-
 variables:
   NODE_ENV: dev
-
-job1:
-  stage: pre
-  tags:
-    - PLI
-  script:
-    - echo "This job runs in merge request pipelines"
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_PIPELINE_SOURCE == "push"
-
 
 # Manque fly, activities
 lint_back_user:
   stage: lint
   image: node:22
-  script:
+  before_script:
     - cd back/users_wonders
     - npm install
+  script:
     - npm run lint
   tags:
     - PLI
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "push"
+  cache:
+    policy: pull-push
+    unprotect: false
+    untracked: false
+    when: on_success
+    paths:
+      - "back/users_wonders/node_modules"
 
 lint_back_quizz:
   stage: lint
   image: node:22
-  script:
+  before_script:
     - cd back/quiz_wonders
     - npm install
+  script:
     - npm run lint
   tags:
     - PLI
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "push"
+  cache:
+    policy: pull-push
+    unprotect: false
+    untracked: false
+    when: on_success
+    paths:
+      - "back/quiz_wonders/node_modules"
 
 lint_back_country:
   stage: lint
   image: node:22
-  script:
+  before_script:
     - cd back/countries_wonders
     - npm install
+  script:
     - npm run lint
   tags:
     - PLI
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "push"
+  cache:
+    policy: pull-push
+    unprotect: false
+    untracked: false
+    when: on_success
+    paths:
+      - "back/countries_wonders/node_modules"
 
 lint_back_activities:
   stage: lint
   image: node:22
-  script:
+  before_script:
     - cd back/activities_wonders
     - npm install
+  script:
     - npm run lint
   tags:
     - PLI
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_PIPELINE_SOURCE == "push"
+  cache:
+    policy: pull-push
+    unprotect: false
+    untracked: false
+    when: on_success
+    paths:
+      - "back/activities_wonders/node_modules"
