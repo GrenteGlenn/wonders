@@ -1,12 +1,7 @@
 stages:
   - lint
   - pre
-
-workflow:
-  rules:
-    - if: $CI_COMMIT_BRANCH
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-
+  
 
 workflow:
   rules:
@@ -24,8 +19,7 @@ job1:
   script:
     - echo "This job runs in merge request pipelines"
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 
 # Manque fly, activities
@@ -118,62 +112,3 @@ lint_back_activities:
     paths:
       - "back/activities_wonders/node_modules"
 
-
-stages:
-  - lint
-
-variables:
-  NODE_ENV: dev
-
-# Manque fly, activities
-lint_back_user:
-  stage: lint
-  image: node:22
-  script:
-    - cd back/users_wonders
-    - npm install
-    - npm run lint
-  tags:
-    - PLI
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_PIPELINE_SOURCE == "push"
-
-lint_back_quizz:
-  stage: lint
-  image: node:22
-  script:
-    - cd back/quiz_wonders
-    - npm install
-    - npm run lint
-  tags:
-    - PLI
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_PIPELINE_SOURCE == "push"
-
-lint_back_country:
-  stage: lint
-  image: node:22
-  script:
-    - cd back/countries_wonders
-    - npm install
-    - npm run lint
-  tags:
-    - PLI
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_PIPELINE_SOURCE == "push"
-
-lint_back_activities:
-  stage: lint
-  image: node:22
-  script:
-    - cd back/activities_wonders
-    - npm install
-    - npm run lint
-  tags:
-    - PLI
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_PIPELINE_SOURCE == "push"
