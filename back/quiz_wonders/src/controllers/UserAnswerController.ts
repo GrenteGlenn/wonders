@@ -8,14 +8,21 @@ interface UpdatedFields {
   updated_at: Date;
 }
 
+type UserAnswerWithIndex = UserAnswer & { [key: string]: unknown };
+
+interface UpdatedFields {
+  response?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 export default class UserAnswerController {
-  
   async list() {
-      return await UserAnswer.findAll();
+    return await UserAnswer.findAll();
   }
 
   async one(id: number) {
-      return await UserAnswer.findByPk(id);
+    return await UserAnswer.findByPk(id);
   }
 
   async new(
@@ -42,33 +49,26 @@ export default class UserAnswerController {
     }
   }
 
+  /* eslint-disable */
   async update(id: number, updatedFields: UpdatedFields) {
     try {
-      const userAnswer = await UserAnswer.findByPk(id);
+      const userAnswer = await UserAnswer.findByPk(id) as UserAnswerWithIndex;
       if (userAnswer) {
-        // Mettez à jour les propriétés de userAnswer avec celles de updatedFields
         Object.keys(updatedFields).forEach((key) => {
           const value = updatedFields[key as keyof UpdatedFields];
           if (value !== undefined) {
-            // Assurez-vous que le type de la clé est valide pour userAnswer
-            (userAnswer as any)[key as keyof typeof userAnswer] = value;
+            userAnswer[key] = value;
           }
         });
-  
-        // Sauvegardez les modifications dans la base de données
         await userAnswer.save();
-        return userAnswer;
-      } else {
-        return null;  // Si l'utilisateur n'est pas trouvé
       }
+      return userAnswer;
     } catch (error) {
-      console.error(error);
-      throw new Error('Failed to update user answer');
+      throw new Error(`Failed to update user answer: ${error}`);
     }
   }
-  
-  
-  
+  /* eslint-enable */
+
   async delete(id: number) {
     try {
       return await UserAnswer.destroy({ where: { id } });

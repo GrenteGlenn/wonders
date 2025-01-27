@@ -18,7 +18,7 @@ class OrganizationUrl
   declare url: string | null;
   declare status_id: number;
   declare readonly created_at?: Date;
-  declare readonly updated_at?: Date;
+  declare updated_at?: Date;
 
   static associate() {
     // this.belongsTo(Organization, {

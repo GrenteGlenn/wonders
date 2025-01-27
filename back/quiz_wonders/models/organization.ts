@@ -1,69 +1,57 @@
-'use strict';
-
-import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../config/dbConnection';
-import OrganizationInterface from '../src/interfaces/OrganizationInterface';
+import { Model, DataTypes, Optional } from 'sequelize';
+import connection from '../config/dbConnection';
+import OrganizationInterface from '../interfaces/OrganizationInterface';
 import Status from './status';
+import UserAnswer from './useranswer';
+import OrganizationUrl from './organizationurl';
 
 interface OrganizationCreationAttributes extends Optional<OrganizationInterface, 'id'> {}
 
-class Organization
-  extends Model<OrganizationInterface, OrganizationCreationAttributes>
-  implements OrganizationInterface
-{
-  public id!: number;
-  public user_id!: number;
-  public status_id!: number;
-  // public userAnswerId!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
-
-  // static associate() {
-  //   Organization.belongsTo(Status, {
-  //     foreignKey: 'status_id',
-  //   });
-  // }
+class Organization extends Model<OrganizationInterface, OrganizationCreationAttributes> implements OrganizationInterface {
+  declare id: number;
+  declare  user_id: number;
+  declare  status_id: number;
+  declare  readonly created_at: Date;
+  declare  updated_at?: Date;
 }
 
-Organization.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      allowNull: false
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    status_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: Status,
-        key: 'id'
-      }
-    },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false
-    },
-    updated_at: {
-      type: DataTypes.DATE,
-      allowNull: false
+Organization.init({
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false
+  },
+  user_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  status_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: Status,
+      key: 'id'
     }
   },
-  {
-    sequelize,
-    underscored: true,
-    modelName: 'organization',
-    timestamps: false
+  created_at: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  updated_at: {
+    type: DataTypes.DATE,
+    allowNull: false
   }
-);
-
-Organization.belongsTo(Status, {
-  foreignKey: 'status_id'
+}, {
+  sequelize: connection,
+  underscored: true,
+  modelName: 'organization',
+  timestamps: false,
 });
 
-export default Organization;
+Organization.belongsTo(Status, {
+  foreignKey: 'status_id',
+})
+
+
+export default Organization

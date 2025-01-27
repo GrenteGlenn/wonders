@@ -12,10 +12,11 @@ export default class TagController {
     return await Tag.create({ name, created_at, updated_at });
   }
 
-  async update(id: number, name: string, created_at: Date, updated_at: Date) {
+  async update(id: number, name: string, updated_at: Date) {
     const tag = await Tag.findByPk(id);
     if (tag) {
       tag.name = name;
+      tag.updated_at = updated_at;
       await tag.save();
     }
     return tag;

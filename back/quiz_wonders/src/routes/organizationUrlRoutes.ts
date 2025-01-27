@@ -19,20 +19,20 @@ router.get('/', (async (req, res) => {
     const organizationUrl = await organizationUrlController.list();
     res.status(200).json(organizationUrl);
   } catch (error) {
-    res.status(500).json({ 'code': '500','message': error });
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 
 router.get('/:id', (async (req, res) => {
   try {
     const organizationUrl = await organizationUrlController.one(parseInt(req.params.id, 10));
-    if(organizationUrl) {
+    if (organizationUrl) {
       res.status(200).json(organizationUrl);
     } else {
-      res.status(404).json({ 'code': '500','message': 'entry does not exists' });
+      res.status(404).json({ code: '500', message: 'entry does not exists' });
     }
   } catch (error) {
-    res.status(500).json({ 'code': '500','message': error });
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 
@@ -49,9 +49,11 @@ router.post('/', (async (req, res) => {
       new Date(),
       new Date()
     );
-    organizationUrl ? res.status(201).json(organizationUrl) : res.status(400).json({'code': '400', 'message': 'an error occured while creating resource'});
+    organizationUrl
+      ? res.status(201).json(organizationUrl)
+      : res.status(400).json({ code: '400', message: 'an error occured while creating resource' });
   } catch (error) {
-    res.status(500).json({ 'code': '500','message': error });
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 router.put('/:id', (async (req, res) => {
@@ -67,26 +69,26 @@ router.put('/:id', (async (req, res) => {
       body.status_id
     );
 
-    if(organizationUrl) {
+    if (organizationUrl) {
       res.status(200).json(organizationUrl);
     } else {
-      res.status(404).json({ 'code': '500','message': 'entry does not exists' });
+      res.status(404).json({ code: '500', message: 'entry does not exists' });
     }
   } catch (error) {
-    res.status(500).json({ 'code': '500','message': error });
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 
 router.delete('/:id', (async (req, res) => {
   try {
     const organizationUrl = await organizationUrlController.delete(parseInt(req.params.id, 10));
-    if(organizationUrl) {
+    if (organizationUrl) {
       res.status(204).json(organizationUrl);
     } else {
-      res.status(404).json({ 'code': '500','message': 'entry does not exists' });
+      res.status(404).json({ code: '500', message: 'entry does not exists' });
     }
   } catch (error) {
-    res.status(500).json({ 'code': '500','message': error });
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 

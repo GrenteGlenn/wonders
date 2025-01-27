@@ -3,10 +3,8 @@ import TripTransportation from '../../models/triptransportation';
 import TripCity from '../../models/tripcity';
 import TripDay from '../../models/tripday';
 import TripDayActivity from '../../models/tripdayactivity';
-import api from '../services/api/countriesService'
 
 export default class TripController {
-
   async fullTrips() {
     const trips = await Trip.findAll();
 
@@ -14,7 +12,6 @@ export default class TripController {
   }
 
   async fullTrip(id: number) {
-    const activites = await api.get('/fact');
     return await Trip.findOne({
       where: { id: id },
       attributes: {
@@ -32,22 +29,22 @@ export default class TripController {
           model: TripCity,
           as: 'cities',
           attributes: {
-            exclude: ['trip_city_id', 'transportation_id','created_at', 'updated_at'],
+            exclude: ['trip_city_id', 'transportation_id', 'created_at', 'updated_at']
           },
           include: [
             {
               model: TripDay,
               as: 'tripCityDays',
               attributes: {
-                exclude: ['created_at', 'updated_at'],
+                exclude: ['created_at', 'updated_at']
               },
-              include : [
+              include: [
                 {
                   model: TripDayActivity,
                   as: 'activities',
                   attributes: {
-                    exclude: ['trip_day_id', 'created_at', 'updated_at'],
-                  },
+                    exclude: ['trip_day_id', 'created_at', 'updated_at']
+                  }
                 }
               ]
             },
@@ -59,24 +56,42 @@ export default class TripController {
               }
             }
           ]
-        },
+        }
       ]
-    })
+    });
   }
 
   async list() {
-    return await Trip.findAll()
+    return await Trip.findAll();
   }
 
   async one(id: number) {
-    const trip = await Trip.findByPk(id)
+    const trip = await Trip.findByPk(id);
     if (trip) {
       return trip;
     }
   }
 
-  async new(user_id: number, country_id: number, duration: number, from_date: Date, to_date: Date, transportation_id: number, created_at: Date, updated_at: Date) {
-    return await Trip.create({ user_id, country_id, duration, from_date, to_date, transportation_id, created_at, updated_at })
+  async new(
+    user_id: number,
+    country_id: number,
+    duration: number,
+    from_date: Date,
+    to_date: Date,
+    transportation_id: number,
+    created_at: Date,
+    updated_at: Date
+  ) {
+    return await Trip.create({
+      user_id,
+      country_id,
+      duration,
+      from_date,
+      to_date,
+      transportation_id,
+      created_at,
+      updated_at
+    });
   }
 
   async update(
@@ -87,17 +102,17 @@ export default class TripController {
     fromDate: Date,
     toDate: Date,
     transportation_id: number,
-    created_at: Date,
     updated_at: Date
   ) {
-    const trip = await Trip.findByPk(id) as any;
+    const trip = (await Trip.findByPk(id)) as Trip;
 
     trip.user_id = user_id;
     trip.country_id = country_id;
     trip.duration = duration;
-    trip.fromDate = fromDate;
-    trip.toDate = toDate;
+    trip.from_date = fromDate;
+    trip.to_date = toDate;
     trip.transportation_id = transportation_id;
+    trip.updated_at = updated_at;
     await trip.save();
     return trip;
   }

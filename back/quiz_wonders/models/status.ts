@@ -8,7 +8,7 @@ class Status extends Model<StatusInterface, StatusCreationAttributes> implements
   public id!: number;
   public name!: string;
   public readonly created_at?: Date | undefined;
-  public readonly updated_at?: Date | undefined;
+  public updated_at?: Date | undefined;
 }
 
 Status.init(

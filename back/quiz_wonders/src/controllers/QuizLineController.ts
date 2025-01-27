@@ -17,29 +17,31 @@ export default class QuizLineController {
         {
           model: QuizLine,
           as: 'childrens',
-          required: false,
+          required: false
         }
       ]
     });
   }
 
   async one(id: number) {
-    return await QuizLine.findByPk(id, { include: [
-      {
-        model: ResponseKind,
-        as: 'response_kind'
-      },
-      {
-        model: Quiz,
-        as: 'quiz'
-      },
-      {
-        model: QuizLine,
-        as: 'ParentQuizLine',
-        required: false,
-        foreignKey: 'parent',
-      }
-    ]});
+    return await QuizLine.findByPk(id, {
+      include: [
+        {
+          model: ResponseKind,
+          as: 'response_kind'
+        },
+        {
+          model: Quiz,
+          as: 'quiz'
+        },
+        {
+          model: QuizLine,
+          as: 'ParentQuizLine',
+          required: false,
+          foreignKey: 'parent'
+        }
+      ]
+    });
   }
 
   async new(data: {

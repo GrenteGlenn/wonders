@@ -8,7 +8,7 @@ class Tag extends Model<TagInterface, TagCreationAttributes> implements TagInter
   declare id: number;
   declare name: string;
   declare readonly created_at?: Date;
-  declare readonly updated_at?: Date;
+  declare updated_at?: Date;
 
   toJSON() {
     const values = Object.assign({}, this.get());
