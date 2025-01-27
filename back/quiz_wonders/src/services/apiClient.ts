@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 class ApiClient {
@@ -8,23 +9,17 @@ class ApiClient {
       baseURL,
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     });
-  
+
     this.handleRequest = this.handleRequest.bind(this);
     this.handleError = this.handleError.bind(this);
-  
+
     // Ajouter des intercepteurs
-    this.client.interceptors.request.use(
-      this.handleRequest as any,
-      this.handleError
-    );
-  
-    this.client.interceptors.response.use(
-      this.handleResponse,
-      this.handleError
-    );
+    this.client.interceptors.request.use(this.handleRequest as any, this.handleError);
+
+    this.client.interceptors.response.use(this.handleResponse, this.handleError);
   }
 
   // Gestion des requêtes

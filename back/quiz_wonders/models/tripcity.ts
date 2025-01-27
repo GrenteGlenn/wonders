@@ -13,7 +13,7 @@ class TripCity extends Model<TripCityInterface, TripCreationAttributes> implemen
   declare transportation_id: number;
   declare city_id: number;
   declare readonly created_at: Date;
-  declare readonly updated_at: Date;
+  declare updated_at: Date;
 
   toJSON() {
     const values = Object.assign({}, this.get());

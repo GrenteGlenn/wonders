@@ -8,7 +8,7 @@ class ResponseKind extends Model<ResponseKindInterface, ResponseKindCreationAttr
     declare id: number;
     declare type: string;
     declare readonly created_at?: Date;
-    declare readonly updated_at?: Date;
+    declare updated_at?: Date;
 
     toJSON() {
         const values = Object.assign({}, this.get());

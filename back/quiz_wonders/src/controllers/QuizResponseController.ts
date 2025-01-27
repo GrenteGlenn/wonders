@@ -45,12 +45,13 @@ export default class QuizResponseController {
     }
   }
 
-  async update(id: number, quiz_id: number, user_id: number, created_at: Date, updated_at: Date) {
+  async update(id: number, quiz_id: number, user_id: number, updated_at: Date) {
     try {
       const quizResponse = await QuizResponse.findByPk(id);
       if (quizResponse) {
         quizResponse.quiz_id = quiz_id;
         quizResponse.user_id = user_id;
+        quizResponse.updated_at = updated_at;
         await quizResponse.save();
         return quizResponse;
       }

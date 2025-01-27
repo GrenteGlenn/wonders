@@ -7,7 +7,7 @@ export default interface QuizLineInterface {
   is_required: boolean;
   step?: number;
   mutiple_type_answer: boolean;
-  parent?: boolean; 
+  parent?: boolean;
   response_kind_id: number;
   created_at?: Date;
   updated_at?: Date;

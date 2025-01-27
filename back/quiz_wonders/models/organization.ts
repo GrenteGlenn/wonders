@@ -8,12 +8,11 @@ import OrganizationUrl from './organizationurl';
 interface OrganizationCreationAttributes extends Optional<OrganizationInterface, 'id'> {}
 
 class Organization extends Model<OrganizationInterface, OrganizationCreationAttributes> implements OrganizationInterface {
-  public id!: number;
-  public user_id!: number;
-  public status_id!: number;
-  // public userAnswerId!: number;
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare id: number;
+  declare  user_id: number;
+  declare  status_id: number;
+  declare  readonly created_at: Date;
+  declare  updated_at?: Date;
 }
 
 Organization.init({

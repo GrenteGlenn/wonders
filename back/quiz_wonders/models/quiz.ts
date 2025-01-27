@@ -13,7 +13,7 @@ class Quiz extends Model<QuizInterface, QuizCreationAttributes> implements QuizI
   declare name: string;
   declare tag_id: number;
   declare readonly createdAt: Date;
-  declare readonly updatedAt: Date;
+  declare updated_at: Date;
 
   toJSON() {
     const values = Object.assign({}, this.get());

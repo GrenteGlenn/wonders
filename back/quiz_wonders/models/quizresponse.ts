@@ -10,7 +10,7 @@ export default class QuizResponse extends Model<QuizResponseInterface, QuizRespo
     declare user_id: number;
     declare quiz_id: number;
     declare readonly created_at?: Date;
-    declare readonly updated_at?: Date;
+    declare updated_at?: Date;
 }
 
 QuizResponse.init({

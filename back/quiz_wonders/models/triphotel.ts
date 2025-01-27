@@ -14,7 +14,7 @@ class TripHotel extends Model<TripHotelInterface, TripHotelCreationAttributes> i
   declare to: Date;
   declare url: string;
   declare readonly created_at: Date;
-  declare readonly updated_at: Date;
+  declare updated_at: Date;
 
   toJSON() {
     const values = Object.assign({}, this.get());

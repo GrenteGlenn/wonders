@@ -89,11 +89,12 @@ export default class QuizController {
     return await Quiz.create({ name, tag_id, created_at, updated_at });
   }
 
-  async update(id: number, name: string, tag_id: number, created_at: Date, updated_at: Date) {
+  async update(id: number, name: string, tag_id: number, updated_at: Date) {
     const quiz = await Quiz.findByPk(id);
     if (quiz) {
       quiz.name = name;
       quiz.tag_id = tag_id;
+      quiz.updated_at = updated_at;
       await quiz.save();
       return quiz;
     }
