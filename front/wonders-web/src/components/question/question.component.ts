@@ -235,9 +235,9 @@ export class QuestionComponent implements OnInit {
           this.proposalCountries[i] = suggestion.data[i];
         }
         this.isProposalLoading = false;
-        // console.log("Remove us :");
-        // console.log("suggestion", suggestion);
-        // console.log("proposal", this.proposalCountries);
+        console.log("Remove us :", answerUser);
+        console.log("suggestion", suggestion);
+        console.log("proposal", this.proposalCountries);
       },
       error: (error) => {
         console.log('Erreur lors de la récupération des propositions de pays');

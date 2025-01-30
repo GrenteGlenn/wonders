@@ -111,7 +111,7 @@ export class QuestionnaireService {
 
     // Obtenir les suggestions de l'AI pour le pays
     getAIProposition(answerUser: AIQuizzCountry): Observable<AnswerAI> {
-      return this.http.post<AnswerAI>(`${this.aiUrl}/api/countries/ai_get_country`, answerUser);
+      return this.http.post<AnswerAI>(`${this.aiUrl}/countries/ai_get_country`, answerUser);
     }
 
 }
