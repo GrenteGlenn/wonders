@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "postgres",
-    "password": "postgres",
+    "username": "kinsuful",
+    "password": "Ae225r910-",
     "database": "country_wonders",
-    "host": "127.0.0.1",
+    "host": "localhost",
     "port": "5432",
     "dialect": "postgres"
   },

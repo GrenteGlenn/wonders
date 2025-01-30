@@ -1,0 +1,18 @@
+{
+  "/quizz-api": {
+    "target": "https://quizz_wonder.turing.etna.cafe",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/quizz-api": ""
+    }
+  },
+  "/ai-api": {
+    "target": "http://localhost:3000/api",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/ai-api": ""
+    }
+  }
+}

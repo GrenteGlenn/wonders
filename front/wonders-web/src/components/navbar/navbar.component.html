@@ -1,0 +1,106 @@
+<nav class="flex items-center justify-between px-10 py-2 bg-white shadow-md">
+    <div class="flex items-center space-x-2">
+        <!-- <img src="path-to-your-logo.png" alt="Wonders Logo" class="h-8 w-auto"> -->
+        <button (click)="goHomePage()"><span class="text-xl font-semibold">Wonders</span></button>
+    </div>
+
+    <div class="flex-grow mx-4 hidden md:block">
+        <div class="relative ">
+        <input type="text" placeholder="Search" class="w-80  px-3 py-2 border rounded-lg bg-slate-200 pr-10 pl-10">
+        <lucide-icon name="search" class="absolute left-0 top-1/2 ml-1 transform -translate-y-1/2 text-gray-400"></lucide-icon>
+        </div>
+    </div>
+
+    <div class="md:flex items-center space-x-4 ">
+
+        <button *ngIf="isAuthenticated" class="bg-blue-500 text-white px-4 py-2 rounded-md hidden md:block" matTooltip="Quizz for choose destination" (click)="goQuestion()" >Quiz</button>
+        <!-- A rajouter quand la fonctionnalitée sera disponible
+        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
+          <button matTooltip="help" class="text-black flex"><lucide-icon name="circle-help"></lucide-icon></button>
+        </div>
+        -->
+        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
+            <button matTooltip="Plan trip" class="text-black flex"><lucide-icon name="route" (click)="goPlanTrip()"></lucide-icon></button>
+        </div>
+        <div *ngIf="isAuthenticated" class="card bg-slate-100 h-full px-3 py-2 rounded-md">
+            <button matTooltip="Profile" class="text-black flex" (click)="goProfile()"><lucide-icon name="user-round"></lucide-icon></button>
+        </div>
+        <!-- A rajouter quand la fonctionnalitée sera disponible
+        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
+            <button matTooltip="Settings" class="text-black flex "><lucide-icon name="settings"></lucide-icon></button>
+        </div>
+        -->
+        <!-- A rajouter quand la fonctionnalitée sera disponible
+        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
+            <button matTooltip="Socials / Conversations" class="text-black flex "><lucide-icon name="users"></lucide-icon></button>
+        </div>
+        -->
+        <div class="card bf-slate-100 h-full px-3 py-2 rounded-md">
+          <button *ngIf="!isAuthenticated" class="text-black flex" (click)="login()">Sign in</button>
+        </div>
+        <div class="relative">
+            <img src="https://github.com/shadcn.png" alt="User Avatar" class="h-8 w-8 rounded-full cursor-pointer" (click)="toggleMenu()">
+
+            <!-- Menu déroulant -->
+            <div *ngIf="isMenuOpen" class="absolute right-0 mt-4 w-64 bg-white rounded-md shadow-lg py-1 z-10">
+              <div class="px-4 py-2 border-b flex text-center">
+                <img src="https://github.com/shadcn.png" alt="User Avatar" class="h-8 w-8 rounded-full " >
+                <span class="text-sm font-medium text-gray-900 mt-1 ml-5">Guest</span>
+              </div>
+              <a href="planTrip" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="map" class="mr-3 h-5 w-5"></lucide-icon>
+                Plan Trip
+              </a>
+              <a href="booking" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="CalendarDays" class="mr-3 h-5 w-5"></lucide-icon>
+                Bookings
+              </a>
+              <a *ngIf="isAuthenticated" href="profile" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="user-round" class="mr-3 h-5 w-5"></lucide-icon>
+                Profile
+              </a>
+              <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="users" class="mr-3 h-5 w-5"></lucide-icon>
+                Communities
+              </a>
+              -->
+              <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="message-circle" class="mr-3 h-5 w-5"></lucide-icon>
+                Chat
+              </a>
+              -->
+              <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-red-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="shield" class="mr-3 h-5 w-5"></lucide-icon>
+                Panel administrator
+              </a>
+              -->
+              <div class="border-t my-1"></div>
+              <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="plane" class="mr-3 h-5 w-5"></lucide-icon>
+                Flights
+              </a>
+              -->
+              <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="bed" class="mr-3 h-5 w-5"></lucide-icon>
+                Hotels
+              </a>
+              -->
+              <a href="activities" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="tree-palm" class="mr-3 h-5 w-5"></lucide-icon>
+                Activities
+              </a>
+              <div class="border-t my-1"></div>
+              <a class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center cursor-pointer" (click)="isAuthenticated ? disconnect() : login()">
+                <lucide-icon name="power" class="mr-3 h-5 w-5"></lucide-icon>
+
+                {{ isAuthenticated ? 'Log out' : 'Sign in' }}
+              </a>
+              </div>
+          </div>
+    </div>
+</nav>
