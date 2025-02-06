@@ -23,6 +23,7 @@ export function createJWT(user: User) {
 export function updateJWT(token: string) {
   if (SECRET !== undefined) {
     const decode = jwt.verify(token, SECRET) as JwtPayload;
+
     if (decode) {
       return jwt.sign(
         {
