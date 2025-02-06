@@ -34,6 +34,20 @@ router.get('/me', (async (req, res) => {
   }
 }) as RequestHandler);
 
+router.get('/me', (async (req, res) => {
+  const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+  let decrypt;
+  if (token) decrypt = decryptJWT(token) as JwtPayload;
+  else res.status(401).json('Not authorized');
+  if (!decrypt) {
+    res.status(401).json('Not authorized');
+  } else {
+    const client = await authController.getOneByEmail(decrypt.email);
+    if (!client) return res.status(401).json('Not authorized');
+    res.status(200).json(client);
+  }
+}) as RequestHandler);
+
 router.get('/:id', (async (req, res) => {
   try {
     const client = await authController.getOne(parseInt(req.params.id, 10));
