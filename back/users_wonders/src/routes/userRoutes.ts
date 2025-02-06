@@ -1,6 +1,8 @@
 import { RequestHandler, Router } from 'express';
 import AuthController from '../controllers/AuthController';
 import UserInterface from '../interfaces/UserInterface';
+import { decryptJWT } from '../lib/JWT';
+import { JwtPayload } from '../interfaces/Global';
 
 const router = Router();
 
@@ -12,6 +14,23 @@ router.get('/', (async (req, res) => {
     res.status(200).json(client);
   } catch (error) {
     res.status(404).json('Error! Something went wrong.');
+  }
+}) as RequestHandler);
+
+router.get('/me', (async (req, res) => {
+  const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+  let decrypt;
+
+  if (token) decrypt = decryptJWT(token) as JwtPayload;
+  else res.status(401).json('Not authorized');
+
+  if (!decrypt) {
+    res.status(401).json('Not authorized');
+  } else {
+    const client = await authController.getOneByEmail(decrypt.email);
+
+    if (!client) return res.status(401).json('Not authorized');
+    res.status(200).json(client);
   }
 }) as RequestHandler);
 
