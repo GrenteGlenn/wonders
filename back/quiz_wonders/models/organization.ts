@@ -7,51 +7,56 @@ import OrganizationUrl from './organizationurl';
 
 interface OrganizationCreationAttributes extends Optional<OrganizationInterface, 'id'> {}
 
-class Organization extends Model<OrganizationInterface, OrganizationCreationAttributes> implements OrganizationInterface {
+class Organization
+  extends Model<OrganizationInterface, OrganizationCreationAttributes>
+  implements OrganizationInterface
+{
   declare id: number;
-  declare  user_id: number;
-  declare  status_id: number;
-  declare  readonly created_at: Date;
-  declare  updated_at?: Date;
+  declare user_id: number;
+  declare status_id: number;
+  declare readonly created_at: Date;
+  declare updated_at?: Date;
 }
 
-Organization.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
-  },
-  user_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  status_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Status,
-      key: 'id'
+Organization.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    status_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Status,
+        key: 'id'
+      }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false
     }
   },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: false
+  {
+    sequelize: connection,
+    underscored: true,
+    modelName: 'organization',
+    timestamps: false
   }
-}, {
-  sequelize: connection,
-  underscored: true,
-  modelName: 'organization',
-  timestamps: false,
-});
+);
 
 Organization.belongsTo(Status, {
-  foreignKey: 'status_id',
-})
+  foreignKey: 'status_id'
+});
 
-
-export default Organization
+export default Organization;
