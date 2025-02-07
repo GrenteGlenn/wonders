@@ -1,6 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import sequelize from '../config/dbConnection';
-import OrganizationUrlInterface from '../src/interfaces/OrganizationUrlInterface';
+import connection from '../config/dbConnection';
+import OrganizationUrlInterface from '../interfaces/OrganizationUrlInterface';
 import Organization from './organization';
 import Status from './status';
 
@@ -81,14 +81,15 @@ OrganizationUrl.init(
     }
   },
   {
-    sequelize,
+    sequelize: connection,
     underscored: true,
     modelName: 'organization_url',
     timestamps: false
   }
 );
 OrganizationUrl.belongsTo(Organization, {
-  foreignKey: 'organization_id'
+  foreignKey: 'organization_id',
+  as: 'organization'
 });
 OrganizationUrl.belongsTo(Status, {
   foreignKey: 'status_id'
