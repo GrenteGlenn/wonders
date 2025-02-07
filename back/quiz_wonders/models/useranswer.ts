@@ -3,6 +3,7 @@ import connection from '../config/dbConnection';
 import UserAnswerInterface from '../src/interfaces/UserAnswerInterface';
 import QuizLine from './quizline';
 import QuizResponse from './quizresponse';
+import QuizAnswerText from './quizanswertext';
 
 interface UserAnswerCreationAttributes extends Optional<UserAnswerInterface, 'id'> {}
 
@@ -78,4 +79,14 @@ UserAnswer.belongsTo(QuizLine, {
 QuizLine.hasMany(UserAnswer, {
   foreignKey: 'quiz_line_id',
   as: 'user_answers'
+});
+
+QuizAnswerText.hasMany(UserAnswer, {
+  foreignKey: 'quiz_response_id',
+  as: 'userAnswer'
+});
+
+UserAnswer.belongsTo(QuizAnswerText, {
+  foreignKey: 'quiz_answer_text_id',
+  as: 'quiz_answer_texts'
 });

@@ -57,7 +57,7 @@ router.delete('/:id', (async (req, res) => {
   try {
     const responseKind = await responseKindController.remove(parseInt(req.params.id, 10));
     if (responseKind) {
-      res.status(204);
+      res.status(204).json();
     } else {
       res.status(404).json({ code: '404', message: 'entry does not exists' });
     }

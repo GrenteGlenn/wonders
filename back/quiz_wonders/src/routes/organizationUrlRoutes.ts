@@ -83,7 +83,7 @@ router.delete('/:id', (async (req, res) => {
   try {
     const organizationUrl = await organizationUrlController.delete(parseInt(req.params.id, 10));
     if (organizationUrl) {
-      res.status(204).json(organizationUrl);
+      res.status(204).json();
     } else {
       res.status(404).json({ code: '500', message: 'entry does not exists' });
     }

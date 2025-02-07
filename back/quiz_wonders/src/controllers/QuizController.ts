@@ -11,6 +11,8 @@ export default class QuizController {
         {
           model: QuizLine,
           as: 'quiz_lines',
+          separate: true,
+          order: [['step', 'DESC']],
           include: [
             {
               model: ResponseKind,
@@ -20,10 +22,6 @@ export default class QuizController {
               model: QuizAnswerText,
               as: 'quiz_answer_texts'
             },
-            {
-              model: Tag,
-              as: 'tags'
-            }
           ]
         },
         {
@@ -48,6 +46,8 @@ export default class QuizController {
         {
           model: QuizLine,
           as: 'quiz_lines',
+          separate: true,
+          order: [['step', 'DESC']],
           include: [
             {
               model: ResponseKind,
@@ -56,10 +56,6 @@ export default class QuizController {
             {
               model: QuizAnswerText,
               as: 'quiz_answer_texts'
-            },
-            {
-              model: Tag,
-              as: 'tags'
             }
           ]
         },
