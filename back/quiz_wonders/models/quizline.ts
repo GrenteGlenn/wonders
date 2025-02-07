@@ -2,9 +2,7 @@ import { DataTypes, Optional, Model } from 'sequelize';
 import connection from '../config/dbConnection';
 import QuizLineInterface from '../src/interfaces/QuizLineInterface'
 import Quiz from './quiz';
-import TagModel from './tag';
 import ResponseKind from './responsekind';
-import QuizAnswerText from './quizanswertext';
 
 interface QuizLineCreationAttributes extends Optional<QuizLineInterface, 'id'> { }
 
@@ -20,7 +18,7 @@ export default class QuizLine extends Model<QuizLineInterface, QuizLineCreationA
   declare parent?: boolean;
   declare response_kind_id: number;
   declare readonly created_at?: Date | undefined;
-  declare readonly updated_at?: Date | undefined;
+  declare updated_at?: Date | undefined;
 
   toJSON() {
     const values = Object.assign({}, this.get());

@@ -2,6 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import QuizResponseInterface from '../src/interfaces/QuizResponseInterface';
 import Quiz from './quiz';
+import UserAnswer from './useranswer';
 
 interface QuizResponseCreationAttributes extends Optional<QuizResponseInterface , 'id'> { }
 
@@ -48,3 +49,9 @@ QuizResponse.belongsTo(Quiz, {
   foreignKey: 'quiz_id',
   as: 'quiz'
 });
+
+QuizResponse.hasMany(UserAnswer, {
+  foreignKey: 'quiz_response_id',
+  as: 'userAnswer'
+});
+

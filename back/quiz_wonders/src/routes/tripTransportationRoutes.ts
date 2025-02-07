@@ -66,7 +66,7 @@ router.put('/:id', (async (req, res) => {
 router.delete('/:id', (async (req, res) => {
   try {
     await tripTransportationController.delete(parseInt(req.params.id, 10));
-    res.status(204);
+    res.status(204).json();
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }

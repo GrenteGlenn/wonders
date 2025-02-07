@@ -84,11 +84,10 @@ router.delete('/:id', (async (req, res) => {
   try {
     const trip = await tripController.delete(parseInt(req.params.id, 10));
     if (trip) {
-      res.status(204);
+      res.status(204).json();
     } else {
       res.status(404).json({ code: '404', message: 'entry does not exists' });
     }
-    res.status(204).send();
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }
