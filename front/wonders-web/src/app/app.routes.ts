@@ -10,6 +10,7 @@ import { LoginComponent } from '../components/login/login.component';
 import { RegisterComponent } from '../components/register/register.component';
 import { DestinationComponent } from '../components/destination/destination.component';
 import { FormActivitiesComponent } from '../components/form-activities/form-activities.component';
+import { ChoiceGuideComponent } from '../components/choice-guide/choice-guide.component';
 
 export const routes: Routes = [
     {path: "landingPage", component: LandingPageComponent},
@@ -21,7 +22,8 @@ export const routes: Routes = [
     {path: "login", component: LoginComponent},
     {path: "register", component: RegisterComponent},
     {path: "destination", component: DestinationComponent},
-    {path: "activities", component: FormActivitiesComponent}
+    {path: "activities", component: FormActivitiesComponent},
+    {path: 'choice-guide', component: ChoiceGuideComponent},
 ];
 
 

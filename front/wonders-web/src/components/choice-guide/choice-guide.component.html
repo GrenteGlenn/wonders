@@ -1,0 +1,35 @@
+<div class="flex justify-center items-center min-h-screen bg-gray-100">
+    <div class="container mx-auto px-4 ">
+      <h1 class="text-3xl font-bold text-center mb-8">Choose Your Travel Experience</h1>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <!-- Carte Quiz -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer cardTransition"
+             (click)="goQuestion()">
+          <div class="p-6">
+            <div class="flex justify-center mb-4">
+              <lucide-icon name="CircleHelp" class="w-16 h-16 text-blue-500"></lucide-icon>
+            </div>
+            <h2 class="text-2xl font-semibold text-center mb-4">Personnalized Guide</h2>
+            <p class="text-gray-600 text-center">
+              Take our quiz to get a customized travel plan based on your preferences
+            </p>
+          </div>
+        </div>
+  
+        <!-- Carte Plan Trip Direct -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer cardTransition"
+             (click)="goPlanTrip()">
+          <div class="p-6">
+            <div class="flex justify-center mb-4">
+              <lucide-icon name="map" class="w-16 h-16 text-green-500"></lucide-icon>
+            </div>
+            <h2 class="text-2xl font-semibold text-center mb-4">Direct Planning</h2>
+            <p class="text-gray-600 text-center">
+              Start planning your trip directly if you already know your destination
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

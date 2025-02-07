@@ -60,8 +60,9 @@
     <img src="assets/loading.gif" alt="loading proposal">
   </div>
   <div *ngIf="!isProposalLoading" class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div *ngFor="let suggestion of proposalCountries" class="bg-white shadow-lg rounded-lg  cardTransition hover:cursor-pointer">
-      <!-- <img src={{suggestion.img_full}} alt="picture of one country" width="100%" height="100%" class="myImg"> -->
+    <div *ngFor="let suggestion of proposalCountries" class="bg-white shadow-lg rounded-lg  cardTransition hover:cursor-pointer" 
+    (click)="onSelectProposal(suggestion)">
+      <img src={{suggestion.img_full}} alt="picture of one country" width="100%" height="100%" class="myImg">
       <h2 class="text-xl font-semibold  text-center text-black">{{suggestion.pays}}</h2>
     </div>
   </div>

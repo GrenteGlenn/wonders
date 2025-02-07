@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 
 
@@ -11,6 +12,17 @@ import { LucideAngularModule } from 'lucide-angular';
   templateUrl: './plan-trip.component.html',
   styleUrl: './plan-trip.component.css'
 })
-export class PlanTipComponent {
+export class PlanTipComponent implements OnInit {
+  cityImage: string = '';
+  cityName: string = '';
+  
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.cityImage = params['image'];
+      this.cityName = params['city'];
+    });
+  }
 
 }

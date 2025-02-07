@@ -30,8 +30,8 @@ export class NavbarComponent implements OnInit {
     );
   }
 
-  goPlanTrip() {
-    this.router.navigate(['planTrip']);
+  goChoiceGuide() {
+    this.router.navigate(['choice-guide']);
   }
   goHomePage() {
     this.router.navigate(['home']);

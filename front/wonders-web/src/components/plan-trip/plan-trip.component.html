@@ -1,10 +1,11 @@
 
 <div class="w-7/12 mx-auto py-10">
-    <h1 class="text-3xl font-bold mb-2">Your trip to Tulum</h1>
-    <p class="text-gray-600 mb-4 ">Mar 28 - Apr 4 </p>
+    <h1 class="text-3xl font-bold mb-2">Your trip to {{cityName}}</h1>
+    <!-- A voir pour la date de voyage -->
+    <!-- <p class="text-gray-600 mb-4 ">Mar 28 - Apr 4 </p> -->
     <div class="relative rounded-lg overflow-hidden">
-      <img src="assets/images/montagne.jpg" class="w-full h-96 object-cover">
-      <div class="absolute inset-0 flex items-center justify-center">
+        <img [src]="cityImage" class="w-full h-96 object-cover">
+        <div class="absolute inset-0 flex items-center justify-center">
           <div class="text-white text-center justify-center px-8">
               <p class="text-4xl w-full font-bold flex mb-4 ">
                   Get ready to explore the ancient ruins and beautiful beaches of . Here are some tips to help you make the most of your trip.
