@@ -12,7 +12,7 @@ export default class QuizController {
           model: QuizLine,
           as: 'quiz_lines',
           separate: true,
-          order: [['step', 'DESC']],
+          order: [['step', 'ASC']],
           include: [
             {
               model: ResponseKind,
@@ -47,7 +47,7 @@ export default class QuizController {
           model: QuizLine,
           as: 'quiz_lines',
           separate: true,
-          order: [['step', 'DESC']],
+          order: [['step', 'ASC']],
           include: [
             {
               model: ResponseKind,
