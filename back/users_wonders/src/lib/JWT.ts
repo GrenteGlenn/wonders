@@ -1,15 +1,9 @@
 import User from '../../models/user';
 import * as jwt from 'jsonwebtoken';
+import { JwtPayload } from '../interfaces/Global';
 
 const SECRET_TOKEN = process.env.DB_NAME;
 const SECRET = process.env.DB_NAME;
-
-interface Data {
-  userId: number;
-  email: string;
-  iat: number;
-  exp: number;
-}
 
 export function createJWT(user: User) {
   if (SECRET !== undefined) {
@@ -28,7 +22,8 @@ export function createJWT(user: User) {
 
 export function updateJWT(token: string) {
   if (SECRET !== undefined) {
-    const decode = jwt.verify(token, SECRET) as Data;
+    const decode = jwt.verify(token, SECRET) as JwtPayload;
+
     if (decode) {
       return jwt.sign(
         {
