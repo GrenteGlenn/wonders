@@ -4,9 +4,11 @@ export default class TripHotelController {
   async list() {
     return await TripHotel.findAll();
   }
+
   async one(id: number) {
     return await TripHotel.findByPk(id);
   }
+
   async new(
     trip_city_id: number,
     name: string,
@@ -17,9 +19,9 @@ export default class TripHotelController {
     created_at: Date,
     updated_at: Date
   ) {
-    const tripHotel = await TripHotel.create({ trip_city_id, name, from, price, to, url, created_at, updated_at });
-    return tripHotel;
+    return await TripHotel.create({ trip_city_id, name, from, price, to, url, created_at, updated_at });
   }
+
   async update(
     id: number,
     trip_city_id: number,
@@ -43,6 +45,7 @@ export default class TripHotelController {
       return tripHotel;
     }
   }
+
   async delete(id: number) {
     const tripHotel = await TripHotel.findByPk(id);
     return tripHotel?.destroy();

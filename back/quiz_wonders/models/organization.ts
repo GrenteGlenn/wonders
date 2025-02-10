@@ -1,9 +1,7 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import OrganizationInterface from '../interfaces/OrganizationInterface';
 import Status from './status';
-import UserAnswer from './useranswer';
-import OrganizationUrl from './organizationurl';
 
 interface OrganizationCreationAttributes extends Optional<OrganizationInterface, 'id'> {}
 

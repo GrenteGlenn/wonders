@@ -18,7 +18,6 @@ router.get('/:id', (async (req, res) => {
   try {
     const tripDay = await tripDayController.one(parseInt(req.params.id, 10));
     tripDay ? res.status(200).json(tripDay) : res.status(404).json({ message: 'No trip trip city found' });
-    res.status(200).json(tripDay);
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }

@@ -5,62 +5,64 @@ import QuizLine from './quizline';
 import Tag from './tag';
 import QuizInterface from '../src/interfaces/QuizInterface';
 
-interface QuizCreationAttributes extends Optional<QuizInterface, 'id'> {
-}
+interface QuizCreationAttributes extends Optional<QuizInterface, 'id'> {}
 
 class Quiz extends Model<QuizInterface, QuizCreationAttributes> implements QuizInterface {
   declare id: number;
   declare name: string;
   declare tag_id: number;
-  declare readonly createdAt: Date;
+  declare readonly created_at: Date;
   declare updated_at: Date;
 
-  toJSON() {
-    const values = Object.assign({}, this.get());
-    delete values.tag_id;
-    delete values.created_at;
-    delete values.updated_at;
-    return values;
-  }
+  // toJSON() {
+  //   const values = Object.assign({}, this.get());
+  //   delete values.tag_id;
+  //   delete values.created_at;
+  //   delete values.updated_at;
+  //   return values;
+  // }
 }
 
-Quiz.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
-  },
-  tag_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Tag,
-      key: 'id'
+Quiz.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
+    tag_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Tag,
+        key: 'id'
+      }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW
     }
   },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW
+  {
+    sequelize: connection,
+    underscored: true,
+    modelName: 'Quiz',
+    tableName: 'quizzes',
+    timestamps: false
   }
-}, {
-  sequelize: connection,
-  underscored: true,
-  modelName: 'Quiz',
-  tableName: 'quizzes',
-  timestamps: false
-});
+);
 
 QuizLine.belongsTo(Quiz, {
   foreignKey: 'quiz_id',

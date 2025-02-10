@@ -3,7 +3,7 @@ import connection from '../config/dbConnection';
 import TripHotelInterface from '../src/interfaces/TripHotelInterface';
 import TripCity from './tripcity';
 
-interface TripHotelCreationAttributes extends Optional<TripHotelInterface, 'id'> { }
+interface TripHotelCreationAttributes extends Optional<TripHotelInterface, 'id'> {}
 
 class TripHotel extends Model<TripHotelInterface, TripHotelCreationAttributes> implements TripHotelInterface {
   declare id: number;
@@ -22,61 +22,64 @@ class TripHotel extends Model<TripHotelInterface, TripHotelCreationAttributes> i
   }
 }
 
-TripHotel.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
+TripHotel.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    trip_city_id: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    price: {
+      type: DataTypes.NUMBER,
+      allowNull: false
+    },
+    from: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    to: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    }
   },
-  trip_city_id: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  price: {
-    type: DataTypes.NUMBER,
-    allowNull: false
-  },
-  from: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  to: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  url: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: true
+  {
+    sequelize: connection,
+    underscored: true,
+    modelName: 'TripHotel',
+    tableName: 'trip_hotels',
+    timestamps: false
   }
-}, {
-  sequelize: connection,
-  underscored: true,
-  modelName: 'TripHotel',
-  tableName: 'trip_hotels',
-  timestamps: false,
-});
+);
 
 TripHotel.belongsTo(TripCity, {
   foreignKey: 'trip_city_id',
-  as: 'trip_city',
+  as: 'trip_city'
 });
 
 TripCity.hasMany(TripHotel, {
   foreignKey: 'trip_city_id',
-  as: 'trip_city',
+  as: 'trip_city'
 });
 
 export default TripHotel;
