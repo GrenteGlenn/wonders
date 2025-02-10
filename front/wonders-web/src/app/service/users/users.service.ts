@@ -17,7 +17,7 @@ export class UsersService {
   ) { }
 
   getUserInfo(){
-    return this.http.get<User>(`${this.API_URL}/users/me`)
+    return this.http.get<User>(`${this.API_URL}/api/users/me`)
   }
 
   // getUserInfoByUserID(UserID: number) {

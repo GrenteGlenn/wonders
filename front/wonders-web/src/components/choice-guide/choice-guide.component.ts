@@ -14,7 +14,7 @@ import { LucideAngularModule } from 'lucide-angular';
 })
 export class ChoiceGuideComponent {
 
-  constructor(private router: Router) {}
+  constructor(public router: Router) {}
 
   goQuestion() {
     this.router.navigate(['question']);

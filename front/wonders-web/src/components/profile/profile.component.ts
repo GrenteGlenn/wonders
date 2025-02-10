@@ -4,6 +4,10 @@ import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import {Dialog, DIALOG_DATA, DialogModule} from '@angular/cdk/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { User } from '../../app/model/User';
+import { Router } from '@angular/router';
+import { AuthentificationService } from '../../app/service/auth/authentification.service';
+import { UsersService } from '../../app/service/users/users.service';
 
 interface r {
   image: string,
@@ -26,13 +30,20 @@ interface r {
 export class ProfileComponent {
   dialog = inject(Dialog);
 
-  pseudo: string = 'Stacy';
-  email: string = 'stacys@gmail.com';
-  username: string = 'Stacy';
-  surname: string = 'Smith';
-  gender: string = 'Female';
-  age: number = 30;
-  country: string = 'United States';
+
+  user: User | null = null;
+
+  constructor(private router: Router, private _authService: AuthentificationService, private usersService: UsersService) {}
+
+  ngOnInit(): void {
+    // this._authService.isAuthenticated$.subscribe(
+    //   isAuth => this.isAuthenticated = isAuth
+    // );
+
+    this.loadUserInfo();
+
+  }
+  
 
   history: r[] = [
     {
@@ -84,6 +95,20 @@ export class ProfileComponent {
     this.dialog.open(ConfirmDialogComponent, {
       height: '400px',
       width: '600px'
+    });
+  }
+
+
+  loadUserInfo() {
+    this.usersService.getUserInfo().subscribe({
+      next: (userData) => {
+        this.user = userData;
+        console.log(this.user, "users");
+        
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des informations utilisateur:', error);
+      }
     });
   }
 }

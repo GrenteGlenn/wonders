@@ -20,36 +20,18 @@
 
 <div class="w-7/12 mx-auto py-10">
     <h1 class="text-3xl font-bold mb-2">Activities</h1>
-    <div class=" overflow-hidden grid gap-4 md:grid-cols-4">
-        <div>
-            <img src="assets/images/tulumPlage.jpg" class="w-64 h-40 object-cover rounded-md ">
-            <span class="flex-col">Beach day at Playa Paraiso</span>
-            <div>
-                <span class="text-gray-600">3/29</span>
-            </div>
-        </div>
-        <div>
-            <img src="assets/images/ruine.avif" class="w-64 h-40 object-cover rounded-md ">
-            <span class="flex-col">Visit the Tulum Ruins</span>
-            <div>
-                <span class="text-gray-600">3/30</span>
-            </div>
-        </div>  <div>
-            <img src="assets/images/tulumGrotte.avif" class="w-64 h-40 object-cover rounded-md ">
-            <span class="flex-col">Swim in Cenote Dos Ojos</span>
-            <div>
-                <span class="text-gray-600">3/31</span>
-            </div>
-        </div>  <div>
-            <img src="assets/images/burritos.jpg" class="w-64 h-40 object-cover rounded-md ">
-            <span class="flex-col">Eat at Burrito Amor</span>
-            <div>
-                <span class="text-gray-600">3/32</span>
-            </div>
+    <div class="overflow-hidden grid gap-4 md:grid-cols-4">
+        <div (click)="openModal()" class="card border-4 border-dotted rounded-lg h-44 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+            <lucide-icon name="plus" class="text-slate-600 mb-2 w-8 h-8"></lucide-icon>
+            <span class="text-slate-600 text-center">Selectionner vos activitées</span>
         </div>
     </div>
-   
 </div>
+
+<app-modal-activity 
+[(isOpen)]="isModalOpen"
+(activityAdded)="onActivityAdded($event)">
+</app-modal-activity>
 
 <div class="w-7/12 mx-auto py-10">
     <h1 class="text-3xl font-bold mb-2">Places to stay</h1>

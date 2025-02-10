@@ -11,6 +11,8 @@ import { RegisterComponent } from '../components/register/register.component';
 import { DestinationComponent } from '../components/destination/destination.component';
 import { FormActivitiesComponent } from '../components/form-activities/form-activities.component';
 import { ChoiceGuideComponent } from '../components/choice-guide/choice-guide.component';
+import { DirectPlanningComponent } from '../components/direct-planning/direct-planning.component';
+import { TripDetailsComponent } from '../components/trip-details/trip-details.component';
 
 export const routes: Routes = [
     {path: "landingPage", component: LandingPageComponent},
@@ -24,6 +26,8 @@ export const routes: Routes = [
     {path: "destination", component: DestinationComponent},
     {path: "activities", component: FormActivitiesComponent},
     {path: 'choice-guide', component: ChoiceGuideComponent},
+    { path: 'direct-planning', component: DirectPlanningComponent },
+    { path: 'trip-details', component: TripDetailsComponent }
 ];
 
 

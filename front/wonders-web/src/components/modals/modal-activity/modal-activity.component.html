@@ -1,0 +1,97 @@
+<div *ngIf="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6 w-7/12">
+      <div class="items-center justify-center flex mb-4">
+        <h2 class="text-xl font-semibold ">Ajouter une activité</h2>
+        <!-- <button (click)="close()" class="text-black hover:text-gray-700">
+          <lucide-icon name="x" class="w-6 h-6"></lucide-icon>
+        </button> -->
+      </div>
+
+      <!-- Stepper -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between relative">
+          <div *ngFor="let step of steps; let i = index" 
+               class="flex flex-col items-center flex-1">
+            <div [class]="'w-8 h-8 rounded-full flex items-center justify-center ' + 
+                         (currentStep >= i ? 'bg-blue-500 text-white' : 'bg-gray-200')">
+              {{i + 1}}
+            </div>
+            <span class="text-xs mt-1">{{step}}</span>
+            <!-- Ligne de connexion -->
+            <div *ngIf="i < steps.length - 1" 
+                 [class]="'absolute h-0.5 top-4 -z-10 ' + 
+                         (currentStep > i ? 'bg-blue-500' : 'bg-gray-200')"
+                 [style.left]="(100 * i / (steps.length - 1) + 12) + '%'"
+                 [style.width]="(100 / (steps.length - 1) - 24) + '%'">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 1: Sélection de la catégorie -->
+      <div *ngIf="currentStep === 0" class="mb-6">
+        <h3 class="text-lg font-medium mb-4">Choisissez une catégorie</h3>
+        <div class="grid grid-cols-2 gap-4">
+            <div *ngFor="let category of categories"
+                (click)="selectCategory(category)"
+                [class]="'p-4 border rounded-lg cursor-pointer transition-all ' + 
+                        (selectedCategory?.id === category.id ? 'border-blue-500 bg-blue-50' : 'hover:border-gray-400')">
+                <div class="flex flex-col items-center">
+                    <!-- <img [src]="selectPicture(picture)" 
+                            class="w-16 h-16 object-cover rounded-lg mb-2"
+                            > -->
+                    <span>{{category.name}}</span>
+                </div>
+             </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Détails de l'activité -->
+      <div *ngIf="currentStep === 1" class="mb-6">
+        <div class="mb-4">
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+          <input type="text" id="name" name="name" [(ngModel)]="activityName"
+                 class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 required>
+        </div>
+
+        <div class="mb-4">
+          <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+          <input type="date" id="date" name="date" [(ngModel)]="activityDate"
+                 class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 required>
+        </div>
+      </div>
+
+      <!-- Step 3: Upload d'image -->
+      <div *ngIf="currentStep === 2" class="mb-6">
+        <div class="mb-4">
+          <label for="image" class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+          <input type="file" id="image" name="image" (change)="onFileSelected($event)"
+                 class="w-full p-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                 accept="image/*">
+        </div>
+      </div>
+
+      <!-- Navigation buttons -->
+      <div class="flex justify-between mt-6">
+        <button *ngIf="currentStep > 0"
+                (click)="previousStep()"
+                class="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+          Précédent
+        </button>
+        <div class="flex-1"></div>
+        <button *ngIf="currentStep < steps.length - 1"
+                [disabled]="!canProceed"
+                (click)="nextStep()"
+                class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed">
+          Suivant
+        </button>
+        <button *ngIf="currentStep === steps.length - 1"
+                (click)="onSubmit()"
+                class="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
+          Terminer
+        </button>
+      </div>
+    </div>
+</div>

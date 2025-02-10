@@ -1,9 +1,9 @@
 <div class="w-7/12 mx-auto py-10">
   <div class="grid gap-4 auto-cols-max grid-flow-auto">
-      <img class="rounded-full row-span-5 col-start-1" src="assets/images/profile.png" alt="profile image" width="128" height="128">
+      <img class="rounded-full row-span-5 col-start-1" src="https://github.com/shadcn.png" alt="profile image" width="128" height="128">
       <div class="row-start-2 col-start-2 row-span-3">
-        <p class="text-2xl font-semibold">{{ pseudo }}</p>
-        <p class="text-base font-light text-gray-500">{{ email }}</p>
+        <p class="text-2xl font-semibold">{{ user?.first_name }}</p>
+        <p class="text-base font-light text-gray-500">{{ user?.email }}</p>
       </div>
       <button class="col-start-12 row-start-2 ml-96 bg-gray-200 hover:bg-gray-300 rounded-lg px-16 py-2 text-sm font-medium">Edit profile</button>
   </div>
@@ -14,10 +14,10 @@
     <p class="font-semibold text-2xl">Personal Details</p>
   </div>
   <div class="grid auto-cols-max grid-flow-auto gap-x-4 mb-4">
-    <img src="assets/images/profile2.png" alt="second image profile" class="rounded-full row-span-3 col-start-1" width="56" height="56">
+    <img src="https://github.com/shadcn.png" alt="second image profile" class="rounded-full row-span-3 col-start-1" width="56" height="56">
     <div class="row-start-2 col-start-2">
-      <p class="text-base">{{ username }} {{ surname }}</p>
-      <p class="text-sm font-light text-gray-500">{{ gender }}, age {{ age }}</p>
+      <p class="text-base">{{ user?.first_name }} {{ user?.last_name }}</p>
+      <!-- <p class="text-sm font-light text-gray-500">{{ gender }}, age {{ age }}</p> -->
     </div>
   </div>
   <div class="grid auto-cols-max grid-flow-auto gap-x-4 mb-4">
@@ -26,7 +26,7 @@
     </div>
     <div class="row-start-2 col-start-2">
       <p class="text-base">Location</p>
-      <p class="text-sm font-light text-gray-500">{{ country }}</p>
+      <p class="text-sm font-light text-gray-500">{{ user?.language_id }}</p>
     </div>
   </div>
   <div class="grid auto-cols-max grid-flow-auto gap-x-4 mb-4">
@@ -35,7 +35,7 @@
     </div>
     <div class="row-start-2 col-start-2">
       <p class="text-base">Email</p>
-      <p class="text-sm font-light text-gray-500">{{ email }}</p>
+      <p class="text-sm font-light text-gray-500">{{ user?.email }}</p>
     </div>
   </div>
 </div>

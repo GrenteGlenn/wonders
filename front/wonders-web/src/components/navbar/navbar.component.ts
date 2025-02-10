@@ -5,6 +5,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { AuthentificationService } from '../../app/service/auth/authentification.service';
+import { UsersService } from '../../app/service/users/users.service';
+import { User } from '../../app/model/User';
 
 @Component({
   selector: 'app-navbar',
@@ -21,13 +23,30 @@ import { AuthentificationService } from '../../app/service/auth/authentification
 export class NavbarComponent implements OnInit {
   isMenuOpen = false;
   isAuthenticated = false;
+  user: User | null = null;
 
-  constructor(private router: Router, private _authService: AuthentificationService) {}
+  constructor(private router: Router, private _authService: AuthentificationService, private usersService: UsersService) {}
 
   ngOnInit(): void {
     this._authService.isAuthenticated$.subscribe(
       isAuth => this.isAuthenticated = isAuth
     );
+
+    this.loadUserInfo();
+
+  }
+
+  loadUserInfo() {
+    this.usersService.getUserInfo().subscribe({
+      next: (userData) => {
+        this.user = userData;
+        console.log(this.user, "users");
+        
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des informations utilisateur:', error);
+      }
+    });
   }
 
   goChoiceGuide() {

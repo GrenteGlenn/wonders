@@ -8,11 +8,21 @@
     }
   },
   "/ai-api": {
-    "target": "http://localhost:3000/api",
+    "target": "http://localhost:3000",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
       "^/ai-api": ""
     }
+  },
+ "/activity-api": {
+    "target": "http://localhost:3001/api", 
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/activity-api": "" 
+    }
   }
+  
+
 }

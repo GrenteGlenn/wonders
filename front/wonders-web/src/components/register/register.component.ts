@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
     last_name: '',
     birth_date: new Date(),
     country: '',
-    language_id: 1
+    language_id: 0
   }
 
   constructor(

@@ -1,0 +1,33 @@
+<div class="w-7/12 mx-auto py-10">
+    <div *ngIf="!selectedCountry" class="text-center mb-8">
+      <h1 class="text-3xl font-bold mb-6">Select Your Destination</h1>
+      <div class="relative w-full max-w-md mx-auto">
+        <select 
+          [(ngModel)]="selectedCountry"
+          (ngModelChange)="onCountrySelect($event)"
+          class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+          <option value="" disabled selected>Choose your destination</option>
+          <option *ngFor="let country of countries" [value]="country.name">
+            {{country.name}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="selectedCountry">
+      <h1 class="text-3xl font-bold mb-2">Your trip to {{selectedCountry}}</h1>
+      <div class="relative rounded-lg overflow-hidden">
+        <img [src]="countryImage" class="w-full h-96 object-cover">
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="text-white text-center justify-center px-8 bg-black bg-opacity-30">
+            <p class="text-4xl w-full font-bold mb-4">
+              Get ready to explore {{selectedCountry}}. {{countryDescription}}
+            </p>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-10 rounded-full float-start">
+              View itinerary
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
