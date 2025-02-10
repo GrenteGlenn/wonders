@@ -19,7 +19,7 @@ interface Ville {
 interface Result {
   pays: string;
   city: string;
-  img_full: string;
+  img_full: string | null;
 }
 
 const router = Router();
@@ -79,12 +79,10 @@ router.post('/ai_get_city', (async (req, res) => {
 
   try {
     const body = <Ville>req.body;
-    console.log(body);
 
     const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ... et sans texte et saut de ligne`;
 
     const cityData = await countryController.getDataFromOpenAI(prompt);
-    console.log(cityData);
     const arrayCity = cityData?.split('}');
     if (arrayCity !== undefined)
       for (const item of arrayCity) {
@@ -95,18 +93,25 @@ router.post('/ai_get_city', (async (req, res) => {
         }
         const city = data[0].split(':');
         const country = data[1].split(':');
-        const image = await fetchImages(city[1], 'city');
-        let value;
-        if (image) value = image.items;
-        if (value)
-          result = [
-            {
-              pays: country[1],
-              city: city[1],
-              img_full: value[0].link
-            },
-            ...result
-          ];
+        let image = null;
+        await fetchImages(city[1], 'city')
+          .then((e) => {
+            if (e != undefined) {
+              image = e.items[0].link;
+            }
+          })
+          .catch((error) => {
+            console.error('Error in /ai route:', error);
+            res.status(404).json(error);
+          });
+        result = [
+          {
+            pays: country[1].trim(),
+            city: city[1].trim(),
+            img_full: image
+          },
+          ...result
+        ];
       }
     res.json({ data: result });
   } catch (error) {

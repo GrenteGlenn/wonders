@@ -20,5 +20,6 @@ export async function fetchImages(target: string = 'France', type: string) {
     return data;
   } catch (error) {
     console.error('Erreur lors de la récupération des images:', error);
+    return null;
   }
 }
