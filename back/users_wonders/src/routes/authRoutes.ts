@@ -70,11 +70,13 @@ router.post('/register', (async (req, res) => {
     if (check.score === 1) return res.json(check.feedback);
     body.password = await encryptPassword(body.password);
     const client = await authController.getOneByEmail(body.email);
-    if (client) return res.status(403).json('client already registered');
-    else await authController.create(body);
-    res.status(201).json('client created successfully.');
+    if (client) {
+      return res.status(403).json('client already registered');
+    }
+    const user = await authController.create(body);
+    res.status(201).json({ message: 'client created successfully.', user: user });
   } catch (error) {
-    res.status(401).json('Error! Something went wrong.');
+    res.status(500).json(error);
   }
 }) as RequestHandler);
 
