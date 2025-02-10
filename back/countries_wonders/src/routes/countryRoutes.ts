@@ -20,6 +20,8 @@ interface Pays {
   paysage: string;
   activity: Array<string>;
   populaire: boolean;
+  duration: number;
+  budget: number;
 }
 
 interface Result {
@@ -107,10 +109,11 @@ router.post('/ai_get_country', (async (req, res) => {
       Qui a des paysage de type ${body.paysage}. 
       Qui propose ce type d'activité : ${body.activity.join(', ')}.` +
       populaire +
-      `Le réponse ne doit être une liste de pays en format d'un array comme cette exemple [pays1, pays2 ...] sans texte`;
+      `le prix par semaine ne doit pas depasser les ${body.budget} euros pour 7 jours et la durée ne doit pas depasser les ${body.duration} jours.
+      Le réponse ne doit être une liste de pays en format d'un array comme cette exemple [pays1, pays2 ...] sans texte`;
 
     const countryData = await countryController.getDataFromOpenAI(prompt);
-    console.log(countryData);
+
     const arrayCountry = countryData?.replace('[', '').replace(']', '').split(',');
     if (arrayCountry !== undefined)
       for (const element of arrayCountry) {
