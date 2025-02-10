@@ -31,7 +31,7 @@ TripHotel.init(
       allowNull: false
     },
     trip_city_id: {
-      type: DataTypes.DATE,
+      type: DataTypes.INTEGER,
       allowNull: false
     },
     name: {
