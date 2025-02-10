@@ -69,7 +69,7 @@ router.post('/register', (async (req, res) => {
     const check = checkPassword(body.password);
     if (check.score === 1) return res.json(check.feedback);
     body.password = await encryptPassword(body.password);
-    const client = await authController.getOneByEmail(body.email);;
+    const client = await authController.getOneByEmail(body.email);
     if (client) {
       return res.status(403).json('client already registered');
     }
