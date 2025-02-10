@@ -33,13 +33,13 @@ export default class QuizLineController {
         {
           model: Quiz,
           as: 'quiz'
-        },
-        {
-          model: QuizLine,
-          as: 'ParentQuizLine',
-          required: false,
-          foreignKey: 'parent'
         }
+        // {
+        //   model: QuizLine,
+        //   as: 'ParentQuizLine',
+        //   required: false,
+        //   foreignKey: 'parent'
+        // }
       ]
     });
   }

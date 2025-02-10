@@ -21,7 +21,7 @@ export default class QuizController {
             {
               model: QuizAnswerText,
               as: 'quiz_answer_texts'
-            },
+            }
           ]
         },
         {
@@ -69,13 +69,13 @@ export default class QuizController {
 
   async getQuizWithQuestions(quizId: number) {
     const quiz = await Quiz.findOne({
-      where: { id: quizId },
-      include: [
-        {
-          model: QuizLine,
-          as: 'quizLines'
-        }
-      ]
+      where: { id: quizId }
+      // include: [
+      //   {
+      //     model: QuizLine,
+      //     as: 'quizLines'
+      //   }
+      // ]
     });
 
     return quiz;

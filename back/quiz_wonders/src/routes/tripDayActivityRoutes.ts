@@ -20,7 +20,6 @@ router.get('/:id', (async (req, res) => {
     tripDayActivity
       ? res.status(200).json(tripDayActivity)
       : res.status(404).json({ message: 'No trip trip city found' });
-    res.status(200).json(tripDayActivity);
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }
