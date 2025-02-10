@@ -99,3 +99,4 @@ lint_back_activities:
     when: on_success
     paths:
       - "back/activities_wonders/node_modules"
+
