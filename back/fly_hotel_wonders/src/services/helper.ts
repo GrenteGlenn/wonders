@@ -1,3 +1,1 @@
-export default class CountryHelper {
-    
-}
+export default class CountryHelper {}

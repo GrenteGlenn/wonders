@@ -1,8 +1,7 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../config/dbConnection';
+import { DataTypes, Optional, Model } from 'sequelize';
+import connection from '../config/dbConnection';
 import QuizLineInterface from '../src/interfaces/QuizLineInterface';
 import Quiz from './quiz';
-import TagModel from './tag';
 import ResponseKind from './responsekind';
 
 interface QuizLineCreationAttributes extends Optional<QuizLineInterface, 'id'> {}
@@ -18,20 +17,19 @@ export default class QuizLine
   declare quiz_id?: number;
   declare step?: number;
   declare is_required: boolean;
-  declare tag_id: number | undefined;
-  declare response_kind_id: number | undefined;
+  declare mutiple_type_answer: boolean;
+  declare parent?: boolean;
+  declare response_kind_id: number;
   declare readonly created_at?: Date | undefined;
-  declare readonly updated_at?: Date | undefined;
+  declare updated_at?: Date | undefined;
 
-  toJSON() {
-    const values = Object.assign({}, this.get());
-    delete values.created_at;
-    delete values.updated_at;
-    delete values.quiz_id;
-    delete values.tag_id;
-    delete values.response_kind_id;
-    return values;
-  }
+  // toJSON() {
+  //   const values = Object.assign({}, this.get());
+  //   delete values.created_at;
+  //   delete values.updated_at;
+  //   delete values.quiz_id;
+  //   return values;
+  // }
 }
 
 QuizLine.init(
@@ -47,6 +45,10 @@ QuizLine.init(
       allowNull: false,
       unique: true
     },
+    mutiple_type_answer: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false
+    },
     is_boolean: {
       type: DataTypes.BOOLEAN,
       allowNull: false
@@ -59,6 +61,14 @@ QuizLine.init(
       type: DataTypes.BOOLEAN,
       allowNull: false
     },
+    parent: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: QuizLine,
+        key: 'id'
+      }
+    },
     is_required: {
       type: DataTypes.BOOLEAN,
       allowNull: false
@@ -68,14 +78,6 @@ QuizLine.init(
       allowNull: false,
       references: {
         model: Quiz,
-        key: 'id'
-      }
-    },
-    tag_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: TagModel,
         key: 'id'
       }
     },
@@ -99,7 +101,7 @@ QuizLine.init(
     }
   },
   {
-    sequelize,
+    sequelize: connection,
     underscored: true,
     modelName: 'QuizLine',
     tableName: 'quiz_lines',
@@ -107,14 +109,17 @@ QuizLine.init(
   }
 );
 
-TagModel.hasMany(QuizLine, {
-  foreignKey: 'quiz_id'
-});
-
-QuizLine.belongsTo(TagModel, {
-  foreignKey: 'tag_id'
-});
-
 QuizLine.belongsTo(ResponseKind, {
-  foreignKey: 'response_kind_id'
+  foreignKey: 'response_kind_id',
+  as: 'response_kind'
+});
+
+QuizLine.hasMany(QuizLine, {
+  as: 'childrens',
+  foreignKey: 'parent'
+});
+
+QuizLine.belongsTo(QuizLine, {
+  as: 'Parent',
+  foreignKey: 'parent'
 });

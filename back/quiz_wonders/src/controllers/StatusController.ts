@@ -3,6 +3,8 @@ import Status from '../../models/status';
 export default class StatusController {
   async list() {
     const status = await Status.findAll();
+    console.log(status);
+
     return status;
   }
 
@@ -16,10 +18,11 @@ export default class StatusController {
     return status;
   }
 
-  async update(id: number, name: string) {
+  async update(id: number, name: string, updated_at: Date) {
     const status = await Status.findByPk(id);
     if (status) {
       status.name = name;
+      status.updated_at = updated_at;
       await status.save();
     }
     return status;

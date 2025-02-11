@@ -13,10 +13,11 @@ export default class ResponseKindController {
     return await ResponseKind.create({ type: type, created_at, updated_at });
   }
 
-  async update(id: number, type: string) {
+  async update(id: number, type: string, updated_at: Date) {
     const responseKind = await ResponseKind.findByPk(id);
     if (responseKind) {
       responseKind.type = type;
+      responseKind.updated_at = updated_at;
       await responseKind.save();
     }
     return responseKind;

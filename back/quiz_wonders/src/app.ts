@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
-import countryRoutes from './routes/countryRoutes';
 import statusRoutes from './routes/statusRoutes';
 import tagRoutes from './routes/tagRoutes';
 import quizRoutes from './routes/quizRoutes';
@@ -11,6 +10,12 @@ import responseKindRoutes from './routes/responseKindRoutes';
 import quizResponseRoutes from './routes/quizResponseRoutes';
 import userAnswerRoutes from './routes/userAnswerRoutes';
 import quizAnswerTextRoutes from './routes/quizAnswerTextRoutes';
+import tripRoutes from './routes/tripRoutes';
+import tripCityRoutes from './routes/tripCityRoutes';
+import tripDayRoutes from './routes/tripDayRoutes';
+import tripHotelRoutes from './routes/tripHotelRoutes';
+import tripDayActivityRoutes from './routes/tripDayActivityRoutes';
+import tripTransportationRoutes from './routes/tripTransportationRoutes';
 
 dotenv.config();
 
@@ -20,7 +25,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Routes
-app.use('/api/countries', countryRoutes);
 app.use('/api/status', statusRoutes);
 app.use('/api/tags', tagRoutes);
 app.use('/api/quiz', quizRoutes);
@@ -31,6 +35,13 @@ app.use('/api/response-kind', responseKindRoutes);
 app.use('/api/user-answer', userAnswerRoutes);
 app.use('/api/quiz-response', quizResponseRoutes);
 app.use('/api/quiz-answer-text', quizAnswerTextRoutes);
+
+app.use('/api/trip-transportation', tripTransportationRoutes);
+app.use('/api/trip', tripRoutes);
+app.use('/api/trip-city', tripCityRoutes);
+app.use('/api/trip-day', tripDayRoutes);
+app.use('/api/trip-day-activity', tripDayActivityRoutes);
+app.use('/api/trip-hotel', tripHotelRoutes);
 
 // Route par défaut
 app.get('/', (req: Request, res: Response) => {

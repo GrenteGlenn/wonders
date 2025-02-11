@@ -1,26 +1,34 @@
 import UserAnswer from '../../models/useranswer';
+interface UpdatedFields {
+  quiz_answer_text_id?: number;
+  quiz_line_id: number;
+  quiz_response_id: number;
+  boolean?: boolean;
+  text?: string;
+  updated_at: Date;
+}
+
+type UserAnswerWithIndex = UserAnswer & { [key: string]: unknown };
+
+interface UpdatedFields {
+  response?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
 
 export default class UserAnswerController {
   async list() {
-    try {
-      return await UserAnswer.findAll();
-    } catch (error) {
-      return console.log(error);
-    }
+    return await UserAnswer.findAll();
   }
 
   async one(id: number) {
-    try {
-      return await UserAnswer.findByPk(id);
-    } catch (error) {
-      return console.log(error);
-    }
+    return await UserAnswer.findByPk(id);
   }
 
   async new(
     quiz_answer_text_id: number | undefined,
-    quiz_line_id: number | undefined,
-    quiz_response_id: number | undefined,
+    quiz_line_id: number,
+    quiz_response_id: number,
     boolean: boolean | undefined,
     text: string | undefined,
     created_at: Date,
@@ -37,34 +45,29 @@ export default class UserAnswerController {
         updated_at
       });
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
 
-  async update(
-    id: number,
-    quiz_answer_text_id: number | undefined,
-    quiz_line_id: number | undefined,
-    quiz_response_id: number | undefined,
-    boolean: boolean | undefined,
-    text: string | undefined
-  ) {
+  /* eslint-disable */
+  async update(id: number, updatedFields: UpdatedFields) {
     try {
-      const userAnswer = await UserAnswer.findByPk(id);
+      const userAnswer = await UserAnswer.findByPk(id) as UserAnswerWithIndex;
       if (userAnswer) {
-        userAnswer.quiz_answer_text_id = quiz_answer_text_id;
-        userAnswer.quiz_line_id = quiz_line_id;
-        userAnswer.quiz_response_id = quiz_response_id;
-        userAnswer.boolean = boolean;
-        userAnswer.text = text;
+        Object.keys(updatedFields).forEach((key) => {
+          const value = updatedFields[key as keyof UpdatedFields];
+          if (value !== undefined) {
+            userAnswer[key] = value;
+          }
+        });
         await userAnswer.save();
       }
       return userAnswer;
     } catch (error) {
-      return console.log(error);
+      throw new Error(`Failed to update user answer: ${error}`);
     }
   }
+  /* eslint-enable */
 
   async delete(id: number) {
     try {

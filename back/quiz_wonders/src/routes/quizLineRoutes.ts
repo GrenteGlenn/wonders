@@ -8,8 +8,12 @@ const router = Router();
 const quizLineController = new QuizLineController();
 
 router.get('/', (async (req, res) => {
-  const quizLine = await quizLineController.list();
-  res.json(quizLine);
+  try {
+    const quizLine = await quizLineController.list();
+    res.json(quizLine);
+  } catch (error) {
+    res.status(500).json({ code: '500', message: error });
+  }
 }) as RequestHandler);
 
 router.get('/:id', (async (req, res) => {
@@ -17,7 +21,7 @@ router.get('/:id', (async (req, res) => {
     const quizLine = await quizLineController.one(parseInt(req.params.id, 10));
     res.json(quizLine);
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 
@@ -29,14 +33,17 @@ router.post('/', (async (req, res) => {
       question: body.question,
       is_required: body.is_required,
       is_text: body.is_text,
+      mutiple_type_answer: body.mutiple_type_answer,
+      parent: body.parent,
       is_boolean: body.is_boolean,
-      tag_id: body.tag_id,
       response_kind_id: body.response_kind_id,
       step: body.step
     });
-    res.json(quizLine);
+    quizLine
+      ? res.status(201).json(quizLine)
+      : res.status(400).json({ code: '400', message: 'an error occured while creating resource' });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 
@@ -50,22 +57,23 @@ router.put('/:id', (async (req, res) => {
       body.is_required,
       body.is_text,
       body.is_boolean,
-      body.tag_id,
+      body.mutiple_type_answer,
+      body.parent,
       body.response_kind_id,
       body.step
     );
-    res.json(quizLine);
+    quizLine ? res.status(200).json(quizLine) : res.status(404).json({ code: '404', message: 'entry does not exists' });
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 
 router.delete('/:id', (async (req, res) => {
   try {
     const quizLine = await quizLineController.remove(parseInt(req.params.id, 10));
-    res.json(quizLine);
+    quizLine ? res.status(204).json() : res.status(404).json({ code: '404', message: 'entry does not exists' });
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
 
