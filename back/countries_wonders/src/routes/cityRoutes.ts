@@ -3,6 +3,7 @@ import CityController from '../controllers/CityController';
 import CountryController from '../controllers/CountryController';
 import { fetchImages } from '../services/countryImage';
 import { get_city_fake } from '../Api/City';
+import { apiOpenTrip } from '../services/OpenTripMap';
 
 interface Body {
   name: string;
@@ -19,7 +20,20 @@ interface Ville {
 interface Result {
   pays: string;
   city: string;
+  description: string;
   img_full: string | null;
+  longitude: number;
+  latitude: number;
+}
+
+interface CityPosition {
+  name: string;
+  country: string;
+  lat: number;
+  lon: number;
+  population: number;
+  timezone: string;
+  status: string;
 }
 
 const router = Router();
@@ -80,21 +94,23 @@ router.post('/ai_get_city', (async (req, res) => {
   try {
     const body = <Ville>req.body;
 
-    const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ... et sans texte et saut de ligne`;
+    const prompt = `Dans ces/ce pays ${body.pays.join(',')} peux-tu me donné des villes qui ont ces/ce types d'activités : ${body.activity.join(', ')}, avec un description de la ville en 3 ligne sans virgule. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville: ville1, pays: pays1, description : description1},{ville: ville2, pays: pays1, description : description2} ... et sans texte et saut de ligne`;
 
     const cityData = await countryController.getDataFromOpenAI(prompt);
     const arrayCity = cityData?.split('}');
     if (arrayCity !== undefined)
       for (const item of arrayCity) {
         if (item === '') break;
-        const data = item.split(',');
+        const data = item.replace('[', '').replace(']', '').split(',');
         if (data[0] === '') {
           data.splice(0, 1);
         }
-        const city = data[0].split(':');
-        const country = data[1].split(':');
+        const city = data[0].split(':')[1].trim();
+        const country = data[1].split(':')[1].trim();
+        const description = data[2].split(':')[1].trim();
+        const cityPosition = (await apiOpenTrip('geoname', `name=${city}`)) as CityPosition;
         let image = null;
-        await fetchImages(city[1], 'city')
+        await fetchImages(city, 'city')
           .then((e) => {
             if (e != undefined) {
               image = e.items[0].link;
@@ -106,9 +122,12 @@ router.post('/ai_get_city', (async (req, res) => {
           });
         result = [
           {
-            pays: country[1].trim(),
-            city: city[1].trim(),
-            img_full: image
+            pays: country,
+            city: city,
+            description: description,
+            img_full: image,
+            longitude: cityPosition.lat,
+            latitude: cityPosition.lon
           },
           ...result
         ];
