@@ -16,6 +16,7 @@ import tripDayRoutes from './routes/tripDayRoutes';
 import tripHotelRoutes from './routes/tripHotelRoutes';
 import tripDayActivityRoutes from './routes/tripDayActivityRoutes';
 import tripTransportationRoutes from './routes/tripTransportationRoutes';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -23,6 +24,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use('/api/status', statusRoutes);
