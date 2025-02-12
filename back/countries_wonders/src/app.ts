@@ -4,10 +4,13 @@ import 'dotenv/config';
 import countryRoutes from './routes/countryRoutes';
 import cityRoutes from './routes/cityRoutes';
 import languageRoutes from './routes/languageRoutes';
+import cors from 'cors';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
 // app.use(express.json());
+
+app.use(cors());
 
 const port = process.env.PORT;
 
