@@ -22,3 +22,7 @@ db-seed-all:
 unit-test: 
 	@echo "Controllers tests..."
 	$(JEST)
+
+start:
+	@echo "Start api..."
+	npm start

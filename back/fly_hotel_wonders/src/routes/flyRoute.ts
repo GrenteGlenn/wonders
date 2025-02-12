@@ -5,7 +5,7 @@ const router = Router();
 
 const flyController = new FlyController();
 
-router.get('/', (async (req, res) => {
+router.get('/', ((req, res) => {
   try {
     const fly = flyController.list();
     res.json(fly);

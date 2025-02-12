@@ -2,15 +2,18 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('user_quiz_ia_result_countries', {
+    await queryInterface.createTable('trip_days', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      test: {
-        type: Sequelize.STRING
+      trip_city_id: {
+        type: Sequelize.INTEGER
+      },
+      date: {
+        type: Sequelize.DATE
       },
       created_at: {
         allowNull: false,
@@ -19,28 +22,26 @@ module.exports = {
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE
-      },
-      country: {
-        type: Sequelize.INTEGER,
-        allowNull: false
       }
     });
-    await queryInterface.addConstraint('user_quiz_ia_result_countries', {
-      type: "foreign key",
-      fields: ["country"],
-      name: 'country',
+    await queryInterface.addConstraint('trip_days', {
+      type: 'foreign key',
+      fields: ["trip_city_id"],
+      name: 'trip_city_id',
       references: {
-        table: 'countries',
+        table: 'trip_cities',
         field: 'id',
       },
       onUpdate: "CASCADE",
       onDelete: "NO ACTION",
-      allowNull: false,
-    })
+    });
   },
-
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeConstraint('user_quiz_ia_result_countries','country')
-    await queryInterface.dropTable('user_quiz_ia_result_countries');
+    try {
+      await queryInterface.removeConstraint('trip_days', 'trip_city_id');
+    } catch(error) {
+      console.warn('Constraint not found')
+    }
+    await queryInterface.dropTable('trip_days');
   }
 };

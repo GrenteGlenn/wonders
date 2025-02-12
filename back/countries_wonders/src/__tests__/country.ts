@@ -14,8 +14,8 @@ describe('CountryController', () => {
     jest.clearAllMocks();
   });
 
-  const created_at = new Date;
-  const updated_at = new Date;
+  const created_at = new Date();
+  const updated_at = new Date();
 
   it('should list all countries', async () => {
     const mockCountries = [{ id: 1, name: 'France', code: 'FR' }];
@@ -38,20 +38,52 @@ describe('CountryController', () => {
   });
 
   it('should create a new country', async () => {
-    const mockCountry = { id: 1, name: 'France', code: 'FR', description: 'test' as unknown as Text, image: 'test', created_at: created_at, updated_at: updated_at };
+    const mockCountry = {
+      id: 1,
+      name: 'France',
+      code: 'FR',
+      description: 'test' as unknown as Text,
+      image: 'test',
+      created_at: created_at,
+      updated_at: updated_at
+    };
     (Country.create as jest.Mock).mockResolvedValue(mockCountry);
 
-    const result = await controller.new('France', 'FR', 'test' as unknown as Text, 'test', created_at, updated_at);
+    const result = await controller.new('France', 'FR', 'test' as unknown as Text, 'test', 1, created_at, updated_at);
 
-    expect(Country.create).toHaveBeenCalledWith({ name: 'France', code: 'FR' , description: 'test' as unknown as Text, image: 'test', created_at, updated_at });
+    expect(Country.create).toHaveBeenCalledWith({
+      name: 'France',
+      code: 'FR',
+      description: 'test' as unknown as Text,
+      image: 'test',
+      created_at,
+      updated_at
+    });
     expect(result).toEqual(mockCountry);
   });
 
   it('should update an existing country', async () => {
-    const mockCountry = { id: 1, name: 'France', code: 'FR', description: 'test' as unknown as Text, image: 'test', created_at: created_at, updated_at: updated_at, save: jest.fn() };
+    const mockCountry = {
+      id: 1,
+      name: 'France',
+      code: 'FR',
+      description: 'test' as unknown as Text,
+      image: 'test',
+      created_at: created_at,
+      updated_at: updated_at,
+      save: jest.fn()
+    };
     (Country.findByPk as jest.Mock).mockResolvedValue(mockCountry);
 
-    const result = await controller.update(1, 'Germany', 'DE', 'test' as unknown as Text, 'test', created_at, updated_at);
+    const result = await controller.update(
+      1,
+      'Germany',
+      'DE',
+      'test' as unknown as Text,
+      'test',
+      1,
+      // updated_at
+    );
 
     expect(Country.findByPk).toHaveBeenCalledWith(1);
     expect(mockCountry.save).toHaveBeenCalled();

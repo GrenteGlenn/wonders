@@ -10,20 +10,23 @@ export default class QuizController {
       include: [
         {
           model: QuizLine,
+          as: 'quiz_lines',
+          separate: true,
+          order: [['step', 'ASC']],
           include: [
             {
-              model: ResponseKind
+              model: ResponseKind,
+              as: 'response_kind'
             },
             {
-              model: QuizAnswerText
-            },
-            {
-              model: Tag
+              model: QuizAnswerText,
+              as: 'quiz_answer_texts'
             }
           ]
         },
         {
-          model: Tag
+          model: Tag,
+          as: 'tags'
         }
       ]
     });
@@ -42,20 +45,23 @@ export default class QuizController {
       include: [
         {
           model: QuizLine,
+          as: 'quiz_lines',
+          separate: true,
+          order: [['step', 'ASC']],
           include: [
             {
-              model: ResponseKind
+              model: ResponseKind,
+              as: 'response_kind'
             },
             {
-              model: QuizAnswerText
-            },
-            {
-              model: Tag
+              model: QuizAnswerText,
+              as: 'quiz_answer_texts'
             }
           ]
         },
         {
-          model: Tag
+          model: Tag,
+          as: 'tags'
         }
       ]
     });
@@ -63,12 +69,13 @@ export default class QuizController {
 
   async getQuizWithQuestions(quizId: number) {
     const quiz = await Quiz.findOne({
-      where: { id: quizId },
-      include: [
-        {
-          model: QuizLine
-        }
-      ]
+      where: { id: quizId }
+      // include: [
+      //   {
+      //     model: QuizLine,
+      //     as: 'quizLines'
+      //   }
+      // ]
     });
 
     return quiz;
@@ -78,11 +85,12 @@ export default class QuizController {
     return await Quiz.create({ name, tag_id, created_at, updated_at });
   }
 
-  async update(id: number, name: string, tag_id: number) {
+  async update(id: number, name: string, tag_id: number, updated_at: Date) {
     const quiz = await Quiz.findByPk(id);
     if (quiz) {
       quiz.name = name;
       quiz.tag_id = tag_id;
+      quiz.updated_at = updated_at;
       await quiz.save();
       return quiz;
     }

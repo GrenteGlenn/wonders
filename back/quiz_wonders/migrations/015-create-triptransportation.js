@@ -2,18 +2,28 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('countries', {
+    await queryInterface.createTable('trip_transportations', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
-        type: Sequelize.STRING
+      from_date: {
+        type: Sequelize.DATE,
+        allowNull: false
       },
-      code: {
-        type: Sequelize.STRING
+      to_date: {
+        type: Sequelize.DATE,
+        allowNull: false
+      },
+      price: {
+        type: Sequelize.FLOAT,
+        allowNull: false
+      },
+      url: {
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
       created_at: {
         allowNull: false,
@@ -26,6 +36,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('countries');
+    await queryInterface.dropTable('trip_transportations');
   }
 };
