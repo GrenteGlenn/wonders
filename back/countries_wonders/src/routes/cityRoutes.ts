@@ -22,7 +22,6 @@ interface Result {
   city: string;
   description: string;
   img_full: string | null;
-  // map: string;
   longitude: number;
   latitude: number;
 }
@@ -110,7 +109,6 @@ router.post('/ai_get_city', (async (req, res) => {
         const country = data[1].split(':')[1].trim();
         const description = data[2].split(':')[1].trim();
         const cityPosition = (await apiOpenTrip('geoname', `name=${city}`)) as CityPosition;
-        // console.log('data', data, city, country, description, cityPosition);
         let image = null;
         await fetchImages(city, 'city')
           .then((e) => {
