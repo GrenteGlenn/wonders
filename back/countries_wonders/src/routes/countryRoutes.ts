@@ -150,6 +150,10 @@ router.post('/ai_get_country', (async (req, res) => {
 router.post('/country_image', (async (req, res) => {
   const body = <PaysImage>req.body;
 
+  if (!body || !body.pays) {
+    res.status(404).json({ error: 'No pays image.' });
+  }
+
   let image = null;
   await fetchImages(body.pays, 'city').then((e) => {
     if (e != undefined) {
