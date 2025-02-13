@@ -7,12 +7,15 @@ import activityRoutes from './routes/activityRoutes';
 import ratingRoutes from './routes/ratingRoutes';
 import reviewRoutes from './routes/reviewRoutes';
 import activityApiRoute from './routes/activityApiRoute';
+import cors from 'cors';
 
 const app = express();
 
 const port = process.env.PORT;
 app.use(express.json());
 // Routes
+
+app.use(cors())
 
 app.use('/api/picture', pictureRoutes);
 app.use('/api/activity-category', activityCategoryRoutes);
