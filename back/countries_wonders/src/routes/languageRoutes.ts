@@ -1,12 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import LanguageController from '../controllers/LanguageController';
-
-interface Body {
-  name: string;
-  code: string;
-  created_at: Date;
-  updated_at: Date;
-}
+import { BodyLangague } from '../interfaces/Globals';
 
 const router = Router();
 
@@ -32,7 +26,7 @@ router.get('/:id', (async (req, res) => {
 
 router.post('/', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyLangague>req.body;
     const language = await languageController.create(body.name, body.code, new Date(), new Date());
     res.json(language);
   } catch (error) {
@@ -42,7 +36,7 @@ router.post('/', (async (req, res) => {
 
 router.put('/:id', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyLangague>req.body;
     const language = await languageController.update(parseInt(req.params.id, 10), body.name, body.code, new Date());
     res.json(language);
   } catch (error) {
