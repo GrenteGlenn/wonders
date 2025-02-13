@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ChevronsLeft, ChevronsRight, CircleHelp, Search, UserRound, Settings, LogIn, Plus, Users, Route,  LucideAngularModule, Map, CalendarDays, MessageCircle, Plane, Bed, TreePalm, Shield, MapPin, MailOpen, Power } from 'lucide-angular';
+import { ChevronsLeft, ChevronsRight, CircleHelp, Search, UserRound, Settings, LogIn, CircleX, Plus, Users, Route,  LucideAngularModule, Map, CalendarDays, MessageCircle, Plane, Bed, TreePalm, Shield, MapPin, MailOpen, Power } from 'lucide-angular';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './common/jwt.interceptor';
 
@@ -32,7 +32,8 @@ export const appConfig: ApplicationConfig = {
        MailOpen, 
        Power,
        LogIn,
-       Plus
+       Plus,
+       CircleX
        })),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([authInterceptor])),

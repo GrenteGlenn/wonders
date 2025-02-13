@@ -9,9 +9,9 @@
 
 export const environment = {
   production: false,
-  userApiUrl: 'http://localhost:3000',
+  userApiUrl: 'http://localhost:3003',
   quizzApiUrl: '/quizz-api',
-  aiApiUrl: '/ai-api',
-  activityApiUrl: '/activity-api',
+  aiApiUrl: 'http://localhost:3000/api',
+  activityApiUrl: 'http://localhost:3002/api',
 };
 

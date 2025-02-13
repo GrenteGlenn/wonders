@@ -5,6 +5,7 @@ import { CountryService } from '../../app/service/country/country.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Activity, ModalActivityComponent } from '../modals/modal-activity/modal-activity.component';
+import { Country } from '../../app/model/Country';
 
 
 @Component({
@@ -80,8 +81,18 @@ export class PlanTipComponent implements OnInit {
     this.isModalOpen = true;
   }
 
-  onActivityAdded(activity: Activity) {
-    this.activities.push(activity);
+  onActivityAdded(activity: any) {
+    this.activities.push(activity);    
+    this.isModalOpen = false;
+    console.log('Activité ajoutée avec succès:', activity);
+  }
+
+  onCountryAdded(country: Country) {
+    console.log('[PlanTripComponent] Pays reçu:', country);
+    this.countries.push(country);
+    
+    this.selectedCountry = country.name;
+    this.onCountrySelect(country.name);
   }
 
 }

@@ -21,16 +21,33 @@
 <div class="w-7/12 mx-auto py-10">
     <h1 class="text-3xl font-bold mb-2">Activities</h1>
     <div class="overflow-hidden grid gap-4 md:grid-cols-4">
-        <div (click)="openModal()" class="card border-4 border-dotted rounded-lg h-44 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
-            <lucide-icon name="plus" class="text-slate-600 mb-2 w-8 h-8"></lucide-icon>
-            <span class="text-slate-600 text-center">Selectionner vos activitées</span>
+      <!-- Liste des activités -->
+      <div *ngFor="let activity of activities" 
+           class="relative h-44 rounded-lg overflow-hidden">
+        <img [src]="activity.image" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white p-4">
+          <h3 class="font-bold text-md text-center">{{activity.name}}</h3>
+          <span class="text-sm font-medium">{{activity.category}}</span>
+          <p class="text-sm mt-1">{{activity.date | date}}</p>
         </div>
+      </div>
+  
+      <!-- Bouton d'ajout -->
+      <div (click)="openModal()" 
+           class="card border-4 border-dotted rounded-lg h-44 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+        <lucide-icon name="plus" class="text-slate-600 mb-2 w-8 h-8"></lucide-icon>
+        <span class="text-slate-600 text-center">Sélectionner vos activités</span>
+      </div>
     </div>
 </div>
 
+
 <app-modal-activity 
 [(isOpen)]="isModalOpen"
-(activityAdded)="onActivityAdded($event)">
+(activityAdded)="onActivityAdded($event)"
+[cityName]="cityName" 
+>
 </app-modal-activity>
 
 <div class="w-7/12 mx-auto py-10">

@@ -9,7 +9,7 @@
   },
   "/ai-api": {
     "target": "http://localhost:3000",
-    "secure": false,
+    "secure": true,
     "changeOrigin": true,
     "pathRewrite": {
       "^/ai-api": ""
