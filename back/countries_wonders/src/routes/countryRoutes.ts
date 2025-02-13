@@ -2,32 +2,7 @@ import { RequestHandler, Router } from 'express';
 import CountryController from '../controllers/CountryController';
 import { fetchImages } from '../services/countryImage';
 import { get_country_fake } from '../Api/Country';
-
-interface Body {
-  name: string;
-  code: string;
-  description: Text;
-  image: string;
-  language: number;
-  created_at: Date;
-  updated_at: Date;
-  data: string;
-}
-
-interface Pays {
-  langue: Array<string>;
-  climat: string;
-  paysage: string;
-  activity: Array<string>;
-  populaire: boolean;
-  duration: number;
-  budget: number;
-}
-
-interface Result {
-  pays: string;
-  img_full: string | null;
-}
+import { BodyCountry, Pays, ResultCountry, TargetImage } from '../interfaces/Globals';
 
 const router = Router();
 
@@ -62,7 +37,7 @@ router.get('/country-description/:id', (async (req, res) => {
 
 router.post('/', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyCountry>req.body;
     const country = await countryController.new(
       body.name,
       body.code,
@@ -80,7 +55,7 @@ router.post('/', (async (req, res) => {
 
 router.post('/ai', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyCountry>req.body;
 
     const prompt = `Je souhaite visiter ${body.name}. Peux-tu me donner des informations intéressantes sur ce pays,
              telles que les monuments célèbres, la culture locale, la gastronomie typique, ainsi que les activités incontournables ?
@@ -97,7 +72,7 @@ router.post('/ai', (async (req, res) => {
 }) as RequestHandler);
 
 router.post('/ai_get_country', (async (req, res) => {
-  let result: Result[] | [] = [];
+  let result: ResultCountry[] | [] = [];
 
   try {
     const body = <Pays>req.body;
@@ -143,6 +118,23 @@ router.post('/ai_get_country', (async (req, res) => {
   }
 }) as RequestHandler);
 
+router.post('/country_image', (async (req, res) => {
+  const body = <TargetImage>req.body;
+
+  if (!body || !body.pays) {
+    res.status(404).json({ error: 'No pays image.' });
+  }
+
+  let image = null;
+  await fetchImages(body.pays, 'city').then((e) => {
+    if (e != undefined) {
+      image = e.items[0].link;
+    }
+  });
+
+  res.json({ data: image });
+}) as RequestHandler);
+
 router.post('/ai_get_country_fake', ((req, res) => {
   const body = <Pays>req.body;
   try {
@@ -157,7 +149,7 @@ router.post('/ai_get_country_fake', ((req, res) => {
 
 router.put('/:id', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyCountry>req.body;
     const country = await countryController.update(
       parseInt(req.params.id, 10),
       body.name,
