@@ -29,6 +29,10 @@ interface Result {
   img_full: string | null;
 }
 
+interface PaysImage {
+  pays: string;
+}
+
 const router = Router();
 
 const countryController = new CountryController();
@@ -141,6 +145,19 @@ router.post('/ai_get_country', (async (req, res) => {
     console.error('Error in /ai route:', error);
     res.status(500).json({ error: error });
   }
+}) as RequestHandler);
+
+router.post('/country_image', (async (req, res) => {
+  const body = <PaysImage>req.body;
+
+  let image = null;
+  await fetchImages(body.pays, 'city').then((e) => {
+    if (e != undefined) {
+      image = e.items[0].link;
+    }
+  });
+
+  res.json({ data: image });
 }) as RequestHandler);
 
 router.post('/ai_get_country_fake', ((req, res) => {
