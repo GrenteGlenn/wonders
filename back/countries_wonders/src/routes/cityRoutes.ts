@@ -4,37 +4,7 @@ import CountryController from '../controllers/CountryController';
 import { fetchImages } from '../services/countryImage';
 import { get_city_fake } from '../Api/City';
 import { apiOpenTrip } from '../services/OpenTripMap';
-
-interface Body {
-  name: string;
-  country: number;
-  created_at: Date;
-  updated_at: Date;
-}
-
-interface Ville {
-  activity: Array<string>;
-  pays: Array<string>;
-}
-
-interface Result {
-  pays: string;
-  city: string;
-  description: string;
-  img_full: string | null;
-  longitude: number;
-  latitude: number;
-}
-
-interface CityPosition {
-  name: string;
-  country: string;
-  lat: number;
-  lon: number;
-  population: number;
-  timezone: string;
-  status: string;
-}
+import { BodyCity, CityPosition, ResultCity, TargetImage, Ville } from '../interfaces/Globals';
 
 const router = Router();
 
@@ -61,7 +31,7 @@ router.get('/:id', (async (req, res) => {
 
 router.post('/', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyCity>req.body;
     const country = await cityController.new(body.name, body.country, new Date(), new Date());
     res.json(country);
   } catch (error) {
@@ -71,7 +41,7 @@ router.post('/', (async (req, res) => {
 
 router.put('/:id', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyCity>req.body;
     const country = await cityController.update(parseInt(req.params.id, 10), body.name, body.country);
     res.json(country);
   } catch (error) {
@@ -89,7 +59,7 @@ router.delete('/:id', (async (req, res) => {
 }) as RequestHandler);
 
 router.post('/ai_get_city', (async (req, res) => {
-  let result: Result[] | [] = [];
+  let result: ResultCity[] | [] = [];
 
   try {
     const body = <Ville>req.body;
