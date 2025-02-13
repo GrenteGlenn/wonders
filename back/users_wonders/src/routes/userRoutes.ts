@@ -49,7 +49,7 @@ router.put('/:id', (async (req, res) => {
     const client = await authController.update(parseInt(req.params.id, 10), body);
     res.status(200).json(client);
   } catch (error) {
-    res.status(401).json('Error! Something went wrong.');
+    res.status(500).json(error);
   }
 }) as RequestHandler);
 

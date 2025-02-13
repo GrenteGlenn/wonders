@@ -12,8 +12,8 @@ export default class QuizAnswerText
   declare id: number;
   declare answer: string;
   declare quiz_line_id: number;
-  declare readonly createdAt?: Date | undefined;
-  declare readonly updatedAt?: Date | undefined;
+  declare readonly created_at?: Date | undefined;
+  declare updated_at?: Date | undefined;
 
   toJSON() {
     const values = Object.assign({}, this.get());

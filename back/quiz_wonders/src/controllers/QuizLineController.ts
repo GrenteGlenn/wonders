@@ -7,28 +7,52 @@ export default class QuizLineController {
     return await QuizLine.findAll({
       include: [
         {
-          model: ResponseKind
+          model: ResponseKind,
+          as: 'response_kind'
         },
         {
-          model: Quiz
+          model: Quiz,
+          as: 'quiz'
+        },
+        {
+          model: QuizLine,
+          as: 'childrens',
+          required: false
         }
       ]
     });
   }
 
   async one(id: number) {
-    return await QuizLine.findByPk(id);
+    return await QuizLine.findByPk(id, {
+      include: [
+        {
+          model: ResponseKind,
+          as: 'response_kind'
+        },
+        {
+          model: Quiz,
+          as: 'quiz'
+        }
+        // {
+        //   model: QuizLine,
+        //   as: 'ParentQuizLine',
+        //   required: false,
+        //   foreignKey: 'parent'
+        // }
+      ]
+    });
   }
 
-  // bug commence la creation a id 1
   async new(data: {
     quiz_id: number | undefined;
     question: string;
     is_required: boolean;
     is_text: boolean | undefined;
     is_boolean: boolean | undefined;
-    tag_id: number | undefined;
-    response_kind_id: number | undefined;
+    mutiple_type_answer: boolean;
+    parent: boolean | undefined;
+    response_kind_id: number;
     step: number | undefined;
   }) {
     return await QuizLine.create(data);
@@ -41,8 +65,9 @@ export default class QuizLineController {
     is_required: boolean,
     is_text: boolean | undefined,
     is_boolean: boolean | undefined,
-    tag_id: number | undefined,
-    response_kind_id: number | undefined,
+    mutiple_type_answer: boolean,
+    parent: boolean | undefined,
+    response_kind_id: number,
     step: number | undefined
   ) {
     const quizLine = await QuizLine.findByPk(id);
@@ -51,8 +76,9 @@ export default class QuizLineController {
       quizLine.is_required = is_required;
       quizLine.is_text = is_text;
       quizLine.is_boolean = is_boolean;
-      quizLine.tag_id = tag_id;
+      quizLine.mutiple_type_answer = mutiple_type_answer;
       quizLine.response_kind_id = response_kind_id;
+      quizLine.parent = parent;
       quizLine.quiz_id = quiz_id;
       quizLine.step = step;
       await quizLine.save();

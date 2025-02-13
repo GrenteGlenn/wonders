@@ -1,8 +1,9 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../config/dbConnection';
-import QuizInterface from '../src/interfaces/QuizInterface';
-import Tag from './tag';
+import connection from '../config/dbConnection';
+
 import QuizLine from './quizline';
+import Tag from './tag';
+import QuizInterface from '../src/interfaces/QuizInterface';
 
 interface QuizCreationAttributes extends Optional<QuizInterface, 'id'> {}
 
@@ -10,16 +11,16 @@ class Quiz extends Model<QuizInterface, QuizCreationAttributes> implements QuizI
   declare id: number;
   declare name: string;
   declare tag_id: number;
-  declare readonly createdAt: Date;
-  declare readonly updatedAt: Date;
+  declare readonly created_at: Date;
+  declare updated_at: Date;
 
-  toJSON() {
-    const values = Object.assign({}, this.get());
-    delete values.tag_id;
-    delete values.created_at;
-    delete values.updated_at;
-    return values;
-  }
+  // toJSON() {
+  //   const values = Object.assign({}, this.get());
+  //   delete values.tag_id;
+  //   delete values.created_at;
+  //   delete values.updated_at;
+  //   return values;
+  // }
 }
 
 Quiz.init(
@@ -55,7 +56,7 @@ Quiz.init(
     }
   },
   {
-    sequelize,
+    sequelize: connection,
     underscored: true,
     modelName: 'Quiz',
     tableName: 'quizzes',
@@ -63,16 +64,19 @@ Quiz.init(
   }
 );
 
-Quiz.belongsTo(Tag, {
-  foreignKey: 'tag_id'
-});
-
 QuizLine.belongsTo(Quiz, {
-  foreignKey: 'quiz_id'
+  foreignKey: 'quiz_id',
+  as: 'quiz'
 });
 
 Quiz.hasMany(QuizLine, {
-  foreignKey: 'quiz_id'
+  foreignKey: 'quiz_id',
+  as: 'quiz_lines'
+});
+
+Quiz.belongsTo(Tag, {
+  foreignKey: 'tag_id',
+  as: 'tags'
 });
 
 export default Quiz;

@@ -3,24 +3,8 @@ import CityController from '../controllers/CityController';
 import CountryController from '../controllers/CountryController';
 import { fetchImages } from '../services/countryImage';
 import { get_city_fake } from '../Api/City';
-
-interface Body {
-  name: string;
-  country: number;
-  created_at: Date;
-  updated_at: Date;
-}
-
-interface Ville {
-  activity: Array<string>;
-  pays: Array<string>;
-}
-
-interface Result {
-  pays: string;
-  city: string;
-  img_full: string | null;
-}
+import { apiOpenTrip } from '../services/OpenTripMap';
+import { BodyCity, CityPosition, ResultCity, TargetImage, Ville } from '../interfaces/Globals';
 
 const router = Router();
 
@@ -47,7 +31,7 @@ router.get('/:id', (async (req, res) => {
 
 router.post('/', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyCity>req.body;
     const country = await cityController.new(body.name, body.country, new Date(), new Date());
     res.json(country);
   } catch (error) {
@@ -57,7 +41,7 @@ router.post('/', (async (req, res) => {
 
 router.put('/:id', (async (req, res) => {
   try {
-    const body = <Body>req.body;
+    const body = <BodyCity>req.body;
     const country = await cityController.update(parseInt(req.params.id, 10), body.name, body.country);
     res.json(country);
   } catch (error) {
@@ -75,26 +59,28 @@ router.delete('/:id', (async (req, res) => {
 }) as RequestHandler);
 
 router.post('/ai_get_city', (async (req, res) => {
-  let result: Result[] | [] = [];
+  let result: ResultCity[] | [] = [];
 
   try {
     const body = <Ville>req.body;
 
-    const prompt = `Dans ces pays ${body.pays.join(',')} peux tu me donner des villes qui ont ces types d'activité : ${body.activity.join(', ')}. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville: ville1, pays: pays1},{ville: ville2, pays: pays1} ... et sans texte et saut de ligne`;
+    const prompt = `Dans ces/ce pays ${body.pays.join(',')} peux-tu me donné des villes qui ont ces/ce types d'activités : ${body.activity.join(', ')}, avec un description de la ville en 3 ligne sans virgule. Le réponse ne doit être une liste de ville avec le pays en format d'un array comme cette exemple {ville: ville1, pays: pays1, description : description1},{ville: ville2, pays: pays1, description : description2} ... et sans texte et saut de ligne`;
 
     const cityData = await countryController.getDataFromOpenAI(prompt);
     const arrayCity = cityData?.split('}');
     if (arrayCity !== undefined)
       for (const item of arrayCity) {
         if (item === '') break;
-        const data = item.split(',');
+        const data = item.replace('[', '').replace(']', '').split(',');
         if (data[0] === '') {
           data.splice(0, 1);
         }
-        const city = data[0].split(':');
-        const country = data[1].split(':');
+        const city = data[0].split(':')[1].trim();
+        const country = data[1].split(':')[1].trim();
+        const description = data[2].split(':')[1].trim();
+        const cityPosition = (await apiOpenTrip('geoname', `name=${city}`)) as CityPosition;
         let image = null;
-        await fetchImages(city[1], 'city')
+        await fetchImages(city, 'city')
           .then((e) => {
             if (e != undefined) {
               image = e.items[0].link;
@@ -106,9 +92,12 @@ router.post('/ai_get_city', (async (req, res) => {
           });
         result = [
           {
-            pays: country[1].trim(),
-            city: city[1].trim(),
-            img_full: image
+            pays: country,
+            city: city,
+            description: description,
+            img_full: image,
+            longitude: cityPosition.lat,
+            latitude: cityPosition.lon
           },
           ...result
         ];
@@ -118,6 +107,23 @@ router.post('/ai_get_city', (async (req, res) => {
     console.error('Error in /ai route:', error);
     res.status(500).json({ error: error });
   }
+}) as RequestHandler);
+
+router.post('/city_image', (async (req, res) => {
+  const body = <TargetImage>req.body;
+
+  if (!body || !body.pays) {
+    res.status(404).json({ error: 'No pays image.' });
+  }
+
+  let image = null;
+  await fetchImages(body.pays, 'city').then((e) => {
+    if (e != undefined) {
+      image = e.items[0].link;
+    }
+  });
+
+  res.json({ data: image });
 }) as RequestHandler);
 
 router.post('/ai_get_city_fake', ((req, res) => {

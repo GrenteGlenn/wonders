@@ -1,6 +1,6 @@
 'use strict';
 
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import UserInterface from '../src/interfaces/UserInterface';
 import LanguageInterface from '../src/interfaces/LanguageInterface';
 import sequelize from '../config/dbConnection';
@@ -11,12 +11,13 @@ interface UserCreationAttributes extends Optional<UserInterface, 'id'> {
 
 class User extends Model<UserInterface, UserCreationAttributes> implements UserInterface {
   declare id: number;
+  declare country_id: number;
   declare first_name: string;
   declare last_name: string;
   declare email: string;
   declare password: string;
   declare readonly created_at: Date;
-  declare readonly updated_at: Date;
+  declare updated_at: Date;
   declare birth_date: Date;
   declare language_id: LanguageInterface;
 }
@@ -24,6 +25,10 @@ class User extends Model<UserInterface, UserCreationAttributes> implements UserI
 User.init(
   {
     first_name: DataTypes.STRING,
+    country_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
     last_name: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,
@@ -42,13 +47,24 @@ User.init(
         model: Language,
         key: 'id'
       }
-    }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal("NOW()"),
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.literal("NOW()"),
+    },
+
   },
   {
     sequelize,
     underscored: true,
     modelName: 'User',
-    timestamps: true // Enables createdAt and updatedAt automatically
+    timestamps: false
   }
 );
 

@@ -10,10 +10,9 @@ import cors from 'cors';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 app.use(cors());
 
-const port = process.env.DB_PORT || 3000;
+const port = process.env.PORT || 3000;
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');

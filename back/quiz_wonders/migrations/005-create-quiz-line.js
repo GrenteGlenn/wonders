@@ -25,12 +25,16 @@ module.exports = {
       is_boolean: {
         type: Sequelize.BOOLEAN
       },
-      tag_id: {
+      quiz_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      quiz_id: {
+      parent: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      mutiple_type_answer: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
       },
       response_kind_id: {
@@ -46,13 +50,13 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-    
+
     await queryInterface.addConstraint('quiz_lines', {
       type: "foreign key",
-      fields: ["tag_id"],
-      name: 'tag_id',
+      fields: ["response_kind_id"],
+      name: 'response_kind_id',
       references: {
-        table: 'tags',
+        table: 'response_kinds',
         field: 'id',
       },
       onUpdate: "CASCADE",
@@ -61,10 +65,10 @@ module.exports = {
 
     await queryInterface.addConstraint('quiz_lines', {
       type: "foreign key",
-      fields: ["response_kind_id"],
-      name: 'response_kind_id',
+      fields: ["parent"],
+      name: 'parent',
       references: {
-        table: 'response_kinds',
+        table: 'quiz_lines',
         field: 'id',
       },
       onUpdate: "CASCADE",
@@ -86,9 +90,7 @@ module.exports = {
   async down(queryInterface, Sequelize) {
     // Remove constraints that depend on QuizLines in other tables
     await queryInterface.removeConstraint('quiz_lines', 'quiz_id');
-    // await queryInterface.removeConstraint('quiz_lines', 'tag_id');
     await queryInterface.removeConstraint('quiz_lines', 'response_kind_id');
-    await queryInterface.removeConstraint('quiz_lines', 'tag_id');
     await queryInterface.dropTable('quiz_lines');
   }
 };

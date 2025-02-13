@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../config/dbConnection';
-import StatusInterface from '../src/interfaces/StatusInterface';
+import connection from '../config/dbConnection';
+import StatusInterface from '../interfaces/StatusInterface';
 
 interface StatusCreationAttributes extends Optional<StatusInterface, 'id'> {}
 
@@ -8,7 +8,7 @@ class Status extends Model<StatusInterface, StatusCreationAttributes> implements
   public id!: number;
   public name!: string;
   public readonly created_at?: Date | undefined;
-  public readonly updated_at?: Date | undefined;
+  public updated_at?: Date | undefined;
 }
 
 Status.init(
@@ -34,9 +34,9 @@ Status.init(
     }
   },
   {
-    sequelize,
+    sequelize: connection,
     underscored: true,
-    modelName: 'Status',
+    modelName: 'status',
     timestamps: false
   }
 );

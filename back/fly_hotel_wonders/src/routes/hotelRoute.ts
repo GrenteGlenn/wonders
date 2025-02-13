@@ -5,7 +5,7 @@ const router = Router();
 
 const hotelController = new HotelController();
 
-router.get('/', (async (req, res) => {
+router.get('/', ((req, res) => {
   try {
     const hotel = hotelController.list();
     res.json(hotel);

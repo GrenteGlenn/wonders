@@ -10,6 +10,8 @@ const app: Express = express();
 const jsonParser = bodyParser.json();
 // app.use(express.json());
 
+app.use(cors());
+
 const port = process.env.PORT;
 
 app.use(cors());
