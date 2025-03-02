@@ -18,6 +18,8 @@ app.use(cors());
 
 // Routes
 
+app.use(cors());
+
 app.use('/api/picture', pictureRoutes);
 app.use('/api/activity-category', activityCategoryRoutes);
 app.use('/api/activity', activityRoutes);

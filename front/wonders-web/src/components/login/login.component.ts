@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthentificationService, ReponseToken } from '../../app/service/auth/authentification.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
-    FormsModule
+    FormsModule,
+    LucideAngularModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'

@@ -1,76 +1,76 @@
 
 <div class="w-7/12 mx-auto py-10">
-    <h1 class="text-3xl font-bold mb-2">Your trip to Tulum</h1>
-    <p class="text-gray-600 mb-4 ">Mar 28 - Apr 4 </p>
+    <h1 class="text-3xl font-bold mb-2">Votre voyage en {{cityName}}</h1>
+    <!-- A voir pour la date de voyage -->
+    <!-- <p class="text-gray-600 mb-4 ">Mar 28 - Apr 4 </p> -->
     <div class="relative rounded-lg overflow-hidden">
-      <img src="assets/images/montagne.jpg" class="w-full h-96 object-cover">
-      <div class="absolute inset-0 flex items-center justify-center">
+        <img [src]="cityImage" class="w-full h-96 object-cover">
+        <div class="absolute inset-0 flex items-center justify-center">
           <div class="text-white text-center justify-center px-8">
               <p class="text-4xl w-full font-bold flex mb-4 ">
-                  Get ready to explore the ancient ruins and beautiful beaches of . Here are some tips to help you make the most of your trip.
+                Préparez-vous à explorer de nouveaux horizons
                 </p>
-                <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-10 rounded-full float-start">
+                <!-- <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-10 rounded-full float-start">
                 View itinerary
-                </button>
+                </button> -->
             </div>
         </div>
     </div>
 </div>
 
 <div class="w-7/12 mx-auto py-10">
-    <h1 class="text-3xl font-bold mb-2">Activities</h1>
-    <div class=" overflow-hidden grid gap-4 md:grid-cols-4">
-        <div>
-            <img src="assets/images/tulumPlage.jpg" class="w-64 h-40 object-cover rounded-md ">
-            <span class="flex-col">Beach day at Playa Paraiso</span>
-            <div>
-                <span class="text-gray-600">3/29</span>
-            </div>
+    <h1 class="text-3xl font-bold mb-2">Activités</h1>
+    <div class="overflow-hidden grid gap-4 md:grid-cols-4">
+      <!-- Liste des activités -->
+      <div *ngFor="let activity of activities" 
+           class="relative h-44 rounded-lg overflow-hidden">
+        <img [src]="activity.image" 
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white p-4">
+          <h3 class="font-bold text-md text-center">{{activity.name}}</h3>
+          <span class="text-sm font-medium">{{activity.category}}</span>
+          <p class="text-sm mt-1">{{activity.date | date}}</p>
         </div>
-        <div>
-            <img src="assets/images/ruine.avif" class="w-64 h-40 object-cover rounded-md ">
-            <span class="flex-col">Visit the Tulum Ruins</span>
-            <div>
-                <span class="text-gray-600">3/30</span>
-            </div>
-        </div>  <div>
-            <img src="assets/images/tulumGrotte.avif" class="w-64 h-40 object-cover rounded-md ">
-            <span class="flex-col">Swim in Cenote Dos Ojos</span>
-            <div>
-                <span class="text-gray-600">3/31</span>
-            </div>
-        </div>  <div>
-            <img src="assets/images/burritos.jpg" class="w-64 h-40 object-cover rounded-md ">
-            <span class="flex-col">Eat at Burrito Amor</span>
-            <div>
-                <span class="text-gray-600">3/32</span>
-            </div>
-        </div>
+      </div>
+  
+      <!-- Bouton d'ajout -->
+      <div (click)="openModal()" 
+           class="card border-4 border-dotted rounded-lg h-44 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+        <lucide-icon name="plus" class="text-slate-600 mb-2 w-8 h-8"></lucide-icon>
+        <span class="text-slate-600 text-center">Sélectionner vos activités</span>
+      </div>
     </div>
-   
 </div>
 
+
+<app-modal-activity 
+[(isOpen)]="isModalOpen"
+(activityAdded)="onActivityAdded($event)"
+[cityName]="cityName" 
+>
+</app-modal-activity>
+
 <div class="w-7/12 mx-auto py-10">
-    <h1 class="text-3xl font-bold mb-2">Places to stay</h1>
+    <h1 class="text-3xl font-bold mb-2">Lieux de séjour</h1>
     <div class=" overflow-hidden grid gap-4 md:grid-cols-3 ">
         <div>
             <img src="assets/images/appartement1.avif" class=" w-full h-48 object-cover rounded-md ">
-            <span class="flex-col">Stylish home in Aldea Zama</span>
+            <span class="flex-col">Maison de style à Aldea Zama</span>
             <div>
-                <span class="text-gray-600">$120/night</span>
+                <span class="text-gray-600">120€/nuit</span>
             </div>
         </div>
         <div>
             <img src="assets/images/appartement2.avif" class="w-full h-48 object-cover rounded-md ">
-            <span class="flex-col">Modern condo near the beach</span>
+            <span class="flex-col">Appartement moderne près de la plage</span>
             <div>
-                <span class="text-gray-600">$95/night</span>
+                <span class="text-gray-600">95€/nuit</span>
             </div>
         </div>  <div>
             <img src="assets/images/bungalow.jpg" class="w-full h-48 object-cover rounded-md ">
-            <span class="flex-col">Jungle bungalow with a pool</span>
+            <span class="flex-col">Bungalow dans la jungle avec piscine</span>
             <div>
-                <span class="text-gray-600">$80/night</span>
+                <span class="text-gray-600">80€/nuit</span>
             </div>
         </div>  
         

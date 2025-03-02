@@ -14,6 +14,8 @@ app.use(cors());
 
 const port = process.env.PORT;
 
+app.use(cors());
+
 app.use('/api/countries', jsonParser, countryRoutes);
 app.use('/api/cities', jsonParser, cityRoutes);
 app.use('/api/languages', jsonParser, languageRoutes);

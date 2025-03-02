@@ -51,7 +51,15 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-
+  // permet le switche de vers la page plan trip avec la suggestion
+  onSelectProposal(suggestion: any) {
+    this.router.navigate(['/planTrip'], {
+      queryParams: {
+        image: suggestion.img_full,
+        city: suggestion.pays
+      }
+    });
+  }
 
   loadUserAnswers() {
     this.questionnaireService.getUserAllAnswers().subscribe({
@@ -133,13 +141,17 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-   saveOrUpdateAnswer() {
+
+  saveOrUpdateAnswer() {
     if (!this.selectedAnswers[this.currentQuestionIndex] || !this.quizResponseId) return;
 
     const currentQuestion = this.questions[this.currentQuestionIndex];
+    console.log("Question actuelle:", currentQuestion); // Debug
+
     const selectedAnswer = currentQuestion.answers.find(
       answer => answer.answer === this.selectedAnswers[this.currentQuestionIndex]
     );
+    console.log("Réponse sélectionnée:", selectedAnswer); // Debug
 
     if (!selectedAnswer) return;
 
@@ -151,35 +163,48 @@ export class QuestionComponent implements OnInit {
       text: selectedAnswer.answer
     };
 
-    // Vérifier si une réponse existe pour cette question spécifique
+    // Sauvegarder directement dans userAnswers
+    const newAnswer = {
+      ...answerData,
+      id: Date.now(), // ID temporaire pour les nouvelles réponses
+      text: selectedAnswer.answer,
+      quiz_line_id: currentQuestion.questionData.id
+    };
+
+    // Mettre à jour ou ajouter la réponse localement
+    const existingIndex = this.userAnswers.findIndex(
+      answer => answer.quiz_line_id === currentQuestion.questionData.id
+    );
+
+    if (existingIndex !== -1) {
+      this.userAnswers[existingIndex] = newAnswer;
+    } else {
+      this.userAnswers.push(newAnswer);
+    }
+
+    console.log("userAnswers mis à jour:", this.userAnswers); // Debug
+
+    // Continuer avec la sauvegarde API comme avant
     const existingAnswer = this.userAnswers.find(
       answer => answer.quiz_line_id === currentQuestion.questionData.id
     );
 
-    if (existingAnswer) {
-      console.log('Mise à jour de la réponse existante ID:', existingAnswer.id);
+    if (existingAnswer && existingAnswer.id) {
       this.questionnaireService.updateUserAnswer(existingAnswer.id, answerData).subscribe({
         next: (response) => {
-          // Met à jour à la fois userAnswers et userAnswersMap
-          const index = this.userAnswers.findIndex(a => a.id === existingAnswer.id);
-          if (index !== -1) {
-            this.userAnswers[index] = response;
-            this.userAnswersMap.set(this.currentQuestionIndex, response);
-          }
+          console.log("Réponse mise à jour avec succès:", response);
         },
         error: (error) => console.error('Erreur mise à jour:', error)
       });
     } else {
       this.questionnaireService.saveUserAnswer(answerData).subscribe({
         next: (response) => {
-          // Ajoute la nouvelle réponse aux deux collections
-          this.userAnswers.push(response);
-          this.userAnswersMap.set(this.currentQuestionIndex, response);
+          console.log("Nouvelle réponse sauvegardée avec succès:", response);
         },
         error: (error) => console.error('Erreur sauvegarde:', error)
       });
     }
-  }
+}
 
   previousQuestion() {
     if (this.currentQuestionIndex > 0) {
@@ -221,28 +246,59 @@ export class QuestionComponent implements OnInit {
     this.router.navigate(['/planTrip'], { queryParams: { destination: destination } });
   }
 
+
   askProposalCountry() {
-    const answerUser: AIQuizzCountry = {
-      langue: ['français', 'anglais'],
-      climat: 'froid',
-      paysage: 'montagneux',
-      activity: [],
-      populaire: false
-    }
-    this.questionnaireService.getAIProposition(answerUser).subscribe({
-      next: (suggestion) => {
-        for (let i=0; i < 3; i++) {
-          this.proposalCountries[i] = suggestion.data[i];
+      const answerUser: AIQuizzCountry = {
+        langue: [],
+        climat: '',
+        paysage: '',
+        activity: [],
+        populaire: false
+      };
+
+      this.userAnswers.forEach(answer => {
+        switch (answer.quiz_line_id) {
+          case 10: // Question langue
+            if (answer.text.toLowerCase().includes('non')) {
+              answerUser.langue = ['français'];
+            } else {
+              answerUser.langue = ['français', 'anglais'];
+            }
+            break;
+
+          case 11: // Question climat
+            
+              answerUser.climat = answer.text.toLowerCase();
+              // console.log( answerUser.climat, 'climat');            
+            break;
+
+          case 15: // Question activité
+              answerUser.activity = [answer.text.toLowerCase()];
+              // console.log(answerUser.activity, 'activité');
+            break;
+    
+          case 19: // Question paysage
+           
+              answerUser.paysage = answer.text.toLowerCase();
+              // console.log( answerUser.paysage, 'paysage');
+
+            break;
+
         }
-        this.isProposalLoading = false;
-        console.log("Remove us :", answerUser);
-        console.log("suggestion", suggestion);
-        console.log("proposal", this.proposalCountries);
-      },
-      error: (error) => {
-        console.log('Erreur lors de la récupération des propositions de pays');
-        console.log(error);
-      }
-    })
+      });
+      this.questionnaireService.getAIProposition(answerUser).subscribe({
+        next: (suggestion) => {
+          for (let i = 0; i < 3; i++) {
+            this.proposalCountries[i] = suggestion.data[i];
+          }
+          this.isProposalLoading = false;
+          console.log("Suggestion:", suggestion);
+          console.log("Proposal:", this.proposalCountries);
+        },
+        error: (error) => {
+          console.log('Erreur lors de la récupération des propositions de pays');
+          console.log(error);
+        }
+      });
   }
 }
