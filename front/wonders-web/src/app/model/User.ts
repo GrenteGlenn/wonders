@@ -4,6 +4,6 @@ export interface User {
   first_name: string,
   last_name: string,
   birth_date: Date,
-  country: string,
+  country_id: any,
   language_id: number
 }

@@ -30,7 +30,23 @@ interface AICountryResponse {
   }[];
 }
 
+interface TargetImage {
+  pays: string;
+}
+
+interface CountryImageResponse {
+  data: string | null;
+}
+
 interface AIDescriptionResponse {
+  data: string;
+}
+
+interface CountryAIRequest {
+  name: string;
+}
+
+interface CountryAIResponse {
   data: string;
 }
 
@@ -39,10 +55,13 @@ interface AIDescriptionResponse {
 })
 export class CountryService {
   private API_URL = environment.quizzApiUrl;
+  private API_URLImg = environment.countryImgUrl;
+
+  
 
   constructor(private http: HttpClient) {}
 
-  // Récupérer tous les pays
+  // Récupère tous les pays
   getAllCountries(): Observable<Country[]> {
     return this.http.get<Country[]>(`${this.API_URL}/api/countries`);
   }
@@ -67,5 +86,10 @@ export class CountryService {
     return this.http.post<AIProposalCountry>(`${this.API_URL}/api/countries/ai_get_country`, criteria);
   }
 
-
+  // Obtenir l'image d'un pays
+  getCountryImage(countryName: string): Observable<CountryImageResponse> {
+    return this.http.post<CountryImageResponse>(`${this.API_URLImg}/api/countries/country_image`, { 
+      pays: countryName 
+    });
+  }
 }

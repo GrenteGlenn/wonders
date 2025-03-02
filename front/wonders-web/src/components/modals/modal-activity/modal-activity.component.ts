@@ -23,6 +23,9 @@ interface SuggestedCity {
   pays: string;
   city: string;
   img_full: string | null;
+  description: string | null;
+  longitude: number;
+  latitude: number;
 }
 
 @Component({
@@ -53,8 +56,12 @@ export class ModalActivityComponent {
   selectedFile: File | null = null;
   selectedCountry: Country | null = null;
   suggestedCities: SuggestedCity[] = [];
-  selectedCity: { city: string; img_full: string | null } | null = null;
-  isLoadingCities: boolean = false;
+  selectedCity: {
+    city: string;
+    img_full: string | null;
+    description: string | null;
+  } | null = null;
+    isLoadingCities: boolean = false;
 
 
   constructor(
@@ -145,8 +152,18 @@ export class ModalActivityComponent {
     this.selectedFile = event.target.files[0];
   }
 
-  selectCity(city: { city: string; img_full: string | null }) {
-    this.selectedCity = city;
+  // selectCity(city: { city: string; img_full: string | null; description: string}) {
+  //   this.selectedCity = city;
+  //   this.activityName = city.city;
+  //   this.selectedPicture = city.img_full;
+  // }
+
+  selectCity(city: SuggestedCity) {
+    this.selectedCity = {
+      city: city.city,
+      img_full: city.img_full,
+      description: city.description || '' // On gère le cas où description est null
+    };
     this.activityName = city.city;
     this.selectedPicture = city.img_full;
   }
@@ -158,7 +175,8 @@ export class ModalActivityComponent {
         category: this.selectedCategory.name, 
         image: this.selectedCity.img_full,
         date: new Date(),
-        pays: this.cityName
+        pays: this.cityName,
+        description: this.selectedCity.description 
       };
   
       this.activityAdded.emit(activity);

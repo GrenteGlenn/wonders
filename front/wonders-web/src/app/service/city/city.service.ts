@@ -21,9 +21,9 @@ interface CityAIResponse {
     pays: string;
     city: string;
     img_full: string | null;
-    // description: string | null;
-    // longitude: number;
-    // latitude: number;
+    description: string | null;
+    longitude: number;
+    latitude: number;
   }[];
 }
 

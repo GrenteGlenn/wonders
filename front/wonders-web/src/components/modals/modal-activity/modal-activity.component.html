@@ -59,16 +59,16 @@
           <!-- Liste des villes -->
           <div *ngIf="!isLoadingCities" class="grid grid-cols-2 gap-4 overflow-y-auto max-h-[50vh]">
             <div *ngFor="let city of suggestedCities"
-                (click)="selectCity(city)"
-                class="w-full h-36 border rounded-lg cursor-pointer transition-all"
-                [class.border-blue-500]="selectedCity?.city === city.city"
-                [class.bg-blue-50]="selectedCity?.city === city.city"
-                [class.hover:border-blue-500]="selectedCity?.city !== city.city"
-                [class.hover:bg-blue-50]="selectedCity?.city !== city.city">
+                 (click)="selectCity(city)"
+                 class="w-full h-36 border rounded-lg cursor-pointer transition-all"
+                 [class.border-blue-500]="selectedCity?.city === city.city"
+                 [class.bg-blue-50]="selectedCity?.city === city.city"
+                 [class.hover:border-blue-500]="selectedCity?.city !== city.city"
+                 [class.hover:bg-blue-50]="selectedCity?.city !== city.city">
               <div class="flex flex-col items-center relative h-full">
                 <img *ngIf="city.img_full" 
-                    [src]="city.img_full" 
-                    class="w-full h-36 object-cover rounded-lg">
+                     [src]="city.img_full" 
+                     class="w-full h-36 object-cover rounded-lg">
                 <div class="absolute inset-0 bg-black bg-opacity-30 rounded-lg flex items-center justify-center">
                   <span class="text-white text-xl font-bold">{{city.city}}</span>
                 </div>
@@ -105,6 +105,10 @@
                   <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
                     <span class="text-white font-bold">{{selectedCity?.city}}</span>
                   </div>
+                </div>
+                <!-- Description de la ville -->
+                <div class="mt-4 text-sm text-gray-600">
+                  <p>{{selectedCity?.description}}</p>
                 </div>
               </div>
             </div>
