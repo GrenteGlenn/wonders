@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import topicRoutes from './routes/topicRoutes'
+import subjectRoutes from './routes/SubjectRouter'
 
 const app: Express = express();
 app.use(cors());
@@ -12,6 +13,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/topics', topicRoutes);
+app.use('/api/subjects', subjectRoutes)
 
 
 

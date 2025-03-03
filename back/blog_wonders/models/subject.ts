@@ -12,8 +12,8 @@ export default class Subject extends Model<SubjectInterface, SubjectCreationAttr
   declare content: string;
   declare user_id: number;
   declare topic: number;
-  declare created_at: Date;
-  declare updated_at: Date;
+  declare created_at?: Date;
+  declare updated_at?: Date;
 
 }
 
@@ -46,11 +46,11 @@ export default class Subject extends Model<SubjectInterface, SubjectCreationAttr
     },
     created_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     },
     updated_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     }
   }, 
     {
