@@ -1,9 +1,9 @@
 interface TopicInterface {
     id: number;
-    country_id?: number;
+    country_id: number;
     name: string;
-    created_at: Date;
-    updated_at: Date;
+    created_at?: Date;
+    updated_at?: Date;
 }
 
 interface SubjectInterface {

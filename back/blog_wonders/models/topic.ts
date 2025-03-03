@@ -8,8 +8,8 @@ export default class Topic extends Model<TopicInterface, TopicCreationAttributes
   declare id: number;
   declare name: string;
   declare country_id: number;
-  declare created_at: Date;
-  declare updated_at: Date;
+  declare created_at?: Date;
+  declare updated_at?: Date;
 }
 
   Topic.init({
@@ -33,7 +33,7 @@ export default class Topic extends Model<TopicInterface, TopicCreationAttributes
     },
     updated_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true
     }
   }, 
     {
