@@ -44,3 +44,4 @@ export default class Topic extends Model<TopicInterface, TopicCreationAttributes
     }
   );
   
+  

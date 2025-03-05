@@ -25,4 +25,10 @@ interface CommentInterface {
   updated_at?: Date;
 }
 
-export { CommentInterface, SubjectInterface, TopicInterface };
+interface UserSubjectInterface {
+  id: number;
+  user_id: number;
+  subject_id: number;
+}
+
+export { CommentInterface, SubjectInterface, TopicInterface, UserSubjectInterface };

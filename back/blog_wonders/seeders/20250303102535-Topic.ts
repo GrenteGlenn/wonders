@@ -8,31 +8,31 @@ module.exports = {
      */
     await queryInterface.bulkInsert('topics', [
       {
-        country_id: 1,  // Assurez-vous que cet ID de pays existe dans la table des pays
+        country_id: 1,
         name: 'Tourism',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        country_id: 2,  // Assurez-vous que cet ID de pays existe dans la table des pays
+        country_id: 2,
         name: 'Travel Tips',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        country_id: 3,  // Assurez-vous que cet ID de pays existe dans la table des pays
+        country_id: 3,
         name: 'Cultural Experiences',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        country_id: 4,  // Assurez-vous que cet ID de pays existe dans la table des pays
+        country_id: 4,
         name: 'Food and Cuisine',
         created_at: new Date(),
         updated_at: new Date()
       },
       {
-        country_id: 5,  // Assurez-vous que cet ID de pays existe dans la table des pays
+        country_id: 5,
         name: 'Adventure Travel',
         created_at: new Date(),
         updated_at: new Date()

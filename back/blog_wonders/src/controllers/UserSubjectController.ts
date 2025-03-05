@@ -1,0 +1,20 @@
+import UserSubject from "../../models/userSubject";
+
+export default class UserSubjectController {
+    async create(subject_id: number, user_id: number) {
+        try {
+            return await UserSubject.create({ user_id, subject_id })
+        } catch (error: unknown) {
+            console.error('Error creating a like:', error);
+        }
+    }
+
+    async delete(id: number) {
+        try {
+            const like = await UserSubject.findByPk(id)
+            like?.destroy()
+        } catch (error: unknown) {
+            console.error('Error creating a like:', error);
+        }
+    }
+}

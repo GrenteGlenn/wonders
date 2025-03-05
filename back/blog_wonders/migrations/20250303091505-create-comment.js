@@ -21,16 +21,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true
       },
-      subject: {
-        type: Sequelize.INTEGER,
-        allowNull: true
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
       },
       updated_at: {
-        allowNull: false,
+        allowNull: true,
         type: Sequelize.DATE
       }
     });

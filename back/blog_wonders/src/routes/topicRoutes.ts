@@ -10,7 +10,7 @@ const router = Router();
 
 const topicController = new TopicController();
 
-router.get('/', (async (req: Request, res: Response)=> {
+router.get('/', (async (req: Request, res: Response) => {
   try {
     const topic = await topicController.list();
     console.log(topic);

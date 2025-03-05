@@ -1,12 +1,71 @@
+import Subject from '../../models/subject';
 import Topic from '../../models/topic';
+import Comment from '../../models/comment';
+import { Sequelize } from "sequelize";
 
 export default class TopicController {
   async list() {
-    return await Topic.findAll();
+    return await Topic.findAll({
+      attributes: ["country_id", "name"],
+      include: [
+        {
+          model: Subject,
+          as: "subjects",
+          attributes: [
+            "id",
+            "title",
+            "content",
+            [
+              Sequelize.literal(`(
+                SELECT COUNT(*) 
+                FROM "user_subjects" 
+                WHERE "user_subjects"."subject_id" = "subjects"."id"
+              )`),
+              "likes",
+            ],
+          ],
+          include: [
+            {
+              model: Comment,
+              as: "comments",
+              attributes: ["id", "message", "user_id"],
+            },
+          ],
+        },
+      ],
+    });
   }
 
   async one(id: number) {
-    return await Topic.findByPk(id);
+    return await Topic.findByPk(id, {
+      attributes: ["country_id", "name"],
+      include: [
+        {
+          model: Subject,
+          as: "subjects",
+          attributes: [
+            "id",
+            "title",
+            "content",
+            [
+              Sequelize.literal(`(
+                SELECT COUNT(*) 
+                FROM "user_subjects" 
+                WHERE "user_subjects"."subject_id" = "subjects"."id"
+              )`),
+              "likes",
+            ],
+          ],
+          include: [
+            {
+              model: Comment,
+              as: "comments",
+              attributes: ["id", "message", "user_id"],
+            },
+          ],
+        },
+      ],
+    });
   }
 
   async new(country_id: number, name: string, created_at: Date) {
