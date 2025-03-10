@@ -5,7 +5,11 @@ JEST=npx jest
 
 db-all: db-migrate-undo-all db-migrate db-seed-all
 
-db-and-tests : db-all unit-test
+db-and-tests : db-all test
+
+show-swagger:
+	@echo "swagger creation"
+	@npm start swagger
 
 show-swagger:
 	@echo "swagger creation"
@@ -23,6 +27,6 @@ db-seed-all:
 	@echo "Seeding database..."
 	$(SEQUELIZE) db:seed:all
 
-unit-test: 
+test:
 	@echo "Controllers tests..."
 	$(JEST)
