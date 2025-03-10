@@ -4,9 +4,11 @@ import topicRoutes from './routes/topicRoutes'
 import subjectRoutes from './routes/subjectRoutes'
 import commentRoutes from './routes/commentRoutes'
 import userSubjectRouter from './routes/userSubjectRoutes'
+import userCheck from './middlewares/userCheck';
 
 const app: Express = express();
 app.use(cors());
+app.use(userCheck);
 
 const port = process.env.PORT || 3000;
 

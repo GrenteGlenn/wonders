@@ -20,7 +20,6 @@ router.post('/', (async (req: Request, res: Response) => {
   }
 }) as RequestHandler);
 
-
 router.delete('/:id', (async (req: Request, res: Response) => {
   try {
     await userSubjectController.delete(parseInt(req.params.id, 10));

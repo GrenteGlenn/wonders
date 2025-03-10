@@ -1,27 +1,26 @@
 import Subject from '../../models/subject';
-import UserSubject from '../../models/userSubject'
-import { Model, DataTypes } from 'sequelize';
-import sequelize from '../../config/dbConnection';
-import { Sequelize, Op, fn, col } from 'sequelize';
+import UserSubject from '../../models/userSubject';
 
 export default class SubjectController {
   async list() {
     const subjects = await Subject.findAll({
       attributes: ['id', 'user_id', 'title', 'content', 'topic', 'created_at', 'updated_at']
     });
-  
+
     // Récupérer les likes séparément
-    const subjectsWithLikes = await Promise.all(subjects.map(async (subject) => {
-      const likes = await UserSubject.count({
-        where: { subject_id: subject.id }
-      });
-  
-      return {
-        ...subject.toJSON(),
-        likes
-      };
-    }));
-  
+    const subjectsWithLikes = await Promise.all(
+      subjects.map(async (subject) => {
+        const likes = await UserSubject.count({
+          where: { subject_id: subject.id }
+        });
+
+        return {
+          ...subject.toJSON(),
+          likes
+        };
+      })
+    );
+
     return subjectsWithLikes;
   }
 
