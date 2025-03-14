@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormActivitiesComponent } from './form-activities.component';
+import { ToastComponent } from './toast.component';
 
-describe('FormActivitiesComponent', () => {
-  let component: FormActivitiesComponent;
-  let fixture: ComponentFixture<FormActivitiesComponent>;
+describe('ToastComponent', () => {
+  let component: ToastComponent;
+  let fixture: ComponentFixture<ToastComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormActivitiesComponent]
+      imports: [ToastComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FormActivitiesComponent);
+    fixture = TestBed.createComponent(ToastComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

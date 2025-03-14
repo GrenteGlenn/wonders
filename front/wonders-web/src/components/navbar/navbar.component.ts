@@ -11,12 +11,7 @@ import { User } from '../../app/model/User';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [
-    LucideAngularModule,
-    MatButtonModule,
-    MatTooltipModule,
-    CommonModule
-  ],
+  imports: [LucideAngularModule, MatButtonModule, MatTooltipModule, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -25,23 +20,23 @@ export class NavbarComponent implements OnInit {
   isAuthenticated = false;
   user: User | null = null;
 
-  constructor(private router: Router, private _authService: AuthentificationService, private usersService: UsersService) {}
+  constructor(
+    private router: Router,
+    private _authService: AuthentificationService,
+    private usersService: UsersService
+  ) {}
 
   ngOnInit(): void {
-    this._authService.isAuthenticated$.subscribe(
-      isAuth => this.isAuthenticated = isAuth
-    );
+    this._authService.isAuthenticated$.subscribe((isAuth) => (this.isAuthenticated = isAuth));
 
     this.loadUserInfo();
-
   }
 
   loadUserInfo() {
     this.usersService.getUserInfo().subscribe({
       next: (userData) => {
         this.user = userData;
-        console.log(this.user, "users");
-        
+        console.log(this.user, 'users');
       },
       error: (error) => {
         console.error('Erreur lors du chargement des informations utilisateur:', error);

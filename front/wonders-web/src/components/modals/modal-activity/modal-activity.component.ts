@@ -5,7 +5,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { ActivityCategory, Picture } from '../../../app/model/activity';
 import { ActivityService } from '../../../app/service/activity/activity.service';
 import { CityService } from '../../../app/service/city/city.service';
-
+import { ToastService } from '../../../app/service/toast/toast.service';
+import { GoogleMapComponent } from "../../google-map/google-map.component";
 
 export interface Activity {
   name: string;
@@ -31,11 +32,7 @@ interface SuggestedCity {
 @Component({
   selector: 'app-modal-activity',
   standalone: true,
-  imports: [
-    CommonModule,
-    LucideAngularModule,
-    FormsModule
-  ],
+  imports: [CommonModule, LucideAngularModule, FormsModule, GoogleMapComponent],
   templateUrl: './modal-activity.component.html',
   styleUrl: './modal-activity.component.css'
 })
@@ -61,18 +58,22 @@ export class ModalActivityComponent {
     img_full: string | null;
     description: string | null;
   } | null = null;
-    isLoadingCities: boolean = false;
+  isLoadingCities: boolean = false;
 
+  
 
   constructor(
     private activityService: ActivityService,
-    private cityService: CityService
-
+    private cityService: CityService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
     this.loadCategories();
   }
+
+ 
+  
 
   loadCategories() {
     this.activityService.getAllCategories().subscribe({
@@ -103,7 +104,7 @@ export class ModalActivityComponent {
       case 1:
         return !!this.selectedCity;
       case 2:
-        return true; 
+        return true;
       default:
         return false;
     }
@@ -112,22 +113,24 @@ export class ModalActivityComponent {
   selectCategory(category: ActivityCategory) {
     this.selectedCategory = category;
     this.selectedPicture = category?.picture_id;
-    
+
     if (this.cityName && category) {
       this.isLoadingCities = true;
-      this.cityService.getAICitySuggestions({
-        activity: [category.name],
-        pays: [this.cityName] 
-      }).subscribe({
-        next: (response) => {
-          this.suggestedCities = response.data;
-          this.isLoadingCities = false; 
-        },
-        error: (error) => {
-          console.error('Erreur lors de la recherche de villes:', error);
-          this.isLoadingCities = false; 
-        }
-      });
+      this.cityService
+        .getAICitySuggestions({
+          activity: [category.name],
+          pays: [this.cityName]
+        })
+        .subscribe({
+          next: (response) => {
+            this.suggestedCities = response.data;
+            this.isLoadingCities = false;
+          },
+          error: (error) => {
+            console.error('Erreur lors de la recherche de villes:', error);
+            this.isLoadingCities = false;
+          }
+        });
     }
   }
 
@@ -135,10 +138,10 @@ export class ModalActivityComponent {
     this.selectedPicture = picture.path;
   }
 
-
   nextStep() {
     if (this.currentStep < this.steps.length - 1 && this.canProceed) {
       this.currentStep++;
+      this.toastService.success('Données sauvegarder avec succès !');
     }
   }
 
@@ -166,30 +169,34 @@ export class ModalActivityComponent {
     };
     this.activityName = city.city;
     this.selectedPicture = city.img_full;
+    console.log(this.suggestedCities, 'cities');
+
   }
 
   onSubmit() {
     if (this.selectedCategory && this.selectedCity) {
       const activity = {
         name: this.selectedCity.city,
-        category: this.selectedCategory.name, 
+        category: this.selectedCategory.name,
         image: this.selectedCity.img_full,
         date: new Date(),
         pays: this.cityName,
-        description: this.selectedCity.description 
+        description: this.selectedCity.description
       };
-  
+
       this.activityAdded.emit(activity);
+      this.toastService.success('Activité ajoutée avec succès !');
+
       this.close();
     }
   }
-  
+
   close() {
     this.isOpen = false;
     this.isOpenChange.emit(false);
     this.resetForm();
   }
-  
+
   private resetForm() {
     this.currentStep = 0;
     this.selectedCategory = null;
@@ -199,5 +206,4 @@ export class ModalActivityComponent {
     this.selectedFile = null;
     this.suggestedCities = [];
   }
-
 }

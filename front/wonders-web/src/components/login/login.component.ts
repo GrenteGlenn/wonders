@@ -7,10 +7,7 @@ import { LucideAngularModule } from 'lucide-angular';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    FormsModule,
-    LucideAngularModule
-  ],
+  imports: [FormsModule, LucideAngularModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -57,6 +54,6 @@ export class LoginComponent implements OnInit {
 
   href(event: Event): void {
     event.preventDefault();
-    this.router.navigate(['register'], { queryParams: { returnUrl: this.returnUrl }});
+    this.router.navigate(['register'], { queryParams: { returnUrl: this.returnUrl } });
   }
 }

@@ -19,7 +19,6 @@ export class RegisterComponent implements OnInit {
   countries: Country[] = [];
   selectedCountryId: any = 0;
 
-
   user: User = {
     email: '',
     password: '',
@@ -28,7 +27,7 @@ export class RegisterComponent implements OnInit {
     birth_date: new Date(),
     country_id: 0,
     language_id: 0
-  }
+  };
 
   constructor(
     private _authService: AuthentificationService,
@@ -42,7 +41,6 @@ export class RegisterComponent implements OnInit {
     this.loadCountries();
   }
 
-
   loadCountries(): void {
     this._countryService.getAllCountries().subscribe({
       next: (data) => {
@@ -55,9 +53,9 @@ export class RegisterComponent implements OnInit {
   }
 
   onCountryChange(event: any): void {
-    const selectedCountry = this.countries.find(country => country.id === +event.target.value);
+    const selectedCountry = this.countries.find((country) => country.id === +event.target.value);
     if (selectedCountry) {
-      this.user.country = selectedCountry.id;
+      this.user.country_id = selectedCountry.id;
       // this.user.language_id = selectedCountry.id;
     }
   }
@@ -65,13 +63,13 @@ export class RegisterComponent implements OnInit {
   clickRegister(): void {
     this._authService.register(this.user).subscribe({
       next: (data) => {
-        this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl }});
+        this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl } });
       }
-    })
+    });
   }
 
   href(event: Event): void {
     event.preventDefault();
-    this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl }});
+    this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl } });
   }
 }

@@ -2,35 +2,38 @@
   <div *ngIf="!selectedCountry" class="text-center mb-8">
     <h1 class="text-3xl font-bold mb-6">Sélectionnez votre destination</h1>
     <div class="relative w-full max-w-md mx-auto">
-      <select 
+      <select
         [(ngModel)]="selectedCountry"
         (ngModelChange)="onCountrySelect($event)"
-        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+      >
         <option value="" disabled selected>Choisissez votre destination</option>
         <option *ngFor="let country of countries" [value]="country.name">
-          {{country.name}}
+          {{ country.name }}
         </option>
       </select>
     </div>
   </div>
 
   <div *ngIf="selectedCountry">
-    <h1 class="text-3xl font-bold mb-2">Votre voyage en {{selectedCountry}}</h1>
+    <h1 class="text-3xl font-bold mb-2">Votre voyage en {{ selectedCountry }}</h1>
     <div class="relative rounded-lg overflow-hidden">
       <!-- Loader pendant le chargement -->
       <div *ngIf="isLoading" class="w-full h-96 bg-gray-200 animate-pulse flex justify-center items-center">
         <span class="text-gray-500">Chargement de l'image...</span>
       </div>
-      
+
       <!-- Image une fois chargée -->
       <ng-container *ngIf="!isLoading">
-        <img [src]="countryImage" 
-             class="w-full h-96 object-cover"
-             (error)="countryImage = 'assets/images/default-country.jpg'">
+        <img
+          [src]="countryImage"
+          class="w-full h-96 object-cover"
+          (error)="countryImage = 'assets/images/default-country.jpg'"
+        />
         <div class="absolute inset-0 flex items-center justify-center">
-          <div class="text-white text-center justify-center px-8 ">
+          <div class="text-white text-center justify-center px-8">
             <p class="text-4xl w-full font-bold mb-4">
-              Préparez-vous à explorer {{selectedCountry}}. {{countryDescription}}
+              Préparez-vous à explorer {{ selectedCountry }}. {{ countryDescription }}
             </p>
             <!-- <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-10 rounded-full float-start">
               View itinerary
@@ -45,20 +48,20 @@
       <h1 class="text-3xl font-bold mb-2">Activités</h1>
       <div class="overflow-hidden grid gap-4 md:grid-cols-4">
         <!-- Liste des activités -->
-        <div *ngFor="let activity of activities" 
-             class="relative h-44 rounded-lg overflow-hidden">
-          <img [src]="activity.image" 
-               class="w-full h-full object-cover">
+        <div *ngFor="let activity of activities" class="relative h-44 rounded-lg overflow-hidden">
+          <img [src]="activity.image" class="w-full h-full object-cover" />
           <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white p-4">
-            <h3 class="font-bold text-md text-center">{{activity.name}}</h3>
-            <span class="text-sm font-medium">{{activity.category}}</span>
-            <p class="text-sm mt-1">{{activity.date | date}}</p>
+            <h3 class="font-bold text-md text-center">{{ activity.name }}</h3>
+            <span class="text-sm font-medium">{{ activity.category }}</span>
+            <p class="text-sm mt-1">{{ activity.date | date }}</p>
           </div>
         </div>
-    
+
         <!-- Bouton d'ajout -->
-        <div (click)="openModal()" 
-             class="card border-4 border-dotted rounded-lg h-44 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors">
+        <div
+          (click)="openModal()"
+          class="card border-4 border-dotted rounded-lg h-44 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors"
+        >
           <lucide-icon name="plus" class="text-slate-600 mb-2 w-8 h-8"></lucide-icon>
           <span class="text-slate-600 text-center">Sélectionnez vos activités</span>
         </div>
@@ -66,10 +69,6 @@
     </div>
   </div>
 </div>
-
-<app-modal-activity 
-  [(isOpen)]="isModalOpen"
-  (activityAdded)="onActivityAdded($event)"
-  [cityName]="selectedCountry" 
->
+<app-toast></app-toast>
+<app-modal-activity [(isOpen)]="isModalOpen" (activityAdded)="onActivityAdded($event)" [cityName]="selectedCountry">
 </app-modal-activity>

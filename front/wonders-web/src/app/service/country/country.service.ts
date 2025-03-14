@@ -57,8 +57,6 @@ export class CountryService {
   private API_URL = environment.quizzApiUrl;
   private API_URLImg = environment.countryImgUrl;
 
-  
-
   constructor(private http: HttpClient) {}
 
   // Récupère tous les pays
@@ -88,8 +86,8 @@ export class CountryService {
 
   // Obtenir l'image d'un pays
   getCountryImage(countryName: string): Observable<CountryImageResponse> {
-    return this.http.post<CountryImageResponse>(`${this.API_URLImg}/api/countries/country_image`, { 
-      pays: countryName 
+    return this.http.post<CountryImageResponse>(`${this.API_URLImg}/api/countries/country_image`, {
+      pays: countryName
     });
   }
 }

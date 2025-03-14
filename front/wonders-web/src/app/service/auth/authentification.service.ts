@@ -6,19 +6,18 @@ import { environment } from '../../../environments/environment';
 import { Router } from '@angular/router';
 
 export interface ReponseToken {
-  success: boolean,
+  success: boolean;
   data: {
-    userId: number,
-    email: string,
-    token: string
-  }
+    userId: number;
+    email: string;
+    token: string;
+  };
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthentificationService {
-
   private url = environment.userApiUrl;
 
   public user: Observable<string>;
@@ -26,8 +25,10 @@ export class AuthentificationService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router)
-  {
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {
     this.userSubject = new BehaviorSubject<string>(localStorage.getItem('UserToken') ?? '');
     this.user = this.userSubject.asObservable();
     const token = localStorage.getItem('UserToken');
@@ -41,7 +42,7 @@ export class AuthentificationService {
 
   // Route pour se connecter
   login(email: string, password: string): Observable<ReponseToken> {
-    return this.http.post<ReponseToken>(`${this.url}/api/auth/login`, {email, password})
+    return this.http.post<ReponseToken>(`${this.url}/api/auth/login`, { email, password });
   }
 
   logout(): void {
@@ -61,4 +62,3 @@ export class AuthentificationService {
     this.isAuthenticatedSubject.next(true);
   }
 }
-

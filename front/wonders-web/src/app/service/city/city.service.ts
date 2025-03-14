@@ -31,9 +31,9 @@ interface CityAIResponse {
   providedIn: 'root'
 })
 export class CityService {
-  private apiUrl = environment.aiApiUrl; 
+  private apiUrl = environment.aiApiUrl;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   // Récupère toutes les villes
   getAllCities(): Observable<City[]> {
@@ -54,6 +54,4 @@ export class CityService {
   getAICitySuggestions(data: CityAIRequest): Observable<CityAIResponse> {
     return this.http.post<CityAIResponse>(`${this.apiUrl}/cities/ai_get_city`, data);
   }
-
-
 }

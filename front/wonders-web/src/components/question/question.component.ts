@@ -12,12 +12,7 @@ import { AIProposalCountry, AIQuizzCountry } from '../../app/model/AI';
 @Component({
   selector: 'app-question',
   standalone: true,
-  imports: [
-    LucideAngularModule,
-    MatProgressBarModule,
-    CommonModule,
-    FormsModule
-  ],
+  imports: [LucideAngularModule, MatProgressBarModule, CommonModule, FormsModule],
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css']
 })
@@ -33,11 +28,10 @@ export class QuestionComponent implements OnInit {
   proposalCountries: AIProposalCountry[] = [];
   isProposalLoading: boolean = true;
 
-
   constructor(
     private router: Router,
     private questionnaireService: QuestionnaireService,
-    private authService: AuthentificationService,
+    private authService: AuthentificationService
   ) {}
 
   ngOnInit() {
@@ -66,8 +60,8 @@ export class QuestionComponent implements OnInit {
       next: (answers) => {
         console.log('Réponses utilisateur chargées:', answers);
         // Filtre les réponses pour ne garder que celles du quiz actuel
-        this.userAnswers = answers.filter((answer: { quiz_line_id: number; }) =>
-          this.questions.some(q => q.questionData.id === answer.quiz_line_id)
+        this.userAnswers = answers.filter((answer: { quiz_line_id: number }) =>
+          this.questions.some((q) => q.questionData.id === answer.quiz_line_id)
         );
         this.populateExistingAnswers();
       },
@@ -78,17 +72,14 @@ export class QuestionComponent implements OnInit {
   }
 
   populateExistingAnswers() {
-    this.userAnswers.forEach(answer => {
-      const questionIndex = this.questions.findIndex(
-        q => q.questionData.id === answer.quiz_line_id
-      );
+    this.userAnswers.forEach((answer) => {
+      const questionIndex = this.questions.findIndex((q) => q.questionData.id === answer.quiz_line_id);
       if (questionIndex !== -1) {
         this.selectedAnswers[questionIndex] = answer.text;
         this.userAnswersMap.set(questionIndex, answer);
       }
     });
   }
-
 
   loadQuizQuestions() {
     return new Promise<void>((resolve) => {
@@ -115,7 +106,7 @@ export class QuestionComponent implements OnInit {
         this.loadExistingAnswers();
       },
       error: (error) => {
-        console.error('Erreur lors de l\'initialisation du quiz:', error);
+        console.error("Erreur lors de l'initialisation du quiz:", error);
       }
     });
   }
@@ -126,9 +117,7 @@ export class QuestionComponent implements OnInit {
     this.questionnaireService.getUserAnswers(this.quizResponseId).subscribe({
       next: (answers) => {
         answers.forEach((answer: any) => {
-          const questionIndex = this.questions.findIndex(
-            q => q.questionData.id === answer.quiz_line_id
-          );
+          const questionIndex = this.questions.findIndex((q) => q.questionData.id === answer.quiz_line_id);
           if (questionIndex !== -1) {
             this.selectedAnswers[questionIndex] = answer.text;
             this.userAnswersMap.set(questionIndex, answer);
@@ -141,17 +130,16 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-
   saveOrUpdateAnswer() {
     if (!this.selectedAnswers[this.currentQuestionIndex] || !this.quizResponseId) return;
 
     const currentQuestion = this.questions[this.currentQuestionIndex];
-    console.log("Question actuelle:", currentQuestion); // Debug
+    console.log('Question actuelle:', currentQuestion); // Debug
 
     const selectedAnswer = currentQuestion.answers.find(
-      answer => answer.answer === this.selectedAnswers[this.currentQuestionIndex]
+      (answer) => answer.answer === this.selectedAnswers[this.currentQuestionIndex]
     );
-    console.log("Réponse sélectionnée:", selectedAnswer); // Debug
+    console.log('Réponse sélectionnée:', selectedAnswer); // Debug
 
     if (!selectedAnswer) return;
 
@@ -173,7 +161,7 @@ export class QuestionComponent implements OnInit {
 
     // Mettre à jour ou ajouter la réponse localement
     const existingIndex = this.userAnswers.findIndex(
-      answer => answer.quiz_line_id === currentQuestion.questionData.id
+      (answer) => answer.quiz_line_id === currentQuestion.questionData.id
     );
 
     if (existingIndex !== -1) {
@@ -182,29 +170,27 @@ export class QuestionComponent implements OnInit {
       this.userAnswers.push(newAnswer);
     }
 
-    console.log("userAnswers mis à jour:", this.userAnswers); // Debug
+    console.log('userAnswers mis à jour:', this.userAnswers); // Debug
 
     // Continuer avec la sauvegarde API comme avant
-    const existingAnswer = this.userAnswers.find(
-      answer => answer.quiz_line_id === currentQuestion.questionData.id
-    );
+    const existingAnswer = this.userAnswers.find((answer) => answer.quiz_line_id === currentQuestion.questionData.id);
 
     if (existingAnswer && existingAnswer.id) {
       this.questionnaireService.updateUserAnswer(existingAnswer.id, answerData).subscribe({
         next: (response) => {
-          console.log("Réponse mise à jour avec succès:", response);
+          console.log('Réponse mise à jour avec succès:', response);
         },
         error: (error) => console.error('Erreur mise à jour:', error)
       });
     } else {
       this.questionnaireService.saveUserAnswer(answerData).subscribe({
         next: (response) => {
-          console.log("Nouvelle réponse sauvegardée avec succès:", response);
+          console.log('Nouvelle réponse sauvegardée avec succès:', response);
         },
         error: (error) => console.error('Erreur sauvegarde:', error)
       });
     }
-}
+  }
 
   previousQuestion() {
     if (this.currentQuestionIndex > 0) {
@@ -217,7 +203,6 @@ export class QuestionComponent implements OnInit {
       }
     }
   }
-
 
   nextQuestion() {
     if (this.currentQuestionIndex < this.questions.length - 1) {
@@ -233,12 +218,11 @@ export class QuestionComponent implements OnInit {
     this.showResults = true;
   }
 
-
   updateProgress() {
     this.percent = ((this.currentQuestionIndex + 1) / this.questions.length) * 100;
   }
 
- onAnswerSelected(answer: string, question: QuizQuestion) {
+  onAnswerSelected(answer: string, question: QuizQuestion) {
     this.selectedAnswers[this.currentQuestionIndex] = answer;
   }
 
@@ -246,59 +230,55 @@ export class QuestionComponent implements OnInit {
     this.router.navigate(['/planTrip'], { queryParams: { destination: destination } });
   }
 
-
   askProposalCountry() {
-      const answerUser: AIQuizzCountry = {
-        langue: [],
-        climat: '',
-        paysage: '',
-        activity: [],
-        populaire: false
-      };
+    const answerUser: AIQuizzCountry = {
+      langue: [],
+      climat: '',
+      paysage: '',
+      activity: [],
+      populaire: false
+    };
 
-      this.userAnswers.forEach(answer => {
-        switch (answer.quiz_line_id) {
-          case 10: // Question langue
-            if (answer.text.toLowerCase().includes('non')) {
-              answerUser.langue = ['français'];
-            } else {
-              answerUser.langue = ['français', 'anglais'];
-            }
-            break;
-
-          case 11: // Question climat
-            
-              answerUser.climat = answer.text.toLowerCase();
-              // console.log( answerUser.climat, 'climat');            
-            break;
-
-          case 15: // Question activité
-              answerUser.activity = [answer.text.toLowerCase()];
-              // console.log(answerUser.activity, 'activité');
-            break;
-    
-          case 19: // Question paysage
-           
-              answerUser.paysage = answer.text.toLowerCase();
-              // console.log( answerUser.paysage, 'paysage');
-
-            break;
-
-        }
-      });
-      this.questionnaireService.getAIProposition(answerUser).subscribe({
-        next: (suggestion) => {
-          for (let i = 0; i < 3; i++) {
-            this.proposalCountries[i] = suggestion.data[i];
+    this.userAnswers.forEach((answer) => {
+      switch (answer.quiz_line_id) {
+        case 10: // Question langue
+          if (answer.text.toLowerCase().includes('non')) {
+            answerUser.langue = ['français'];
+          } else {
+            answerUser.langue = ['français', 'anglais'];
           }
-          this.isProposalLoading = false;
-          console.log("Suggestion:", suggestion);
-          console.log("Proposal:", this.proposalCountries);
-        },
-        error: (error) => {
-          console.log('Erreur lors de la récupération des propositions de pays');
-          console.log(error);
+          break;
+
+        case 11: // Question climat
+          answerUser.climat = answer.text.toLowerCase();
+          // console.log( answerUser.climat, 'climat');
+          break;
+
+        case 15: // Question activité
+          answerUser.activity = [answer.text.toLowerCase()];
+          // console.log(answerUser.activity, 'activité');
+          break;
+
+        case 19: // Question paysage
+          answerUser.paysage = answer.text.toLowerCase();
+          // console.log( answerUser.paysage, 'paysage');
+
+          break;
+      }
+    });
+    this.questionnaireService.getAIProposition(answerUser).subscribe({
+      next: (suggestion) => {
+        for (let i = 0; i < 3; i++) {
+          this.proposalCountries[i] = suggestion.data[i];
         }
-      });
+        this.isProposalLoading = false;
+        console.log('Suggestion:', suggestion);
+        console.log('Proposal:', this.proposalCountries);
+      },
+      error: (error) => {
+        console.log('Erreur lors de la récupération des propositions de pays');
+        console.log(error);
+      }
+    });
   }
 }
