@@ -3,12 +3,33 @@ import TripTransportation from '../../models/triptransportation';
 import TripCity from '../../models/tripcity';
 import TripDay from '../../models/tripday';
 import TripDayActivity from '../../models/tripdayactivity';
+import TripInterface from '../interfaces/TripInterface';
+import TripTransportationInterface from '../interfaces/TripTransportationInterface';
+import TripCityInterface from '../interfaces/TripCityInterface';
 
 export default class TripController {
   async fullTrips() {
     const trips = await Trip.findAll();
 
     return trips;
+  }
+
+  async createFullTrip(trip: TripInterface, tripTrasportation: TripTransportationInterface, tripCities: TripCityInterface[]) {
+    const tripResponse = await Trip.create({
+      ...trip,
+      created_at: new Date(),
+      updated_at: new Date()
+    });
+
+    const tripTransportationResponse = await TripTransportation.create({
+      ...tripTrasportation,
+      created_at: new Date(),
+      updated_at: new Date()
+    })
+
+    const tripCityResponse = await TripCity.create({
+
+    })
   }
 
   async fullTrip(id: number) {

@@ -30,6 +30,17 @@ router.get('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
+router.post('/submit-full-asnwer', (async (req, res) => {
+
+  try {
+    const response = await quizResponseController.newFullQuizResponse(req.body.quizResponse, req.body.userAnswers)
+    res.status(201).json(response)
+  } catch (error: unknown) {
+    console.error(error)
+  }
+
+}))
+
 router.post('/', (async (req, res) => {
   try {
     const body = <Body>req.body;
