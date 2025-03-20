@@ -68,6 +68,7 @@ export class RegisterComponent implements OnInit {
     const selectedCountry = this.countries.find((country) => country.id === +event.target.value);
     if (selectedCountry) {
       this.user.country_id = selectedCountry.id;
+      // this.user.language_id = selectedCountry.id;
     }
   }
 

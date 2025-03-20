@@ -1,0 +1,29 @@
+<div *ngIf="subject" class="subject-container">
+  <h1>{{ subject.title }}</h1>
+  <p><strong>Créé le :</strong> {{ subject.created_at | date: 'longDate' }}</p>
+  <p><strong>Dernière mise à jour :</strong> {{ subject.updated_at | date: 'longDate' }}</p>
+  <p>{{ subject.content }}</p>
+  <h2>Commentaires</h2>
+  <div *ngIf="hasComments; else noComments">
+    <ul>
+      <li *ngFor="let comment of subject.comments">
+        <strong>Commentaire #{{ comment.id }} :</strong> {{ comment.message }}
+      </li>
+    </ul>
+  </div>
+  <div>
+    <h4 class="m-5">Ecrire un commentaire</h4>
+    <div>
+      <label>Sujet</label>
+      <input type="text" min="5" max="50" required />
+    </div>
+    <div>
+      <label>Commentaire</label>
+      <input type="text" min="5" max="1000" required />
+    </div>
+    <button type="submit" (click)="createSubject(subject.id)">Valider</button>
+  </div>
+  <ng-template #noComments>
+    <p>Aucun commentaire pour ce sujet.</p>
+  </ng-template>
+</div>

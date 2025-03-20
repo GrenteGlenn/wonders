@@ -1,0 +1,18 @@
+<div class="subject-container">
+    <h1>Liste des Sujets</h1>
+    <div *ngIf="subjects.length === 0" class="no-subjects">
+      Aucun sujet disponible.
+    </div>
+    <div *ngIf="subjects.length > 0" class="subject-list">
+      <div *ngFor="let subject of subjects" class="subject-card">
+        <h2>{{ subject.title }}</h2>
+        <div class="subject-meta">
+          <span>❤️ {{ subject.likes }} likes</span>
+          <span>📅 {{ subject.updated_at | date:'longDate' }}</span>
+        </div>
+  
+        <button (click)="viewDetails(subject.id)">Voir Détails</button>
+      </div>
+    </div>
+  </div>
+  

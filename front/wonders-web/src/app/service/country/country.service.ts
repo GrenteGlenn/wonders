@@ -7,7 +7,7 @@ import { AIProposalCountry } from '../../model/AI';
 interface Country {
   id: number;
   name: string;
-  code: string;
+  code: any;
   description: string;
   image: string;
   language: number;
