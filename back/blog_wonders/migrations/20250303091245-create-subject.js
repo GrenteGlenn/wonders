@@ -49,7 +49,7 @@ module.exports = {
   },
   async down(queryInterface, Sequelize) {
     try {
-      await queryInterface.removeConstraint('topics', 'topic');
+      await queryInterface.removeConstraint('subjects', 'topic');
     } catch (error) {
       console.warn('Constraint not found')
     }

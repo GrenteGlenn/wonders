@@ -1,9 +1,13 @@
+import Comment from '../../models/comment';
 import Subject from '../../models/subject';
 import UserSubject from '../../models/userSubject';
 
 export default class SubjectController {
-  async list() {
+  async list(topic_id: number) {
     const subjects = await Subject.findAll({
+      where: {
+        topic: topic_id
+      },
       attributes: ['id', 'user_id', 'title', 'content', 'topic', 'created_at', 'updated_at']
     });
 
@@ -25,10 +29,19 @@ export default class SubjectController {
   }
 
   async one(id: number) {
-    return await Subject.findByPk(id);
+    return await Subject.findByPk(id, {
+      attributes: ['id', 'user_id', 'title', 'content', 'topic', 'created_at', 'updated_at'],
+      include: [
+        {
+          model: Comment,
+          as: 'comments',
+          attributes: ['id', 'message']
+        }
+      ]
+    });
   }
 
-  async new(title: string, content: string, user_id: number, topic: number, created_at: Date) {
+  async create(title: string, content: string, user_id: number, topic: number, created_at: Date) {
     try {
       return await Subject.create({ title, content, user_id, topic, created_at });
     } catch (error: unknown) {

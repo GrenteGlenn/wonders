@@ -20,7 +20,7 @@ module.exports = {
     }
     for (let i = 1; i <= 125; i++) {
       entries.push({
-        user_id: (i % subjectsLimit) + 1 as number,
+        user_id: (i % subjectsLimit) + 1,
         subject_id: 3
       });
     }

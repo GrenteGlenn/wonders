@@ -14,7 +14,8 @@ const subjectController = new SubjectController();
 
 router.get('/', (async (req: Request, res: Response) => {
   try {
-    const subject = await subjectController.list();
+    const id = Number(req.query.topic_id);
+    const subject = await subjectController.list(id);
 
     res.status(200).json(subject);
   } catch (error) {
@@ -40,7 +41,7 @@ router.get('/:id', (async (req: Request, res: Response) => {
 router.post('/', (async (req: Request, res: Response) => {
   try {
     const body = <Body>req.body;
-    const subject = await subjectController.new(body.title, body.content, body.user_id, body.topic, new Date());
+    const subject = await subjectController.create(body.title, body.content, body.user_id, body.topic, new Date());
     subject
       ? res.status(201).json(subject)
       : res.status(400).json({ code: '400', message: 'an error occured while creating resource' });

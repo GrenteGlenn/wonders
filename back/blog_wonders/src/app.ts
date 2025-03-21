@@ -10,7 +10,7 @@ const app: Express = express();
 app.use(cors());
 app.use(userCheck);
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3004;
 
 app.use(express.json());
 
@@ -19,8 +19,6 @@ app.use('/api/topics', topicRoutes);
 app.use('/api/subjects', subjectRoutes)
 app.use('/api/comments', commentRoutes)
 app.use('/api/like', userSubjectRouter)
-
-
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World!');

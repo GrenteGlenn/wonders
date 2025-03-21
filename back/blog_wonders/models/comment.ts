@@ -56,12 +56,12 @@ export default class Comment extends Model<CommentInterface, CommentCreationAttr
     }
   );
 
-    Subject.belongsTo(Subject, {
-      foreignKey: 'subject',
-      as: 'subjectDetails'
-    });
-
-    Subject.hasMany(Comment, {
-      foreignKey: 'subject',
-      as: 'comments'
-    });
+  Comment.belongsTo(Subject, {
+    foreignKey: 'subject',
+    as: 'subjectDetails'
+  });
+  
+  Subject.hasMany(Comment, {
+    foreignKey: 'subject',
+    as: 'comments'
+  });
