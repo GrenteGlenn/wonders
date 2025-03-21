@@ -7,6 +7,7 @@
 
 export const environment = {
   production: false,
+  UrlStandard: 'http://localhost:3000',
   userApiUrl: 'http://localhost:3003',
   countryImgUrl: 'http://localhost:3000',
   quizzApiUrl: '/quizz-api',

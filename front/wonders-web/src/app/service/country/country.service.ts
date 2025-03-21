@@ -56,6 +56,7 @@ interface CountryAIResponse {
 export class CountryService {
   private API_URL = environment.quizzApiUrl;
   private API_URLImg = environment.countryImgUrl;
+  private API_URStandard = environment.UrlStandard;
 
   constructor(private http: HttpClient) {}
 
@@ -74,9 +75,13 @@ export class CountryService {
     return this.http.get<Country>(`${this.API_URL}/api/countries/country-description/${id}`);
   }
 
-  // Obtenir des informations IA sur un pays
+  // Obtenir des informations IA sur un pays (ne pas toucher)
   getAICountryInfo(countryName: string): Observable<AIDescriptionResponse> {
     return this.http.post<AIDescriptionResponse>(`${this.API_URL}/api/countries/ai_get_county`, { name: countryName });
+  }
+  // Obtenir des informations IA sur un pays (ne pas toucher)
+  getAICountryDescription(countryName: string): Observable<AIDescriptionResponse> {
+    return this.http.post<CountryAIResponse>(`${this.API_URStandard}/api/countries/ai`, { name: countryName });
   }
 
   // Rechercher des pays selon des critères

@@ -6,7 +6,7 @@ import { ActivityCategory, Picture } from '../../../app/model/activity';
 import { ActivityService } from '../../../app/service/activity/activity.service';
 import { CityService } from '../../../app/service/city/city.service';
 import { ToastService } from '../../../app/service/toast/toast.service';
-import { GoogleMapComponent } from "../../google-map/google-map.component";
+import { GoogleMapComponent } from '../../google-map/google-map.component';
 
 export interface Activity {
   name: string;
@@ -60,8 +60,6 @@ export class ModalActivityComponent {
   } | null = null;
   isLoadingCities: boolean = false;
 
-  
-
   constructor(
     private activityService: ActivityService,
     private cityService: CityService,
@@ -71,9 +69,6 @@ export class ModalActivityComponent {
   ngOnInit() {
     this.loadCategories();
   }
-
- 
-  
 
   loadCategories() {
     this.activityService.getAllCategories().subscribe({
@@ -170,7 +165,6 @@ export class ModalActivityComponent {
     this.activityName = city.city;
     this.selectedPicture = city.img_full;
     console.log(this.suggestedCities, 'cities');
-
   }
 
   onSubmit() {
