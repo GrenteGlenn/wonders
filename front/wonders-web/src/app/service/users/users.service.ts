@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../../model/User';
+import { FetchableUser } from '../../model/User';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { AuthentificationService } from '../auth/authentification.service';
@@ -17,7 +17,7 @@ export class UsersService {
   ) { }
 
   getUserInfo(){
-    return this.http.get<User>(`${this.API_URL}/api/users/me`)
+    return this.http.get<FetchableUser>(`${this.API_URL}/api/users/me`)
   }
 
   // getUserInfoByUserID(UserID: number) {

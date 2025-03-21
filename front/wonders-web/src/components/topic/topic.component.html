@@ -1,7 +1,9 @@
 <div class="topic-container">
     <h1>Categories</h1>
     <div *ngIf="me" class="topic-form">
-      <h2>Créer une nouvelle catégorie</h2>
+      <div class="align-button"><button (click)="isFormVisible = !isFormVisible">+</button></div>
+      <div *ngIf="isFormVisible">
+        <h2>Créer une nouvelle catégorie</h2>
       <div class="form-group">
         <label for="topicName">Nom</label>
         <input 
@@ -19,7 +21,6 @@
             </option>
           </select>
       </div>
-      
       <button 
         (click)="createSubject()" 
         [disabled]="!newTopic.name || !newTopic.country_id"
@@ -27,7 +28,7 @@
         Créer le sujet
       </button>
     </div>
-    
+  </div>
     <div class="topics-list">
       <h2>Sujets disponibles</h2>
       

@@ -231,6 +231,13 @@ body {
       white-space: nowrap;
       font-weight: 600;
     }
+
+    .align-button {
+      display: flex;
+      justify-content: end;
+      margin:15px 0;
+      font-size: 2.5rem; 
+    }
     
     td:nth-of-type(1):before { content: "ID"; }
     td:nth-of-type(2):before { content: "Nom"; }

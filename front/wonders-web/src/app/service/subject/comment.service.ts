@@ -7,7 +7,7 @@ import { Comment } from '../../model/Subject';
 @Injectable({
   providedIn: 'root'
 })
-export class SubjectService {
+export class CommentService {
 
   private API_URL = environment.blogApiUrl
 
@@ -15,8 +15,8 @@ export class SubjectService {
     private http: HttpClient
   ) { }
 
-  Create(user_id: number, message: string, subject: string) {
-    return this.http.post<Comment>(`${this.API_URL}/comments`, {user_id: user_id, subject: subject, message: message})
+  Create(user_id: number, message: string, subject: number) {
+    return this.http.post<Comment>(`${this.API_URL}/comments`, {user_id: user_id, message: message, subject: subject})
 
   }
 

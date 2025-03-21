@@ -1,24 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SubjectDetails } from '../../app/model/Subject';
+import { SubjectDetails, Comment } from '../../app/model/Subject';
 import { SubjectService } from '../../app/service/subject/subject.service';
+import { UsersService} from '../../app/service/users/users.service';
+import { CommentService } from '../../app/service/subject/comment.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-subject-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './subject-detail.component.html',
   styleUrl: './subject-detail.component.css'
 })
 export class SubjectDetailComponent implements OnInit {
-  subject: SubjectDetails | null = null;  // subject est initialisé à null
+  subject: SubjectDetails | null = null;
   id: number = 0;
+  user_id: number = 0;
+  newComment: Comment = { message: '', user_id: 0, subject: 0}
 
   constructor(
     private route: ActivatedRoute,
+    private _userService: UsersService,
     private _subjectService: SubjectService,
-    private router: Router
+    private router: Router,
+    private _commentService: CommentService
+  
   ) { }
 
   ngOnInit(): void {
@@ -27,13 +35,24 @@ export class SubjectDetailComponent implements OnInit {
       if (this.id) {
         this.getSubject(this.id);
       }
+      this.getMe()
+    });
+  }
+
+  getMe(): void {
+    this._userService.getUserInfo().subscribe({
+      next: (data) => {
+        this.user_id = data.id;
+      },
+      error: (error) => {
+        console.error('An error occured while fetching me:', error);
+      }
     });
   }
 
   getSubject(id: number): void {
     this._subjectService.getOneSubjects(id).subscribe({
       next: (data: SubjectDetails) => {
-        console.log(data);
         this.subject = data;
       },
       error: (error) => {
@@ -46,8 +65,18 @@ export class SubjectDetailComponent implements OnInit {
     this.router.navigate(['/subjects', id]);
   }
 
-  createSubject(id: number) {
+  createComment(id: number | undefined) {
     console.log("ta mere suce des bites");
+    this._commentService.Create(this.user_id, this.newComment.message, id as number).subscribe({
+      next: (data: Comment) => {
+        this.newComment = { message: '', user_id: 0, subject: 0}
+        this.getSubject(id as number)
+      },
+
+      error: (error) => {
+        console.error('Erreur lors de la récupération du sujet:', error);
+      }
+    });
     
   }
 

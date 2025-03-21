@@ -1,23 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subject } from '../../app/model/Subject';
+import { Subject, InsertSubject } from '../../app/model/Subject';
 import { SubjectService } from '../../app/service/subject/subject.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UsersService } from '../../app/service/users/users.service';
+import { FormsModule } from '@angular/forms';
+import { User, FetchableUser } from '../../app/model/User';
 
 @Component({
   selector: 'app-subject',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './subject.component.html',
   styleUrl: './subject.component.css'
 })
 export class SubjectComponent implements OnInit {
   subjects: Subject[] = [];
-  topic_id: number = 0;
+  topic_id: number | null = null;
+  isFormVisible: boolean = false;
+  user_id: number | null = null;
+  newSubject: InsertSubject = { title: '', content: '', user_id: this.user_id as number, topic: this.topic_id as number };
+
 
   constructor(
     private route: ActivatedRoute,
     private _subjectService: SubjectService,
+    private _userService: UsersService,
     private router: Router
   ) { }
 
@@ -27,13 +35,24 @@ export class SubjectComponent implements OnInit {
       if (this.topic_id) {
         this.getSubjects(this.topic_id);
       }
+      this.getMe()
+    });
+  }
+
+  getMe(): void {
+    this._userService.getUserInfo().subscribe({
+      next: (data: FetchableUser) => {
+        this.user_id = data.id;
+      },
+      error: (error) => {
+        console.error('Erreur lors de la récupération de l\'utilisateur:', error);
+      }
     });
   }
 
   getSubjects(topic_id: number): void {
     this._subjectService.getAllSubjects(topic_id).subscribe({
       next: (data: Subject[]) => {
-        console.log(data);
         this.subjects = data;
       },
       error: (error) => {
@@ -44,5 +63,19 @@ export class SubjectComponent implements OnInit {
 
   viewDetails(id: number): void {
     this.router.navigate(['/subjects', id]);
+  }
+
+  createSubject(): void {
+    this._subjectService.Create(this.newSubject.title, this.newSubject.content, this.user_id as number, this.topic_id as number)
+    .subscribe({
+      next: (response) => {
+        this.isFormVisible = false
+        this.newSubject = { title: '', content: '', user_id: 0, topic: 0 };
+        this.getSubjects(this.topic_id as number)
+      },
+      error: (error) => {
+        console.error('Erreur lors de la création du sujet:', error);
+      }
+    });
   }
 }

@@ -37,4 +37,11 @@
   button:hover {
     background-color: #0056b3;
   }
+
+  .align-button {
+    display: flex;
+    justify-content: end;
+    margin:15px 0;
+    font-size: 2.5rem; 
+  }
   

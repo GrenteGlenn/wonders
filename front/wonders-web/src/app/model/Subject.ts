@@ -9,8 +9,15 @@ export interface Subject {
     updated_at?: Date;
   }
 
+  export interface InsertSubject {
+    title: string;
+    content: string;
+    user_id: number;
+    topic: number;
+  }
+
   export interface Comment {
-    id: number;
+    id?: number;
     message: string;
     user_id: number;
     subject: number;

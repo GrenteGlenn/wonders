@@ -24,8 +24,8 @@ export class SubjectService {
     return this.http.get<SubjectDetails>(`${this.API_URL}/subjects/${id}`)
   }
 
-  Create(country_id: number, name: string) {
-    return this.http.post<Subject>(`${this.API_URL}/topics`, {country_id: country_id, name: name})
+  Create(title: string, content: string, user_id: number, topic: number) {
+    return this.http.post<Subject>(`${this.API_URL}/subjects`, {title: title, content: content, user_id: user_id, topic: topic})
 
   }
 

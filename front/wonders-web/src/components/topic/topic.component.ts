@@ -22,6 +22,7 @@ export class TopicComponent {
   me: User | null = null
   countries: Country[] | null = []
   country: Country | null = null 
+  isFormVisible: boolean = false
 
   constructor(
     private route: ActivatedRoute,
@@ -40,8 +41,6 @@ export class TopicComponent {
   getCountries(): void {
     this._countriesService.getAllCountries().subscribe({
       next: (data) => {
-        console.log(data);
-        
         this.countries = data;
       },
       error: (error) => {
@@ -69,8 +68,6 @@ export class TopicComponent {
   getTopics(): void {
     this._topicService.getAllTopics().subscribe({
       next: (data) => {
-        console.log(data);
-        
         this.topics = data;
       },
       error: (error) => {
@@ -90,7 +87,6 @@ export class TopicComponent {
         this._topicService.Create(this.newTopic.country_id, this.newTopic.name)
           .subscribe({
             next: (response) => {
-              console.log('Sujet créé avec succès:', response);
               this.getTopics();
               this.newTopic = { name: '', country_id: 0 };
             },
