@@ -16,7 +16,7 @@
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            Mis à jour le {{ subject.updated_at | date: 'longDate' }}
+            Mis à jour le {{ subject.updated_at ?? subject.created_at| date: 'longDate' }}
           </p>
         </div>
         <p class="text-gray-600 text-lg leading-relaxed">
@@ -32,10 +32,12 @@
           </svg>
           Commentaires
         </h2>
-
         <!-- Liste des commentaires -->
         <div *ngIf="hasComments; else noComments" class="space-y-4 mb-8">
           <div *ngFor="let comment of subject?.comments" class="bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500">
+            <div *ngIf="comment.user_id == user_id && subject" (click)="deleteComment(comment, subject)" class="text-right text-3xl font-bold cursor-pointer text-gray-600 hover:text-red-500">
+              ×
+            </div>
             <div class="flex items-start">
               <div class="flex-shrink-0">
                 <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">

@@ -49,10 +49,17 @@
 
     <div *ngIf="subjects.length > 0" class="subject-list">
       <div *ngFor="let subject of subjects" class="subject-card">
+        <div *ngIf="subject.user_id == user_id" (click)="deleteSubject(subject.id)" class="text-right text-3xl font-bold cursor-pointer text-gray-600 hover:text-red-500">
+          ×
+        </div>
         <h2>{{ subject.title }}</h2>
         <div class="subject-meta">
-          <span>❤️ {{ subject.likes }} likes</span>
-          <span>📅 {{ subject.updated_at | date:'longDate' }}</span>
+          <span class="cursor-pointer text-red-500 hover:text-red-700 flex items-center space-x-1" (click)="likeSubject(subject)">
+            ❤️ 
+            <span>{{ subject.likes }}</span> 
+            <span>{{ subject.likes <= 1 ? 'like' : 'likes' }}</span>
+          </span>
+          <span>📅 {{ subject.created_at | date:'longDate' }}</span>
         </div>
         <button (click)="viewDetails(subject.id)">Voir Détails</button>
       </div>

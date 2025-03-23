@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from '../../app/service/users/users.service';
 import { FormsModule } from '@angular/forms';
 import { User, FetchableUser } from '../../app/model/User';
+import { UserLikeService } from '../../app/service/subject/userLike.service';
+import { UserLike } from '../../app/model/UserLike';
 
 @Component({
   selector: 'app-subject',
@@ -26,6 +28,7 @@ export class SubjectComponent implements OnInit {
     private route: ActivatedRoute,
     private _subjectService: SubjectService,
     private _userService: UsersService,
+    private _userLikeService: UserLikeService,
     private router: Router
   ) { }
 
@@ -50,6 +53,24 @@ export class SubjectComponent implements OnInit {
     });
   }
 
+  likeSubject(subject: Subject): void {
+    if (!subject || !subject.id || !this.user_id) {
+      console.warn('Sujet ou identifiant utilisateur invalide.');
+      return;
+    }
+
+    this._userLikeService.Create(subject.id, this.user_id).subscribe({
+      next: () => {
+        if (this.topic_id) {
+          this.getSubjects(this.topic_id);
+        }
+      },
+      error: (error) => {
+        console.error('Erreur lors de l’ajout du like:', error);
+      }
+    });
+  }
+
   getSubjects(topic_id: number): void {
     this._subjectService.getAllSubjects(topic_id).subscribe({
       next: (data: Subject[]) => {
@@ -67,15 +88,27 @@ export class SubjectComponent implements OnInit {
 
   createSubject(): void {
     this._subjectService.Create(this.newSubject.title, this.newSubject.content, this.user_id as number, this.topic_id as number)
-    .subscribe({
-      next: (response) => {
-        this.isFormVisible = false
-        this.newSubject = { title: '', content: '', user_id: 0, topic: 0 };
-        this.getSubjects(this.topic_id as number)
-      },
-      error: (error) => {
-        console.error('Erreur lors de la création du sujet:', error);
-      }
-    });
+      .subscribe({
+        next: (response) => {
+          this.isFormVisible = false
+          this.newSubject = { title: '', content: '', user_id: 0, topic: 0 };
+          this.getSubjects(this.topic_id as number)
+        },
+        error: (error) => {
+          console.error('Erreur lors de la création du sujet:', error);
+        }
+      });
+  }
+
+  deleteSubject(id: number): void {
+    this._subjectService.Delete(id)
+      .subscribe({
+        next: () => {
+          this.getSubjects(this.topic_id as number)
+        },
+        error: (error) => {
+          console.error('Erreur lors de la création du sujet:', error);
+        }
+      });
   }
 }

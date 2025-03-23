@@ -29,12 +29,12 @@ export class SubjectService {
 
   }
 
-  Edit(topic: Topic) {
-    return this.http.put<Subject[]>(`${this.API_URL}/topics/${topic.id}`,{country_id: topic.country_id, name: topic.name})
+  Edit(subject: Subject) {
+    // return this.http.put<Subject[]>(`${this.API_URL}/subjects/${subject.id}`,{country_id: subject.country_id, name: topic.name})
   }
 
-  Delete(topic: Topic) {
-    return this.http.delete(`${this.API_URL}/topics/${topic.id}`)
+  Delete(id: number) {
+    return this.http.delete(`${this.API_URL}/subjects/${id}`)
   }
 
 

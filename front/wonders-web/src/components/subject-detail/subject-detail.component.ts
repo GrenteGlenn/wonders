@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SubjectDetails, Comment } from '../../app/model/Subject';
 import { SubjectService } from '../../app/service/subject/subject.service';
-import { UsersService} from '../../app/service/users/users.service';
+import { UsersService } from '../../app/service/users/users.service';
 import { CommentService } from '../../app/service/subject/comment.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -17,8 +17,8 @@ import { FormsModule } from '@angular/forms';
 export class SubjectDetailComponent implements OnInit {
   subject: SubjectDetails | null = null;
   id: number = 0;
-  user_id: number = 0;
-  newComment: Comment = { message: '', user_id: 0, subject: 0}
+  user_id: number | null = null;
+  newComment: Comment = { message: '', user_id: 0, subject: 0 }
 
   constructor(
     private route: ActivatedRoute,
@@ -26,7 +26,7 @@ export class SubjectDetailComponent implements OnInit {
     private _subjectService: SubjectService,
     private router: Router,
     private _commentService: CommentService
-  
+
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +54,7 @@ export class SubjectDetailComponent implements OnInit {
     this._subjectService.getOneSubjects(id).subscribe({
       next: (data: SubjectDetails) => {
         this.subject = data;
+  
       },
       error: (error) => {
         console.error('Erreur lors de la récupération du sujet:', error);
@@ -66,21 +67,36 @@ export class SubjectDetailComponent implements OnInit {
   }
 
   createComment(id: number | undefined) {
-    console.log("ta mere suce des bites");
-    this._commentService.Create(this.user_id, this.newComment.message, id as number).subscribe({
-      next: (data: Comment) => {
-        this.newComment = { message: '', user_id: 0, subject: 0}
-        this.getSubject(id as number)
-      },
+    if (this.user_id !== null) {
+      this._commentService.Create(this.user_id, this.newComment.message, id as number).subscribe({
+        next: (data: Comment) => {
+          this.newComment = { message: '', user_id: 0, subject: 0 }
+          this.getSubject(id as number)
+        },
 
-      error: (error) => {
-        console.error('Erreur lors de la récupération du sujet:', error);
-      }
-    });
-    
+        error: (error) => {
+          console.error('Erreur lors de la récupération du sujet:', error);
+        }
+      })
+    }
+    ;
   }
 
   get hasComments(): boolean {
     return !!this.subject?.comments?.length;
+  }
+
+  deleteComment(comment: Comment, subject: SubjectDetails): void {
+    if (this.user_id === comment.user_id && comment.id && subject) {
+      this._commentService.Delete(comment).subscribe({
+        next: () => {
+          this.getSubject(subject.id as number)
+        },
+
+        error: (error) => {
+          console.error('Erreur lors de la récupération du sujet:', error);
+        }
+      });
+    }
   }
 }
