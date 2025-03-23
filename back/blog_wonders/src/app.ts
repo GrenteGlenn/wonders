@@ -8,7 +8,7 @@ import userCheck from './middlewares/userCheck';
 
 const app: Express = express();
 app.use(cors());
-app.use(userCheck);
+// app.use(userCheck);
 
 const port = process.env.PORT || 3004;
 

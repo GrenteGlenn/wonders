@@ -35,7 +35,7 @@ export default class SubjectController {
         {
           model: Comment,
           as: 'comments',
-          attributes: ['id', 'message']
+          attributes: ['id', 'message', 'user_id']
         }
       ]
     });
