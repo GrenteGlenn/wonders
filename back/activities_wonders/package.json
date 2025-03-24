@@ -8,13 +8,13 @@
     "sequelize": "^6.37.3",
     "zod": "^3.23.8"
   },
-  "name": "quiz_wonders",
+  "name": "activity_wonders",
   "type": "commonjs",
   "version": "1.0.0",
   "main": "./src/app.js",
   "scripts": {
-    "test": "jest",
     "start": "ts-node src/app.ts",
+    "test": "jest",
     "build": "tsc",
     "init": "npm install",
     "lint": "eslint src/**/*.ts",

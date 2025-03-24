@@ -1,6 +1,7 @@
 import User from '../../models/user';
 import UserInterface from '../interfaces/UserInterface';
 import { encryptPassword } from '../lib/CheckPassword';
+import Role from '../../models/role';
 
 export default class AuthController {
   async list() {
@@ -12,7 +13,14 @@ export default class AuthController {
   }
 
   async getOneByEmail(email: string) {
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findOne({
+      where: { email: email },
+      include: {
+        model: Role,
+        as: 'role',
+        attributes: ['role']
+      }
+    });
     if (user) return user;
     else return null;
   }
