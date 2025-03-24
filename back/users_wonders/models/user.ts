@@ -83,12 +83,16 @@ User.hasOne(Language, {
 
 Language.belongsTo(User);
 
-User.hasOne(Role, {
-  sourceKey: 'id',
-  foreignKey: 'role_id'
+
+User.belongsTo(Role, {
+  foreignKey: 'role_id',
+  as: 'role'
 });
 
-Role.belongsTo(User);
-
+// Modèle Role
+Role.hasMany(User, {
+  foreignKey: 'role_id',
+  as: 'users'
+});
 
 export default User;

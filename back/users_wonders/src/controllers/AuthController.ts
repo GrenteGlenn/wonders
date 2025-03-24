@@ -5,21 +5,39 @@ import Role from '../../models/role';
 
 export default class AuthController {
   async list() {
-    return await User.findAll();
+    return await User.findAll({
+      include: [
+        {
+          model: Role,
+          as: 'role',
+          attributes: ['role']
+        }
+      ]
+    });
   }
 
   async getOne(id: number) {
-    return await User.findByPk(id);
+    return await User.findByPk(id, {
+      include: [
+        {
+          model: Role,
+          as: 'role',
+          attributes: ['role']
+        }
+      ]
+    });
   }
 
   async getOneByEmail(email: string) {
     const user = await User.findOne({
       where: { email: email },
-      include: {
-        model: Role,
-        as: 'role',
-        attributes: ['role']
-      }
+      include: [
+        {
+          model: Role,
+          as: 'role',
+          attributes: ['role']
+        }
+      ]
     });
     if (user) return user;
     else return null;
