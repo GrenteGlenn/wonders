@@ -6,30 +6,123 @@ import TripDayActivity from '../../models/tripdayactivity';
 import TripInterface from '../interfaces/TripInterface';
 import TripTransportationInterface from '../interfaces/TripTransportationInterface';
 import TripCityInterface from '../interfaces/TripCityInterface';
+import TripDayInterface from '../interfaces/TripDayInterface';
+import TripDayActivityInterface from '../interfaces/TripDayActivityInterface';
 
 export default class TripController {
-  async fullTrips() {
-    const trips = await Trip.findAll();
+  async fullTrips(id: number) {
+    const trips = await Trip.findAll({
+      where: { user_id: id },
+      attributes: {
+        exclude: ['created_at', 'updated_at', 'transportation_id']
+      },
+      include: [
+        {
+          model: TripTransportation,
+          as: 'trip_transportation',
+          attributes: {
+            exclude: ['id', 'created_at', 'updated_at']
+          }
+        },
+        {
+          model: TripCity,
+          as: 'cities',
+          attributes: {
+            exclude: ['trip_city_id', 'transportation_id', 'created_at', 'updated_at']
+          },
+          include: [
+            {
+              model: TripDay,
+              as: 'tripCityDays',
+              attributes: {
+                exclude: ['created_at', 'updated_at']
+              },
+              include: [
+                {
+                  model: TripDayActivity,
+                  as: 'activities',
+                  attributes: {
+                    exclude: ['trip_day_id', 'created_at', 'updated_at']
+                  }
+                }
+              ]
+            },
+            {
+              model: TripTransportation,
+              as: 'transportation',
+              attributes: {
+                exclude: ['created_at', 'updated_at']
+              }
+            }
+          ]
+        }
+      ]
+    });
 
     return trips;
   }
 
-  async createFullTrip(trip: TripInterface, tripTrasportation: TripTransportationInterface, tripCities: TripCityInterface[]) {
-    const tripResponse = await Trip.create({
-      ...trip,
+  async createFullTrip(
+    trip: TripInterface,
+    tripTransportation: TripTransportationInterface,
+    tripCities: {
+      cities: TripCityInterface;
+      transportations: TripTransportation;
+      tripCityDays: TripDayInterface[];
+      tripDayActivities: TripDayActivityInterface[];
+    }[]
+  ) {
+    const tripTransportationResponseOne = await TripTransportation.create({
+      ...tripTransportation,
       created_at: new Date(),
       updated_at: new Date()
     });
 
-    const tripTransportationResponse = await TripTransportation.create({
-      ...tripTrasportation,
+    const tripResponse = await Trip.create({
+      ...trip,
+      transportation_id: tripTransportationResponseOne.id,
       created_at: new Date(),
       updated_at: new Date()
-    })
+    });
 
-    const tripCityResponse = await TripCity.create({
+    for (const city of tripCities) {
+      const { cities, transportations, tripCityDays, tripDayActivities } = city;
 
-    })
+      const tripTransportResponse = await TripTransportation.create({
+        ...transportations,
+        created_at: new Date(),
+        updated_at: new Date()
+      });
+      const tripCityResponse = await TripCity.create({
+        ...cities,
+        transportation_id: tripTransportResponse.id,
+        trip_id: tripResponse.id,
+        created_at: new Date(),
+        updated_at: new Date()
+      });
+
+      if (tripCityDays) {
+        for (const day of tripCityDays) {
+          const tripCityDayResponse = await TripDay.create({
+            ...day,
+            trip_city_id: tripCityResponse.id,
+            created_at: new Date(),
+            updated_at: new Date()
+          });
+
+          await Promise.all(
+            tripDayActivities.map(async (activity) => {
+              await TripDayActivity.create({
+                ...activity,
+                trip_day_id: tripCityDayResponse.id,
+                created_at: new Date(),
+                updated_at: new Date()
+              });
+            })
+          );
+        }
+      }
+    }
   }
 
   async fullTrip(id: number) {

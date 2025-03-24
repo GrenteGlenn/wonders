@@ -1,9 +1,16 @@
 import QuizResponseController from '../controllers/QuizResponseController';
 import { RequestHandler, Router } from 'express';
+import UserAnswer from '../interfaces/UserAnswerInterface';
+import QuizResponse from '../interfaces/QuizResponseInterface';
 
 interface Body {
   quiz_id: number;
   user_id: number;
+}
+
+interface BodyAllAswers {
+  quizResponse: QuizResponse;
+  userAnswers: UserAnswer[];
 }
 
 const router = Router();
@@ -31,15 +38,14 @@ router.get('/:id', (async (req, res) => {
 }) as RequestHandler);
 
 router.post('/submit-full-asnwer', (async (req, res) => {
-
   try {
-    const response = await quizResponseController.newFullQuizResponse(req.body.quizResponse, req.body.userAnswers)
-    res.status(201).json(response)
+    const body = <BodyAllAswers>req.body;
+    const response = await quizResponseController.newFullQuizResponse(body.quizResponse, body.userAnswers);
+    res.status(201).json(response);
   } catch (error: unknown) {
-    console.error(error)
+    console.error(error);
   }
-
-}))
+}) as RequestHandler);
 
 router.post('/', (async (req, res) => {
   try {

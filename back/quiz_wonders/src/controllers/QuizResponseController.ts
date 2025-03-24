@@ -32,7 +32,6 @@ export default class QuizResponseController {
   }
 
   async newFullQuizResponse(quizResponse: QuizResponseInterface, userAnswers: UserAnswerInterface[]) {
-
     try {
       const quizRes = await QuizResponse.create({
         ...quizResponse,
@@ -45,14 +44,12 @@ export default class QuizResponseController {
           ...userAnswer,
           created_at: new Date(),
           updated_at: new Date(),
-          quiz_response_id: quizRes.id,
+          quiz_response_id: quizRes.id
         });
       }
-
     } catch (error: unknown) {
-      console.error(error)
+      console.error(error);
     }
-
   }
 
   async one(id: number) {
