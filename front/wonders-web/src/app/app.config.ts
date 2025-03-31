@@ -61,7 +61,7 @@ export const appConfig: ApplicationConfig = {
         LogIn,
         Plus,
         CircleX,
-        CircleCheckBig,
+        CircleCheckBig
       })
     ),
     provideAnimationsAsync(),

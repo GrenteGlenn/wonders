@@ -4,8 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CityService } from '../../app/service/city/city.service';
 import { CountryService } from '../../app/service/country/country.service';
-import { catchError, forkJoin, map, of } from 'rxjs';
-import { GoogleMapComponent } from "../google-map/google-map.component";
+import { GoogleMapComponent } from '../google-map/google-map.component';
 
 interface Destination {
   name: string;
@@ -15,9 +14,9 @@ interface Destination {
   isDescriptionLoading?: boolean;
   isImageLoading?: boolean;
 }
-interface CountryImageResponse {
-  data: string | null;
-}
+// interface CountryImageResponse {
+//   data: string | null;
+// }
 
 @Component({
   selector: 'app-destinations',
@@ -31,8 +30,6 @@ export class DestinationsComponent implements OnInit {
   searchResults: Destination[] = [];
   searchTerm: string = '';
   isLoading: boolean = true;
-
-  // Pagination
   currentPage: number = 1;
   itemsPerPage: number = 6;
   totalPages: number = 1;
@@ -48,7 +45,6 @@ export class DestinationsComponent implements OnInit {
     this.route.queryParams.subscribe((params) => {
       this.isLoading = true;
 
-      // Récupérer éventuellement le paramètre de page
       if (params['page']) {
         this.currentPage = parseInt(params['page'], 10) || 1;
       } else {
@@ -78,44 +74,34 @@ export class DestinationsComponent implements OnInit {
     if (Math.abs(page - this.currentPage) <= 1) {
       return true;
     }
-
-    // Pour les grandes paginations, ajouter des ellipses (...)
-    // en n'affichant que certaines pages
     if (this.totalPages > 7) {
       if (this.currentPage <= 4) {
-        // Si on est au début, montrer les 5 premières pages
+        // Si on est au début, montre les 5 premières pages
         return page <= 5;
       } else if (this.currentPage >= this.totalPages - 3) {
-        // Si on est à la fin, montrer les 5 dernières pages
+        // Si on est à la fin, montre les 5 dernières pages
         return page >= this.totalPages - 4;
       } else {
-        // Sinon, montrer quelques pages autour de la page courante
+        // Sinon, montre quelques pages autour de la page courante
         return Math.abs(page - this.currentPage) <= 2;
       }
     }
-
-    // Pour les petites paginations, montrer toutes les pages
     return true;
   }
-
-  // Ce getter permet d'accéder à l'objet Math dans le template
   get Math() {
     return Math;
   }
 
-  // Méthode pour gérer la pagination
+  // Gestion de la pagination
   updatePagination() {
     this.totalPages = Math.ceil(this.searchResults.length / this.itemsPerPage);
-
-    // Ajuster la page courante si nécessaire
     if (this.currentPage > this.totalPages) {
       this.currentPage = this.totalPages;
     }
     if (this.currentPage < 1) {
       this.currentPage = 1;
     }
-
-    // Calculer les résultats pour la page courante
+    // Calcule les résultats pour la page courante
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = Math.min(startIndex + this.itemsPerPage, this.searchResults.length);
     this.paginatedResults = this.searchResults.slice(startIndex, endIndex);
@@ -173,26 +159,15 @@ export class DestinationsComponent implements OnInit {
       }
     });
   }
-
+  //Clean les texts
   private cleanFormattedText(text: string): string {
     if (!text) return '';
 
-    // Remplacer les titres Markdown (###)
     let cleaned = text.replace(/#{1,6}\s/g, '');
-
-    // Remplacer les gras Markdown (**)
     cleaned = cleaned.replace(/\*\*/g, '');
-
-    // Remplacer les italiques Markdown (*)
     cleaned = cleaned.replace(/\*/g, '');
-
-    // Supprimer les listes numérotées (1., 2., etc.)
     cleaned = cleaned.replace(/^\d+\.\s/gm, '');
-
-    // Supprimer les listes à puces (-, *, •)
     cleaned = cleaned.replace(/^[\-\*\•]\s/gm, '');
-
-    // Remplacer les liens Markdown [texte](url) par juste le texte
     cleaned = cleaned.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1');
 
     return cleaned;
@@ -201,7 +176,7 @@ export class DestinationsComponent implements OnInit {
   loadCountry(countryName: string) {
     console.log('Chargement du pays:', countryName);
 
-    // Initialiser immédiatement la destination avec juste le nom
+    // Initialiser la destination avec le nom
     this.destination = {
       name: countryName,
       image: '',
@@ -210,69 +185,46 @@ export class DestinationsComponent implements OnInit {
       isDescriptionLoading: true,
       isImageLoading: true
     };
-
-    // Sortir du mode de chargement global
     this.isLoading = false;
 
-    // 1. Charger l'image en premier
+    // Charge l'image en premier
     this.countryService.getCountryImage(countryName).subscribe({
       next: (imageResponse) => {
-        console.log('Réponse image:', imageResponse);
-
-        // Mettre à jour l'image dès qu'elle est disponible
+        // Met à jour l'image dès qu'elle est disponible
         if (this.destination && imageResponse && imageResponse.data) {
           this.destination.image = imageResponse.data;
         }
-
-        // Marquer l'image comme chargée
         if (this.destination) {
           this.destination.isImageLoading = false;
         }
       },
       error: (error) => {
         console.error("Erreur lors du chargement de l'image:", error);
-
-        // En cas d'erreur, marquer comme chargé quand même
-        if (this.destination) {
-          this.destination.isImageLoading = false;
-        }
       }
     });
 
-    // 2. Charger la description en parallèle
+    //Charge la description en parallèle
     this.countryService.getAICountryDescription(countryName).subscribe({
       next: (response) => {
-        // Mettre à jour la description dès qu'elle est disponible
         if (this.destination && response && response.data) {
           const cleanedDescription = this.cleanFormattedText(response.data);
           this.destination.description = cleanedDescription;
         } else if (this.destination) {
           this.destination.description = `${countryName} est une destination fascinante à découvrir.`;
         }
-
-        // Marquer la description comme chargée
         if (this.destination) {
           this.destination.isDescriptionLoading = false;
         }
       },
       error: (error) => {
         console.error('Erreur lors du chargement de la description:', error);
-
-        // En cas d'erreur, mettre une description par défaut
-        if (this.destination) {
-          this.destination.description = `${countryName} est une destination fascinante à découvrir. Explorez sa culture, son histoire et ses merveilles.`;
-          this.destination.isDescriptionLoading = false;
-        }
       }
     });
   }
 
   loadCountryImage(countryName: string) {
-    console.log("Chargement de l'image pour:", countryName);
-
     this.countryService.getCountryImage(countryName).subscribe({
       next: (imageResponse) => {
-        console.log('Réponse image:', imageResponse);
         if (this.destination && imageResponse && imageResponse.data) {
           this.destination.image = imageResponse.data;
         }
@@ -323,19 +275,19 @@ export class DestinationsComponent implements OnInit {
               }));
 
             this.searchResults = [...this.searchResults, ...filteredCountries];
-            this.updatePagination(); // Mise à jour de la pagination
+            this.updatePagination();
             this.isLoading = false;
           },
           error: (error) => {
             console.error('Erreur lors de la récupération des pays:', error);
-            this.updatePagination(); // Mise à jour de la pagination même en cas d'erreur
+            this.updatePagination();
             this.isLoading = false;
           }
         });
       },
       error: (error) => {
         console.error('Erreur lors de la recherche de villes:', error);
-        this.updatePagination(); // Mise à jour de la pagination même en cas d'erreur
+        this.updatePagination();
         this.isLoading = false;
       }
     });
@@ -371,7 +323,7 @@ export class DestinationsComponent implements OnInit {
     });
   }
 
-  // Méthode pour charger les images une par une (pour éviter trop de requêtes simultanées)
+  // Charge les images une par une (pour éviter trop de requêtes simultanées)
   loadImagesSequentially(countries: any[]) {
     countries.forEach((country, index) => {
       setTimeout(() => {

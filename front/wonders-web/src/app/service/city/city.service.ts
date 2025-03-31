@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
+
 interface City {
   id?: number;
   name: string;
@@ -33,7 +34,7 @@ interface CityAIResponse {
 export class CityService {
   private apiUrl = environment.aiApiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, ) {}
 
   // Récupère toutes les villes
   getAllCities(): Observable<City[]> {
