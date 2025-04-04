@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-let port = process.env.PORT;
+const port = process.env.PORT;
 
 app.use('/api/hotel', hotelRoute);
 app.use('/api/fly', flyRoute);
