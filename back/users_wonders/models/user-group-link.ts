@@ -5,7 +5,7 @@ import User from './user';
 import UserGroup from './user-group';
 
 
-class UserGroupLink extends Model<UserGroupLinkInterface> implements UserGroupLinkInterface {
+export default class UserGroupLink extends Model<UserGroupLinkInterface> implements UserGroupLinkInterface {
   declare user_id: number;
   declare user_group_id: number;
   declare readonly created_at: Date;
@@ -16,6 +16,7 @@ UserGroupLink.init(
   {
     user_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true, 
       allowNull: false,
       references: {
         model: User,
@@ -24,6 +25,7 @@ UserGroupLink.init(
     },
     user_group_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true, 
       allowNull: false,
       references: {
         model: UserGroup,
@@ -47,4 +49,3 @@ UserGroupLink.init(
   }
 );
 
-export default UserGroupLink;

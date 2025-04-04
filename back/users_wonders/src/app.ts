@@ -6,6 +6,7 @@ import userRoutes from './routes/userRoutes';
 import addressRoutes from './routes/adressRoutes';
 import roleRoutes from './routes/roleRoutes';
 import sessionRoutes from './routes/sessionRoutes';
+import userGroupRoutes from './routes/userGroupRoutes';
 import cors from 'cors';
 
 const app: Express = express();
@@ -23,6 +24,7 @@ app.use('/api/users', jsonParser, userRoutes);
 app.use('/api/address', jsonParser, addressRoutes);
 app.use('/api/role', jsonParser, roleRoutes);
 app.use('/api/session', jsonParser, sessionRoutes);
+app.use('/api/user-group', jsonParser, userGroupRoutes);
 
 app.listen(port, () => {
   console.log(`Example app User listening on port ${port}`);

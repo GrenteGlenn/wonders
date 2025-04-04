@@ -2,6 +2,7 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import { UserGroupInterface } from '../src/interfaces/UserGroup';
 import sequelize from '../config/dbConnection';
 import User from './user';
+import UserGroupLink from './user-group-link';
 
 interface UserGroupCreationAttributes extends Optional<UserGroupInterface, 'id'> {}
 
@@ -11,6 +12,9 @@ class UserGroup extends Model<UserGroupInterface, UserGroupCreationAttributes> i
   declare owner: number;
   declare readonly created_at: Date;
   declare readonly updated_at: Date;
+
+  declare users?: User[];
+  declare ownerUser?: User;
 }
 
 UserGroup.init(
@@ -47,5 +51,22 @@ UserGroup.init(
     timestamps: false
   }
 );
+
+User.hasMany(UserGroup, { foreignKey: 'owner', as: 'ownedGroups' });
+UserGroup.belongsTo(User, { foreignKey: 'owner', as: 'ownerUser' });
+
+User.belongsToMany(UserGroup, {
+  through: UserGroupLink,
+  foreignKey: 'user_id',
+  otherKey: 'user_group_id',
+  as: 'userGroups'
+});
+
+UserGroup.belongsToMany(User, {
+  through: UserGroupLink,
+  foreignKey: 'user_group_id',
+  otherKey: 'user_id',
+  as: 'users'
+});
 
 export default UserGroup;
