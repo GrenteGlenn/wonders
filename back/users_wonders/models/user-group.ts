@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { UserGroupInterface } from '../src/interfaces/UserGroup';
 import sequelize from '../config/dbConnection';
 import User from './user';
@@ -12,6 +12,7 @@ class UserGroup extends Model<UserGroupInterface, UserGroupCreationAttributes> i
   declare readonly created_at: Date;
   declare readonly updated_at: Date;
 }
+const date = Sequelize.literal('NOW()')
 
 UserGroup.init(
   {
@@ -25,11 +26,13 @@ UserGroup.init(
     },
     created_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true,
+      defaultValue: date
     },
     updated_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true,
+      defaultValue: date
     },
   },
   {

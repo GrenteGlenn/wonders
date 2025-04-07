@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
 import { UserGroupLinkInterface } from '../src/interfaces/UserGroup';
 import sequelize from '../config/dbConnection';
 import User from './user';
@@ -14,11 +14,13 @@ export default class UserGroupLink extends Model<UserGroupLinkInterface> impleme
   declare readonly updated_at: Date;
 }
 
+const date = Sequelize.literal('NOW()')
+
 UserGroupLink.init(
   {
     user_id: {
       type: DataTypes.INTEGER,
-      primaryKey: true, 
+      primaryKey: true,
       allowNull: false,
       onDelete: 'CASCADE',
       references: {
@@ -28,7 +30,7 @@ UserGroupLink.init(
     },
     user_group_id: {
       type: DataTypes.INTEGER,
-      primaryKey: true, 
+      primaryKey: true,
       allowNull: false,
       onDelete: 'CASCADE',
       references: {
@@ -47,11 +49,13 @@ UserGroupLink.init(
     },
     created_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true,
+      defaultValue: date
     },
     updated_at: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: true,
+      defaultValue: date
     },
   },
   {

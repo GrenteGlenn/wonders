@@ -2,6 +2,11 @@ import User from '../../models/user';
 import UserGroup from '../../models/user-group';
 // import { Op } from '@sequelize/core';
 import UserGroupLink from '../../models/user-group-link';
+import AuthController from './AuthController';
+import UserRoles from '../enums/enums';
+import { group } from 'console';
+
+const authController = new AuthController();
 
 const userInformationGroupExclude: string[] = [
   'owner',
@@ -64,7 +69,7 @@ export default class UserGroupController {
   }
 
   async delete(groupId: number, userId: number) {
-    const user = await User.findByPk(userId);
+    const user = await authController.getOne(userId);
 
     const group = (await UserGroup.findByPk(groupId, {
       attributes: {
@@ -84,40 +89,44 @@ export default class UserGroupController {
         }
       ]
     })) as GroupWithUsers;
+
+
     const userIsOwner = group.users?.some((user: UserWithLink) => user.id === userId && user.UserGroupLink?.is_owner);
 
-    // todo user.role === ROLE_ADMIN
-    if (group && userIsOwner) {
-      await group.destroy();
+    if (user?.dataValues.role?.role === UserRoles.UserRoles.Admin || (group && userIsOwner)) {
 
-      return await group.destroy();
+      await UserGroupLink.destroy({
+        where: {
+          user_group_id: groupId
+        }
+      });
+      await group.destroy();
+      return true;
+    } else {
+      return false;
     }
   }
 
-  //   async getAllByUser(userId: number) {
-  //     return await UserGroup.findAll({
-  //       attributes: {
-  //         exclude: userInformationGroupExclude
-  //       },
-  //       include: [
-  //         {
-  //           model: User,
-  //           as: 'users',
-  //           attributes: {
-  //             exclude: userInformationGroupExclude
-  //           },
-  //           required: false
-  //         },
-  //         {
-  //           model: User,
-  //           as: 'ownerUser',
-  //           attributes: {
-  //             exclude: userInformationGroupExclude
-  //           }
-  //         }
-  //       ]
-  //     });
-  //   }
+  async getAllByUser(userId: number) {
+    return await UserGroup.findAll({
+      where: {
+        '$users.id$': userId
+      },
+      attributes: {
+        exclude: userInformationGroupExclude
+      },
+      include: [
+        {
+          model: User,
+          as: 'users',
+          attributes: {
+            exclude: userInformationGroupExclude
+          },
+          required: true
+        }
+      ]
+    });
+  }
 
   async addUserToGroup(userId: number, groupId: number) {
     const existingGroupOwned = await UserGroup.findAll({});
@@ -141,15 +150,49 @@ export default class UserGroupController {
     }
   }
 
-  async removeUserFromGroup(userId: number, groupId: number) {
-    const group = await UserGroupLink.findOne({
+  async acceptToJoinToGroup(userId: number, groupId: number) {
+    const existingGroupeAlereadyJoined = await UserGroupLink.findOne({
       where: {
         user_id: userId,
         user_group_id: groupId
       }
     });
-    if (group) {
-      return await group.destroy();
+    if (existingGroupeAlereadyJoined) {
+      existingGroupeAlereadyJoined.is_accepted = true
+      await existingGroupeAlereadyJoined?.save()
     }
   }
+
+  async removeUserFromGroup(userId: number, groupId: number) {
+    const group = await UserGroup.findByPk(groupId);
+
+    const groupLink = await UserGroupLink.findOne({
+      where: {
+        user_id: userId,
+        user_group_id: groupId
+      }
+    });
+
+    if (!groupLink) return;
+
+    const allLinks = await UserGroupLink.findAll({
+      where: { user_group_id: groupId }
+    });
+    
+    const isOwner = groupLink.is_owner;
+    const otherMembers = allLinks.filter(link => link.user_id !== userId);
+  
+    if (isOwner) {
+      if (otherMembers.length > 0) {
+        const newOwner = otherMembers[0];
+        await newOwner.update({ is_owner: true });
+      } else {
+        groupLink.destroy()
+        return await group?.destroy();
+      }
+    }
+  
+    return await groupLink.destroy();
+  }
+
 }
