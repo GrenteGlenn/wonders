@@ -1,0 +1,26 @@
+import { Request, Response, NextFunction } from 'express';
+import { decryptJWT } from '../lib/JWT';
+import { JwtPayload } from '../interfaces/Global';
+import AuthController from '../controllers/AuthController'
+
+const authController = new AuthController()
+
+const userCheck = async function (req: Request, res: Response, next: NextFunction) {
+    const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+    if (token) {
+        const decrypt = decryptJWT(token) as JwtPayload;
+
+        if (!decrypt) {
+            res.status(403).send('Forbidden');
+        } else {
+            const client = await authController.getOneByEmail(decrypt.email);
+            if (client) {
+                next()
+            }
+        }
+    } else {
+        res.status(401).send('Unauthorized');
+    }
+};
+
+export default userCheck;

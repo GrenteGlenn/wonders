@@ -8,10 +8,12 @@ import roleRoutes from './routes/roleRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import userGroupRoutes from './routes/userGroupRoutes';
 import cors from 'cors';
+import userCheck from './middlewares/userCheck';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
 app.use(cors());
+ app.use(userCheck);
 
 const port = process.env.PORT;
 
