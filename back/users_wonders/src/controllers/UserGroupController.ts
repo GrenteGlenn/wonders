@@ -64,7 +64,7 @@ export default class UserGroupController {
   }
 
   async delete(groupId: number, userId: number) {
-    // const user = await User.findByPk(userId);
+    const user = await User.findByPk(userId);
 
     const group = (await UserGroup.findByPk(groupId, {
       attributes: {

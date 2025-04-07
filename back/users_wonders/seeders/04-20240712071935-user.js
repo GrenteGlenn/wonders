@@ -6,6 +6,7 @@ const argon2 = require('argon2');
 module.exports = {
   async up(queryInterface) {
     try {
+
       const hashedPassword1 = await encryptPassword('...');
       const hashedPassword2 = await encryptPassword('password456');
       const hashedPassword3 = await encryptPassword('password789');
@@ -28,6 +29,7 @@ module.exports = {
           first_name: 'Jane',
           country_id: 1,
           last_name: 'Doe',
+          role_id: 1,
           email: 'jane.doe@example.com',
           password: hashedPassword2,
           created_at: new Date(),
@@ -40,6 +42,7 @@ module.exports = {
           country_id: 2,
           last_name: 'Smith',
           email: 'alice.smith@example.com',
+          role_id: 1,
           password: hashedPassword3,
           created_at: new Date(),
           updated_at: new Date(),
@@ -51,6 +54,7 @@ module.exports = {
           country_id: 3,
           last_name: 'Johnson',
           email: 'bob.johnson@example.com',
+          role_id: 1,
           password: hashedPassword4,
           created_at: new Date(),
           updated_at: new Date(),
@@ -62,7 +66,8 @@ module.exports = {
           country_id: 1,
           last_name: 'Brown',
           email: 'charlie.brown@example.com',
-          password: hashedPassword5, // Mot de passe haché
+          role_id: 1,
+          password: hashedPassword5,
           created_at: new Date(),
           updated_at: new Date(),
           birth_date: new Date('1995-05-05'),
