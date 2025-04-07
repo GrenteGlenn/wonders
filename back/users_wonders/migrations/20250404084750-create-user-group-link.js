@@ -19,6 +19,15 @@ module.exports = {
           key: 'id'
         },
       },
+      is_owner: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+      },
+      is_accepted: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

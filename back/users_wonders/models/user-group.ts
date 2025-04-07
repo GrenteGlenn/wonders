@@ -9,12 +9,8 @@ interface UserGroupCreationAttributes extends Optional<UserGroupInterface, 'id'>
 class UserGroup extends Model<UserGroupInterface, UserGroupCreationAttributes> implements UserGroupInterface {
   declare id: number;
   declare name: string;
-  declare owner: number;
   declare readonly created_at: Date;
   declare readonly updated_at: Date;
-
-  declare users?: User[];
-  declare ownerUser?: User;
 }
 
 UserGroup.init(
@@ -25,14 +21,6 @@ UserGroup.init(
       unique: false,
       validate: {
         len: [1, 50]
-      }
-    },
-    owner: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: User,
-        key: 'id'
       }
     },
     created_at: {
@@ -51,9 +39,6 @@ UserGroup.init(
     timestamps: false
   }
 );
-
-User.hasMany(UserGroup, { foreignKey: 'owner', as: 'ownedGroups' });
-UserGroup.belongsTo(User, { foreignKey: 'owner', as: 'ownerUser' });
 
 User.belongsToMany(UserGroup, {
   through: UserGroupLink,
