@@ -12,8 +12,9 @@ import userCheck from './middlewares/userCheck';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
+
 app.use(cors());
- app.use(userCheck);
+app.use(userCheck);
 
 const port = process.env.PORT;
 

@@ -111,6 +111,11 @@
     "outDir": "./dist",
     "rootDir": "./"
   },
-  "include": ["src/**/*.ts", "src/seeders/9-country.ts", "src/models/index.js", "src/seeders/11-organizationUrl.ts", "src/test.ts.save"],
-  "exclude": ["node_modules"],                              /* Skip type checking all .d.ts files. */
+  "include": [
+    "src/**/*.ts"
+, "src/middlewares/userCheck.ts"  ],
+  "exclude": [
+    "node_modules"
+  ]
+  /* Skip type checking all .d.ts files. */
 }

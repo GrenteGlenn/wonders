@@ -125,20 +125,28 @@ export default class UserGroupController {
     });
   }
 
-  async addUserToGroup(userId: number, groupId: number) {
+  async addUserToGroup(email: string, group_id: number) {
+    const existingUser = await User.findOne({
+      where: {
+        email: email
+      }
+    });
+    if (existingUser === null) {
+      throw new Error('user not found');
+    }
     const existingGroupOwned = await UserGroup.findAll({});
 
     const existingGroupeAlereadyJoined = await UserGroupLink.findAll({
       where: {
-        user_id: userId,
-        user_group_id: groupId
+        user_id: existingUser.id,
+        user_group_id: group_id
       }
     });
 
     if (!existingGroupOwned && !existingGroupeAlereadyJoined) {
-      await UserGroupLink.create({
-        user_id: userId,
-        user_group_id: groupId,
+      return await UserGroupLink.create({
+        user_id: existingUser.id,
+        user_group_id: group_id,
         is_owner: false,
         is_accepted: false,
         created_at: new Date(),
@@ -161,8 +169,6 @@ export default class UserGroupController {
   }
 
   async removeUserFromGroup(userId: number, groupId: number) {
-    // const group = await UserGroup.findByPk(groupId);
-
     const groupLink = await UserGroupLink.findOne({
       where: {
         user_id: userId,
