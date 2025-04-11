@@ -10,6 +10,7 @@ export default class UserGroupLink extends Model<UserGroupLinkInterface> impleme
   declare user_group_id: number;
   declare is_accepted: boolean;
   declare is_owner: boolean;
+  declare user_quiz_answer_id?: number | null
   declare readonly created_at: Date;
   declare readonly updated_at: Date;
 }
@@ -46,6 +47,10 @@ UserGroupLink.init(
     is_owner: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+    },
+    user_quiz_answer_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     created_at: {
       type: DataTypes.DATE,

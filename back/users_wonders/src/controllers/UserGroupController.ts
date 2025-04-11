@@ -4,7 +4,6 @@ import UserGroup from '../../models/user-group';
 import UserGroupLink from '../../models/user-group-link';
 import AuthController from './AuthController';
 import UserRoles from '../enums/enums';
-import { group } from 'console';
 
 const authController = new AuthController();
 
@@ -90,11 +89,9 @@ export default class UserGroupController {
       ]
     })) as GroupWithUsers;
 
-
     const userIsOwner = group.users?.some((user: UserWithLink) => user.id === userId && user.UserGroupLink?.is_owner);
 
     if (user?.dataValues.role?.role === UserRoles.UserRoles.Admin || (group && userIsOwner)) {
-
       await UserGroupLink.destroy({
         where: {
           user_group_id: groupId
@@ -158,13 +155,13 @@ export default class UserGroupController {
       }
     });
     if (existingGroupeAlereadyJoined) {
-      existingGroupeAlereadyJoined.is_accepted = true
-      await existingGroupeAlereadyJoined?.save()
+      existingGroupeAlereadyJoined.is_accepted = true;
+      await existingGroupeAlereadyJoined?.save();
     }
   }
 
   async removeUserFromGroup(userId: number, groupId: number) {
-    const group = await UserGroup.findByPk(groupId);
+    // const group = await UserGroup.findByPk(groupId);
 
     const groupLink = await UserGroupLink.findOne({
       where: {
@@ -178,21 +175,47 @@ export default class UserGroupController {
     const allLinks = await UserGroupLink.findAll({
       where: { user_group_id: groupId }
     });
-    
+
     const isOwner = groupLink.is_owner;
-    const otherMembers = allLinks.filter(link => link.user_id !== userId);
-  
+    const otherMembers = allLinks.filter((link) => link.user_id !== userId);
+
     if (isOwner) {
       if (otherMembers.length > 0) {
         const newOwner = otherMembers[0];
         await newOwner.update({ is_owner: true });
       } else {
-        groupLink.destroy()
-        return await group?.destroy();
+        await groupLink.destroy();
       }
     }
-  
+
     return await groupLink.destroy();
   }
 
+  async addUserQuizAnswerToUserGroup(quiz_answer_id: number, user_id: number, group_id: number) {
+    const userGroupLinkResult = await UserGroupLink.findOne({
+      where: {
+        user_id: user_id,
+        user_group_id: group_id
+      }
+    });
+    if (userGroupLinkResult !== null) {
+      await userGroupLinkResult.update({
+        user_quiz_answer_id: quiz_answer_id
+      });
+    }
+  }
+
+  async removeUserQuizAnswerToUserGroup(user_id: number, group_id: number) {
+    const userGroupLinkResult = await UserGroupLink.findOne({
+      where: {
+        user_id: user_id,
+        user_group_id: group_id
+      }
+    });
+    if (userGroupLinkResult !== null) {
+      await userGroupLinkResult.update({
+        user_quiz_answer_id: null
+      });
+    }
+  }
 }

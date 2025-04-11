@@ -21,6 +21,7 @@ module.exports = {
             user_id: userId,
             user_group_id: groupId,
             is_accepted: Math.random() < 0.5,
+            user_quiz_answer_id:  Math.random() * (3 - 1) + 1,
             is_owner: false,
             created_at: new Date(),
             updated_at: new Date()

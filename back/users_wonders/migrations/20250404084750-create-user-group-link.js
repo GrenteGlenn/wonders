@@ -28,6 +28,10 @@ module.exports = {
         allowNull: false,
         defaultValue: false
       },
+      user_quiz_answer_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
