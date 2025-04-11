@@ -14,7 +14,6 @@ const app: Express = express();
 const jsonParser = bodyParser.json();
 
 app.use(cors());
-app.use(userCheck);
 
 const port = process.env.PORT;
 
@@ -23,7 +22,10 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', jsonParser, authRoutes);
-app.use('/api/users', jsonParser, userRoutes);
+
+app.use(userCheck);
+
+app.use('/api/users', jsonParser,  userRoutes);
 app.use('/api/address', jsonParser, addressRoutes);
 app.use('/api/role', jsonParser, roleRoutes);
 app.use('/api/session', jsonParser, sessionRoutes);
