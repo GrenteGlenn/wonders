@@ -1,16 +1,19 @@
 import { RequestHandler, Router } from 'express';
 import HotelController from '../controllers/HotelController';
 import { getHotelOffers, checkHotelOffers } from '../services/Amadeus';
+import { z } from 'zod';
+import { HotelOffersSchema, HotelSchema } from '../interface/Global';
 
-interface HotelResponse {
-  latitude: number;
-  longitude: number;
-  radius: number;
-  hotelScore: number;
-  ratings: number;
-  hotelIds: string;
-  adults: string;
-}
+// Définition du schéma Zod pour HotelResponse
+const HotelResponseSchema = z.object({
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  radius: z.number().optional(),
+  hotelScore: z.number().optional(),
+  ratings: z.number().optional(),
+  hotelIds: z.string().optional(),
+  adults: z.string().optional()
+});
 
 const router = Router();
 
@@ -27,10 +30,20 @@ router.get('/', ((req, res) => {
 }) as RequestHandler);
 
 router.get('/list', (async (req, res) => {
-  const { hotelScore, ratings, radius, longitude, latitude } = <HotelResponse>req.body;
+  const validationResult = HotelResponseSchema.safeParse(req.body);
+
+  if (!validationResult.success) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Paramètres de recherche invalides',
+      errors: validationResult.error.format()
+    });
+  }
+
+  const { latitude, longitude, radius, hotelScore, ratings } = validationResult.data;
 
   try {
-    const hotel = await getHotelOffers(latitude, longitude, radius, hotelScore, ratings);
+    const hotel = (await getHotelOffers(latitude, longitude, radius, hotelScore, ratings)) as typeof HotelSchema;
 
     res.json(hotel);
   } catch (error) {
@@ -39,10 +52,20 @@ router.get('/list', (async (req, res) => {
 }) as RequestHandler);
 
 router.get('/offers', (async (req, res) => {
-  const { hotelIds, adults } = <HotelResponse>req.body;
+  const validationResult = HotelResponseSchema.safeParse(req.body);
+
+  if (!validationResult.success) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Paramètres de recherche invalides',
+      errors: validationResult.error.format()
+    });
+  }
+
+  const { hotelIds, adults } = validationResult.data;
 
   try {
-    const hotel = await checkHotelOffers(hotelIds, adults);
+    const hotel = (await checkHotelOffers(hotelIds, adults)) as typeof HotelOffersSchema;
 
     res.json(hotel);
   } catch (error) {

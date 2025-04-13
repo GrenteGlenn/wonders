@@ -1,17 +1,22 @@
 import { RequestHandler, Router } from 'express';
 import FlyController from '../controllers/FlyController';
 import { getFlightOffers } from '../services/Amadeus';
+import { z } from 'zod';
+import { FlightOfferSchema } from '../interface/Global';
 
-interface FlyParams {
-  originLocationCode: string;
-  destinationLocationCode: string;
-  departureDate: string;
-  returnDate: string;
-  adults: number;
-  children: number;
-  nonStop: boolean;
-  maxPrice: number | null;
-}
+const FlyParamsSchema = z.object({
+  originLocationCode: z.string().length(3).toUpperCase(),
+  destinationLocationCode: z.string().length(3).toUpperCase(),
+  departureDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  returnDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  adults: z.string().default('2'),
+  children: z.string().optional(),
+  nonStop: z.boolean().default(false).optional(),
+  maxPrice: z.number().positive().optional()
+});
 
 const router = Router();
 
@@ -27,19 +32,18 @@ router.get('/', ((req, res) => {
 }) as RequestHandler);
 
 router.get('/list', (async (req, res) => {
-  const {
-    originLocationCode,
-    destinationLocationCode,
-    departureDate,
-    returnDate,
-    adults,
-    children,
-    nonStop,
-    maxPrice
-  } = <FlyParams>req.body;
-
   try {
-    const fly = await getFlightOffers(
+    const validationResult = FlyParamsSchema.safeParse(req.body);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Paramètres de recherche invalides',
+        errors: validationResult.error.format()
+      });
+    }
+
+    const {
       originLocationCode,
       destinationLocationCode,
       departureDate,
@@ -48,9 +52,26 @@ router.get('/list', (async (req, res) => {
       children,
       nonStop,
       maxPrice
-    );
-    console.log(fly);
-    res.json(fly);
+    } = validationResult.data;
+
+    const flightOffers = (await getFlightOffers(
+      originLocationCode,
+      destinationLocationCode,
+      departureDate,
+      returnDate,
+      adults,
+      children,
+      nonStop,
+      maxPrice
+    )) as typeof FlightOfferSchema;
+
+    const validatedOffers = z.array(FlightOfferSchema).parse(flightOffers);
+
+    return res.status(200).json({
+      status: 'success',
+      results: validatedOffers.length,
+      data: validatedOffers
+    });
   } catch (error) {
     res.json({ error: error });
   }
