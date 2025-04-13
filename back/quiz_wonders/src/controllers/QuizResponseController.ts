@@ -2,6 +2,8 @@ import QuizAnswerText from '../../models/quizanswertext';
 import QuizLine from '../../models/quizline';
 import QuizResponse from '../../models/quizresponse';
 import UserAnswer from '../../models/useranswer';
+import QuizResponseInterface from '../interfaces/QuizResponseInterface';
+import UserAnswerInterface from '../interfaces/UserAnswerInterface';
 
 export default class QuizResponseController {
   async list() {
@@ -26,6 +28,27 @@ export default class QuizResponseController {
       });
     } catch (error) {
       return console.log(error);
+    }
+  }
+
+  async newFullQuizResponse(quizResponse: QuizResponseInterface, userAnswers: UserAnswerInterface[]) {
+    try {
+      const quizRes = await QuizResponse.create({
+        ...quizResponse,
+        created_at: new Date(),
+        updated_at: new Date()
+      });
+
+      for (const userAnswer of userAnswers) {
+        await UserAnswer.create({
+          ...userAnswer,
+          created_at: new Date(),
+          updated_at: new Date(),
+          quiz_response_id: quizRes.id
+        });
+      }
+    } catch (error: unknown) {
+      console.error(error);
     }
   }
 

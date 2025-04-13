@@ -27,3 +27,5 @@ app.use('/api/session', jsonParser, sessionRoutes);
 app.listen(port, () => {
   console.log(`Example app User listening on port ${port}`);
 });
+
+export default app;

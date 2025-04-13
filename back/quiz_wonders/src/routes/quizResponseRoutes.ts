@@ -1,9 +1,16 @@
 import QuizResponseController from '../controllers/QuizResponseController';
 import { RequestHandler, Router } from 'express';
+import UserAnswer from '../interfaces/UserAnswerInterface';
+import QuizResponse from '../interfaces/QuizResponseInterface';
 
 interface Body {
   quiz_id: number;
   user_id: number;
+}
+
+interface BodyAllAswers {
+  quizResponse: QuizResponse;
+  userAnswers: UserAnswer[];
 }
 
 const router = Router();
@@ -27,6 +34,16 @@ router.get('/:id', (async (req, res) => {
       : res.status(404).json({ code: '404', message: 'entry does not exists' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
+  }
+}) as RequestHandler);
+
+router.post('/submit-full-asnwer', (async (req, res) => {
+  try {
+    const body = <BodyAllAswers>req.body;
+    const response = await quizResponseController.newFullQuizResponse(body.quizResponse, body.userAnswers);
+    res.status(201).json(response);
+  } catch (error: unknown) {
+    console.error(error);
   }
 }) as RequestHandler);
 
