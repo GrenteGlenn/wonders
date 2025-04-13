@@ -29,7 +29,6 @@ export async function getFlightOffers(
     });
     return response.data;
   } catch (e) {
-    console.error(e);
     return e;
   }
 }
@@ -46,7 +45,6 @@ export async function getHotelOffers(latitude, longitude, radius = 5, hotelScore
 
     return response.data;
   } catch (e) {
-    console.error(e);
     return e;
   }
 }
@@ -62,7 +60,6 @@ export async function checkHotelOffers(hotelIds, adults) {
 
     return response.data;
   } catch (e) {
-    console.error(e);
     return e;
   }
 }
