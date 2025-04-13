@@ -19,18 +19,47 @@ router.get('/', (async (req, res) => {
 
 router.get('/me', (async (req, res) => {
   const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
-  let decrypt;
 
-  if (token) decrypt = decryptJWT(token) as JwtPayload;
-  else res.status(401).json('Not authorized');
+  try {
+    let decrypt;
 
-  if (!decrypt) {
-    res.status(401).json('Not authorized');
-  } else {
+    if (token) decrypt = decryptJWT(token) as JwtPayload;
+    else res.status(401).json('Not authorized');
+
+    if (!decrypt) {
+      res.status(401).json('Not authorized');
+    } else {
+      const client = await authController.getOneByEmail(decrypt.email);
+
+      if (!client) return res.status(401).json('Not authorized');
+      res.status(200).json(client);
+    }
+  } catch (error: unknown) {
+    res.status(500).json('Internal server error');
+  }
+}) as RequestHandler);
+
+router.get('/verify', (async (req, res) => {
+  const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+  try {
+    if (!token) {
+      return res.status(401).json('Not authorized');
+    }
+
+    const decrypt = decryptJWT(token) as JwtPayload;
+
+    if (!decrypt) {
+      return res.status(401).json('Not authorized');
+    }
+
     const client = await authController.getOneByEmail(decrypt.email);
 
-    if (!client) return res.status(401).json('Not authorized');
-    res.status(200).json(client);
+    if (!client) {
+      return res.status(401).json('Not authorized');
+    }
+    return res.status(200).json(true);
+  } catch (error: unknown) {
+    return res.status(500).json('Internal server error');
   }
 }) as RequestHandler);
 

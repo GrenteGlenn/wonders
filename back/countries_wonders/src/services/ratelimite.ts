@@ -36,7 +36,7 @@ class RateLimiter {
 
     this.isProcessing = true;
     const task = this.queue.shift();
-    
+
     if (task) {
       try {
         await task();
@@ -45,8 +45,8 @@ class RateLimiter {
       }
 
       // Attendre avant la prochaine requête
-      await new Promise(resolve => setTimeout(resolve, this.rateLimitMs));
-      
+      await new Promise((resolve) => setTimeout(resolve, this.rateLimitMs));
+
       // Traite la requête suivante
       await this.processQueue();
     }
@@ -71,18 +71,18 @@ export async function fetchImages(target: string = 'France', type: string): Prom
       // Ajout d'une gestion de retries avec backoff exponentiel
       let retries = 3;
       let retryDelay = 1000; // 1 seconde initiale
-      
+
       while (retries > 0) {
         const response: Response = await fetch(url);
-        
+
         if (response.ok) {
-          return await response.json() as CustomSearchResponse;
-        } 
-        
+          return (await response.json()) as CustomSearchResponse;
+        }
+
         if (response.status === 429) {
           // Si on reçoit un 429, on attend plus longtemps avant de réessayer
-          console.log(`Rate limited (429), retrying in ${retryDelay/1000} seconds... (${retries} attempts left)`);
-          await new Promise(resolve => setTimeout(resolve, retryDelay));
+          console.log(`Rate limited (429), retrying in ${retryDelay / 1000} seconds... (${retries} attempts left)`);
+          await new Promise((resolve) => setTimeout(resolve, retryDelay));
           retryDelay *= 2; // Backoff exponentiel
           retries--;
         } else {
@@ -90,7 +90,7 @@ export async function fetchImages(target: string = 'France', type: string): Prom
           throw new Error(`Erreur HTTP: ${response.status}`);
         }
       }
-      
+
       throw new Error('Trop de tentatives échouées en raison de la limitation de débit');
     } catch (error) {
       console.error('Erreur lors de la récupération des images:', error);
@@ -104,20 +104,20 @@ const imageCache: Record<string, string> = {};
 
 export async function fetchImagesWithCache(target: string = 'France', type: string): Promise<string | null> {
   const cacheKey = `${target}:${type}`;
-  
+
   // Vérifier si l'image est déjà dans le cache
   if (imageCache[cacheKey]) {
     return imageCache[cacheKey];
   }
-  
+
   // Sinon, faire la requête
   const result = await fetchImages(target, type);
-  
+
   if (result?.items?.[0]?.link) {
     // Stocker dans le cache
     imageCache[cacheKey] = result.items[0].link;
     return result.items[0].link;
   }
-  
+
   return null;
 }

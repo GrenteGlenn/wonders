@@ -173,4 +173,3 @@ router.delete('/:id', (async (req, res) => {
 }) as RequestHandler);
 
 export default router;
-
