@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CityService } from '../../app/service/city/city.service';
 import { CountryService } from '../../app/service/country/country.service';
@@ -14,9 +14,6 @@ interface Destination {
   isDescriptionLoading?: boolean;
   isImageLoading?: boolean;
 }
-// interface CountryImageResponse {
-//   data: string | null;
-// }
 
 @Component({
   selector: 'app-destinations',
@@ -26,6 +23,9 @@ interface Destination {
   styleUrl: './destinations.component.css'
 })
 export class DestinationsComponent implements OnInit {
+  @Input() queryParams?: {[key: string]: string};
+  @Input() hideBackButton: boolean = false; 
+
   destination: Destination | null = null;
   searchResults: Destination[] = [];
   searchTerm: string = '';
@@ -36,35 +36,55 @@ export class DestinationsComponent implements OnInit {
   paginatedResults: Destination[] = [];
 
   constructor(
-    private route: ActivatedRoute,
+    private routes: ActivatedRoute,
     private cityService: CityService,
-    private countryService: CountryService
+    private countryService: CountryService,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.isLoading = true;
-
-      if (params['page']) {
-        this.currentPage = parseInt(params['page'], 10) || 1;
-      } else {
-        this.currentPage = 1;
-      }
-
-      if (params['city']) {
-        this.searchTerm = params['city'];
-        this.loadCity(params['city']);
-      } else if (params['country']) {
-        this.searchTerm = params['country'];
-        this.loadCountry(params['country']);
-      } else if (params['search']) {
-        this.searchTerm = params['search'];
-        this.searchDestinations(params['search']);
-      } else {
-        this.loadPopularDestinations();
-      }
-    });
+    // Vérifier d'abord s'il y a des queryParams injectés
+    if (this.queryParams) {
+      this.processQueryParams(this.queryParams);
+    } else {
+      // Sinon, utiliser les queryParams de l'URL
+      this.routes.queryParams.subscribe((params) => {
+        this.processQueryParams(params);
+      });
+    }
   }
+
+  // Ajoute cette méthode pour réagir aux changements de queryParams
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['queryParams'] && this.queryParams) {
+      this.processQueryParams(this.queryParams);
+    }
+  }
+
+  // Méthode pour traiter les queryParams (soit de l'URL, soit des inputs)
+  processQueryParams(params: any) {
+    this.isLoading = true;
+
+    if (params['page']) {
+      this.currentPage = parseInt(params['page'], 10) || 1;
+    } else {
+      this.currentPage = 1;
+    }
+
+    if (params['city']) {
+      this.searchTerm = params['city'];
+      this.loadCity(params['city']);
+    } else if (params['country']) {
+      this.searchTerm = params['country'];
+      this.loadCountry(params['country']);
+    } else if (params['search']) {
+      this.searchTerm = params['search'];
+      this.searchDestinations(params['search']);
+    } else {
+      this.loadPopularDestinations();
+    }
+  }
+
 
   showPageNumber(page: number): boolean {
     if (page === 1 || page === this.totalPages) {
@@ -360,6 +380,26 @@ export class DestinationsComponent implements OnInit {
           }
         });
       }, index * 20);
+    });
+  }
+
+  viewDestinationDetails(result: Destination) {
+    if (result.type === 'city') {
+      // Navigue vers la page avec le paramètre de ville
+      this.router.navigate(['/destinations'], {
+        queryParams: { city: result.name }
+      });
+    } else {
+      // Navigue vers la page avec le paramètre de pays
+      this.router.navigate(['/destinations'], {
+        queryParams: { country: result.name }
+      });
+    }
+  }
+  // retour à la liste des pays
+  goBackToList() {
+    this.router.navigate(['/destinations']).then(() => {
+      window.location.reload();
     });
   }
 }

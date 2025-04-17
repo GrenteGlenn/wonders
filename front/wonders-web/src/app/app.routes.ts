@@ -11,8 +11,11 @@ import { RegisterComponent } from '../components/register/register.component';
 import { ChoiceGuideComponent } from '../components/choice-guide/choice-guide.component';
 import { DirectPlanningComponent } from '../components/direct-planning/direct-planning.component';
 import { TripDetailsComponent } from '../components/trip-details/trip-details.component';
-import { GoogleMapComponent } from '../components/google-map/google-map.component';
 import { DestinationsComponent } from '../components/destinations/destinations.component';
+import { FlyComponent } from '../components/fly/fly/fly.component';
+import { StepBodyComponent } from '../components/step-trip/step-body/step-body.component';
+import { ActivitiesComponent } from '../components/activities/activities/activities.component';
+import { HotelComponent } from '../components/hotel/hotel.component';
 
 export const routes: Routes = [
   { path: 'landingPage', component: LandingPageComponent },
@@ -26,6 +29,9 @@ export const routes: Routes = [
   { path: 'choice-guide', component: ChoiceGuideComponent },
   { path: 'direct-planning', component: DirectPlanningComponent },
   { path: 'trip-details', component: TripDetailsComponent },
-  { path: 'destinations', component: DestinationsComponent}
-  // { path: 'googlemap', component: GoogleMapComponent}
+  { path: 'destinations', component: DestinationsComponent},
+  { path: 'fly', component: FlyComponent},
+  { path: 'stepBody', component: StepBodyComponent},
+  { path: 'activity', component: ActivitiesComponent},
+  { path: 'hotel', component: HotelComponent}
 ];
