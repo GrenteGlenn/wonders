@@ -12,7 +12,7 @@ export class ActivityService {
 
   constructor(private http: HttpClient) {}
 
-  // Activities 
+  // Activities
   getAllActivities(): Observable<Activity[]> {
     return this.http.get<Activity[]>(`${this.API_URL}/api/activities`);
   }
@@ -25,7 +25,7 @@ export class ActivityService {
     return this.http.delete(`${this.API_URL}/api/activities/${id}`);
   }
 
-  // Activity Categories 
+  // Activity Categories
   getAllCategories(): Observable<ActivityCategory[]> {
     return this.http.get<ActivityCategory[]>(`${this.API_URL}/activity-category`);
   }
@@ -46,5 +46,4 @@ export class ActivityService {
   getPictureById(id: number): Observable<Picture> {
     return this.http.get<Picture>(`${this.API_URL}/api/picture/${id}`);
   }
-
 }

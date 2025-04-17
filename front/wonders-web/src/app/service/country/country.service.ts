@@ -56,40 +56,45 @@ interface CountryAIResponse {
 export class CountryService {
   private API_URL = environment.quizzApiUrl;
   private API_URLImg = environment.countryImgUrl;
-
-  
+  private API_URStandard = environment.UrlStandard;
 
   constructor(private http: HttpClient) {}
 
+  // Attention changer l'urlStandard en URL -> VPN (API_URL)
+
   // Récupère tous les pays
   getAllCountries(): Observable<Country[]> {
-    return this.http.get<Country[]>(`${this.API_URL}/api/countries`);
+    return this.http.get<Country[]>(`${this.API_URStandard}/api/countries`);
   }
 
   // Récupérer un pays par son ID
   getCountryById(id: number): Observable<Country> {
-    return this.http.get<Country>(`${this.API_URL}/api/countries/${id}`);
+    return this.http.get<Country>(`${this.API_URStandard}/api/countries/${id}`);
   }
 
   // Récupérer la description d'un pays
   getCountryDescription(id: number): Observable<Country> {
-    return this.http.get<Country>(`${this.API_URL}/api/countries/country-description/${id}`);
+    return this.http.get<Country>(`${this.API_URStandard}/api/countries/country-description/${id}`);
   }
 
-  // Obtenir des informations IA sur un pays
+  // Obtenir des informations IA sur un pays (ne pas toucher)
   getAICountryInfo(countryName: string): Observable<AIDescriptionResponse> {
-    return this.http.post<AIDescriptionResponse>(`${this.API_URL}/api/countries/ai_get_county`, { name: countryName });
+    return this.http.post<AIDescriptionResponse>(`${this.API_URStandard}/api/countries/ai_get_county`, { name: countryName });
+  }
+  // Obtenir des informations IA sur un pays (ne pas toucher)
+  getAICountryDescription(countryName: string): Observable<AIDescriptionResponse> {
+    return this.http.post<CountryAIResponse>(`${this.API_URStandard}/api/countries/ai`, { name: countryName });
   }
 
   // Rechercher des pays selon des critères
   searchCountriesAI(criteria: AICountryRequest): Observable<AIProposalCountry> {
-    return this.http.post<AIProposalCountry>(`${this.API_URL}/api/countries/ai_get_country`, criteria);
+    return this.http.post<AIProposalCountry>(`${this.API_URStandard}/api/countries/ai_get_country`, criteria);
   }
 
   // Obtenir l'image d'un pays
   getCountryImage(countryName: string): Observable<CountryImageResponse> {
-    return this.http.post<CountryImageResponse>(`${this.API_URLImg}/api/countries/country_image`, { 
-      pays: countryName 
+    return this.http.post<CountryImageResponse>(`${this.API_URLImg}/api/countries/country_image`, {
+      pays: countryName
     });
   }
 }

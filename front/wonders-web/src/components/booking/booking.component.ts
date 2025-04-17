@@ -7,6 +7,4 @@ import { Component } from '@angular/core';
   templateUrl: './booking.component.html',
   styleUrl: './booking.component.css'
 })
-export class BookingComponent {
-
-}
+export class BookingComponent {}

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Country } from '../modals/modal-activity/modal-activity.component';
 import { CountryService } from '../../app/service/country/country.service';
 import { NgFor } from '@angular/common';
+import { LanguageService } from '../../app/service/languages/languages.service';
 
 @Component({
   selector: 'app-register',
@@ -18,32 +19,33 @@ export class RegisterComponent implements OnInit {
   returnUrl: string = '/home';
   countries: Country[] = [];
   selectedCountryId: any = 0;
-
+  languages: any[] = [];
 
   user: User = {
     email: '',
     password: '',
     first_name: '',
     last_name: '',
+    role_id: 1,
     birth_date: new Date(),
     country_id: 0,
-    language_id: 0
-  }
+    language_id: 1
+  };
 
   constructor(
     private _authService: AuthentificationService,
     private route: ActivatedRoute,
     private _countryService: CountryService,
+    private _languagesService: LanguageService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
-    this.loadCountries();
+    this.loadData();
   }
 
-
-  loadCountries(): void {
+  loadData(): void {
     this._countryService.getAllCountries().subscribe({
       next: (data) => {
         this.countries = data;
@@ -52,26 +54,33 @@ export class RegisterComponent implements OnInit {
         console.error('Erreur lors du chargement des pays:', error);
       }
     });
+    this._languagesService.getAllLanguages().subscribe({
+      next: (data) => {
+        this.languages = data;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement des langues:', error);
+      }
+    });
   }
 
   onCountryChange(event: any): void {
-    const selectedCountry = this.countries.find(country => country.id === +event.target.value);
+    const selectedCountry = this.countries.find((country) => country.id === +event.target.value);
     if (selectedCountry) {
-      this.user.country = selectedCountry.id;
-      // this.user.language_id = selectedCountry.id;
+      this.user.country_id = selectedCountry.id;
     }
   }
 
   clickRegister(): void {
     this._authService.register(this.user).subscribe({
       next: (data) => {
-        this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl }});
+        this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl } });
       }
-    })
+    });
   }
 
   href(event: Event): void {
     event.preventDefault();
-    this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl }});
+    this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl } });
   }
 }

@@ -1,0 +1,24 @@
+<google-map height="385px" width="600px" [options]="options">
+	<!-- Markers for Brazilian locations -->
+	<map-advanced-marker
+		*ngFor="let location of brLocations; let i = index"
+		#markerElem="mapAdvancedMarker"
+		[position]="{ lat: location.lat, lng: location.lng }"
+		[content]="location.content"
+		[title]="'Brazil Location ' + (i + 1)"
+		(mapClick)="onMarkerClick(markerElem)">
+	</map-advanced-marker>
+
+	<!-- Markers for Canadian locations -->
+	<map-advanced-marker
+		*ngFor="let location of caLocations; let i = index"
+		#markerElem="mapAdvancedMarker"
+		[position]="{ lat: location.lat, lng: location.lng }"
+		[content]="location.content"
+		[title]="'Canada Location ' + (i + 1)"
+		(mapClick)="onMarkerClick(markerElem)">
+	</map-advanced-marker>
+
+	<!-- Info Window Component -->
+	<map-info-window #infoWindow></map-info-window>
+</google-map>

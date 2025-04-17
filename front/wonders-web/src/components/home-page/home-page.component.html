@@ -1,54 +1,48 @@
-<div class="w-8/12 mx-auto py-10">
-    <div class="relative rounded-lg overflow-hidden">
-      <img src="assets/images/castleHome.jpg" class="w-full h-[500px] object-cover" alt="Castle">
-      <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center">
-        <h1 class="text-white text-5xl font-bold mb-8 text-center px-4">
-          Découvrez votre prochaine destination de vacances
-        </h1>
-        <div class="w-full max-w-2xl px-4">
-          <div class="relative">
-            <input type="text" placeholder="Recherche par ville, pays ou région" class=" w-full py-3 pl-12 pr-10 rounded-full bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <lucide-icon name="search" class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5  "></lucide-icon>
-            <button class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-full">
-              Recherche
-            </button>
-          </div>
-          
+<div class="w-full md:w-11/12 lg:w-9/12 xl:w-8/12 mx-auto px-4 py-6 md:py-10">
+  <div class="relative rounded-lg overflow-hidden">
+    <img src="assets/images/castleHome.jpg" class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover" alt="Castle" />
+    <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center p-4">
+      <h1 class="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-8 text-center">
+        Découvrez votre prochaine destination de vacances
+      </h1>
+      <app-search-destination class="w-full max-w-lg"></app-search-destination>
+    </div>
+  </div>
+</div>
+
+<div class="w-full md:w-11/12 lg:w-9/12 xl:w-8/12 mx-auto px-4 py-6 md:py-10">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+    <span class="text-3xl sm:text-3xl mb-4 sm:mb-0">Destinations populaires en 2024</span>
+    <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 sm:px-6 w-full sm:w-auto rounded-lg" (click)="showMore()">
+      Voir plus
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+    <div
+      *ngFor="let destination of popularDestinations"
+      class="cursor-pointer hover:shadow-lg transition-shadow duration-300"
+    >
+      <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden">
+        <!-- Indicateur de chargement -->
+        <div
+          *ngIf="destination.loading"
+          class="absolute inset-0 flex items-center justify-center bg-gray-200"
+        >
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
+        <img
+          *ngIf="!destination.loading"
+          [src]="destination.imageSrc"
+          class="w-full h-full object-cover"
+          alt="{{ destination.cityName }}"
+          (error)="handleImageError($event)"
+        />
+      </div>
+      <div class="mt-2">
+        <span class="block font-semibold text-base">{{ destination.cityName }}, {{ destination.countryName }}</span>
+        <p class="text-sm text-gray-600">{{ destination.description }}</p>
       </div>
     </div>
+  </div>
 </div>
-
-<div class="w-8/12 mx-auto py-10">
-    <h1 class="text-3xl font-bold mb-2">Destination populaire</h1>
-    <div class=" overflow-hidden grid gap-4 md:grid-cols-4">
-        <div>
-            <img src="assets/images/tulumPlage.jpg" class="w-80 h-64 object-cover rounded-md ">
-            <span class="flex-col">Paradis tropical aux Maldives</span>
-            <div>
-                <span class="text-gray-600">5000€ pour 7 jours</span>
-            </div>
-        </div>
-        <div>
-            <img src="assets/images/ruine.avif" class="w-80 h-64 object-cover rounded-md ">
-            <span class="flex-col">Voyage historique à Rome</span>
-            <div>
-                <span class="text-gray-600">3000€ pour 5 jours</span>
-            </div>
-        </div>  <div>
-            <img src="assets/images/tulumGrotte.avif" class="w-80 h-64 object-cover rounded-md ">
-            <span class="flex-col">Aventure en Nouvelle-Zélande</span>
-            <div>
-                <span class="text-gray-600">7000€ pour 10 jours</span>
-            </div>
-        </div>  <div>
-            <img src="assets/images/burritos.jpg" class="w-80 h-64 object-cover rounded-md ">
-            <span class="flex-col">Détente à Bali</span>
-            <div>
-                <span class="text-gray-600">4000€ pour 7 jours</span>
-            </div>
-        </div>
-    </div>
-   
-</div>
-

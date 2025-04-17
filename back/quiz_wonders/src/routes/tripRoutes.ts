@@ -1,6 +1,7 @@
 import { RequestHandler, Router } from 'express';
 import TripController from '../controllers/TripController';
 import TripInterface from '../interfaces/TripInterface';
+import TripTransportation from '../models/triptransportation';
 
 const router = Router();
 const tripController = new TripController();
@@ -22,9 +23,9 @@ router.get('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/users-full-trips', (async (req, res) => {
+router.get('/user-full-trips/:id', (async (req, res) => {
   try {
-    const trip = await tripController.fullTrips();
+    const trip = await tripController.fullTrips(parseInt(req.params.id, 10));
     res.status(200).json(trip);
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
@@ -58,6 +59,24 @@ router.post('/', (async (req, res) => {
       : res.status(400).json({ code: '400', message: 'an error occured while creating resource' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
+  }
+}) as RequestHandler);
+
+router.post('/create-full-trip', (async (req, res) => {
+  try {
+    // eslint-disable-next-line
+    const { trip, tripTransportation, tripCities } = req.body;
+
+    if (!trip || !tripTransportation || !tripCities) {
+      return res.status(400).json({ code: '400', message: 'Missing required fields' });
+    }
+    // eslint-disable-next-line
+    const fullTrip = await tripController.createFullTrip(trip as TripInterface, tripTransportation as TripTransportation, tripCities as any);
+
+    return res.status(201).json(fullTrip);
+  } catch (error) {
+    console.error('Error in /create_full_trip:', error);
+    return res.status(500).json({ code: '500', message: 'Internal Server Error' });
   }
 }) as RequestHandler);
 

@@ -6,16 +6,12 @@ import { Router } from '@angular/router';
 import { AIProposalCountry, AIQuizzCountry } from '../../app/model/AI';
 import { Activity, Country, ModalActivityComponent } from '../modals/modal-activity/modal-activity.component';
 import { LucideAngularModule } from 'lucide-angular';
+import { ToastComponent } from '../toast/toast.component';
 
 @Component({
   selector: 'app-direct-planning',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    LucideAngularModule,
-    ModalActivityComponent
-  ],
+  imports: [CommonModule, FormsModule, LucideAngularModule, ModalActivityComponent, ToastComponent],
   templateUrl: './direct-planning.component.html',
   styleUrl: './direct-planning.component.css'
 })
@@ -26,11 +22,14 @@ export class DirectPlanningComponent implements OnInit {
   countryDescription: string = '';
   isModalOpen = false;
   activities: Activity[] = [];
-  isLoading = false; // Pour gérer l'état de chargement
-  
+  isLoading = false;
+  destination: any = null;
+
+
+
   constructor(
     private countryService: CountryService,
-    private router: Router
+    // private router: Router,
   ) {}
 
   ngOnInit() {
@@ -52,7 +51,7 @@ export class DirectPlanningComponent implements OnInit {
     if (countryName) {
       this.isLoading = true;
       this.selectedCountry = countryName;
-      
+
       // Charger l'image du pays sélectionné
       this.countryService.getCountryImage(countryName).subscribe({
         next: (response) => {
@@ -65,11 +64,11 @@ export class DirectPlanningComponent implements OnInit {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Erreur lors de la récupération de l\'image:', error);
+          console.error("Erreur lors de la récupération de l'image:", error);
           this.countryImage = 'assets/images/default-country.jpg';
           this.isLoading = false;
         }
-      });
+      });      
 
       // Obtenir la description du pays
       this.countryService.getAICountryInfo(countryName).subscribe({
@@ -84,21 +83,21 @@ export class DirectPlanningComponent implements OnInit {
     }
   }
 
-   openModal() {
-      this.isModalOpen = true;
-    }
-  
-    onActivityAdded(activity: any) {
-      this.activities.push(activity);    
-      this.isModalOpen = false;
-      console.log('Activité ajoutée avec succès:', activity);
-    }
-  
-    onCountryAdded(country: Country) {
-      console.log('[PlanTripComponent] Pays reçu:', country);
-      this.countries.push(country);
-      
-      this.selectedCountry = country.name;
-      this.onCountrySelect(country.name);
-    }
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  onActivityAdded(activity: any) {
+    this.activities.push(activity);
+    this.isModalOpen = false;
+    console.log('Activité ajoutée avec succès:', activity);
+  }
+
+  onCountryAdded(country: Country) {
+    console.log('[PlanTripComponent] Pays reçu:', country);
+    this.countries.push(country);
+
+    this.selectedCountry = country.name;
+    this.onCountrySelect(country.name);
+  }
 }

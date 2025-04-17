@@ -9,10 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      country_id: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
+
       first_name: {
         type: Sequelize.STRING,
         allowNull: false
@@ -41,6 +38,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false
       },
+      country_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
+      role_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
@@ -56,6 +61,18 @@ module.exports = {
       name: 'language_id',
       references: {
         table: 'languages',
+        field: 'id'
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'NO ACTION',
+      allowNull: false
+    });
+    await queryInterface.addConstraint('users', {
+      type: 'foreign key',
+      fields: ['role_id'],
+      name: 'role_id',
+      references: {
+        table: 'roles',
         field: 'id'
       },
       onUpdate: 'CASCADE',

@@ -3,6 +3,7 @@ import Language from './LanguageInterface';
 export default interface UserInterface {
   id?: number;
   country_id: number;
+  role_id: number;
   first_name: string;
   last_name: string;
   email: string;

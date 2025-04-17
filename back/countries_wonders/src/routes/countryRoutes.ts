@@ -3,6 +3,7 @@ import CountryController from '../controllers/CountryController';
 import { fetchImages } from '../services/countryImage';
 import { get_country_fake } from '../Api/Country';
 import { BodyCountry, Pays, ResultCountry, TargetImage } from '../interfaces/Globals';
+import { fetchImagesWithCache } from '../services/ratelimite';
 
 const router = Router();
 
@@ -122,19 +123,17 @@ router.post('/country_image', (async (req, res) => {
   const body = <TargetImage>req.body;
 
   if (!body || !body.pays) {
-    res.status(404).json({ error: 'No pays image.' });
+    return res.status(404).json({ error: 'No pays image.' });
   }
 
-  let image = null;
-  await fetchImages(body.pays, 'city').then((e) => {
-    if (e != undefined) {
-      image = e.items[0].link;
-    }
-  });
-
-  res.json({ data: image });
+  try {
+    const image = await fetchImagesWithCache(body.pays, 'city');
+    res.json({ data: image });
+  } catch (error) {
+    console.error('Error fetching image:', error);
+    res.status(500).json({ error: error });
+  }
 }) as RequestHandler);
-
 router.post('/ai_get_country_fake', ((req, res) => {
   const body = <Pays>req.body;
   try {

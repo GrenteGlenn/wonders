@@ -1,44 +1,90 @@
 <div class="flex justify-center items-center min-h-screen bg-gray-100">
   <div class="container mx-auto px-4">
     <div class="grid grid-cols-1 justify-items-center max-w-2xl mx-auto my-10 py-10 border rounded-md shadow-md">
-        <h1 class="text-2xl font-medium mb-16">S'enregistrer</h1>
-        <p class="justify-self-end text-red-500 px-10">Champs requis *</p>
-        <div class="justify-self-start px-12 w-full">
-          <div class="mb-4">
-            <label for="lb_email">Adresse mail <i class="text-red-500">*</i></label> <br>
-            <input type="text" [(ngModel)]="user.email" id="lb_email" class="w-full border border-gray-300 rounded-md p-2">
-          </div>
-          <div class="mb-4">
-            <label for="lb_password">Mot de passe <i class="text-red-500">*</i></label> <br>
-            <input type="password" [(ngModel)]="user.password" id="lb_password" class="w-full border border-gray-300 rounded-md p-2">
-          </div>
-          <div class="mb-4">
-            <label for="lb_firstname">Prénom <i class="text-red-500">*</i></label> <br>
-            <input type="text" [(ngModel)]="user.first_name" id="lb_firstname" class="w-full border border-gray-300 rounded-md p-2">
-          </div>
-          <div class="mb-4">
-            <label for="lb_lastname">Nom <i class="text-red-500">*</i></label> <br>
-            <input type="text" [(ngModel)]="user.last_name" id="lb_lastname" class="w-full border border-gray-300 rounded-md p-2">
-          </div>
-          <div class="mb-4">
-            <label for="lb_birthday">Date d'anniversaire <i class="text-red-500">*</i></label> <br>
-            <input type="date" [(ngModel)]="user.birth_date" id="lb_birthday" class="w-full border border-gray-300 rounded-md p-2">
-          </div>
-          <div class="mb-4">
-            <label for="lb_country">Pays <i class="text-red-500">*</i></label> <br>
-            <select 
-              (change)="onCountryChange($event)" 
-              id="lb_country" 
-              class="w-full border border-gray-300 rounded-md p-2">
-              <option value="">Sélectionnez un pays</option>
-              <option *ngFor="let country of countries" [value]="country.id">
-                {{country.name}}
-              </option>
-            </select>
-          </div>
+      <h1 class="text-2xl font-medium mb-16">S'enregistrer</h1>
+      <p class="justify-self-end text-red-500 px-10">Champs requis *</p>
+      <div class="justify-self-start px-12 w-full">
+        <div class="mb-4">
+          <label for="lb_email">Adresse mail <i class="text-red-500">*</i></label> <br />
+          <input
+            type="text"
+            [(ngModel)]="user.email"
+            id="lb_email"
+            class="w-full border border-gray-300 rounded-md p-2"
+          />
         </div>
-        <button (click)="clickRegister()" class="px-16 py-2 font-medium bg-blue-500 hover:bg-blue-600 rounded-md text-white mt-8">S'inscrire</button>
-        <p class="py-6">Vous avez déjà un compte ? <a href="" (click)="href($event)" class="text-cyan-500 underline">Se connecter maintenant</a></p>
+        <div class="mb-4">
+          <label for="lb_password">Mot de passe <i class="text-red-500">*</i></label> <br />
+          <input
+            type="password"
+            [(ngModel)]="user.password"
+            id="lb_password"
+            class="w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="lb_firstname">Prénom <i class="text-red-500">*</i></label> <br />
+          <input
+            type="text"
+            [(ngModel)]="user.first_name"
+            id="lb_firstname"
+            class="w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="lb_lastname">Nom <i class="text-red-500">*</i></label> <br />
+          <input
+            type="text"
+            [(ngModel)]="user.last_name"
+            id="lb_lastname"
+            class="w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="lb_birthday">Date d'anniversaire <i class="text-red-500">*</i></label> <br />
+          <input
+            type="date"
+            [(ngModel)]="user.birth_date"
+            id="lb_birthday"
+            class="w-full border border-gray-300 rounded-md p-2"
+          />
+        </div>
+        <div class="mb-4">
+          <label for="lb_country">Pays <i class="text-red-500">*</i></label> <br />
+          <select
+            (change)="onCountryChange($event)"
+            id="lb_country"
+            class="w-full border border-gray-300 rounded-md p-2"
+          >
+            <option value="">Sélectionnez un pays</option>
+            <option *ngFor="let country of countries" [value]="country.id">
+              {{ country.name }}
+            </option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="lb_language">Langue <i class="text-red-500">*</i></label> <br />
+          <select
+            [(ngModel)]="user.language_id"
+            id="lb_language"
+            class="w-full border border-gray-300 rounded-md p-2"
+          >
+            <option *ngFor="let language of languages" [value]="language.id">
+              {{ language.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <button
+        (click)="clickRegister()"
+        class="px-16 py-2 font-medium bg-blue-500 hover:bg-blue-600 rounded-md text-white mt-8"
+      >
+        S'inscrire
+      </button>
+      <p class="py-6">
+        Vous avez déjà un compte ?
+        <a href="" (click)="href($event)" class="text-cyan-500 underline">Se connecter maintenant</a>
+      </p>
     </div>
   </div>
 </div>
