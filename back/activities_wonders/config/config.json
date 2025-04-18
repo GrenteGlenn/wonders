@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "kinsuful",
-    "password": "Ae225r910-",
-    "database": "activity",
+    "username": "celia_wonders",
+    "password": "wonders",
+    "database": "activities_wonders",
     "host": "127.0.0.1",
     "port": "5432",
     "dialect": "postgres"
