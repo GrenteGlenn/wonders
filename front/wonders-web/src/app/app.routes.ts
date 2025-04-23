@@ -29,20 +29,20 @@ export const routes: Routes = [
     { path: "profile", component: ProfileComponent, canActivate: [authGuard] },
     { path: "login", component: LoginComponent },
     { path: "register", component: RegisterComponent },
-    { path: "destination", component: DestinationComponent },
-    { path: "activities", component: FormActivitiesComponent },
+    { path: "destination", component: DestinationsComponent },
+    { path: "activities", component: ActivitiesComponent },
     { path: 'choice-guide', component: ChoiceGuideComponent },
     { path: 'direct-planning', component: DirectPlanningComponent },
     { path: 'trip-details', component: TripDetailsComponent },
     { path: 'blog', component: TopicComponent },
-    { path: 'blog/:id', component: SubjectComponent},
-    { path: 'subjects/:id', component: SubjectDetailComponent}
+    { path: 'blog/:id', component: SubjectComponent },
+    { path: 'subjects/:id', component: SubjectDetailComponent },
     { path: 'trip-details', component: TripDetailsComponent },
-    { path: 'destinations', component: DestinationsComponent},
-    { path: 'fly', component: FlyComponent},
-    { path: 'stepBody', component: StepBodyComponent},
-    { path: 'activity', component: ActivitiesComponent},
-    { path: 'hotel', component: HotelComponent}
+    { path: 'destinations', component: DestinationsComponent },
+    { path: 'fly', component: FlyComponent },
+    { path: 'stepBody', component: StepBodyComponent },
+    { path: 'activity', component: ActivitiesComponent },
+    { path: 'hotel', component: HotelComponent }
 ];
 
 
