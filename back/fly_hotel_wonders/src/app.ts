@@ -2,6 +2,7 @@ import express from 'express';
 import 'dotenv/config';
 import hotelRoute from './routes/hotelRoute';
 import flyRoute from './routes/flyRoute';
+import localisationRoutes from './routes/localisationRoutes'
 import cors from 'cors';
 
 const app = express();
@@ -12,8 +13,9 @@ const port = process.env.PORT;
 
 app.use('/api/hotel', hotelRoute);
 app.use('/api/fly', flyRoute);
+app.use('/api/localisation', localisationRoutes)
 
-app.get('/test', function (req, res) {
+app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
