@@ -15,6 +15,7 @@ module.exports = {
           country_id: 1,
           last_name: 'Doe',
           email: 'example@example.com',
+          role_id: 1,
           password: hashedPassword, // Mot de passe haché
           created_at: new Date(),
           updated_at: new Date(),
