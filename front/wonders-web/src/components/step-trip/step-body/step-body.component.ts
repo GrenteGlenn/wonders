@@ -6,19 +6,31 @@ import { FormsModule } from '@angular/forms';
 import { DestinationsComponent } from '../../destinations/destinations.component';
 import { ActivitiesComponent } from '../../activities/activities/activities.component';
 import { FlyComponent } from '../../fly/fly/fly.component';
-import { HotelComponent } from "../../hotel/hotel.component";
+import { HotelComponent } from '../../hotel/hotel.component';
+import { Destination } from '../../../app/model/destination';
+import { PreviewComponent } from '../../preview/preview.component';
+import { RequirementsComponent } from '../../requirements/requirements.component';
 
 @Component({
   selector: 'app-step-body',
   standalone: true,
-  imports: [CommonModule, FormsModule, DestinationsComponent, ActivitiesComponent, FlyComponent, HotelComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    DestinationsComponent,
+    ActivitiesComponent,
+    FlyComponent,
+    HotelComponent,
+    PreviewComponent,
+    RequirementsComponent
+  ],
   templateUrl: './step-body.component.html',
   styleUrl: './step-body.component.css'
 })
 export class StepBodyComponent {
-  steps = ['Pays', 'Activités', 'Vols', 'Hotel', 'Prévisualisation'];
+  steps = ['Pays', 'Activités', 'Vols', 'Hotel', 'Résumé'];
   currentStep = 1;
-  
+
   private toastService = inject(ToastService);
   countries: any[] = [];
   selectedCountry: string = '';
@@ -26,13 +38,51 @@ export class StepBodyComponent {
   countryDescription: string = '';
   isModalOpen = false;
   isLoading = false;
-  
-  // Objet pour passer les queryParams au composant Destinations
-  destinationParams: {[key: string]: string} = {};
 
-  constructor(
-    private countryService: CountryService
-  ) {}
+  //stock les données pour l'étape 5
+
+  selectedDestination: Destination | null = null;
+  selectedActivity: any = null;
+  selectedFlight: any = null;
+  selectedHotel: any = null;
+
+  destinationParams: { [key: string]: string } = {};
+
+  constructor(private countryService: CountryService) {}
+
+  handleDestinationSelected(destination: Destination) {
+    this.selectedDestination = destination;
+    // console.log(' Destination reçue :', destination);
+  }
+  handleActivitySelected(activity: any) {
+    this.selectedActivity = activity;
+    // console.log(' Activité reçue :', activity);
+  }
+  handleFlightSelected(flight: any) {
+    this.selectedFlight = flight;
+    // console.log(' Vol reçu :', flight);
+  }
+
+  handleHotelSelected(hotel: any) {
+    this.selectedHotel = hotel;
+    // console.log(' Hôtel reçu :', hotel);
+  }
+
+  // Fonction pour valider les étapes en fonction des requirements
+  canProceedToNextStep(): boolean {
+    switch (this.currentStep) {
+      case 1:
+        return !!this.selectedDestination;
+      case 2:
+        return !!(this.selectedActivity?.category && this.selectedActivity?.name);
+      case 3:
+        return !!this.selectedFlight;
+      case 4:
+        return !!this.selectedHotel?.name;
+      default:
+        return true;
+    }
+  }
 
   nextStep() {
     if (this.currentStep < this.steps.length) {
@@ -64,11 +114,8 @@ export class StepBodyComponent {
     if (countryName) {
       this.isLoading = true;
       this.selectedCountry = countryName;
-      
-      // Préparer les paramètres pour le composant Destinations
       this.destinationParams = { country: countryName };
 
-      // Charger l'image du pays sélectionné (tu peux enlever cette partie si c'est géré par Destinations)
       this.countryService.getCountryImage(countryName).subscribe({
         next: (response) => {
           if (response.data) {

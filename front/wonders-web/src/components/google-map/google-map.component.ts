@@ -14,17 +14,11 @@ export class GoogleMapComponent {
 
 	brLocations: any[] = [
 		{ lat: -22.9068, lng: -43.1729 }, // Rio de Janeiro
-		{ lat: -23.5505, lng: -46.6333 }, // São Paulo
-		{ lat: -15.7939, lng: -47.8828 }, // Brasília
-		{ lat: -12.9777, lng: -38.5016 }, // Salvador
-		{ lat: -3.1190, lng: -60.0217 },  // Manaus
+
 	];
 	caLocations: any[] = [
 		{ lat: 48.4096, lng: -123.3693 },   // Willows Beach, Victoria (British Columbia)
-		{ lat: 44.6348, lng: -63.5783 },    // Lawrencetown Beach, Halifax (Nova Scotia)
-		{ lat: 49.6841, lng: -124.9998 },   // Rathtrevor Beach, Parksville (British Columbia)
-		{ lat: 45.3446, lng: -63.2687 },    // Melmerby Beach, New Glasgow (Nova Scotia)
-		{ lat: 49.0053, lng: -122.8634 },   // White Rock Beach, White Rock (British Columbia)
+	
 	];
 
 	options: google.maps.MapOptions = {

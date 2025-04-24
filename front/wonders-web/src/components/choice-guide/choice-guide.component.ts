@@ -17,6 +17,6 @@ export class ChoiceGuideComponent {
   }
 
   goPlanTrip() {
-    this.router.navigate(['planTrip']);
+    this.router.navigate(['stepBody']);
   }
 }

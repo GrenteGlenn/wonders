@@ -1,130 +1,163 @@
 <div class="w-full max-w-full mx-auto px-10 sm:px-10 lg:px-10 py-10">
-  <div class="relative flex items-center justify-between">
-    <ng-container *ngFor="let step of steps; let i = index">
-      <!-- Trait entre étapes -->
-      <div
-        *ngIf="i > 0"
-        class="absolute top-4 z-0"
-        [ngStyle]="{
-          left: 'calc((100% / ' + steps.length + ') * ' + i + ' - 16px)',
-          width: 'calc(100% / ' + steps.length + ')'
-        }"
-        class="h-0.5"
-        [ngClass]="{
-          'bg-black': currentStep > i,
-          'bg-gray-300': currentStep <= i
-        }"
-      ></div>
+  <div class="flex flex-col lg:flex-row gap-8 items-start">
+    <div class="flex-1">
+      <div class="relative flex items-center justify-between mb-10">
+        <ng-container *ngFor="let step of steps; let i = index">
+          <div
+            *ngIf="i > 0"
+            class="absolute top-4 z-0"
+            [ngStyle]="{
+              left: 'calc((100% / ' + steps.length + ') * ' + i + ' - 16px)',
+              width: 'calc(100% / ' + steps.length + ')'
+            }"
+            class="h-0.5"
+            [ngClass]="{
+              'bg-black': currentStep > i,
+              'bg-gray-300': currentStep <= i
+            }"
+          ></div>
 
-      <!-- Étape -->
-      <div class="flex flex-col items-center z-10" [style.width.%]="10 / steps.length">
-        <div
-          class="flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-semibold"
-          [ngClass]="{
-            'bg-black text-white border-black': currentStep >= i + 1,
-            'bg-white text-gray-600 border-gray-400': currentStep < i + 1
-          }"
-        >
-          {{ i + 1 }}
-        </div>
-        <span
-          class="text-sm mt-2 font-medium text-center"
-          [ngClass]="{
-            'text-black font-semibold': currentStep === i + 1,
-            'text-gray-400': currentStep < i + 1,
-            'text-black': currentStep > i + 1
-          }"
-        >
-          {{ step }}
-        </span>
+          <div class="flex flex-col items-center z-10" [style.width.%]="10 / steps.length">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-full border-2 text-sm font-semibold"
+              [ngClass]="{
+                'bg-black text-white border-black': currentStep >= i + 1,
+                'bg-white text-gray-600 border-gray-400': currentStep < i + 1
+              }"
+            >
+              {{ i + 1 }}
+            </div>
+            <span
+              class="text-sm mt-2 font-medium text-center"
+              [ngClass]="{
+                'text-black font-semibold': currentStep === i + 1,
+                'text-gray-400': currentStep < i + 1,
+                'text-black': currentStep > i + 1
+              }"
+            >
+              {{ step }}
+            </span>
+          </div>
+        </ng-container>
       </div>
-    </ng-container>
-  </div>
 
-  <!-- Contenu -->
-  <div class="mt-8">
-    <ng-container [ngSwitch]="currentStep">
-      <!-- Étape 1: Sélection du pays -->
-      <ng-container *ngSwitchCase="1">
-        <div *ngIf="!selectedCountry" class="text-center mb-8">
-          <h1 class="text-3xl font-bold mb-6">Sélectionnez votre destination</h1>
-          <div class="relative w-full max-w-md mx-auto">
-            <select
-              [(ngModel)]="selectedCountry"
-              (ngModelChange)="onCountrySelect($event)"
-              class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-            >
-              <option value="" disabled selected>Choisissez votre destination</option>
-              <option *ngFor="let country of countries" [value]="country.name">
-                {{ country.name }}
-              </option>
-            </select>
-          </div>
-        </div>
+      <!-- Contenu -->
+      <div class="mt-8">
+        <ng-container [ngSwitch]="currentStep">
+          <!-- Étape 1: Sélection du pays -->
+          <ng-container *ngSwitchCase="1">
+            <div *ngIf="!selectedCountry" class="text-center mb-8 flex flex-col items-center">
+              <header class="bg-gradient-to-r from-blue-600 to-indigo-700 py-10 px-4 md:px-8 rounded-md w-full">
+                <div class="max-w-7xl mx-auto">
+                  <h1 class="text-3xl md:text-4xl font-bold text-white">Sélectionnez votre destination</h1>
+                  <p class="text-blue-100 mt-2">Trouvez le meilleur endroit pour votre prochain voyage</p>
+                </div>
+              </header>
 
-        <!-- Afficher le composant Destinations lorsqu'un pays est sélectionné -->
-        <div *ngIf="selectedCountry" class="">
-          <div class="flex justify-end items-center">
-            <button
-              (click)="selectedCountry = ''"
-              class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 text-sm flex items-center"
-            >
-              Changer de pays
-            </button>
-          </div>
-          <app-destinations [queryParams]="destinationParams" [hideBackButton]="true"></app-destinations>
-        </div>
-      </ng-container>
+              <!-- Select -->
+              <div class="relative w-full max-w-md mt-6">
+                <select
+                  [(ngModel)]="selectedCountry"
+                  (ngModelChange)="onCountrySelect($event)"
+                  class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                >
+                  <option value="" disabled selected>Choisissez votre destination</option>
+                  <option *ngFor="let country of countries" [value]="country.name">
+                    {{ country.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
 
-      <!-- Étape 2: Activités -->
-      <ng-container *ngSwitchCase="2">
-        <div class="mb-6">
-          <!-- Intégration du composant d'activités -->
-          <div class="bg-white rounded-lg shadow-md">
-            <app-activities [cityName]="selectedCountry"></app-activities>
-          </div>
-        </div>
-      </ng-container>
+            <!-- Afficher le composant Destinations lorsqu'un pays est sélectionné -->
+            <div *ngIf="selectedCountry">
+              <header class="bg-gradient-to-r from-blue-600 to-indigo-700 py-10 px-4 md:px-8 rounded-md w-full">
+                <div class="flex justify-between">
+                  <h1 class="text-3xl md:text-4xl font-bold text-white">{{ selectedDestination?.name }}</h1>
+                  <button
+                    (click)="selectedCountry = ''"
+                    class="px-3 py-1 h-10 w-30 bg-gray-200 rounded-md hover:bg-gray-300 text-sm flex items-center"
+                  >
+                    Changer de pays
+                  </button>
+                </div>
+              </header>
+              <app-destinations
+                [queryParams]="destinationParams"
+                [hideBackButton]="true"
+                (destinationSelected)="handleDestinationSelected($event)"
+              ></app-destinations>
+            </div>
+          </ng-container>
 
-      <ng-container *ngSwitchCase="3">
-        <app-fly></app-fly>
-      </ng-container>
+          <!-- Étape 2: Activités -->
+          <ng-container *ngSwitchCase="2">
+            <div class="mb-6">
+              <!-- Intégration du composant d'activités -->
+              <div class="bg-white rounded-lg shadow-md">
+                <app-activities
+                  [cityName]="selectedCountry"
+                  (activitySelected)="handleActivitySelected($event)"
+                ></app-activities>
+              </div>
+            </div>
+          </ng-container>
 
-      <ng-container *ngSwitchCase="4">
-        <app-hotel></app-hotel>
-      </ng-container>
+          <ng-container *ngSwitchCase="3">
+            <app-fly (flightSelected)="handleFlightSelected($event)"></app-fly>
+          </ng-container>
 
-      <ng-container *ngSwitchCase="5">
-        <h1 class="text-3xl font-bold mb-6">Récapitulatif de votre voyage</h1>
-        <div class="flex justify-center items-center h-64 bg-gray-100 rounded-lg">
-          <p class="text-xl text-gray-500">🧾 <strong>Composant Prévisualisation</strong> à implémenter</p>
-        </div>
-      </ng-container>
-    </ng-container>
-  </div>
+          <ng-container *ngSwitchCase="4">
+            <app-hotel (hotelSelected)="handleHotelSelected($event)"></app-hotel>
+          </ng-container>
 
-  <!-- Navigation -->
-  <div class="flex justify-between w-full mt-10">
-    <!-- Précédent  -->
-    <ng-container *ngIf="currentStep !== 1; else emptyLeft">
-      <button class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors" (click)="prevStep()">
-        ← Précédent
-      </button>
-    </ng-container>
-    <ng-template #emptyLeft>
-      <div></div>
-    </ng-template>
+          <ng-container *ngSwitchCase="5">
+            <h1 class="text-3xl font-bold mb-6">Récapitulatif de votre voyage</h1>
+            <app-preview
+              [destination]="selectedDestination"
+              [activity]="selectedActivity"
+              [flight]="selectedFlight"
+              [hotel]="selectedHotel"
+            ></app-preview>
+          </ng-container>
+        </ng-container>
+      </div>
 
-    <!-- Suivant -->
-    <button
-      class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-      (click)="nextStep()"
-      [disabled]="currentStep === steps.length || (currentStep === 1 && !selectedCountry)"
-      [ngClass]="{
-        'opacity-50 cursor-not-allowed': currentStep === steps.length || (currentStep === 1 && !selectedCountry)
-      }"
-    >
-      {{ currentStep === steps.length ? 'Terminer' : 'Suivant →' }}
-    </button>
+      <!-- Navigation -->
+      <div class="flex justify-between w-full mt-10">
+        <!-- Précédent  -->
+        <ng-container *ngIf="currentStep !== 1; else emptyLeft">
+          <button class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors" (click)="prevStep()">
+            ← Précédent
+          </button>
+        </ng-container>
+        <ng-template #emptyLeft>
+          <div></div>
+        </ng-template>
+
+        <!-- Suivant -->
+        <ng-container *ngIf="!(currentStep === 1 && !selectedDestination)">
+          <button
+            class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            (click)="nextStep()"
+            [disabled]="!canProceedToNextStep()"
+            [ngClass]="{
+              'opacity-50 cursor-not-allowed': !canProceedToNextStep()
+            }"
+          >
+            {{ currentStep === steps.length ? 'Terminer' : 'Suivant →' }}
+          </button>
+        </ng-container>
+      </div>
+    </div>
+    <div class="hidden lg:block w-80 mt-1 sticky top-10 self-start">
+      <app-requirements
+        [currentStep]="currentStep"
+        [selectedDestination]="selectedDestination"
+        [selectedActivity]="selectedActivity"
+        [selectedFlight]="selectedFlight"
+        [selectedHotel]="selectedHotel"
+      ></app-requirements>
+    </div>
   </div>
 </div>

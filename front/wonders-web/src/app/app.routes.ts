@@ -16,6 +16,7 @@ import { FlyComponent } from '../components/fly/fly/fly.component';
 import { StepBodyComponent } from '../components/step-trip/step-body/step-body.component';
 import { ActivitiesComponent } from '../components/activities/activities/activities.component';
 import { HotelComponent } from '../components/hotel/hotel.component';
+import { PreviewComponent } from '../components/preview/preview.component';
 
 export const routes: Routes = [
   { path: 'landingPage', component: LandingPageComponent },
@@ -33,5 +34,6 @@ export const routes: Routes = [
   { path: 'fly', component: FlyComponent},
   { path: 'stepBody', component: StepBodyComponent},
   { path: 'activity', component: ActivitiesComponent},
-  { path: 'hotel', component: HotelComponent}
+  { path: 'hotel', component: HotelComponent},
+  { path: 'preview', component:PreviewComponent}
 ];

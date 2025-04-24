@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
@@ -15,6 +15,8 @@ import { finalize, forkJoin, of } from 'rxjs';
 export class HotelComponent {
   private fb = inject(FormBuilder);
   private hotelService = inject(HotelService);
+  @Output() hotelSelected = new EventEmitter<any>();
+
 
   hotelForm: FormGroup = this.fb.group({
     latitude: [48.8651],
@@ -46,8 +48,19 @@ export class HotelComponent {
   //stock l'id de l'hotel selectionner
   selectHotel(hotel: any) {
     this.selectedHotelId = hotel.hotelId;
-    console.log('Hôtel sélectionné:', this.selectedHotelId);
+  
+    const selectedHotelData = {
+      id: hotel.hotelId,
+      name: hotel.nameFormatted,
+      distance: hotel.distance,
+      country: hotel.address?.countryCode,
+      hasOffers: hotel.hasOffers,
+      offers: hotel.offers || []
+    };
+  
+    this.hotelSelected.emit(selectedHotelData);
   }
+  
   isSelected(hotel: any): boolean {
     return this.selectedHotelId === hotel.hotelId;
   }

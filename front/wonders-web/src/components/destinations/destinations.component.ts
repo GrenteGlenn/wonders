@@ -1,19 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CityService } from '../../app/service/city/city.service';
 import { CountryService } from '../../app/service/country/country.service';
 import { GoogleMapComponent } from '../google-map/google-map.component';
-
-interface Destination {
-  name: string;
-  image: string;
-  description: string;
-  type: 'city' | 'country';
-  isDescriptionLoading?: boolean;
-  isImageLoading?: boolean;
-}
+import { Destination } from '../../app/model/destination';
 
 @Component({
   selector: 'app-destinations',
@@ -23,8 +15,9 @@ interface Destination {
   styleUrl: './destinations.component.css'
 })
 export class DestinationsComponent implements OnInit {
-  @Input() queryParams?: {[key: string]: string};
-  @Input() hideBackButton: boolean = false; 
+  @Input() queryParams?: { [key: string]: string };
+  @Input() hideBackButton: boolean = false;
+  @Output() destinationSelected = new EventEmitter<Destination>();
 
   destination: Destination | null = null;
   searchResults: Destination[] = [];
@@ -84,7 +77,6 @@ export class DestinationsComponent implements OnInit {
       this.loadPopularDestinations();
     }
   }
-
 
   showPageNumber(page: number): boolean {
     if (page === 1 || page === this.totalPages) {
@@ -167,6 +159,7 @@ export class DestinationsComponent implements OnInit {
             isDescriptionLoading: false,
             isImageLoading: false
           };
+          this.destinationSelected.emit(this.destination);
         } else {
           this.destination = null;
           this.searchResults = [];
@@ -205,6 +198,9 @@ export class DestinationsComponent implements OnInit {
       isDescriptionLoading: true,
       isImageLoading: true
     };
+
+    this.destinationSelected.emit(this.destination);
+
     this.isLoading = false;
 
     // Charge l'image en premier

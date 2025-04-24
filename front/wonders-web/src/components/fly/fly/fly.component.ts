@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FlightOffersResponse, FlightSearchParams, FlyService } from '../../../app/service/fly/fly.service';
 import { LucideAngularModule } from 'lucide-angular';
@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './fly.component.css'
 })
 export class FlyComponent {
+  @Output() flightSelected = new EventEmitter<any>();
+
   searchForm: FormGroup;
   isSearching = false;
   searchCompleted = false;
@@ -143,6 +145,22 @@ export class FlyComponent {
       }
     });
   }
+
+  selectFlight(flight: any) {
+    const selected = {
+      airline: flight.validatingAirlineCodes[0],
+      departure: flight.itineraries[0].segments[0].departure.iataCode,
+      arrival: flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival.iataCode,
+      price: flight.price.total,
+      currency: flight.price.currency,
+      departureTime: flight.itineraries[0].segments[0].departure.at,
+      arrivalTime: flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival.at,
+      duration: flight.itineraries[0].duration
+    };
+  
+    this.flightSelected.emit(selected);
+  }
+  
 
   // Extraire les compagnies aériennes uniques des résultats
   extractAirlines(): void {

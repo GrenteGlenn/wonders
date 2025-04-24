@@ -1,0 +1,91 @@
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <!-- Destination -->
+  <div class="col-span-1 xl:col-span-1 space-y-6">
+    <div class="bg-white p-6 rounded-xl shadow-md">
+      <div class="flex items-center mb-4 gap-2">
+        <h2 class="text-xl font-bold">Destination choisie</h2>
+      </div>
+      <img [src]="destination?.image" class="w-full h-52 object-cover rounded-lg mb-4" alt="{{ destination?.name }}" />
+      <h3 class="text-lg font-semibold">{{ destination?.name }}</h3>
+      <p class="text-gray-600 mt-2 text-sm whitespace-pre-line" [ngClass]="{ 'line-clamp-6': !showMore }">
+        {{ destination?.description }}
+      </p>
+      <button
+        class="text-blue-600 text-sm mt-2 hover:underline font-medium"
+        *ngIf="destination?.description?.length > 300"
+        (click)="showMore = !showMore"
+      >
+        {{ showMore ? 'Voir moins' : 'Voir plus' }}
+      </button>
+    </div>
+
+    <!-- Carte -->
+    <div class="bg-white rounded-xl shadow-md p-4">
+      <div class="flex items-center mb-3 gap-2">
+        <lucide-icon name="map-pin" class="h-5 w-5 text-rose-500"></lucide-icon>
+        <h3 class="text-base font-semibold">Localisation</h3>
+      </div>
+      <app-google-map></app-google-map>
+    </div>
+  </div>
+
+  <!-- Activité -->
+  <div class="col-span-1 xl:col-span-1 space-y-6">
+    <div class="bg-white p-6 rounded-xl shadow-md" *ngIf="activity">
+      <div class="flex items-center gap-2">
+        <h2 class="text-xl font-bold">Activité sélectionnée</h2>
+      </div>
+      <div>
+        {{ activity.category }}
+      </div>
+      <img [src]="activity?.image" class="w-full h-52 object-cover rounded-lg mb-4" alt="{{ activity?.city }}" />
+      <h3 class="text-lg font-semibold">{{ activity?.city }}</h3>
+      <p class="text-gray-600 text-sm">
+        {{ activity?.description || 'Une activité ' + activity?.category + ' vous attend !' }}
+      </p>
+    </div>
+
+    <!-- Vol -->
+    <div class="bg-white p-6 rounded-xl shadow-md lg:col-span-2" *ngIf="flight">
+      <div class="flex items-center mb-4 gap-2">
+        <lucide-icon name="plane" class="h-5 w-5 text-green-600"></lucide-icon>
+        <h2 class="text-xl font-bold">Vol sélectionné</h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+        <div>
+          <p class="text-gray-500">Départ</p>
+          <p class="font-medium">{{ flight?.departure }}</p>
+          <p class="text-gray-500">{{ flight?.departureTime | date: 'short' }}</p>
+        </div>
+        <div>
+          <p class="text-gray-500">Arrivée</p>
+          <p class="font-medium">{{ flight?.arrival }}</p>
+          <p class="text-gray-500">{{ flight?.arrivalTime | date: 'short' }}</p>
+        </div>
+        <div>
+          <p class="text-gray-500">Prix total</p>
+          <p class="text-green-600 font-semibold">{{ flight?.price }} {{ flight?.currency || '€' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hôtel -->
+    <div class="bg-white p-6 rounded-xl shadow-md lg:col-span-2" *ngIf="hotel">
+      <div class="flex items-center mb-4 gap-2">
+        <lucide-icon name="hotel" class="h-5 w-5 text-teal-600"></lucide-icon>
+        <h2 class="text-xl font-bold">Hôtel sélectionné</h2>
+      </div>
+      <h3 class="text-lg font-semibold">{{ hotel?.name }}</h3>
+      <p class="text-gray-600 text-sm mb-2">{{ hotel?.country || 'Pays inconnu' }}</p>
+      <p class="text-sm text-gray-500">Distance : {{ hotel?.distance?.value }} {{ hotel?.distance?.unit }}</p>
+
+      <div class="mt-4 text-sm text-gray-500 italic">
+        <p *ngIf="!hotel?.hasOffers">Actuellement Aucune offre disponible pour cet hôtel.</p>
+        <p *ngIf="hotel?.offers?.length === 0 && hotel?.hasOffers">Chargement des offres...</p>
+        <p *ngIf="hotel?.offers?.length > 0">
+          {{ hotel?.offers?.length }} offre(s) trouvée(s) — vous pourrez les consulter sur place ou par e-mail.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
