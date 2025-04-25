@@ -5,20 +5,19 @@ import countryRoutes from './routes/countryRoutes';
 import cityRoutes from './routes/cityRoutes';
 import languageRoutes from './routes/languageRoutes';
 import cors from 'cors';
+import airportRoutes from './routes/airportRoutes';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
-// app.use(express.json());
 
 app.use(cors());
 
 const port = process.env.PORT;
 
-app.use(cors());
-
 app.use('/api/countries', jsonParser, countryRoutes);
 app.use('/api/cities', jsonParser, cityRoutes);
 app.use('/api/languages', jsonParser, languageRoutes);
+app.use('/api/airports', jsonParser, airportRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello World! This is Quiz Wonders micro service');
