@@ -1,5 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import LocalisationController from '../controllers/LocalisationController';
+import LocalisationInterface from '../interface/localisation';
 
 const localisationController = new LocalisationController();
 const router = Router();
@@ -27,7 +28,8 @@ router.get('/:id', (async (req, res) => {
 
 router.post('/', (async (req, res) => {
   try {
-    const newLocalisation = await localisationController.create(req.body);
+    const body = <LocalisationInterface>req.body;
+    const newLocalisation = await localisationController.create(body);
     res.status(201).json(newLocalisation);
   } catch (error) {
     res.status(500).json({ error });
@@ -36,7 +38,8 @@ router.post('/', (async (req, res) => {
 
 router.put('/:id', (async (req, res) => {
   try {
-    const updatedLocalisation = await localisationController.update(Number(req.params.id), req.body);
+    const body = <LocalisationInterface>req.body;
+    const updatedLocalisation = await localisationController.update(Number(req.params.id), body);
     res.json(updatedLocalisation);
   } catch (error) {
     res.status(500).json({ error });
