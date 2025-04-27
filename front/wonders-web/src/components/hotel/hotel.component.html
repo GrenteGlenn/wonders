@@ -113,7 +113,6 @@
 
       <!-- Bouton filtre offres -->
       <button
-        (click)="toggleFilter()"
         class="flex items-center gap-2 text-sm px-3 py-1.5 rounded-md flex-shrink-0"
         [class.bg-teal-100]="showOnlyWithOffers"
         [class.text-teal-700]="showOnlyWithOffers"
@@ -256,13 +255,13 @@
       </p>
     </ng-container>
 
-    <ng-container *ngIf="!searchByName && showOnlyWithOffers && hotels.length > 0">
+    <!-- <ng-container *ngIf="!searchByName && showOnlyWithOffers && hotels.length > 0">
       <p class="text-lg font-medium">Aucun hôtel avec offres disponibles</p>
       <p class="mt-2 text-sm text-gray-500">
         Il y a {{ hotels.length }} hôtels sans offres disponibles.
         <button (click)="toggleFilter()" class="text-teal-600 hover:underline">Voir tous les hôtels</button>
       </p>
-    </ng-container>
+    </ng-container> -->
 
     <ng-container *ngIf="(!searchByName && !showOnlyWithOffers) || hotels.length === 0">
       <p class="text-lg font-medium">Aucun hôtel trouvé pour ces critères.</p>

@@ -131,8 +131,6 @@ export class StepBodyComponent {
           this.isLoading = false;
         }
       });
-
-      // Cette partie est peut-être redondante si tu utilises le composant Destinations
       this.countryService.getAICountryInfo(countryName).subscribe({
         next: (response) => {
           this.countryDescription = response.data;

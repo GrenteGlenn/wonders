@@ -152,7 +152,7 @@ export class HotelComponent {
     });
   }
 
-  // Méthode modifiée pour appliquer tous les filtres (offres et nom)
+  // Méthode pour appliquer tous les filtres (offres et nom)
   applyFilters() {
     if (this.showOnlyWithOffers) {
       this.filteredHotels = this.hotels.filter((hotel) => hotel.hasOffers);
@@ -186,21 +186,21 @@ export class HotelComponent {
   }
 
   // Méthode pour basculer le filtre d'offres
-  toggleFilter() {
-    this.showOnlyWithOffers = !this.showOnlyWithOffers;
-    this.hotelForm.patchValue({ showOnlyWithOffers: this.showOnlyWithOffers });
+  // toggleFilter() {
+  //   this.showOnlyWithOffers = !this.showOnlyWithOffers;
+  //   this.hotelForm.patchValue({ showOnlyWithOffers: this.showOnlyWithOffers });
 
-    if (this.showOnlyWithOffers && this.hotels.length > 0) {
-      const uncheckedHotels = this.hotels.filter((hotel) => hotel.offers === null);
-      if (uncheckedHotels.length > 0) {
-        this.loadAllHotelsOffers();
-      } else {
-        this.applyFilters();
-      }
-    } else {
-      this.applyFilters();
-    }
-  }
+  //   if (this.showOnlyWithOffers && this.hotels.length > 0) {
+  //     const uncheckedHotels = this.hotels.filter((hotel) => hotel.offers === null);
+  //     if (uncheckedHotels.length > 0) {
+  //       this.loadAllHotelsOffers();
+  //     } else {
+  //       this.applyFilters();
+  //     }
+  //   } else {
+  //     this.applyFilters();
+  //   }
+  // }
 
   onResetForm() {
     this.hotelForm.reset({
@@ -218,7 +218,7 @@ export class HotelComponent {
     this.searchDone = false;
   }
 
-  // Méthode pour afficher/masquer et charger les offres d'un hôtel
+  // Méthode pour afficher/masquer les offres d'un hôtel
   toggleOffers(hotel: any) {
     if (hotel.offers !== null) {
       hotel.showOffers = !hotel.showOffers;

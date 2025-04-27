@@ -150,7 +150,7 @@
         </ng-container>
       </div>
     </div>
-    <div class="hidden lg:block w-80 mt-1 sticky top-10 self-start">
+    <div class="hidden lg:block w-80 mt-1 sticky top-10 self-start" *ngIf="currentStep !== 5">
       <app-requirements
         [currentStep]="currentStep"
         [selectedDestination]="selectedDestination"
