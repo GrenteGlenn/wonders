@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModalActivityComponent } from './modal-activity.component';
+import { RequirementsComponent } from './requirements.component';
 
-describe('ModalActivityComponent', () => {
-  let component: ModalActivityComponent;
-  let fixture: ComponentFixture<ModalActivityComponent>;
+describe('RequirementsComponent', () => {
+  let component: RequirementsComponent;
+  let fixture: ComponentFixture<RequirementsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModalActivityComponent]
+      imports: [RequirementsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ModalActivityComponent);
+    fixture = TestBed.createComponent(RequirementsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

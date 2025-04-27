@@ -3,10 +3,10 @@ import { User } from '../../app/model/User';
 import { AuthentificationService } from '../../app/service/auth/authentification.service';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Country } from '../modals/modal-activity/modal-activity.component';
 import { CountryService } from '../../app/service/country/country.service';
 import { NgFor } from '@angular/common';
 import { LanguageService } from '../../app/service/languages/languages.service';
+import { Country } from '../activities/activities/activities.component';
 
 @Component({
   selector: 'app-register',
@@ -68,7 +68,6 @@ export class RegisterComponent implements OnInit {
     const selectedCountry = this.countries.find((country) => country.id === +event.target.value);
     if (selectedCountry) {
       this.user.country_id = selectedCountry.id;
-      // this.user.language_id = selectedCountry.id;
     }
   }
 

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
@@ -15,6 +15,8 @@ import { finalize, forkJoin, of } from 'rxjs';
 export class HotelComponent {
   private fb = inject(FormBuilder);
   private hotelService = inject(HotelService);
+  @Output() hotelSelected = new EventEmitter<any>();
+
 
   hotelForm: FormGroup = this.fb.group({
     latitude: [48.8651],
@@ -46,8 +48,19 @@ export class HotelComponent {
   //stock l'id de l'hotel selectionner
   selectHotel(hotel: any) {
     this.selectedHotelId = hotel.hotelId;
-    console.log('Hôtel sélectionné:', this.selectedHotelId);
+  
+    const selectedHotelData = {
+      id: hotel.hotelId,
+      name: hotel.nameFormatted,
+      distance: hotel.distance,
+      country: hotel.address?.countryCode,
+      hasOffers: hotel.hasOffers,
+      offers: hotel.offers || []
+    };
+  
+    this.hotelSelected.emit(selectedHotelData);
   }
+  
   isSelected(hotel: any): boolean {
     return this.selectedHotelId === hotel.hotelId;
   }
@@ -139,7 +152,7 @@ export class HotelComponent {
     });
   }
 
-  // Méthode modifiée pour appliquer tous les filtres (offres et nom)
+  // Méthode pour appliquer tous les filtres (offres et nom)
   applyFilters() {
     if (this.showOnlyWithOffers) {
       this.filteredHotels = this.hotels.filter((hotel) => hotel.hasOffers);
@@ -173,21 +186,21 @@ export class HotelComponent {
   }
 
   // Méthode pour basculer le filtre d'offres
-  toggleFilter() {
-    this.showOnlyWithOffers = !this.showOnlyWithOffers;
-    this.hotelForm.patchValue({ showOnlyWithOffers: this.showOnlyWithOffers });
+  // toggleFilter() {
+  //   this.showOnlyWithOffers = !this.showOnlyWithOffers;
+  //   this.hotelForm.patchValue({ showOnlyWithOffers: this.showOnlyWithOffers });
 
-    if (this.showOnlyWithOffers && this.hotels.length > 0) {
-      const uncheckedHotels = this.hotels.filter((hotel) => hotel.offers === null);
-      if (uncheckedHotels.length > 0) {
-        this.loadAllHotelsOffers();
-      } else {
-        this.applyFilters();
-      }
-    } else {
-      this.applyFilters();
-    }
-  }
+  //   if (this.showOnlyWithOffers && this.hotels.length > 0) {
+  //     const uncheckedHotels = this.hotels.filter((hotel) => hotel.offers === null);
+  //     if (uncheckedHotels.length > 0) {
+  //       this.loadAllHotelsOffers();
+  //     } else {
+  //       this.applyFilters();
+  //     }
+  //   } else {
+  //     this.applyFilters();
+  //   }
+  // }
 
   onResetForm() {
     this.hotelForm.reset({
@@ -205,7 +218,7 @@ export class HotelComponent {
     this.searchDone = false;
   }
 
-  // Méthode pour afficher/masquer et charger les offres d'un hôtel
+  // Méthode pour afficher/masquer les offres d'un hôtel
   toggleOffers(hotel: any) {
     if (hotel.offers !== null) {
       hotel.showOffers = !hotel.showOffers;
