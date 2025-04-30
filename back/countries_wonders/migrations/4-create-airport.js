@@ -17,7 +17,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      city: {
+      city_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      longitude: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+      },
+      latitude: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
@@ -34,7 +42,7 @@ module.exports = {
 
     await queryInterface.addConstraint('airports', {
       type: "foreign key",
-      fields: ["city"],
+      fields: ["city_id"],
       name: 'fk_city',
       references: {
         table: 'cities',

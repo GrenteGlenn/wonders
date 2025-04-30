@@ -1,16 +1,18 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
-import City from './city'
+import City from './city';
 
 import AirportInterface from '../src/interfaces/AirportInterface';
 
-interface AirportCreationAttributes extends Optional<AirportInterface, 'id'> { }
+interface AirportCreationAttributes extends Optional<AirportInterface, 'id'> {}
 
 class Airport extends Model<AirportInterface, AirportCreationAttributes> implements AirportInterface {
   declare id: number;
   declare name: string;
   declare code: string;
-  declare city: number;
+  declare city_id: number;
+  declare longitude: number;
+  declare latitude: number;
   declare readonly created_at?: Date;
   declare readonly updated_at?: Date;
 }
@@ -54,7 +56,7 @@ Airport.init(
         this.setDataValue('code', value);
       }
     },
-    city: {
+    city_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -62,11 +64,31 @@ Airport.init(
         key: 'id'
       },
       get() {
-        const value = this.getDataValue('city');
+        const value = this.getDataValue('city_id');
         return value ? value : null;
       },
       set(value: number) {
-        this.setDataValue('city', value);
+        this.setDataValue('city_id', value);
+      }
+    },
+    longitude: {
+      type: DataTypes.FLOAT,
+      get() {
+        const value = this.getDataValue('longitude');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('longitude', value);
+      }
+    },
+    latitude: {
+      type: DataTypes.FLOAT,
+      get() {
+        const value = this.getDataValue('latitude');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('latitude', value);
       }
     },
     created_at: {
@@ -93,7 +115,6 @@ Airport.init(
     modelName: 'airport'
   }
 );
-
 
 City.hasMany(Airport, {
   foreignKey: 'city',
