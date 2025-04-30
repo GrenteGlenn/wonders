@@ -1,0 +1,139 @@
+<div class="bg-white rounded-lg shadow-sm">
+  <!-- En-tête du composant -->
+  <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white p-6 rounded-t-lg">
+    <h2 class="text-2xl font-semibold">Activités à {{ cityName }}</h2>
+    <p class="text-blue-100 mt-2">Découvrez des expériences uniques pour votre séjour</p>
+  </div>
+
+  <div class="p-6">
+    <!-- Étape 1: Sélection de la catégorie -->
+    <div class="mb-8">
+      <div class="flex items-center mb-4">
+        <h3 class="text-xl font-medium translate-y-px">Choisissez votre catégorie d'activité</h3>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+        <div
+          *ngFor="let category of categories"
+          (click)="selectCategory(category)"
+          class="relative group cursor-pointer transition-all duration-300"
+        >
+          <div
+            class="absolute inset-0 rounded-xl"
+            [ngClass]="
+              selectedCategory?.id === category.id
+                ? 'bg-blue-600 shadow-lg shadow-blue-200'
+                : 'bg-gray-100 group-hover:bg-gray-200'
+            "
+          ></div>
+          <div class="relative p-6 flex flex-col items-center">
+            <!-- Icône de catégorie -->
+
+            <span
+              class="text-center font-medium"
+              [ngClass]="
+                selectedCategory?.id === category.id ? 'text-white' : 'text-gray-800 group-hover:text-gray-900'
+              "
+            >
+              {{ category.name }}
+            </span>
+
+            <!-- Indicateur de sélection -->
+            <div
+              *ngIf="selectedCategory?.id === category.id"
+              class="absolute top-3 right-3 text-white rounded-full p-1 shadow-sm"
+            >
+              <lucide-icon name="circle-check"></lucide-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Étape 2: Suggestions de destinations (visible uniquement si une catégorie est sélectionnée) -->
+    <div *ngIf="selectedCategory" class="mb-8 mt-12">
+      <div class="flex items-center mb-4">
+        <h3 class="text-xl font-medium translate-y-px">Destinations recommandées pour {{ selectedCategory.name }}</h3>
+      </div>
+
+      <!-- Loader -->
+      <div *ngIf="isLoadingCities" class="flex justify-center items-center h-64 my-8">
+        <div class="relative">
+          <div class="w-16 h-16 border-4 border-blue-100 border-t-blue-600 rounded-full animate-spin"></div>
+        </div>
+      </div>
+
+      <!-- Message si aucune ville n'est trouvée -->
+      <div
+        *ngIf="!isLoadingCities && suggestedCities.length === 0"
+        class="bg-blue-50 border border-blue-100 rounded-lg p-8 text-center my-8"
+      >
+        <div class="text-blue-800 text-5xl mb-4">🔍</div>
+        <h4 class="text-lg font-medium text-blue-800 mb-2">Aucune destination trouvée</h4>
+        <p class="text-blue-600">
+          Nous n'avons pas trouvé de destination recommandée pour cette activité. Essayez une autre catégorie.
+        </p>
+      </div>
+
+      <!-- Liste des villes -->
+      <div *ngIf="!isLoadingCities && suggestedCities.length > 0" class="mt-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div
+            *ngFor="let city of suggestedCities"
+            (click)="selectCity(city)"
+            class="relative group cursor-pointer transition-all duration-300 rounded-xl overflow-hidden shadow-sm hover:shadow-md"
+            [ngClass]="selectedCity?.city === city.city ? 'ring-2 ring-blue-500' : ''"
+          >
+            <!-- Badge "Recommandé" sur certaines cartes (optionnel) -->
+            <div
+              *ngIf="suggestedCities.indexOf(city) < 2"
+              class="absolute top-4 left-4 z-10 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full font-medium"
+            >
+              Recommandé
+            </div>
+
+            <!-- Image de la ville -->
+            <div class="relative h-56">
+              <img
+                [src]="city.img_full || 'assets/images/placeholder.jpg'"
+                class="w-full h-full object-cover transition-transform duration-700"
+                alt="{{ city.city }}"
+                onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';"
+              />
+
+              <!-- Overlay pour le texte -->
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-70"></div>
+
+              <!-- Info bulle (optionnelle) -->
+              <div
+                *ngIf="selectedCity?.city !== city.city"
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/90 text-blue-600 rounded-full py-2 px-4 font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm"
+              >
+                Sélectionner
+              </div>
+
+              <!-- Indicateur de sélection -->
+              <div *ngIf="selectedCity?.city === city.city" class="absolute top-4 right-4 text-white shadow-md">
+                <lucide-icon name="circle-check"></lucide-icon>
+              </div>
+            </div>
+
+            <!-- Informations sur la ville -->
+            <div class="p-4 bg-white">
+              <h4 class="text-lg font-semibold text-gray-900">{{ city.city }}</h4>
+              <div class="flex items-center mt-1">
+                <span class="ml-1 text-sm text-gray-500">{{ cityName }}</span>
+              </div>
+              <p class="mt-2 text-sm text-gray-600 line-clamp-2">
+                {{
+                  city.description ||
+                    'Découvrez cette destination fascinante pour votre activité ' + selectedCategory.name
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

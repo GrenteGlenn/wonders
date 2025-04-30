@@ -1,0 +1,246 @@
+
+body {
+    background-color: red;
+}/* Variables pour la cohérence des couleurs */
+:root {
+    --primary-color: #3f51b5;
+    --primary-light: #757de8;
+    --primary-dark: #002984;
+    --accent-color: #ff4081;
+    --text-on-primary: white;
+    --text-primary: #333;
+    --text-secondary: #666;
+    --background-light: #f9f9f9;
+    --background-card: white;
+    --border-radius: 8px;
+    --box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.15);
+    --transition: all 0.3s ease;
+  }
+  
+  .topic-container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-primary);
+  }
+  
+  h1 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.2rem;
+    font-weight: 600;
+    position: relative;
+  }
+  
+  h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary-light);
+    border-radius: 3px;
+  }
+  
+  h2 {
+    color: var(--text-primary);
+    margin-bottom: 1.2rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  
+  /* Formulaire */
+  .topic-form {
+    background-color: var(--background-card);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 2rem;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  
+  input, select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    transition: var(--transition);
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: var(--primary-light);
+    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
+  }
+  
+  button {
+    background-color: var(--primary-color);
+    color: var(--text-on-primary);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  button:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+  
+  button:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  button:disabled {
+    background-color: #c5c5c5;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Liste des sujets */
+  .topics-list {
+    background-color: var(--background-card);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+  }
+  
+  th, td {
+    padding: 1rem;
+    text-align: left;
+  }
+  
+  th {
+    background-color: var(--background-light);
+    font-weight: 600;
+    color: var(--text-secondary);
+    position: sticky;
+    top: 0;
+  }
+  
+  th:first-child {
+    border-top-left-radius: 6px;
+  }
+  
+  th:last-child {
+    border-top-right-radius: 6px;
+  }
+  
+  tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: var(--transition);
+  }
+  
+  tbody tr:last-child {
+    border-bottom: none;
+  }
+  
+  tbody tr:hover {
+    background-color: rgba(63, 81, 181, 0.05);
+  }
+  
+  .no-topics {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    background-color: var(--background-light);
+    border-radius: var(--border-radius);
+  }
+  
+  /* Bouton d'action dans la table */
+  td button {
+    background-color: var(--accent-color);
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  td button:hover {
+    background-color: #e91e63;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .topic-container {
+      padding: 0 1rem;
+    }
+    
+    .topic-form, .topics-list {
+      padding: 1.5rem;
+    }
+    
+    table, thead, tbody, th, td, tr {
+      display: block;
+    }
+    
+    thead tr {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    }
+    
+    tr {
+      margin-bottom: 1rem;
+      border: 1px solid #eee;
+      border-radius: var(--border-radius);
+      padding: 0.5rem;
+    }
+    
+    td {
+      border: none;
+      position: relative;
+      padding-left: 50%;
+    }
+    
+    td:before {
+      position: absolute;
+      left: 1rem;
+      width: 45%;
+      padding-right: 10px;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    .align-button {
+      display: flex;
+      justify-content: end;
+      margin:15px 0;
+      font-size: 2.5rem; 
+    }
+    
+    td:nth-of-type(1):before { content: "ID"; }
+    td:nth-of-type(2):before { content: "Nom"; }
+    td:nth-of-type(3):before { content: "Pays ID"; }
+    td:nth-of-type(4):before { content: "Actions"; }
+  }

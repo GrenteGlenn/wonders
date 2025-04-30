@@ -1,0 +1,60 @@
+<div class="topic-container">
+    <h1>Categories</h1>
+    <div *ngIf="me" class="topic-form">
+      <div class="align-button"><button (click)="isFormVisible = !isFormVisible">+</button></div>
+      <div *ngIf="isFormVisible">
+        <h2>Créer une nouvelle catégorie</h2>
+      <div class="form-group">
+        <label for="topicName">Nom</label>
+        <input 
+          type="text" 
+          id="topicName" 
+          [(ngModel)]="newTopic.name" 
+          placeholder="Entrez le nom ici"
+        >
+      </div>
+      <div class="form-group">
+        <label for="countryId">pays</label>
+        <select id="countryId" [(ngModel)]="newTopic.country_id">
+            <option *ngFor="let country of countries" [value]="country.id">
+              {{ country.name }}
+            </option>
+          </select>
+      </div>
+      <button 
+        (click)="createSubject()" 
+        [disabled]="!newTopic.name || !newTopic.country_id"
+      >
+        Créer le sujet
+      </button>
+    </div>
+  </div>
+    <div class="topics-list">
+      <h2>Sujets disponibles</h2>
+      
+      <div *ngIf="topics.length === 0" class="no-topics">
+        Aucun sujet trouvé.
+      </div>
+      
+      <table *ngIf="topics.length > 0">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Pays ID</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let topic of topics">
+            <td>{{ topic.id }}</td>
+            <td>{{ topic.name }}</td>
+            <td>{{ getCountryName(topic.country_id) }}</td>
+            <td>
+              <button (click)="viewTopic(topic.id)">Voir détails</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

@@ -47,6 +47,10 @@ export class NavbarComponent implements OnInit {
   goChoiceGuide() {
     this.router.navigate(['choice-guide']);
   }
+
+  goBlog() {
+    this.router.navigate(['blog']);
+  }
   goHomePage() {
     this.router.navigate(['home']);
   }

@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { ActivityCategory, Picture } from '../../../app/model/activity';
-import { ActivityService } from '../../../app/service/activity/activity.service';
-import { CityService } from '../../../app/service/city/city.service';
-import { ToastService } from '../../../app/service/toast/toast.service';
 import { GoogleMapComponent } from '../../google-map/google-map.component';
+import { ActivityCategory, Picture } from '../../../app/model/activity';
+import { ToastService } from '../../../app/service/toast/toast.service';
+import { CityService } from '../../../app/service/city/city.service';
+import { ActivityService } from '../../../app/service/activity/activity.service';
 
 export interface Activity {
   name: string;
@@ -30,21 +30,17 @@ interface SuggestedCity {
 }
 
 @Component({
-  selector: 'app-modal-activity',
+  selector: 'app-activities',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, FormsModule, GoogleMapComponent],
-  templateUrl: './modal-activity.component.html',
-  styleUrl: './modal-activity.component.css'
+  imports: [CommonModule, LucideAngularModule, FormsModule],
+  templateUrl: './activities.component.html',
+  styleUrl: './activities.component.css'
 })
-export class ModalActivityComponent {
-  @Input() isOpen = false;
+export class ActivitiesComponent {
   @Input() cityName: string = '';
-  @Output() isOpenChange = new EventEmitter<boolean>();
-  @Output() activityAdded = new EventEmitter<any>();
-  // @Output() countryAdded = new EventEmitter<any>();
+  @Output() activitySelected = new EventEmitter<any>();
 
-  steps = ['Catégorie', 'Ville', 'Résumer'];
-  currentStep = 0;
+
   categories: ActivityCategory[] = [];
   selectedCategory: ActivityCategory | null = null;
   activityName = '';
@@ -92,23 +88,45 @@ export class ModalActivityComponent {
     });
   }
 
-  get canProceed(): boolean {
-    switch (this.currentStep) {
-      case 0:
-        return !!this.selectedCategory && this.selectedPicture;
-      case 1:
-        return !!this.selectedCity;
-      case 2:
-        return true;
-      default:
-        return false;
-    }
-  }
+
+
+  // selectCategory(category: ActivityCategory) {
+  //   this.selectedCategory = category;
+  //   this.selectedPicture = category?.picture_id;
+
+  //   if (this.cityName && category) {
+  //     this.isLoadingCities = true;
+  //     this.cityService
+  //       .getAICitySuggestions({
+  //         activity: [category.name],
+  //         pays: [this.cityName]
+  //       })
+  //       .subscribe({
+  //         next: (response) => {
+  //           this.suggestedCities = response.data;
+  //           this.isLoadingCities = false;
+  //         },
+  //         error: (error) => {
+  //           console.error('Erreur lors de la recherche de villes:', error);
+  //           this.isLoadingCities = false;
+  //         }
+  //       });
+  //   }
+  // }
 
   selectCategory(category: ActivityCategory) {
     this.selectedCategory = category;
     this.selectedPicture = category?.picture_id;
-
+  
+    // 🆕 Émission partielle de l'activité dès sélection de catégorie
+    this.activitySelected.emit({
+      name: this.activityName || '',
+      image: this.selectedPicture || '',
+      description: this.selectedCity?.description || '',
+      category: this.selectedCategory?.name || '',
+      country: this.cityName
+    });
+  
     if (this.cityName && category) {
       this.isLoadingCities = true;
       this.cityService
@@ -128,76 +146,68 @@ export class ModalActivityComponent {
         });
     }
   }
-
+  
   selectPicture(picture: Picture) {
     this.selectedPicture = picture.path;
   }
 
-  nextStep() {
-    if (this.currentStep < this.steps.length - 1 && this.canProceed) {
-      this.currentStep++;
-      this.toastService.success('Données sauvegarder avec succès !');
-    }
-  }
-
-  previousStep() {
-    if (this.currentStep > 0) {
-      this.currentStep--;
-    }
-  }
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
-  // selectCity(city: { city: string; img_full: string | null; description: string}) {
-  //   this.selectedCity = city;
+
+  // selectCity(city: SuggestedCity) {
+  //   this.selectedCity = {
+  //     city: city.city,
+  //     img_full: city.img_full,
+  //     description: city.description || '' // On gère le cas où description est null
+  //   };
   //   this.activityName = city.city;
   //   this.selectedPicture = city.img_full;
+  //   console.log(this.suggestedCities, 'cities');
   // }
-
   selectCity(city: SuggestedCity) {
     this.selectedCity = {
       city: city.city,
       img_full: city.img_full,
-      description: city.description || '' // On gère le cas où description est null
+      description: city.description || ''
     };
     this.activityName = city.city;
     this.selectedPicture = city.img_full;
-    console.log(this.suggestedCities, 'cities');
+  
+    this.activitySelected.emit({
+      name: city.city,
+      image: city.img_full,
+      description: city.description || '',
+      category: this.selectedCategory?.name || '',
+      country: this.cityName
+    });
+  
+    console.log('🎯 Activité émise vers parent :', {
+      name: city.city,
+      image: city.img_full,
+      description: city.description || '',
+      category: this.selectedCategory?.name || '',
+      country: this.cityName
+    });
   }
+  
+  // onSubmit() {
+  //   if (this.selectedCategory && this.selectedCity) {
+  //     const activity = {
+  //       name: this.selectedCity.city,
+  //       category: this.selectedCategory.name,
+  //       image: this.selectedCity.img_full,
+  //       date: new Date(),
+  //       pays: this.cityName,
+  //       description: this.selectedCity.description
+  //     };
 
-  onSubmit() {
-    if (this.selectedCategory && this.selectedCity) {
-      const activity = {
-        name: this.selectedCity.city,
-        category: this.selectedCategory.name,
-        image: this.selectedCity.img_full,
-        date: new Date(),
-        pays: this.cityName,
-        description: this.selectedCity.description
-      };
+  //     this.toastService.success('Activité ajoutée avec succès !');
 
-      this.activityAdded.emit(activity);
-      this.toastService.success('Activité ajoutée avec succès !');
+  //   }
+  // }
 
-      this.close();
-    }
-  }
-
-  close() {
-    this.isOpen = false;
-    this.isOpenChange.emit(false);
-    this.resetForm();
-  }
-
-  private resetForm() {
-    this.currentStep = 0;
-    this.selectedCategory = null;
-    this.selectedCity = null;
-    this.activityName = '';
-    this.activityDate = '';
-    this.selectedFile = null;
-    this.suggestedCities = [];
-  }
+ 
 }

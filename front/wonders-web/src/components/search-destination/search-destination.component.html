@@ -1,62 +1,61 @@
 <div class="w-full max-w-2xl px-4">
-    <div class="relative">
-      <input
-        type="text"
-        placeholder="Recherche par ville ou pays"
-        class="w-full py-3 pl-12 pr-10 rounded-full bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        [(ngModel)]="searchTerm"
-        (input)="onSearchChange()"
-        (focus)="showDropdown = true"
-        (keydown.arrowdown)="onArrowDown()"
-        (keydown.arrowup)="onArrowUp()"
-        (keydown.enter)="navigateToSelectedResult()"
-      />
-      <lucide-icon
-        name="search"
-        class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
-      ></lucide-icon>
-      <button
-        class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-full"
-        (click)="search()"
-      >
-        Recherche
-      </button>
-      
-      <!-- Dropdown des résultats -->
+  <div class="relative">
+    <input
+      type="text"
+      placeholder="Recherche par ville ou pays"
+      class="w-full py-3 pl-12 pr-10 rounded-full bg-white text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()"
+      (focus)="showDropdown = true"
+      (keydown.arrowdown)="onArrowDown()"
+      (keydown.arrowup)="onArrowUp()"
+      (keydown.enter)="navigateToSelectedResult()"
+    />
+    <lucide-icon
+      name="search"
+      class="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5"
+    ></lucide-icon>
+    <button
+      class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-full"
+      (click)="search()"
+    >
+      Recherche
+    </button>
+
+    <!-- Dropdown des résultats -->
+    <div
+      *ngIf="showDropdown && searchResults.length > 0"
+      class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg max-h-80 overflow-y-auto"
+    >
       <div
-        *ngIf="showDropdown && searchResults.length > 0"
-        class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg max-h-80 overflow-y-auto"
+        *ngFor="let result of searchResults; let i = index"
+        (click)="navigateToResult(result)"
+        (mouseenter)="selectedIndex = i"
+        class="p-3 hover:bg-gray-100 cursor-pointer flex items-center"
+        [class.bg-gray-100]="i === selectedIndex"
       >
-        <div
-          *ngFor="let result of searchResults; let i = index"
-          (click)="navigateToResult(result)"
-          (mouseenter)="selectedIndex = i"
-          class="p-3 hover:bg-gray-100 cursor-pointer flex items-center"
-          [class.bg-gray-100]="i === selectedIndex"
-        >
-          <div class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 mr-3 overflow-hidden" *ngIf="result.image">
-            <img [src]="result.image" class="w-full h-full object-cover" alt="{{ result.name }}"  />
-          </div>
-          <div>
-            <p class="font-medium">{{ result.name }}</p>
-            <p class="text-sm text-gray-500">{{ result.type === 'city' ? 'Ville' : 'Pays' }}</p>
-          </div>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 mr-3 overflow-hidden" *ngIf="result.image">
+          <img [src]="result.image" class="w-full h-full object-cover" alt="{{ result.name }}" />
         </div>
-      </div>
-      
-      <!-- Message quand aucun résultat -->
-      <div
-        *ngIf="showDropdown && searchTerm && searchResults.length === 0 && !isLoading"
-        class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg p-4 text-center"
-      >
-        Aucun résultat trouvé pour "{{ searchTerm }}"
-      </div>
-      
-      <!-- Loading indicator -->
-      <div *ngIf="isLoading" class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg p-4 text-center">
-        <div class="flex justify-center">
-          <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+        <div>
+          <span class="font-medium">{{ result.name }}</span>
         </div>
       </div>
     </div>
+
+    <!-- Message quand aucun résultat -->
+    <div
+      *ngIf="showDropdown && searchTerm && searchResults.length === 0 && !isLoading"
+      class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg p-4 text-center"
+    >
+      Aucun résultat trouvé pour "{{ searchTerm }}"
+    </div>
+
+    <!-- Loading indicator -->
+    <div *ngIf="isLoading" class="absolute z-10 w-full mt-1 bg-white rounded-lg shadow-lg p-4 text-center">
+      <div class="flex justify-center">
+        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+      </div>
+    </div>
   </div>
+</div>

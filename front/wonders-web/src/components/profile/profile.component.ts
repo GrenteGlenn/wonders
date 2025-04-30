@@ -7,6 +7,8 @@ import { User } from '../../app/model/User';
 import { Router } from '@angular/router';
 import { AuthentificationService } from '../../app/service/auth/authentification.service';
 import { UsersService } from '../../app/service/users/users.service';
+import { LanguageService } from '../../app/service/languages/languages.service';
+import { CountryService } from '../../app/service/country/country.service';
 
 interface r {
   image: string;
@@ -25,11 +27,17 @@ export class ProfileComponent {
   dialog = inject(Dialog);
 
   user: User | null = null;
+  languageName: string = '';
+  countryName: string = '';
+
 
   constructor(
-    private router: Router,
-    private _authService: AuthentificationService,
-    private usersService: UsersService
+    // private router: Router,
+    // private _authService: AuthentificationService,
+    private usersService: UsersService,
+    private languageService: LanguageService,
+    private countryService: CountryService
+
   ) {}
 
   ngOnInit(): void {
@@ -87,7 +95,7 @@ export class ProfileComponent {
   ];
 
   confirmDelete(): void {
-  //  modale à placer ici 
+    //  modale à placer ici
   }
 
   loadUserInfo() {
@@ -95,9 +103,41 @@ export class ProfileComponent {
       next: (userData) => {
         this.user = userData;
         console.log(this.user, 'users');
+        
+        if (this.user && this.user.language_id) {
+          this.loadLanguageName(this.user.language_id);
+        }
+        if (this.user && this.user.country_id) {
+          this.loadCountryName(this.user.country_id);
+        }
       },
       error: (error) => {
         console.error('Erreur lors du chargement des informations utilisateur:', error);
+      }
+    });
+  }
+
+  // Charge le nom de la langue de l'user en fonction de l'id de ce dernier
+  loadLanguageName(languageId: number) {
+    this.languageService.getLanguageById(languageId).subscribe({
+      next: (language) => {
+        this.languageName = language.name;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement de la langue:', error);
+        this.languageName = 'Langue non disponible';
+      }
+    });
+  }
+  // Charge le nom du pays de l'user en fonction de l'id de ce dernier
+  loadCountryName(countryId: number) {
+    this.countryService.getCountryById(countryId).subscribe({
+      next: (country) => {
+        this.countryName = country.name;
+      },
+      error: (error) => {
+        console.error('Erreur lors du chargement du pays:', error);
+        this.countryName = 'Pays non disponible';
       }
     });
   }

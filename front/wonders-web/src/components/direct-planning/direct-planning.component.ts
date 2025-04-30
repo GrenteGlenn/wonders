@@ -2,16 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CountryService } from '../../app/service/country/country.service';
-import { Router } from '@angular/router';
-import { AIProposalCountry, AIQuizzCountry } from '../../app/model/AI';
-import { Activity, Country, ModalActivityComponent } from '../modals/modal-activity/modal-activity.component';
 import { LucideAngularModule } from 'lucide-angular';
 import { ToastComponent } from '../toast/toast.component';
+import { Activity, Country } from '../activities/activities/activities.component';
 
 @Component({
   selector: 'app-direct-planning',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, ModalActivityComponent, ToastComponent],
+  imports: [CommonModule, FormsModule, LucideAngularModule, ToastComponent],
   templateUrl: './direct-planning.component.html',
   styleUrl: './direct-planning.component.css'
 })
@@ -22,11 +20,14 @@ export class DirectPlanningComponent implements OnInit {
   countryDescription: string = '';
   isModalOpen = false;
   activities: Activity[] = [];
-  isLoading = false; // Pour gérer l'état de chargement
+  isLoading = false;
+  destination: any = null;
+
+
 
   constructor(
     private countryService: CountryService,
-    private router: Router
+    // private router: Router,
   ) {}
 
   ngOnInit() {
@@ -65,7 +66,7 @@ export class DirectPlanningComponent implements OnInit {
           this.countryImage = 'assets/images/default-country.jpg';
           this.isLoading = false;
         }
-      });
+      });      
 
       // Obtenir la description du pays
       this.countryService.getAICountryInfo(countryName).subscribe({

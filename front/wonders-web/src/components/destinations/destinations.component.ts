@@ -1,22 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CityService } from '../../app/service/city/city.service';
 import { CountryService } from '../../app/service/country/country.service';
 import { GoogleMapComponent } from '../google-map/google-map.component';
-
-interface Destination {
-  name: string;
-  image: string;
-  description: string;
-  type: 'city' | 'country';
-  isDescriptionLoading?: boolean;
-  isImageLoading?: boolean;
-}
-// interface CountryImageResponse {
-//   data: string | null;
-// }
+import { Destination } from '../../app/model/destination';
 
 @Component({
   selector: 'app-destinations',
@@ -26,6 +15,10 @@ interface Destination {
   styleUrl: './destinations.component.css'
 })
 export class DestinationsComponent implements OnInit {
+  @Input() queryParams?: { [key: string]: string };
+  @Input() hideBackButton: boolean = false;
+  @Output() destinationSelected = new EventEmitter<Destination>();
+
   destination: Destination | null = null;
   searchResults: Destination[] = [];
   searchTerm: string = '';
@@ -36,34 +29,53 @@ export class DestinationsComponent implements OnInit {
   paginatedResults: Destination[] = [];
 
   constructor(
-    private route: ActivatedRoute,
+    private routes: ActivatedRoute,
     private cityService: CityService,
-    private countryService: CountryService
+    private countryService: CountryService,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params) => {
-      this.isLoading = true;
+    // Vérifie d'abord s'il y a des queryParams injectés
+    if (this.queryParams) {
+      this.processQueryParams(this.queryParams);
+    } else {
+      // Sinon, utilise les queryParams de l'URL
+      this.routes.queryParams.subscribe((params) => {
+        this.processQueryParams(params);
+      });
+    }
+  }
 
-      if (params['page']) {
-        this.currentPage = parseInt(params['page'], 10) || 1;
-      } else {
-        this.currentPage = 1;
-      }
+  // Méthode de reactions aux changements de queryParams
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['queryParams'] && this.queryParams) {
+      this.processQueryParams(this.queryParams);
+    }
+  }
 
-      if (params['city']) {
-        this.searchTerm = params['city'];
-        this.loadCity(params['city']);
-      } else if (params['country']) {
-        this.searchTerm = params['country'];
-        this.loadCountry(params['country']);
-      } else if (params['search']) {
-        this.searchTerm = params['search'];
-        this.searchDestinations(params['search']);
-      } else {
-        this.loadPopularDestinations();
-      }
-    });
+  // Méthode pour traiter les queryParams (soit de l'URL, soit des inputs)
+  processQueryParams(params: any) {
+    this.isLoading = true;
+
+    if (params['page']) {
+      this.currentPage = parseInt(params['page'], 10) || 1;
+    } else {
+      this.currentPage = 1;
+    }
+
+    if (params['city']) {
+      this.searchTerm = params['city'];
+      this.loadCity(params['city']);
+    } else if (params['country']) {
+      this.searchTerm = params['country'];
+      this.loadCountry(params['country']);
+    } else if (params['search']) {
+      this.searchTerm = params['search'];
+      this.searchDestinations(params['search']);
+    } else {
+      this.loadPopularDestinations();
+    }
   }
 
   showPageNumber(page: number): boolean {
@@ -107,7 +119,6 @@ export class DestinationsComponent implements OnInit {
     this.paginatedResults = this.searchResults.slice(startIndex, endIndex);
   }
 
-  // Méthodes de navigation
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
@@ -147,6 +158,7 @@ export class DestinationsComponent implements OnInit {
             isDescriptionLoading: false,
             isImageLoading: false
           };
+          this.destinationSelected.emit(this.destination);
         } else {
           this.destination = null;
           this.searchResults = [];
@@ -174,9 +186,9 @@ export class DestinationsComponent implements OnInit {
   }
 
   loadCountry(countryName: string) {
-    console.log('Chargement du pays:', countryName);
+    // console.log('Chargement du pays:', countryName);
 
-    // Initialiser la destination avec le nom
+    // Initialise la destination avec le nom
     this.destination = {
       name: countryName,
       image: '',
@@ -185,6 +197,9 @@ export class DestinationsComponent implements OnInit {
       isDescriptionLoading: true,
       isImageLoading: true
     };
+
+    this.destinationSelected.emit(this.destination);
+
     this.isLoading = false;
 
     // Charge l'image en premier
@@ -299,9 +314,9 @@ export class DestinationsComponent implements OnInit {
     // Récupérer tous les pays
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
-        console.log('Pays récupérés:', countries.length);
+        // console.log('Pays récupérés:', countries.length);
 
-        // Afficher d'abord avec des images placeholder pour une meilleure UX
+        // Affiche d'abord avec des images placeholder pour une meilleure UX
         this.searchResults = countries.map((country) => ({
           name: country.name,
           image: 'assets/images/placeholder.jpg',
@@ -309,11 +324,10 @@ export class DestinationsComponent implements OnInit {
           type: 'country' as const
         }));
 
-        // Mettre à jour la pagination et masquer le loader
         this.updatePagination();
         this.isLoading = false;
 
-        // Maintenant, pour chaque pays, charger son image individuellement
+        // Pour chaque pays, charge son image individuellement
         this.loadImagesSequentially(countries);
       },
       error: (error) => {
@@ -360,6 +374,23 @@ export class DestinationsComponent implements OnInit {
           }
         });
       }, index * 20);
+    });
+  }
+
+  viewDestinationDetails(result: Destination) {
+    if (result.type === 'city') {
+      this.router.navigate(['/destinations'], {
+        queryParams: { city: result.name }
+      });
+    } else {
+      this.router.navigate(['/destinations'], {
+        queryParams: { country: result.name }
+      });
+    }
+  }
+  goBackToList() {
+    this.router.navigate(['/destinations']).then(() => {
+      window.location.reload();
     });
   }
 }

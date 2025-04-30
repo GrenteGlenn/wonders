@@ -31,18 +31,56 @@ router.get('/', ((req, res) => {
   }
 }) as RequestHandler);
 
+// router.get('/list', (async (req, res) => {
+//   try {
+//     const validationResult = FlyParamsSchema.safeParse(req.query);
+
+//     if (!validationResult.success) {
+//       return res.status(400).json({
+//         status: 'error',
+//         message: 'Paramètres de recherche invalides',
+//         errors: validationResult.error.format()
+//       });
+//     }
+
+//     const {
+//       originLocationCode,
+//       destinationLocationCode,
+//       departureDate,
+//       returnDate,
+//       adults,
+//       children,
+//       nonStop,
+//       maxPrice
+//     } = validationResult.data;
+
+//     const flightOffers = (await getFlightOffers(
+//       originLocationCode,
+//       destinationLocationCode,
+//       departureDate,
+//       returnDate,
+//       adults,
+//       children,
+//       nonStop,
+//       maxPrice
+//     )) as typeof FlightOfferSchema;
+
+//     const validatedOffers = z.array(FlightOfferSchema).parse(flightOffers);
+
+//     return res.status(200).json({
+//       status: 'success',
+//       results: validatedOffers.length,
+//       data: validatedOffers
+//     });
+//   } catch (error) {
+//     res.json({ error: error });
+//   }
+// }) as RequestHandler);
+
 router.get('/list', (async (req, res) => {
-  try {
-    const validationResult = FlyParamsSchema.safeParse(req.body);
-
-    if (!validationResult.success) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Paramètres de recherche invalides',
-        errors: validationResult.error.format()
-      });
-    }
-
+  try {    
+  
+    // cast manuellement 
     const {
       originLocationCode,
       destinationLocationCode,
@@ -52,7 +90,7 @@ router.get('/list', (async (req, res) => {
       children,
       nonStop,
       maxPrice
-    } = validationResult.data;
+    } = req.query;
 
     const flightOffers = (await getFlightOffers(
       originLocationCode,
@@ -65,7 +103,30 @@ router.get('/list', (async (req, res) => {
       maxPrice
     )) as typeof FlightOfferSchema;
 
+
+    const parsedQuery = {
+      originLocationCode: typeof originLocationCode === 'string' ? originLocationCode.toUpperCase() : undefined,
+      destinationLocationCode: typeof destinationLocationCode === 'string' ? destinationLocationCode.toUpperCase() : undefined,
+      departureDate: typeof departureDate === 'string' ? departureDate : undefined,
+      returnDate: typeof returnDate === 'string' ? returnDate : undefined,
+      adults: typeof adults === 'string' ? adults : '2',
+      children: typeof children === 'string' ? children : undefined,
+      nonStop: typeof nonStop === 'string' ? nonStop === 'true' : false,
+      maxPrice: typeof maxPrice === 'string' && !isNaN(Number(maxPrice)) ? Number(maxPrice) : undefined
+    };
+
+    const validationResult = FlyParamsSchema.safeParse(parsedQuery);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Paramètres de recherche invalides',
+        errors: validationResult.error.format()
+      });
+    }
     const validatedOffers = z.array(FlightOfferSchema).parse(flightOffers);
+    console.log('REQ QUERY', req.query);
+
 
     return res.status(200).json({
       status: 'success',
@@ -73,8 +134,9 @@ router.get('/list', (async (req, res) => {
       data: validatedOffers
     });
   } catch (error) {
-    res.json({ error: error });
+    res.status(500).json({ error: error });
   }
 }) as RequestHandler);
+
 
 export default router;

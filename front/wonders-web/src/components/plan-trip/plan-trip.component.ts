@@ -4,13 +4,13 @@ import { LucideAngularModule } from 'lucide-angular';
 import { CountryService } from '../../app/service/country/country.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Activity, ModalActivityComponent } from '../modals/modal-activity/modal-activity.component';
 import { Country } from '../../app/model/Country';
+import { Activity } from '../activities/activities/activities.component';
 
 @Component({
   selector: 'app-plan-trip',
   standalone: true,
-  imports: [LucideAngularModule, FormsModule, CommonModule, ModalActivityComponent],
+  imports: [LucideAngularModule, FormsModule, CommonModule],
   templateUrl: './plan-trip.component.html',
   styleUrl: './plan-trip.component.css'
 })

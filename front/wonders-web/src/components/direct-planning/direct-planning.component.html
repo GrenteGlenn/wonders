@@ -12,6 +12,7 @@
           {{ country.name }}
         </option>
       </select>
+      
     </div>
   </div>
 
@@ -24,7 +25,7 @@
       </div>
 
       <!-- Image une fois chargée -->
-      <ng-container *ngIf="!isLoading">
+      <div *ngIf="!isLoading">
         <img
           [src]="countryImage"
           class="w-full h-96 object-cover"
@@ -35,19 +36,15 @@
             <p class="text-4xl w-full font-bold mb-4">
               Préparez-vous à explorer {{ selectedCountry }}. {{ countryDescription }}
             </p>
-            <!-- <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-10 rounded-full float-start">
-              View itinerary
-            </button> -->
           </div>
         </div>
-      </ng-container>
+      </div>
     </div>
 
     <!-- Section Activités -->
-    <div class="mt-10">
+    <!-- <div class="mt-10">
       <h1 class="text-3xl font-bold mb-2">Activités</h1>
       <div class="overflow-hidden grid gap-4 md:grid-cols-4">
-        <!-- Liste des activités -->
         <div *ngFor="let activity of activities" class="relative h-44 rounded-lg overflow-hidden">
           <img [src]="activity.image" class="w-full h-full object-cover" />
           <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white p-4">
@@ -57,7 +54,6 @@
           </div>
         </div>
 
-        <!-- Bouton d'ajout -->
         <div
           (click)="openModal()"
           class="card border-4 border-dotted rounded-lg h-44 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors"
@@ -66,9 +62,8 @@
           <span class="text-slate-600 text-center">Sélectionnez vos activités</span>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
+ 
 </div>
 <app-toast></app-toast>
-<app-modal-activity [(isOpen)]="isModalOpen" (activityAdded)="onActivityAdded($event)" [cityName]="selectedCountry">
-</app-modal-activity>

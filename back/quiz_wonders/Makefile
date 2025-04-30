@@ -20,6 +20,10 @@ db-migrate-undo-all:
 	@echo "Undoing all migrations..."
 	$(SEQUELIZE) db:migrate:undo:all
 
+db-create:
+	@echo "Creating database..."
+	$(sequelize) db:create
+
 db-migrate:
 	@echo "Running migrations..."
 	$(SEQUELIZE) db:migrate

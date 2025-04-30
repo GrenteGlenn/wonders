@@ -1,0 +1,69 @@
+<div class="subject-container">
+    <h1>Liste des Sujets</h1>
+    <div class="align-button"><button (click)="isFormVisible = !isFormVisible">+</button></div>
+    <div *ngIf="isFormVisible">
+      <div class="space-y-4">
+        <div>
+          <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">
+            Titre
+          </label>
+          <input
+            type="text"
+            id="title"
+            minlength="5"
+            maxlength="50"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+            placeholder="Entrez le titre de votre post"
+            [(ngModel)]="newSubject.title">
+        </div>
+        <div>
+          <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">
+            Contenu
+          </label>
+          <textarea
+            id="content"
+            minlength="5"
+            maxlength="1000"
+            required
+            rows="4"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+            placeholder="Écrivez votre post"
+            [(ngModel)]="newSubject.content">
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          (click)="createSubject()"
+          [disabled]="!newSubject.title || !newSubject.content"
+          class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+        >
+          Publier le sujet
+        </button>
+      </div>
+    </div>
+    <div *ngIf="!isFormVisible">
+    <div *ngIf="subjects.length === 0" class="no-subjects">
+      Aucun sujet disponible.
+    </div>
+
+    <div *ngIf="subjects.length > 0" class="subject-list">
+      <div *ngFor="let subject of subjects" class="subject-card">
+        <div *ngIf="subject.user_id == user_id" (click)="deleteSubject(subject.id)" class="text-right text-3xl font-bold cursor-pointer text-gray-600 hover:text-red-500">
+          ×
+        </div>
+        <h2>{{ subject.title }}</h2>
+        <div class="subject-meta">
+          <span class="cursor-pointer text-red-500 hover:text-red-700 flex items-center space-x-1" (click)="likeSubject(subject)">
+            ❤️ 
+            <span>{{ subject.likes }}</span> 
+            <span>{{ subject.likes <= 1 ? 'like' : 'likes' }}</span>
+          </span>
+          <span>📅 {{ subject.created_at | date:'longDate' }}</span>
+        </div>
+        <button (click)="viewDetails(subject.id)">Voir Détails</button>
+      </div>
+    </div>
+  </div>
+  </div>
+  

@@ -1,0 +1,271 @@
+<!-- Layout principal -->
+<div class="min-h-screen bg-gray-50">
+  <!-- En-tête -->
+  <header class="bg-gradient-to-r from-teal-600 to-cyan-700 py-10 px-4 md:px-8 rounded-md">
+    <div class="max-w-7xl mx-auto">
+      <h1 class="text-3xl md:text-4xl font-bold text-white">Trouvez l'hôtel parfait</h1>
+      <p class="text-cyan-100 mt-2">Comparez les hébergements au meilleur prix</p>
+    </div>
+  </header>
+
+  <!-- Formulaire de recherche -->
+  <div class="max-w-full w-full mt-6 mb-8">
+    <div class="bg-white rounded-lg shadow-lg p-4 md:p-6 mt-8">
+      <form [formGroup]="hotelForm" (ngSubmit)="onSearchHotels()">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <!-- Latitude -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
+            <div class="relative">
+              <lucide-icon name="map-pin" class="absolute top-1.5 left-1.5 h-5 w-5 text-gray-400"></lucide-icon>
+              <input
+                type="number"
+                formControlName="latitude"
+                placeholder="48.8566"
+                class="pl-10 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+              />
+            </div>
+          </div>
+
+          <!-- Longitude -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
+            <div class="relative">
+              <lucide-icon name="map-pin" class="absolute top-1.5 left-1.5 h-5 w-5 text-gray-400"></lucide-icon>
+              <input
+                type="number"
+                formControlName="longitude"
+                placeholder="2.3522"
+                class="pl-10 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+              />
+            </div>
+          </div>
+
+          <!-- Rayon -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Rayon de recherche (km)</label>
+            <div class="relative">
+              <lucide-icon name="map" class="absolute top-1.5 left-1.5 h-5 w-5 text-gray-400"></lucide-icon>
+              <input
+                type="number"
+                formControlName="radius"
+                placeholder="10"
+                class="pl-10 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+          <button
+            type="button"
+            (click)="onResetForm()"
+            class="py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 flex items-center gap-2"
+          >
+            <lucide-icon name="refresh-cw" class="h-4 w-4"></lucide-icon>
+            Réinitialiser
+          </button>
+
+          <button
+            type="submit"
+            [disabled]="isLoading"
+            class="py-2.5 px-6 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 flex items-center gap-2"
+          >
+            <lucide-icon name="search" class="h-4 w-4" *ngIf="!isLoading"></lucide-icon>
+            <lucide-icon name="loader" class="h-4 w-4 animate-spin" *ngIf="isLoading"></lucide-icon>
+            <span *ngIf="!isLoading">Rechercher</span>
+            <span *ngIf="isLoading">Chargement...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Barre de filtres et recherche (après recherche) -->
+  <div class="px-4 mb-4" *ngIf="hotels && hotels.length > 0">
+    <div
+      class="bg-white rounded-lg shadow-sm p-3 md:p-4 flex flex-col md:flex-row md:items-center justify-between gap-3"
+    >
+      <div class="flex items-center">
+        <span class="text-gray-600 text-sm">{{ displayedHotels.length }} sur {{ filteredHotels.length }} hôtels</span>
+      </div>
+
+      <!-- Barre de recherche par nom -->
+      <div class="flex-grow max-w-xl">
+        <div class="relative">
+          <lucide-icon name="search" class="absolute top-1.5 left-1.5 h-4 w-4 text-gray-400"></lucide-icon>
+          <input
+            type="text"
+            [value]="searchByName"
+            (input)="onSearchNameChange($event)"
+            placeholder="Rechercher par nom, chaîne ou ID..."
+            class="pl-9 pr-9 w-full py-2 border border-gray-300 rounded-md shadow-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-500 text-sm"
+          />
+          <button
+            *ngIf="searchByName"
+            (click)="clearSearch()"
+            class="absolute top-2.5 right-3 text-gray-400 hover:text-gray-600"
+          >
+            <lucide-icon name="x" class="h-4 w-4"></lucide-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bouton filtre offres -->
+      <button
+        class="flex items-center gap-2 text-sm px-3 py-1.5 rounded-md flex-shrink-0"
+        [class.bg-teal-100]="showOnlyWithOffers"
+        [class.text-teal-700]="showOnlyWithOffers"
+        [class.bg-gray-100]="!showOnlyWithOffers"
+        [class.text-gray-700]="!showOnlyWithOffers"
+      >
+        <lucide-icon name="filter" class="h-4 w-4"></lucide-icon>
+        <span>{{ showOnlyWithOffers ? 'Tous les hôtels' : 'Hôtels avec offres' }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- État de chargement pour les offres -->
+  <div class="px-4 py-6 text-center" *ngIf="isLoadingOffers">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+      <lucide-icon name="loader" class="animate-spin h-8 w-8 mx-auto text-teal-600 mb-4"></lucide-icon>
+      <p class="text-gray-600">Vérification des offres disponibles pour tous les hôtels...</p>
+      <p class="text-gray-500 text-sm mt-2">Cette opération peut prendre quelques instants</p>
+    </div>
+  </div>
+
+  <!-- Résultats -->
+  <div class="px-4 py-6" *ngIf="displayedHotels && displayedHotels.length > 0 && !isLoadingOffers">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-6">
+      <div
+        *ngFor="let hotel of paginatedHotels"
+        [class.border-2]="isSelected(hotel)"
+        [class.border-teal-600]="isSelected(hotel)"
+        [class.cursor-pointer]="true"
+        class="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition duration-300 border border-transparent"
+      >
+        <div class="p-5 space-y-3">
+          <!-- Titre -->
+          <div class="flex rounded-md">
+            <div class="flex items-center gap-2">
+              <h3 class="text-lg font-bold text-gray-800">{{ hotel.nameFormatted }}</h3>
+            </div>
+          </div>
+
+          <!-- Badge Offres disponibles -->
+          <div *ngIf="hotel.hasOffers" class="flex">
+            <span
+              class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1"
+            >
+              <lucide-icon name="check" class="h-3 w-3"></lucide-icon>
+              Offres disponibles
+            </span>
+          </div>
+
+          <!-- Infos -->
+          <div class="space-y-1 text-sm text-gray-600">
+            <div class="flex items-center gap-2">
+              <lucide-icon name="map-pin" class="h-4 w-4 text-gray-400"></lucide-icon>
+              <span>{{ hotel.address?.countryCode || 'Pays inconnu' }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span>À {{ hotel.distance?.value }} {{ hotel.distance?.unit }}</span>
+            </div>
+          </div>
+
+          <!-- Offres (nouvelle section) -->
+          <div *ngFor="let offer of hotel.offers" class="border-t pt-2">
+            <div class="flex justify-between items-center">
+              <span class="font-medium">
+                {{ offer.room?.typeEstimated?.category || offer.room?.type || 'Chambre standard' }}
+              </span>
+              <span class="text-teal-700 font-bold">
+                {{ offer.price?.total || 'N/A' }} {{ offer.price?.currency || '€' }}
+              </span>
+            </div>
+            <div class="text-xs text-gray-600 mt-1 flex items-center justify-between">
+              <span>{{ offer.checkInDate || 'N/A' }} - {{ offer.checkOutDate || 'N/A' }}</span>
+              <span>{{ offer.guests?.adults || '2' }} adulte(s)</span>
+            </div>
+            <div class="text-xs text-gray-500 italic mt-1">
+              {{ offer.room?.description?.text || 'Aucune description disponible' }}
+            </div>
+          </div>
+
+          <!-- Footer -->
+          <div class="mt-4 border-t pt-3 text-xs text-gray-500 flex items-center justify-between">
+            <span>Maj : {{ hotel.lastUpdate | date: 'short' }}</span>
+            <button
+              class="text-teal-600 font-medium hover:text-teal-800 text-sm flex items-center gap-1"
+              (click)="toggleOffers(hotel)"
+              [class.text-gray-400]="hotel.isLoadingOffers"
+              [disabled]="hotel.isLoadingOffers"
+            >
+              <lucide-icon
+                name="search"
+                class="h-4 w-4"
+                *ngIf="!hotel.showOffers && !hotel.isLoadingOffers"
+              ></lucide-icon>
+              <lucide-icon name="x" class="h-4 w-4" *ngIf="hotel.showOffers && !hotel.isLoadingOffers"></lucide-icon>
+              <lucide-icon name="loader" class="h-4 w-4 animate-spin" *ngIf="hotel.isLoadingOffers"></lucide-icon>
+              {{ hotel.showOffers ? 'Masquer' : 'Offres' }}
+            </button>
+            <button
+              (click)="selectHotel(hotel)"
+              class="w-34 px-4 float-right bg-teal-600 hover:bg-teal-700 text-white rounded-md text-sm font-medium"
+            >
+              Sélectionner
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pagination -->
+    <div class="flex justify-center items-center space-x-4 mt-8" *ngIf="totalPages > 1">
+      <button
+        (click)="setPage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+      >
+        <lucide-icon name="chevron-left" class="h-4 w-4 inline-block mr-1"></lucide-icon> Précédent
+      </button>
+
+      <span class="text-sm text-gray-600"> Page {{ currentPage }} / {{ totalPages }} </span>
+
+      <button
+        (click)="setPage(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+        class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+      >
+        Suivant <lucide-icon name="chevron-right" class="h-4 w-4 inline-block ml-1"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Message si aucun résultat -->
+  <div *ngIf="displayedHotels?.length === 0 && searchDone && !isLoadingOffers" class="text-center py-12 text-gray-600">
+    <lucide-icon name="search-x" class="h-12 w-12 mx-auto text-gray-400 mb-3"></lucide-icon>
+
+    <!-- Message différent selon les cas de figure -->
+    <ng-container *ngIf="searchByName && filteredHotels.length > 0">
+      <p class="text-lg font-medium">Aucun hôtel trouvé avec "{{ searchByName }}"</p>
+      <p class="mt-2 text-sm text-gray-500">
+        Essayez avec un autre terme ou
+        <button (click)="clearSearch()" class="text-teal-600 hover:underline">effacez la recherche</button>
+      </p>
+    </ng-container>
+
+    <!-- <ng-container *ngIf="!searchByName && showOnlyWithOffers && hotels.length > 0">
+      <p class="text-lg font-medium">Aucun hôtel avec offres disponibles</p>
+      <p class="mt-2 text-sm text-gray-500">
+        Il y a {{ hotels.length }} hôtels sans offres disponibles.
+        <button (click)="toggleFilter()" class="text-teal-600 hover:underline">Voir tous les hôtels</button>
+      </p>
+    </ng-container> -->
+
+    <ng-container *ngIf="(!searchByName && !showOnlyWithOffers) || hotels.length === 0">
+      <p class="text-lg font-medium">Aucun hôtel trouvé pour ces critères.</p>
+      <p class="mt-2 text-sm text-gray-500">Essayez d'élargir votre rayon de recherche</p>
+    </ng-container>
+  </div>
+</div>
