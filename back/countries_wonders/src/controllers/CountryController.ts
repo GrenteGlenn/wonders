@@ -63,14 +63,36 @@ class CountryController {
     description: Text,
     image: string,
     language: number,
+    longitude: number,
+    latitude: number,
     created_at: Date,
     updated_at: Date
   ) {
-    const country = await Country.create({ name, code, description, image, language, updated_at });
+    const country = await Country.create({
+      name,
+      code,
+      description,
+      image,
+      language,
+      longitude,
+      latitude,
+      created_at,
+      updated_at
+    });
     return country;
   }
 
-  async update(id: number, name: string, code: string, description: Text, image: string, language: number) {
+  async update(
+    id: number,
+    name: string,
+    code: string,
+    description: Text,
+    image: string,
+    language: number,
+    longitude: number,
+    latitude: number,
+    updated_at: Date
+  ) {
     const country = await Country.findByPk(id);
     if (country) {
       country.name = name;
@@ -78,6 +100,9 @@ class CountryController {
       country.description = description;
       country.image = image;
       country.language = language;
+      country.longitude = longitude;
+      country.latitude = latitude;
+      country.updated_at = updated_at;
       await country.save();
     }
     return country;

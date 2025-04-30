@@ -12,12 +12,18 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      country: {
+      country_id: {
         type: Sequelize.INTEGER,
         allowNull: false
       },
       image: {
         type: Sequelize.STRING
+      },
+      longitude: {
+        type: Sequelize.INTEGER,
+      },
+      latitude: {
+        type: Sequelize.INTEGER,
       },
       created_at: {
         allowNull: false,
@@ -31,7 +37,7 @@ module.exports = {
 
     await queryInterface.addConstraint('cities', {
       type: "foreign key",
-      fields: ["country"],
+      fields: ["country_id"],
       name: 'fk_cities_country',
       references: {
         table: 'countries',

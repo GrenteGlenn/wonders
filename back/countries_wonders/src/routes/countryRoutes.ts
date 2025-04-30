@@ -45,6 +45,8 @@ router.post('/', (async (req, res) => {
       body.description,
       body.image,
       body.language,
+      body.longitude,
+      body.latitude,
       new Date(),
       new Date()
     );
@@ -155,7 +157,10 @@ router.put('/:id', (async (req, res) => {
       body.code,
       body.description,
       body.image,
-      body.language
+      body.language,
+      body.longitude,
+      body.latitude,
+      new Date()
     );
     res.json(country);
   } catch (error) {

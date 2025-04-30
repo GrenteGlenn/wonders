@@ -13,6 +13,8 @@ class Country extends Model<CountryInterface, CountryCreationAttributes> impleme
   declare image: string;
   declare description?: Text | undefined;
   declare language: number;
+  declare longitude: number;
+  declare latitude: number;
   declare updated_at_description?: Date | undefined;
   declare readonly created_at?: Date | undefined;
   declare updated_at?: Date | undefined;
@@ -103,6 +105,26 @@ Country.init(
       },
       set(value: number) {
         this.setDataValue('language', value);
+      }
+    },
+    longitude: {
+      type: DataTypes.INTEGER,
+      get() {
+        const value = this.getDataValue('longitude');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('longitude', value);
+      }
+    },
+    latitude: {
+      type: DataTypes.INTEGER,
+      get() {
+        const value = this.getDataValue('latitude');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('latitude', value);
       }
     },
     updated_at_description: {
