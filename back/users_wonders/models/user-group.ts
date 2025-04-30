@@ -39,6 +39,7 @@ UserGroup.init(
     sequelize,
     underscored: true,
     modelName: 'UserGroup',
+    tableName: 'user_groups',
     timestamps: false
   }
 );

@@ -1,9 +1,9 @@
 import User from '../../models/user';
 import UserGroup from '../../models/user-group';
-// import { Op } from '@sequelize/core';
 import UserGroupLink from '../../models/user-group-link';
 import AuthController from './AuthController';
 import UserRoles from '../enums/enums';
+import { Op } from 'sequelize';
 
 const authController = new AuthController();
 
@@ -105,9 +105,26 @@ export default class UserGroupController {
   }
 
   async getAllByUser(userId: number) {
+
+    const userGroups = await UserGroup.findAll({
+      include: [
+        {
+          model: User,
+          as: 'users',
+          where: { id: userId },
+          attributes: [],
+          required: true
+        }
+      ],
+      attributes: ['id'],
+      raw: true
+    });
+    
+    const groupIds = userGroups.map(group => group.id);
+    
     return await UserGroup.findAll({
       where: {
-        '$users.id$': userId
+        id: { [Op.in]: groupIds }
       },
       attributes: {
         exclude: userInformationGroupExclude
@@ -119,7 +136,7 @@ export default class UserGroupController {
           attributes: {
             exclude: userInformationGroupExclude
           },
-          required: true
+          required: false
         }
       ]
     });
