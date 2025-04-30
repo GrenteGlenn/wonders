@@ -105,7 +105,6 @@ export default class UserGroupController {
   }
 
   async getAllByUser(userId: number) {
-
     const userGroups = await UserGroup.findAll({
       include: [
         {
@@ -119,9 +118,9 @@ export default class UserGroupController {
       attributes: ['id'],
       raw: true
     });
-    
-    const groupIds = userGroups.map(group => group.id);
-    
+
+    const groupIds = userGroups.map((group) => group.id);
+
     return await UserGroup.findAll({
       where: {
         id: { [Op.in]: groupIds }
