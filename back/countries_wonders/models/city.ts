@@ -9,7 +9,9 @@ interface CityCreationAttributes extends Optional<CityInterface, 'id'> {}
 class City extends Model<CityInterface, CityCreationAttributes> implements CityInterface {
   declare id: number;
   declare name: string;
-  declare country: number;
+  declare country_id: number;
+  declare longitude: number;
+  declare latitude: number;
   declare readonly created_at?: Date | undefined;
   declare readonly updated_at?: Date | undefined;
 }
@@ -41,7 +43,7 @@ City.init(
         this.setDataValue('name', value);
       }
     },
-    country: {
+    country_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -49,11 +51,31 @@ City.init(
         key: 'id'
       },
       get() {
-        const value = this.getDataValue('country');
+        const value = this.getDataValue('country_id');
         return value ? value : null;
       },
       set(value: number) {
-        this.setDataValue('country', value);
+        this.setDataValue('country_id', value);
+      }
+    },
+    longitude: {
+      type: DataTypes.INTEGER,
+      get() {
+        const value = this.getDataValue('longitude');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('longitude', value);
+      }
+    },
+    latitude: {
+      type: DataTypes.INTEGER,
+      get() {
+        const value = this.getDataValue('latitude');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('latitude', value);
       }
     },
     created_at: {

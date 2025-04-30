@@ -32,7 +32,14 @@ router.get('/:id', (async (req, res) => {
 router.post('/', (async (req, res) => {
   try {
     const body = <BodyCity>req.body;
-    const country = await cityController.new(body.name, body.country, new Date(), new Date());
+    const country = await cityController.new(
+      body.name,
+      body.country,
+      body.longitude,
+      body.latitude,
+      new Date(),
+      new Date()
+    );
     res.json(country);
   } catch (error) {
     res.json({ error: error });
@@ -42,7 +49,13 @@ router.post('/', (async (req, res) => {
 router.put('/:id', (async (req, res) => {
   try {
     const body = <BodyCity>req.body;
-    const country = await cityController.update(parseInt(req.params.id, 10), body.name, body.country);
+    const country = await cityController.update(
+      parseInt(req.params.id, 10),
+      body.name,
+      body.country,
+      body.longitude,
+      body.latitude
+    );
     res.json(country);
   } catch (error) {
     res.json({ error: error });
