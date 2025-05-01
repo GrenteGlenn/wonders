@@ -1,69 +1,137 @@
-<div class="subject-container">
-    <h1>Liste des Sujets</h1>
-    <div class="align-button"><button (click)="isFormVisible = !isFormVisible">+</button></div>
-    <div *ngIf="isFormVisible">
-      <div class="space-y-4">
-        <div>
-          <label for="subject" class="block text-sm font-medium text-gray-700 mb-1">
-            Titre
-          </label>
-          <input
-            type="text"
-            id="title"
-            minlength="5"
-            maxlength="50"
-            required
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-            placeholder="Entrez le titre de votre post"
-            [(ngModel)]="newSubject.title">
-        </div>
-        <div>
-          <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">
-            Contenu
-          </label>
-          <textarea
-            id="content"
-            minlength="5"
-            maxlength="1000"
-            required
-            rows="4"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
-            placeholder="Écrivez votre post"
-            [(ngModel)]="newSubject.content">
-          ></textarea>
-        </div>
-        <button
-          type="submit"
-          (click)="createSubject()"
-          [disabled]="!newSubject.title || !newSubject.content"
-          class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
-        >
-          Publier le sujet
-        </button>
-      </div>
-    </div>
-    <div *ngIf="!isFormVisible">
-    <div *ngIf="subjects.length === 0" class="no-subjects">
-      Aucun sujet disponible.
+<div class="max-w-full px-10 mt-5 sm:px-10 lg:px-10 py-10">
+  <div class="flex justify-between mb-6">
+    <span class="text-3xl text-start">Liste des Sujets</span>
+    <button
+      (click)="isFormVisible = !isFormVisible"
+      class="flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
+    >
+      <lucide-icon name="plus" class="w-5 h-5"></lucide-icon>
+      {{ isFormVisible ? 'Fermer' : 'Nouveau Sujet' }}
+    </button>
+  </div>
+
+  <!-- Formulaire création -->
+  <div *ngIf="isFormVisible" class="bg-white shadow rounded-lg p-6 space-y-6 mb-10">
+    <div>
+      <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Titre</label>
+      <input
+        id="title"
+        type="text"
+        minlength="5"
+        maxlength="50"
+        required
+        [(ngModel)]="newSubject.title"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        placeholder="Entrez le titre du sujet"
+      />
     </div>
 
-    <div *ngIf="subjects.length > 0" class="subject-list">
-      <div *ngFor="let subject of subjects" class="subject-card">
-        <div *ngIf="subject.user_id == user_id" (click)="deleteSubject(subject.id)" class="text-right text-3xl font-bold cursor-pointer text-gray-600 hover:text-red-500">
-          ×
-        </div>
-        <h2>{{ subject.title }}</h2>
-        <div class="subject-meta">
-          <span class="cursor-pointer text-red-500 hover:text-red-700 flex items-center space-x-1" (click)="likeSubject(subject)">
-            ❤️ 
-            <span>{{ subject.likes }}</span> 
-            <span>{{ subject.likes <= 1 ? 'like' : 'likes' }}</span>
-          </span>
-          <span>📅 {{ subject.created_at | date:'longDate' }}</span>
-        </div>
-        <button (click)="viewDetails(subject.id)">Voir Détails</button>
-      </div>
+    <div>
+      <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Contenu</label>
+      <textarea
+        id="content"
+        rows="5"
+        minlength="5"
+        maxlength="1000"
+        required
+        [(ngModel)]="newSubject.content"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+        placeholder="Écrivez votre contenu ici..."
+      ></textarea>
+    </div>
+
+    <div class="flex justify-end">
+      <button
+        (click)="createSubject()"
+        [disabled]="!newSubject.title || !newSubject.content"
+        class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Publier
+      </button>
     </div>
   </div>
+
+  <!-- Liste des sujets -->
+  <div *ngIf="!isFormVisible">
+    <div *ngIf="subjects.length === 0" class="text-center text-gray-500">Aucun sujet disponible.</div>
+
+    <div *ngIf="subjects.length > 0" class="divide-gray-200">
+      <div
+        *ngFor="let subject of paginatedSubjects"
+        class="flex flex-col md:flex-row items-start border mb-5 md:items-center py-6 hover:bg-gray-50 transition px-4 rounded-md relative group"
+      >
+        <!-- Bouton supression -->
+        <button
+          *ngIf="subject.user_id == user_id"
+          (click)="deleteSubject(subject.id); $event.stopPropagation()"
+          class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition text-xl"
+        >
+          <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+        </button>
+
+        <div class="flex-1">
+          <span
+            class="text-2xl text-gray-800 group-hover:text-blue-600 mb-5 cursor-pointer"
+            (click)="viewDetails(subject.id)"
+          >
+            {{ subject.title }}
+          </span>
+          <span class="text-sm text-gray-600 mt-5 line-clamp-2">
+            {{ subject.content }}
+          </span>
+        </div>
+
+        <!-- Séparateur vertical -->
+        <div class="hidden md:block w-px h-20 bg-gray-300 mx-6"></div>
+
+        <!-- Date -->
+        <div class="flex flex-col items-center text-sm text-gray-500 min-w-[100px] text-center">
+          <lucide-icon name="calendar" class="w-5 h-5 mb-1"></lucide-icon>
+          <span>{{ subject.created_at | date: 'longDate' }}</span>
+        </div>
+
+        <div class="hidden md:block w-px h-20 bg-gray-300 mx-6"></div>
+        <div class="flex flex-col items-center text-sm text-gray-500 min-w-[80px] text-center">
+          <button
+            (click)="likeSubject(subject); $event.stopPropagation()"
+            class="flex flex-col items-center text-red-500 hover:text-red-600 transition"
+          >
+            <lucide-icon name="thumbs-up" class="w-5 h-5 mb-1"></lucide-icon>
+            <span>{{ subject.likes || 0 }}</span>
+            <span class="text-xs">{{ subject.likes <= 1 ? 'like' : 'likes' }}</span>
+          </button>
+        </div>
+      </div>
+      
+    </div>
+    <div *ngIf="totalPages > 1" class="mt-6 flex justify-center items-center gap-2">
+      <button
+        (click)="changePage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Précédent
+      </button>
+    
+      <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+        <button
+          (click)="changePage(i + 1)"
+          [class.bg-blue-600]="currentPage === i + 1"
+          [class.text-white]="currentPage === i + 1"
+          class="px-3 py-1 border rounded hover:bg-blue-100"
+        >
+          {{ i + 1 }}
+        </button>
+      </ng-container>
+    
+      <button
+        (click)="changePage(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+        class="px-3 py-1 border rounded disabled:opacity-40"
+      >
+        Suivant
+      </button>
+    </div>
+    
   </div>
-  
+</div>

@@ -24,7 +24,7 @@ db-migrate-undo-all:
 db-migrate:
 	@echo "Running migrations..."
 	$(SEQUELIZE) db:migrate
-
+	
 db-seed-all:
 	@echo "Seeding database..."
 	$(SEQUELIZE) db:seed:all

@@ -19,6 +19,7 @@ class User extends Model<UserInterface, UserCreationAttributes> implements UserI
   declare birth_date: Date;
   declare language_id: LanguageInterface;
   declare country_id: number;
+  declare img: string;
   declare role_id: number;
   declare updated_at: Date;
   declare readonly created_at: Date;
@@ -57,6 +58,10 @@ User.init(
         model: Role,
         key: 'id'
       }
+    },
+    img: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     created_at: {
       type: DataTypes.DATE,

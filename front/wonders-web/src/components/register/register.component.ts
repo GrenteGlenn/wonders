@@ -7,6 +7,7 @@ import { CountryService } from '../../app/service/country/country.service';
 import { NgFor } from '@angular/common';
 import { LanguageService } from '../../app/service/languages/languages.service';
 import { Country } from '../activities/activities/activities.component';
+import { TranslateService } from '../../app/service/translate/translate.service';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,7 @@ import { Country } from '../activities/activities/activities.component';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
-  returnUrl: string = '/home';
+  returnUrl: string = '';
   countries: Country[] = [];
   selectedCountryId: any = 0;
   languages: any[] = [];
@@ -37,11 +38,14 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private _countryService: CountryService,
     private _languagesService: LanguageService,
-    private router: Router
+    private router: Router,
+    private translateService: TranslateService  
   ) {}
 
   ngOnInit(): void {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+    const rawReturnUrl = this.route.snapshot.queryParams['returnUrl'] || 'home';
+    this.returnUrl = `/${this.translateService.currentLang}/${rawReturnUrl}`;
+
     this.loadData();
   }
 
@@ -54,6 +58,7 @@ export class RegisterComponent implements OnInit {
         console.error('Erreur lors du chargement des pays:', error);
       }
     });
+
     this._languagesService.getAllLanguages().subscribe({
       next: (data) => {
         this.languages = data;
@@ -74,13 +79,13 @@ export class RegisterComponent implements OnInit {
   clickRegister(): void {
     this._authService.register(this.user).subscribe({
       next: (data) => {
-        this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl } });
+        this.router.navigate(['/', this.translateService.currentLang, 'login'], { queryParams: { returnUrl: this.returnUrl } });
       }
     });
   }
 
   href(event: Event): void {
     event.preventDefault();
-    this.router.navigate(['login'], { queryParams: { returnUrl: this.returnUrl } });
+    this.router.navigate(['/', this.translateService.currentLang, 'login'], { queryParams: { returnUrl: this.returnUrl } });
   }
 }

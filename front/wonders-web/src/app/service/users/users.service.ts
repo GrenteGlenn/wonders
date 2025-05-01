@@ -20,9 +20,9 @@ export class UsersService {
     return this.http.get<FetchableUser>(`${this.API_URL}/api/users/me`)
   }
 
-  // getUserInfoByUserID(UserID: number) {
-  //   return this.http.get<User>(`${this.API_URL}/users/${UserID}`)
-  // }
+  getUserInfoByUserID(UserID: number) {
+    return this.http.get<FetchableUser>(`${this.API_URL}/api/users/${UserID}`)
+  }
 
   // getAllUsers(){
   //   return this.http.get<User[]>(`${this.API_URL}/users/users`)

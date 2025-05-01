@@ -18,5 +18,6 @@ export interface FetchableUser {
   birth_date: Date,
   role_id: number,
   country_id: any,
-  language_id: number
+  language_id: number,
+  user?: User
 }

@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 })
 export class TopicService {
 
-  private API_URL = environment.blogApiUrl
+  private API_URL = `${environment.blogApiUrl}/api`
 
   constructor(
     private http: HttpClient
