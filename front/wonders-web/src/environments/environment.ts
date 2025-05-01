@@ -9,7 +9,7 @@ export const environment = {
   aiApiUrl: 'http://localhost:3000/api',
   activityApiUrl: 'http://localhost:3002/api',
   API_GoogleMap : 'AIzaSyBWzw4MK4lSKCjhrCDu5EnH4ASnw2am8Ns',
-  blogApiUrl: 'http://localhost:3004/api'
+  blogApiUrl: 'http://localhost:3009'
 };
 
 

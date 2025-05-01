@@ -6,6 +6,7 @@ import { CityService } from '../../app/service/city/city.service';
 import { CountryService } from '../../app/service/country/country.service';
 import { GoogleMapComponent } from '../google-map/google-map.component';
 import { Destination } from '../../app/model/destination';
+import { TranslateService } from '../../app/service/translate/translate.service';
 
 @Component({
   selector: 'app-destinations',
@@ -32,7 +33,8 @@ export class DestinationsComponent implements OnInit {
     private routes: ActivatedRoute,
     private cityService: CityService,
     private countryService: CountryService,
-    private router: Router
+    private router: Router,
+    public translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -186,7 +188,6 @@ export class DestinationsComponent implements OnInit {
   }
 
   loadCountry(countryName: string) {
-    // console.log('Chargement du pays:', countryName);
 
     // Initialise la destination avec le nom
     this.destination = {
@@ -314,8 +315,6 @@ export class DestinationsComponent implements OnInit {
     // Récupérer tous les pays
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
-        // console.log('Pays récupérés:', countries.length);
-
         // Affiche d'abord avec des images placeholder pour une meilleure UX
         this.searchResults = countries.map((country) => ({
           name: country.name,
@@ -379,17 +378,17 @@ export class DestinationsComponent implements OnInit {
 
   viewDestinationDetails(result: Destination) {
     if (result.type === 'city') {
-      this.router.navigate(['/destinations'], {
+      this.router.navigate(['/', this.translateService.currentLang, 'destination'], {
         queryParams: { city: result.name }
       });
     } else {
-      this.router.navigate(['/destinations'], {
+      this.router.navigate(['/', this.translateService.currentLang, 'destination'], {
         queryParams: { country: result.name }
       });
     }
   }
   goBackToList() {
-    this.router.navigate(['/destinations']).then(() => {
+    this.router.navigate(['/', this.translateService.currentLang, 'destination']).then(() => {
       window.location.reload();
     });
   }

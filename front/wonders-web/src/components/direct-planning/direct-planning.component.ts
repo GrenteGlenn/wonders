@@ -23,12 +23,7 @@ export class DirectPlanningComponent implements OnInit {
   isLoading = false;
   destination: any = null;
 
-
-
-  constructor(
-    private countryService: CountryService,
-    // private router: Router,
-  ) {}
+  constructor(private countryService: CountryService) {}
 
   ngOnInit() {
     this.loadCountries();
@@ -66,7 +61,7 @@ export class DirectPlanningComponent implements OnInit {
           this.countryImage = 'assets/images/default-country.jpg';
           this.isLoading = false;
         }
-      });      
+      });
 
       // Obtenir la description du pays
       this.countryService.getAICountryInfo(countryName).subscribe({

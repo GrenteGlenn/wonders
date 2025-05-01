@@ -1,47 +1,24 @@
 <nav class="flex items-center justify-between px-10 py-2 bg-white shadow-md">
-    <div class="flex items-center space-x-2">
-        <!-- <img src="path-to-your-logo.png" alt="Wonders Logo" class="h-8 w-auto"> -->
-        <button (click)="goHomePage()"><span class="text-xl font-semibold">Wonders</span></button>
-    </div>
-    <div *ngIf="isAuthenticated" class="h-full px-3 py-2">
-      <button matTooltip="Planifier un voyage" class="text-black flex" (click)="goBlog()">Blog</button>
+  <div class="flex items-center space-x-2">
+    <!-- <img src="path-to-your-logo.png" alt="Wonders Logo" class="h-8 w-auto"> -->
+    <button (click)="goHomePage()"><span class="text-xl font-semibold">Wonders</span></button>
   </div>
-    <!-- <div class="flex-grow mx-4 hidden md:block">
-        <div class="relative ">
-        <input type="text" placeholder="Search" class="w-80  px-3 py-2 border rounded-lg bg-slate-200 pr-10 pl-10">
-        <lucide-icon name="search" class="absolute left-0 top-1/2 ml-1 transform -translate-y-1/2 text-gray-400"></lucide-icon>
-        </div>
-    </div> -->
 
   <div class="md:flex items-center space-x-4">
-    <!-- A rajouter quand la fonctionnalitée sera disponible
-        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
-          <button matTooltip="help" class="text-black flex"><lucide-icon name="circle-help"></lucide-icon></button>
-        </div>
-        -->
-    <div *ngIf="isAuthenticated" class="card bg-blue-600 h-full px-3 py-2  rounded-md">
+    <div *ngIf="isAuthenticated" class="card bg-blue-600 h-full px-3 py-2 rounded-md">
       <button (click)="goChoiceGuide()" class="text-black flex w-full">
-        <lucide-icon name="route"  class="mr-1"> </lucide-icon>
-        Plannifier votre voyage
+        <lucide-icon name="route" class="mr-1"> </lucide-icon>
+        {{ 'NavBar.ButtonTrip' | translate }}
       </button>
     </div>
-    <div *ngIf="isAuthenticated" class="card bg-slate-100 h-full px-3 py-2 rounded-md">
-      <button matTooltip="Profil" class="text-black flex" (click)="goProfile()">
-        <lucide-icon name="user-round"></lucide-icon>
-      </button>
+    <div class="flex justify-end p-4">
+      <select [value]="translateService.currentLang" (change)="onLanguageChange($event)" class="p-2 border rounded">
+        <option value="fr">{{ 'NavBar.TranslateFR' | translate }}</option>
+        <option value="en">{{ 'NavBar.TranslateEN' | translate }}</option>
+      </select>
     </div>
-    <!-- A rajouter quand la fonctionnalitée sera disponible
-        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
-            <button matTooltip="Settings" class="text-black flex "><lucide-icon name="settings"></lucide-icon></button>
-        </div>
-        -->
-    <!-- A rajouter quand la fonctionnalitée sera disponible
-        <div class="card bg-slate-100 h-full px-3 py-2 rounded-md">
-            <button matTooltip="Socials / Conversations" class="text-black flex "><lucide-icon name="users"></lucide-icon></button>
-        </div>
-        -->
     <div class="card bg-slate-100 h-full px-3 py-2 rounded-md" *ngIf="!isAuthenticated">
-      <button class="text-black flex" (click)="login()"><lucide-icon name="Connexion"></lucide-icon></button>
+      <button class="text-black flex" (click)="login()"><lucide-icon name="users"></lucide-icon></button>
     </div>
     <div class="relative" *ngIf="isAuthenticated">
       <img
@@ -52,27 +29,35 @@
       />
 
       <!-- Menu déroulant -->
-      <div *ngIf="isMenuOpen" class="absolute right-0 mt-4 w-64 bg-white rounded-md shadow-lg py-1 z-10">
+      <div
+        *ngIf="isMenuOpen"
+        class="absolute right-0 mt-4 w-64 bg-white rounded-md shadow-lg py-1 z-10"
+        (mouseleave)="closeMenu()"
+      >
         <div class="px-4 py-2 border-b flex text-center">
           <img src="https://github.com/shadcn.png" alt="User Avatar" class="h-8 w-8 rounded-full" />
           <span class="text-sm font-medium text-gray-900 mt-1 ml-5">{{ user?.first_name || 'Chargement...' }}</span>
         </div>
-        <a href="planTrip" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+        <button
+          (click)="goChoiceGuide()"
+          class="px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+        >
           <lucide-icon name="map" class="mr-3 h-5 w-5"></lucide-icon>
-          Planifier un voyage
-        </a>
-        <a href="booking" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-          <lucide-icon name="CalendarDays" class="mr-3 h-5 w-5"></lucide-icon>
-          Réservations
-        </a>
-        <a
+          {{ 'NavBar.ButtonTrip' | translate }}
+        </button>
+        <button
+          (click)="goProfile()"
           *ngIf="isAuthenticated"
-          href="profile"
-          class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+          class="px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 flex items-center"
         >
           <lucide-icon name="user-round" class="mr-3 h-5 w-5"></lucide-icon>
-          Profil
-        </a>
+          {{ 'NavBar.ButtonProfile' | translate }}
+        </button>
+
+        <button (click)="goForum()" class="px-4 py-2 text-sm w-full text-gray-700 hover:bg-gray-100 flex items-center">
+          <lucide-icon name="message-square-text" class="mr-3 h-5 w-5"></lucide-icon>
+          Forum
+        </button>
         <!-- A rajouter quand la fonctionnalitée sera disponible
               <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
                 <lucide-icon name="users" class="mr-3 h-5 w-5"></lucide-icon>
@@ -104,18 +89,17 @@
                 Hotels
               </a>
               -->
-        <a href="activities" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+        <!-- <a href="activities" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
           <lucide-icon name="tree-palm" class="mr-3 h-5 w-5"></lucide-icon>
           Activités
-        </a>
-        <div class="border-t my-1"></div>
+        </a> -->
         <a
           class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center cursor-pointer"
           (click)="isAuthenticated ? disconnect() : login()"
         >
           <lucide-icon name="power" class="mr-3 h-5 w-5"></lucide-icon>
 
-          {{ isAuthenticated ? 'Déconnexion' : 'Connexion' }}
+          {{ isAuthenticated ? ('NavBar.ButtonDeconnexion' | translate) : ('NavBar.ButtonConnexion' | translate) }}
         </a>
       </div>
     </div>

@@ -6,6 +6,8 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 import { CityService } from '../../app/service/city/city.service';
 import { CountryService } from '../../app/service/country/country.service';
 import { Router } from '@angular/router';
+import { TranslateService } from '../../app/service/translate/translate.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface SearchResult {
   id: number;
@@ -17,7 +19,7 @@ interface SearchResult {
 @Component({
   selector: 'app-search-destination',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, TranslateModule],
   templateUrl: './search-destination.component.html',
   styleUrl: './search-destination.component.css'
 })
@@ -33,7 +35,8 @@ export class SearchDestinationComponent implements OnInit {
   constructor(
     private cityService: CityService,
     private countryService: CountryService,
-    private router: Router
+    private router: Router,
+    public translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -66,9 +69,6 @@ export class SearchDestinationComponent implements OnInit {
 
   fetchResults(term: string) {
     this.isLoading = true;
-    console.log('Recherche de résultats pour:', term);
-
-    // On va stocker tous les résultats ici
     let results: SearchResult[] = [];
 
     // Recherche dans les pays (prioritaire)
@@ -96,26 +96,23 @@ export class SearchDestinationComponent implements OnInit {
                 type: 'city' as const
               }));
 
-            // Combiner les deux résultats
+            // Combine les deux résultats
             results = [...results, ...filteredCities];
 
-            // Tri des résultats par pertinence
+            // Tri les résultats par pertinence
             results.sort((a, b) => {
-              // Priorité pour les correspondances exactes
               const aExact = a.name.toLowerCase() === term.toLowerCase();
               const bExact = b.name.toLowerCase() === term.toLowerCase();
 
               if (aExact && !bExact) return -1;
               if (!aExact && bExact) return 1;
 
-              // Ensuite, priorité pour ceux qui commencent par le terme
               const aStarts = a.name.toLowerCase().startsWith(term.toLowerCase());
               const bStarts = b.name.toLowerCase().startsWith(term.toLowerCase());
 
               if (aStarts && !bStarts) return -1;
               if (!aStarts && bStarts) return 1;
 
-              // Enfin, tri alphabétique
               return a.name.localeCompare(b.name);
             });
 
@@ -126,7 +123,6 @@ export class SearchDestinationComponent implements OnInit {
           },
           error: (error) => {
             console.error('Erreur lors de la récupération des villes:', error);
-            // En cas d'erreur, on utilise quand même les pays déjà récupérés
             this.searchResults = results.slice(0, 10);
             this.selectedIndex = this.searchResults.length > 0 ? 0 : -1;
             this.isLoading = false;
@@ -142,21 +138,20 @@ export class SearchDestinationComponent implements OnInit {
 
   search() {
     if (this.searchTerm && this.searchResults.length > 0) {
-      // Si un terme est entré et des résultats existent, naviguer vers le résultat sélectionné
       this.navigateToSelectedResult();
     } else {
-      // Si aucun terme ou aucun résultat, naviguer vers la page destinations sans paramètres
-      this.router.navigate(['/destinations']);
+      this.router.navigate(['/', this.translateService.currentLang, 'destinations']);
+
     }
   }
 
   navigateToResult(result: SearchResult) {
     if (result.type === 'city') {
-      this.router.navigate(['/destinations'], {
+      this.router.navigate(['/', this.translateService.currentLang, 'destination'], {
         queryParams: { city: result.name }
       });
     } else {
-      this.router.navigate(['/destinations'], {
+      this.router.navigate(['/', this.translateService.currentLang, 'destination'], {
         queryParams: { country: result.name }
       });
     }
@@ -170,12 +165,12 @@ export class SearchDestinationComponent implements OnInit {
     } else {
       // Si aucun résultat n'est sélectionné mais qu'un terme est entré
       if (this.searchTerm) {
-        this.router.navigate(['/destinations'], {
+        this.router.navigate(['/', this.translateService.currentLang, 'destination'], {
           queryParams: { search: this.searchTerm }
         });
       } else {
         // Si aucun terme n'est entré, naviguer vers la page destinations sans paramètres
-        this.router.navigate(['/destinations']);
+        this.router.navigate(['/', this.translateService.currentLang, 'destination']);
       }
     }
   }
@@ -192,7 +187,4 @@ export class SearchDestinationComponent implements OnInit {
     }
   }
 
-  // handleImageError(event: any) {
-  //   event.target.src = 'assets/images/placeholder.jpg';
-  // }
 }

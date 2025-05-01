@@ -6,6 +6,8 @@ import { CityService } from '../../app/service/city/city.service';
 import { CommonModule } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
+import { TranslateService } from '../../app/service/translate/translate.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface PopularDestination {
   cityName: string;
@@ -18,7 +20,7 @@ interface PopularDestination {
 @Component({
   selector: 'app-home-page',
   standalone: true,
-  imports: [LucideAngularModule, SearchDestinationComponent, CommonModule],
+  imports: [LucideAngularModule, SearchDestinationComponent, CommonModule, TranslateModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
@@ -59,7 +61,8 @@ export class HomePageComponent implements OnInit {
   constructor(
     private countryService: CountryService,
     private cityService: CityService,
-    private router: Router
+    private router: Router,
+    public translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
@@ -93,6 +96,7 @@ export class HomePageComponent implements OnInit {
   }
 
   showMore(): void {
-    this.router.navigate(['/destinations'])
+    this.router.navigate(['/', this.translateService.currentLang, 'destinations']);
+
   }
 }

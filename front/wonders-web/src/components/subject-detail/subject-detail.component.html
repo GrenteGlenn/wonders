@@ -1,105 +1,114 @@
 <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto">
-      <!-- En-tête du sujet -->
-      <div *ngIf="subject" class="bg-white rounded-xl shadow-md p-8 mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-4">
-          {{ subject.title }}
-        </h1>
-        <div class="flex space-x-6 text-sm text-gray-500 mb-6">
-          <p class="flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Créé le {{ subject.created_at | date: 'longDate' }}
-          </p>
-          <p class="flex items-center">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            Mis à jour le {{ subject.updated_at ?? subject.created_at| date: 'longDate' }}
-          </p>
-        </div>
-        <p class="text-gray-600 text-lg leading-relaxed">
-          {{ subject.content }}
+  <div class="max-w-full">
+    <div *ngIf="subject" class="bg-white rounded-xl shadow-md p-8 mb-8">
+      <div class="justify-between flex">
+        <span class="text-lg font-bold text-gray-900 mb-4">{{ subject.title }}</span>
+        <p class="text-gray-500 text-sm mb-2">Créé le {{ subject.created_at | date: 'longDate' }}</p>
+      </div>
+      <p class="text-gray-700 text-lg">{{ subject.content }}</p>
+    </div>
+
+    <!-- Liste des commentaires -->
+    <div *ngFor="let comment of paginatedComments" class="flex bg-white rounded-xl shadow-md mb-6 relative">
+      <!-- Avatar -->
+      <div class="w-1/4 border-r border-gray-200 flex flex-col items-center py-6 space-y-3">
+        <img src="https://github.com/shadcn.png" class="rounded-full w-20 h-20" alt="Avatar" />
+        <p class="text-gray-900 font-semibold"> {{ comment.user?.first_name || 'Utilisateur inconnu' }}
         </p>
+        <div class="text-gray-500 text-sm">Posts: 13</div>
+        <div class="text-gray-500 text-sm">Likes: 2346</div>
       </div>
 
-      <!-- Section des commentaires -->
-      <div class="bg-white rounded-xl shadow-md p-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-          <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-          </svg>
-          Commentaires
-        </h2>
-        <!-- Liste des commentaires -->
-        <div *ngIf="hasComments; else noComments" class="space-y-4 mb-8">
-          <div *ngFor="let comment of subject?.comments" class="bg-gray-50 rounded-lg p-4 border-l-4 border-blue-500">
-            <div *ngIf="comment.user_id == user_id && subject" (click)="deleteComment(comment, subject)" class="text-right text-3xl font-bold cursor-pointer text-gray-600 hover:text-red-500">
-              ×
-            </div>
-            <div class="flex items-start">
-              <div class="flex-shrink-0">
-                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                  <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                  </svg>
-                </div>
-              </div>
-              <div class="ml-4 flex-1">
-                <p class="text-sm font-medium text-gray-900">
-                  Commentaire #{{ comment.id }}
-                </p>
-                <p class="mt-1 text-gray-600">
-                  {{ comment.message }}
-                </p>
-              </div>
-            </div>
+      <!-- Message -->
+      <div class="flex-1 flex flex-col justify-between p-6 relative">
+        <div>
+          <div class="flex justify-between items-center">
+            <p class="text-gray-400 text-sm">Posté le {{ comment.created_at | date: 'longDate' }}</p>
+            <p class="text-gray-400 text-sm">#{{ comment.id }}</p>
           </div>
+          <p class="text-gray-700 mt-4">
+            {{ comment.message }}
+          </p>
         </div>
 
-        <!-- Message si pas de commentaires -->
-        <ng-template #noComments>
-          <div class="text-center py-8 text-gray-500">
-            <svg class="mx-auto h-12 w-12 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-            <p class="text-xl font-medium">Aucun commentaire pour le moment</p>
-            <p class="mt-1">Soyez le premier à commenter !</p>
+        <!-- Actions -->
+        <div class="flex justify-between items-center mt-6">
+          <!-- Système de vote -->
+          <div class="flex items-center gap-4">
+            <button class="flex items-center text-gray-500 hover:text-blue-600">
+              <lucide-icon name="thumbs-up" class="w-5 h-5 mr-1"></lucide-icon>
+              <span>1</span>
+            </button>
+            <button class="flex items-center text-gray-500 hover:text-red-600">
+              <lucide-icon name="thumbs-down" class="w-5 h-5 mr-1"></lucide-icon>
+              <span>0</span>
+            </button>
           </div>
-        </ng-template>
 
-        <!-- Formulaire de commentaire -->
-        <div class="bg-gray-50 rounded-lg p-6 mt-8">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4">
-            Ajouter un commentaire
-          </h3>
-          <div class="space-y-4">
-            <div>
-              <label for="comment" class="block text-sm font-medium text-gray-700 mb-1">
-                Commentaire
-              </label>
-              <textarea
-                id="comment"
-                minlength="5"
-                maxlength="1000"
-                required
-                rows="4"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
-                placeholder="Écrivez votre commentaire ici"
-                [(ngModel)]="newComment.message"
-              ></textarea>
-            </div>
+          <!-- Actions delete -->
+          <div class="flex items-center space-x-4 text-gray-400 text-sm">
+            <button class="hover:underline">Citer</button>
             <button
-              type="submit"
-              [disabled]="!newComment.message"
-              (click)="createComment(subject?.id)"
-              class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+              *ngIf="comment.user_id === user_id"
+              (click)="deleteComment(comment, subject)"
+              class="text-gray-400 flex hover:text-red-600"
+              title="Supprimer"
             >
-              Publier le commentaire
+              <lucide-icon name="x" class="w-4 h-6"></lucide-icon>
+              <span class="mt-0.5">supprimer</span>
             </button>
           </div>
         </div>
       </div>
     </div>
+    <!-- pagination -->
+    <div *ngIf="totalCommentPages > 1" class="mt-4 flex justify-center gap-2">
+      <button
+        (click)="changePage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="px-3 py-1 border rounded disabled:opacity-50"
+      >
+        Précédent
+      </button>
+
+      <ng-container *ngFor="let page of [].constructor(totalCommentPages); let i = index">
+        <button
+          (click)="changePage(i + 1)"
+          [class.bg-blue-600]="currentPage === i + 1"
+          [class.text-white]="currentPage === i + 1"
+          class="px-3 py-1 border rounded hover:bg-blue-100"
+        >
+          {{ i + 1 }}
+        </button>
+      </ng-container>
+
+      <button
+        (click)="changePage(currentPage + 1)"
+        [disabled]="currentPage === totalCommentPages"
+        class="px-3 py-1 border rounded disabled:opacity-50"
+      >
+        Suivant
+      </button>
+    </div>
+
+    <!-- Ajout d'un commentaire -->
+    <div class="bg-white rounded-xl shadow-md p-8 mt-8">
+      <h2 class="text-2xl font-bold mb-4">Répondre</h2>
+      <textarea
+        [(ngModel)]="newComment.message"
+        rows="4"
+        placeholder="Écrire votre réponse..."
+        class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+      ></textarea>
+      <div class="flex justify-end mt-4">
+        <button
+          (click)="createComment(subject?.id)"
+          [disabled]="!newComment.message"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+        >
+          Envoyer
+        </button>
+      </div>
+    </div>
   </div>
+</div>

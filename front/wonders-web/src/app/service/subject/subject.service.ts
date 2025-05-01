@@ -8,7 +8,7 @@ import { Subject, SubjectDetails } from '../../model/Subject';
 })
 export class SubjectService {
 
-  private API_URL = environment.blogApiUrl
+  private API_URL = `${environment.blogApiUrl}/api`
 
   constructor(
     private http: HttpClient

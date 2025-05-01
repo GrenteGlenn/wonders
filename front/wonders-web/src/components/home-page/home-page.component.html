@@ -1,9 +1,13 @@
 <div class="w-full md:w-11/12 lg:w-9/12 xl:w-8/12 mx-auto px-4 py-6 md:py-10">
   <div class="relative rounded-lg overflow-hidden">
-    <img src="assets/images/castleHome.jpg" class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover" alt="Castle" />
+    <img
+      src="assets/images/castleHome.jpg"
+      class="w-full h-[300px] sm:h-[400px] md:h-[500px] object-cover"
+      alt="Castle"
+    />
     <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center p-4">
       <h1 class="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-8 text-center">
-        Découvrez votre prochaine destination de vacances
+        {{ 'HomePage.HomeTitle' | translate }}
       </h1>
       <app-search-destination class="w-full max-w-lg"></app-search-destination>
     </div>
@@ -12,9 +16,12 @@
 
 <div class="w-full md:w-11/12 lg:w-9/12 xl:w-8/12 mx-auto px-4 py-6 md:py-10">
   <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-    <span class="text-3xl sm:text-3xl mb-4 sm:mb-0">Destinations populaires en 2024</span>
-    <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 sm:px-6 w-full sm:w-auto rounded-lg" (click)="showMore()">
-      Voir plus
+    <span class="text-3xl sm:text-3xl mb-4 sm:mb-0"> {{ 'HomePage.HomeSubTitle' | translate }} </span>
+    <button
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 sm:px-6 w-full sm:w-auto rounded-lg"
+      (click)="showMore()"
+    >
+      {{ 'HomePage.HomeShowMore' | translate }}
     </button>
   </div>
 
@@ -25,10 +32,7 @@
     >
       <div class="relative w-full aspect-[4/3] rounded-md overflow-hidden">
         <!-- Indicateur de chargement -->
-        <div
-          *ngIf="destination.loading"
-          class="absolute inset-0 flex items-center justify-center bg-gray-200"
-        >
+        <div *ngIf="destination.loading" class="absolute inset-0 flex items-center justify-center bg-gray-200">
           <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
         </div>
         <img
