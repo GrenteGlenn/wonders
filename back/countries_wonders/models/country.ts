@@ -108,7 +108,7 @@ Country.init(
       }
     },
     longitude: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
       get() {
         const value = this.getDataValue('longitude');
         return value ? value : null;
@@ -118,7 +118,7 @@ Country.init(
       }
     },
     latitude: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
       get() {
         const value = this.getDataValue('latitude');
         return value ? value : null;
