@@ -72,7 +72,7 @@ Airport.init(
       }
     },
     longitude: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DOUBLE,
       get() {
         const value = this.getDataValue('longitude');
         return value ? value : null;
@@ -82,7 +82,7 @@ Airport.init(
       }
     },
     latitude: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.DOUBLE,
       get() {
         const value = this.getDataValue('latitude');
         return value ? value : null;
@@ -117,12 +117,12 @@ Airport.init(
 );
 
 City.hasMany(Airport, {
-  foreignKey: 'city',
+  foreignKey: 'city_id',
   as: 'airports'
 });
 
 Airport.belongsTo(City, {
-  foreignKey: 'city',
+  foreignKey: 'city_id',
   as: 'cityData'
 });
 export default Airport;
