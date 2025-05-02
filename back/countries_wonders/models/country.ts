@@ -171,13 +171,13 @@ Country.belongsTo(Language, {
 });
 
 Country.hasMany(City, {
-  foreignKey: 'country',
-  as: 'ctry'
+  foreignKey: 'country_id',
+  as: 'country'
 });
 
 City.belongsTo(Country, {
-  foreignKey: 'country',
-  as: 'ctry'
+  foreignKey: 'country_id',
+  as: 'country'
 });
 
 export default Country;

@@ -7,7 +7,7 @@ class CityController {
       include: [
         {
           model: Country,
-          as: 'ctry',
+          as: 'country',
           attributes: ['id', 'name', 'code']
         }
       ]
@@ -20,7 +20,7 @@ class CityController {
       include: [
         {
           model: Country,
-          as: 'ctry',
+          as: 'country',
           attributes: ['id', 'name', 'code']
         }
       ]
