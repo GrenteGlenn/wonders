@@ -127,8 +127,9 @@ router.post('/country_image', (async (req, res) => {
   if (!body || !body.pays) {
     res.status(404).json({ error: 'No pays image.' });
   }
-
+  // eslint-disable-next-line
   let image = null;
+
   await fetchImages(body.pays, 'city').then((e) => {
     if (e != undefined) {
       image = e.items[0].link;

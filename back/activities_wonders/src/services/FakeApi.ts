@@ -2,7 +2,6 @@ import ActivityApiInterface from '../interfaces/activityApiInterface';
 
 import data from './data.json';
 
-
 /**
  * Convertit des degrés en radians
  * @param degrees - Valeur en degrés
