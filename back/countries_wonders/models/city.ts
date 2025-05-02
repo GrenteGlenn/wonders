@@ -59,7 +59,7 @@ City.init(
       }
     },
     longitude: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
       get() {
         const value = this.getDataValue('longitude');
         return value ? value : null;
@@ -69,7 +69,7 @@ City.init(
       }
     },
     latitude: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DOUBLE,
       get() {
         const value = this.getDataValue('latitude');
         return value ? value : null;

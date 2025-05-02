@@ -26,10 +26,10 @@ module.exports = {
         allowNull: false
       },
       longitude: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE,
       },
       latitude: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DOUBLE,
       },
       created_at: {
         allowNull: false,
