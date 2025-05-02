@@ -1,6 +1,6 @@
 stages:
   - lint
-  - pre
+  # - pre
   
 
 workflow:
