@@ -13,7 +13,7 @@ const port = process.env.PORT;
 app.use('/api/hotel', hotelRoute);
 app.use('/api/fly', flyRoute);
 
-app.get('/test', function (req, res) {
+app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 

@@ -1,10 +1,12 @@
 <nav class="flex items-center justify-between px-10 py-2 bg-white shadow-md">
-  <div class="flex items-center space-x-2">
-    <!-- <img src="path-to-your-logo.png" alt="Wonders Logo" class="h-8 w-auto"> -->
-    <button (click)="goHomePage()"><span class="text-xl font-semibold">Wonders</span></button>
+    <div class="flex items-center space-x-2">
+        <!-- <img src="path-to-your-logo.png" alt="Wonders Logo" class="h-8 w-auto"> -->
+        <button (click)="goHomePage()"><span class="text-xl font-semibold">Wonders</span></button>
+    </div>
+    <div *ngIf="isAuthenticated" class="h-full px-3 py-2">
+      <button matTooltip="Planifier un voyage" class="text-black flex" (click)="goBlog()">Blog</button>
   </div>
-
-  <!-- <div class="flex-grow mx-4 hidden md:block">
+    <!-- <div class="flex-grow mx-4 hidden md:block">
         <div class="relative ">
         <input type="text" placeholder="Search" class="w-80  px-3 py-2 border rounded-lg bg-slate-200 pr-10 pl-10">
         <lucide-icon name="search" class="absolute left-0 top-1/2 ml-1 transform -translate-y-1/2 text-gray-400"></lucide-icon>

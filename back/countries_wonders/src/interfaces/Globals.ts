@@ -4,6 +4,8 @@ export interface BodyCountry {
   description: Text;
   image: string;
   language: number;
+  longitude: number;
+  latitude: number;
   created_at: Date;
   updated_at: Date;
   data: string;
@@ -31,6 +33,8 @@ export interface TargetImage {
 export interface BodyCity {
   name: string;
   country: number;
+  longitude: number;
+  latitude: number;
   created_at: Date;
   updated_at: Date;
 }

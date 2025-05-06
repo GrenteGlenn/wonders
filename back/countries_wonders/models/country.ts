@@ -13,6 +13,8 @@ class Country extends Model<CountryInterface, CountryCreationAttributes> impleme
   declare image: string;
   declare description?: Text | undefined;
   declare language: number;
+  declare longitude: number;
+  declare latitude: number;
   declare updated_at_description?: Date | undefined;
   declare readonly created_at?: Date | undefined;
   declare updated_at?: Date | undefined;
@@ -105,6 +107,26 @@ Country.init(
         this.setDataValue('language', value);
       }
     },
+    longitude: {
+      type: DataTypes.DOUBLE,
+      get() {
+        const value = this.getDataValue('longitude');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('longitude', value);
+      }
+    },
+    latitude: {
+      type: DataTypes.DOUBLE,
+      get() {
+        const value = this.getDataValue('latitude');
+        return value ? value : null;
+      },
+      set(value: number) {
+        this.setDataValue('latitude', value);
+      }
+    },
     updated_at_description: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -149,13 +171,13 @@ Country.belongsTo(Language, {
 });
 
 Country.hasMany(City, {
-  foreignKey: 'country',
-  as: 'ctry'
+  foreignKey: 'country_id',
+  as: 'country'
 });
 
 City.belongsTo(Country, {
-  foreignKey: 'country',
-  as: 'ctry'
+  foreignKey: 'country_id',
+  as: 'country'
 });
 
 export default Country;

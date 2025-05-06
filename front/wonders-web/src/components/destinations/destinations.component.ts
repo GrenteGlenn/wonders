@@ -1,19 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { CityService } from '../../app/service/city/city.service';
 import { CountryService } from '../../app/service/country/country.service';
 import { GoogleMapComponent } from '../google-map/google-map.component';
-
-interface Destination {
-  name: string;
-  image: string;
-  description: string;
-  type: 'city' | 'country';
-  isDescriptionLoading?: boolean;
-  isImageLoading?: boolean;
-}
+import { Destination } from '../../app/model/destination';
 
 @Component({
   selector: 'app-destinations',
@@ -23,8 +15,9 @@ interface Destination {
   styleUrl: './destinations.component.css'
 })
 export class DestinationsComponent implements OnInit {
-  @Input() queryParams?: {[key: string]: string};
-  @Input() hideBackButton: boolean = false; 
+  @Input() queryParams?: { [key: string]: string };
+  @Input() hideBackButton: boolean = false;
+  @Output() destinationSelected = new EventEmitter<Destination>();
 
   destination: Destination | null = null;
   searchResults: Destination[] = [];
@@ -43,18 +36,18 @@ export class DestinationsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Vérifier d'abord s'il y a des queryParams injectés
+    // Vérifie d'abord s'il y a des queryParams injectés
     if (this.queryParams) {
       this.processQueryParams(this.queryParams);
     } else {
-      // Sinon, utiliser les queryParams de l'URL
+      // Sinon, utilise les queryParams de l'URL
       this.routes.queryParams.subscribe((params) => {
         this.processQueryParams(params);
       });
     }
   }
 
-  // Ajoute cette méthode pour réagir aux changements de queryParams
+  // Méthode de reactions aux changements de queryParams
   ngOnChanges(changes: SimpleChanges) {
     if (changes['queryParams'] && this.queryParams) {
       this.processQueryParams(this.queryParams);
@@ -84,7 +77,6 @@ export class DestinationsComponent implements OnInit {
       this.loadPopularDestinations();
     }
   }
-
 
   showPageNumber(page: number): boolean {
     if (page === 1 || page === this.totalPages) {
@@ -127,7 +119,6 @@ export class DestinationsComponent implements OnInit {
     this.paginatedResults = this.searchResults.slice(startIndex, endIndex);
   }
 
-  // Méthodes de navigation
   goToPage(page: number) {
     if (page >= 1 && page <= this.totalPages) {
       this.currentPage = page;
@@ -167,6 +158,7 @@ export class DestinationsComponent implements OnInit {
             isDescriptionLoading: false,
             isImageLoading: false
           };
+          this.destinationSelected.emit(this.destination);
         } else {
           this.destination = null;
           this.searchResults = [];
@@ -194,9 +186,9 @@ export class DestinationsComponent implements OnInit {
   }
 
   loadCountry(countryName: string) {
-    console.log('Chargement du pays:', countryName);
+    // console.log('Chargement du pays:', countryName);
 
-    // Initialiser la destination avec le nom
+    // Initialise la destination avec le nom
     this.destination = {
       name: countryName,
       image: '',
@@ -205,6 +197,9 @@ export class DestinationsComponent implements OnInit {
       isDescriptionLoading: true,
       isImageLoading: true
     };
+
+    this.destinationSelected.emit(this.destination);
+
     this.isLoading = false;
 
     // Charge l'image en premier
@@ -319,9 +314,9 @@ export class DestinationsComponent implements OnInit {
     // Récupérer tous les pays
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
-        console.log('Pays récupérés:', countries.length);
+        // console.log('Pays récupérés:', countries.length);
 
-        // Afficher d'abord avec des images placeholder pour une meilleure UX
+        // Affiche d'abord avec des images placeholder pour une meilleure UX
         this.searchResults = countries.map((country) => ({
           name: country.name,
           image: 'assets/images/placeholder.jpg',
@@ -329,11 +324,10 @@ export class DestinationsComponent implements OnInit {
           type: 'country' as const
         }));
 
-        // Mettre à jour la pagination et masquer le loader
         this.updatePagination();
         this.isLoading = false;
 
-        // Maintenant, pour chaque pays, charger son image individuellement
+        // Pour chaque pays, charge son image individuellement
         this.loadImagesSequentially(countries);
       },
       error: (error) => {
@@ -385,18 +379,15 @@ export class DestinationsComponent implements OnInit {
 
   viewDestinationDetails(result: Destination) {
     if (result.type === 'city') {
-      // Navigue vers la page avec le paramètre de ville
       this.router.navigate(['/destinations'], {
         queryParams: { city: result.name }
       });
     } else {
-      // Navigue vers la page avec le paramètre de pays
       this.router.navigate(['/destinations'], {
         queryParams: { country: result.name }
       });
     }
   }
-  // retour à la liste des pays
   goBackToList() {
     this.router.navigate(['/destinations']).then(() => {
       window.location.reload();

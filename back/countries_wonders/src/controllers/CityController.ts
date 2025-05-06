@@ -7,7 +7,7 @@ class CityController {
       include: [
         {
           model: Country,
-          as: 'ctry',
+          as: 'country',
           attributes: ['id', 'name', 'code']
         }
       ]
@@ -20,7 +20,7 @@ class CityController {
       include: [
         {
           model: Country,
-          as: 'ctry',
+          as: 'country',
           attributes: ['id', 'name', 'code']
         }
       ]
@@ -28,16 +28,23 @@ class CityController {
     return city;
   }
 
-  async new(name: string, country: number, created_at: Date, updated_at: Date) {
-    const city = await City.create({ name, country, created_at, updated_at });
-    return city;
+  async new(name: string, country_id: number, longitude: number, latitude: number, created_at: Date, updated_at: Date) {
+    const country = await Country.findByPk(country_id);
+    if (country) {
+      return await City.create({ name, country_id: country_id, longitude, latitude, created_at, updated_at });
+    } else {
+      return null;
+    }
   }
 
-  async update(id: number, name: string, country: number) {
+  async update(id: number, name: string, country_id: number, longitude: number, latitude: number) {
     const city = await City.findByPk(id);
-    if (city) {
+    const country = await Country.findByPk(country_id);
+    if (city && country) {
       city.name = name;
-      city.country = country;
+      city.country_id = country_id;
+      city.longitude = longitude;
+      city.latitude = latitude;
       await city.save();
     }
     return city;

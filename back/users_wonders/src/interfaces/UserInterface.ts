@@ -1,9 +1,11 @@
 import Language from './LanguageInterface';
+import RoleInterface from './RoleInterface';
 
 export default interface UserInterface {
   id?: number;
   country_id: number;
   role_id: number;
+  role?: RoleInterface;
   first_name: string;
   last_name: string;
   email: string;

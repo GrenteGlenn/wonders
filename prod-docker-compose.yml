@@ -1,0 +1,12 @@
+services:
+  back-user:
+    container_name: back-user
+    image: back-user
+    ports:
+      -  3001
+    networks:
+      -  caddy-net
+
+networks:
+  caddy-net:
+    external: false

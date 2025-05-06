@@ -5,7 +5,7 @@
   "main": "./src/app.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "ts-node src/app.ts",
+    "start": "nodemon --ext ts --exec ts-node src/app.ts",
     "migration:run": "npx sequelize-cli db:migrate",
     "migration:seeder": "npx sequelize-cli db:seed:all",
     "migration:undo:all": "npx sequelize-cli db:migrate:undo:all",
@@ -58,6 +58,7 @@
     "typescript": "^5.6.2",
     "typescript-eslint": "^7.16.0",
     "swagger-ui-express": "^5.0.1",
-    "swagger-autogen": "^2.23.7"
+    "swagger-autogen": "^2.23.7",
+    "nodemon": "^3.1.9"
   }
 }

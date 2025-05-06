@@ -45,6 +45,8 @@ router.post('/', (async (req, res) => {
       body.description,
       body.image,
       body.language,
+      body.longitude,
+      body.latitude,
       new Date(),
       new Date()
     );
@@ -123,8 +125,16 @@ router.post('/country_image', (async (req, res) => {
   const body = <TargetImage>req.body;
 
   if (!body || !body.pays) {
-    return res.status(404).json({ error: 'No pays image.' });
+    res.status(404).json({ error: 'No pays image.' });
   }
+  // eslint-disable-next-line
+  let image = null;
+
+  await fetchImages(body.pays, 'city').then((e) => {
+    if (e != undefined) {
+      image = e.items[0].link;
+    }
+  });
 
   try {
     const image = await fetchImagesWithCache(body.pays, 'city');
@@ -155,7 +165,10 @@ router.put('/:id', (async (req, res) => {
       body.code,
       body.description,
       body.image,
-      body.language
+      body.language,
+      body.longitude,
+      body.latitude,
+      new Date()
     );
     res.json(country);
   } catch (error) {

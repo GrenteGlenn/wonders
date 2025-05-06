@@ -14,6 +14,7 @@ router.get('/', (async (req, res) => {
     res.status(500).json({ code: '500', message: error });
   }
 }) as RequestHandler);
+
 router.get('/:id', (async (req, res) => {
   try {
     const trip = await tripController.one(parseInt(req.params.id, 10));
