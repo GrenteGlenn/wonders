@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-// Interface pour les paramètres de recherche de vol
 export interface FlightSearchParams {
   originLocationCode: string;
   destinationLocationCode: string;
@@ -15,11 +14,10 @@ export interface FlightSearchParams {
   maxPrice?: number;
 }
 
-// Interface pour la réponse de l'API
 export interface FlightOffersResponse {
   status: string;
   results: number;
-  data: any[]; // Vous pouvez créer une interface spécifique pour vos FlightOfferSchema
+  data: any[]; 
 }
 
 @Injectable({

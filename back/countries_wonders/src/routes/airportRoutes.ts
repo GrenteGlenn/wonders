@@ -30,16 +30,26 @@ router.get('/city/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/geo', (async (req, res) => {
-  const body = <Body>req.body;
+// router.get('/geo', (async (req, res) => {
+//   const body = <Body>req.body;
 
+//   try {
+//     const airport = await airportController.geo(body.longitude, body.latitude);
+//     res.json(airport);
+//   } catch (error) {
+//     res.status(500).json({ error });
+//   }
+// }) as RequestHandler);
+
+router.post('/geo', async (req, res) => {
+  const { longitude, latitude } = req.body;
   try {
-    const airport = await airportController.geo(body.longitude, body.latitude);
+    const airport = await airportController.geo(longitude, latitude);
     res.json(airport);
   } catch (error) {
     res.status(500).json({ error });
   }
-}) as RequestHandler);
+});
 
 router.get('/:id', (async (req, res) => {
   console.log('id');

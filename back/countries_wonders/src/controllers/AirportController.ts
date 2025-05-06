@@ -1,4 +1,5 @@
 import Airport from '../../models/airport';
+import City from '../../models/city';
 import AirportInterface from '../interfaces/AirportInterface';
 import { Op } from 'sequelize';
 

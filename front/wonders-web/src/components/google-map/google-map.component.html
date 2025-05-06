@@ -14,7 +14,7 @@
 	  </map-advanced-marker>
   
 	  <!-- Markers canadiens -->
-	  <map-advanced-marker
+	  <!-- <map-advanced-marker
 		*ngFor="let location of caLocations; let i = index"
 		#markerElem="mapAdvancedMarker"
 		[position]="{ lat: location.lat, lng: location.lng }"
@@ -22,7 +22,7 @@
 		[title]="'Canada Location ' + (i + 1)"
 		(mapClick)="onMarkerClick(markerElem)">
 	  </map-advanced-marker>
-  
+   -->
 	  <map-info-window #infoWindow></map-info-window>
 	</google-map>
   </div>
