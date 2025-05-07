@@ -1,0 +1,17 @@
+meta {
+  name: Hello Word
+  type: http
+  seq: 1
+}
+
+get {
+  url: https://{{address}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

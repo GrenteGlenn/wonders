@@ -1,0 +1,21 @@
+meta {
+  name: Delete Users
+  type: http
+  seq: 2
+}
+
+delete {
+  url: http://{{address}}/api/users/{{userId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("Status code is 202", function () {
+      expect(res.getStatus()).to.equal(202);
+  });
+}

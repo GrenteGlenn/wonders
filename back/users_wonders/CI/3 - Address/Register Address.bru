@@ -1,0 +1,40 @@
+meta {
+  name: Register Address
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://{{address}}/api/address/register
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "name": "{{StreetName}}",
+    "street": "{{StreetAddress}}",
+    "city": "{{City}}",
+    "zip_code": "{{CountryCode}}",
+    "complementary": "",
+    "country_id": 1,
+    "user_id": {{userId}}
+  }
+}
+
+script:pre-request {
+  // bru.setGlobalEnvVar("StreetName", pm.variables.replaceIn("{{$randomStreetName}}"));
+  // bru.setGlobalEnvVar("StreetAddress", pm.variables.replaceIn("{{$randomStreetAddress}}"));
+  // bru.setGlobalEnvVar("City", pm.variables.replaceIn("{{$randomCity}}"));
+  // bru.setGlobalEnvVar("CountryCode", pm.variables.replaceIn("{{$randomCountryCode}}"));
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}
