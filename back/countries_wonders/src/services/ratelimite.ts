@@ -124,7 +124,6 @@ export async function fetchImagesWithCache(target: string = 'France', type: stri
 }
 
 const openAiLimiter = new RateLimiter(2); // Limite à 2 requêtes/sec 
-
 const descriptionCache: Record<string, string> = {};
 
 export async function getOpenAIDescription(prompt: string, countryName: string): Promise<string> {
@@ -139,6 +138,3 @@ export async function getOpenAIDescription(prompt: string, countryName: string):
     return descriptionCache[countryName];
   });
 }
-
-
-

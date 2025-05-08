@@ -75,7 +75,6 @@ router.post('/', (async (req, res) => {
 //   }
 // }) as RequestHandler);
 
-
 router.post('/ai', (async (req, res) => {
   try {
     const body = <BodyCountry>req.body;
@@ -112,7 +111,6 @@ router.post('/ai', (async (req, res) => {
     return res.status(500).json({ error: error });
   }
 }) as RequestHandler);
-
 
 router.post('/ai_get_country', (async (req, res) => {
   let result: ResultCountry[] | [] = [];
