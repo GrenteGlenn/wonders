@@ -1,0 +1,25 @@
+meta {
+  name: Get Address User Id
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://{{address}}/api/address/user/{{userId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setGlobalEnvVar("addressid", response[0].id);
+}

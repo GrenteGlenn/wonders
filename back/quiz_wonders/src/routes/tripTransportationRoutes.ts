@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import TripTransportationController from '../controllers/TripTransportationController';
-import TripTrasportationInterface from '../interfaces/TripTransportationInterface';
+import TripTransportationInterface from '../interfaces/TripTransportationInterface';
 
 const tripTransportationController = new TripTransportationController();
 
@@ -28,12 +28,13 @@ router.get('/:id', (async (req, res) => {
 
 router.post('/', (async (req, res) => {
   try {
-    const body = <TripTrasportationInterface>req.body;
+    const body = <TripTransportationInterface>req.body;
     const tripTrasportation = await tripTransportationController.new(
       body.from_date,
       body.to_date,
       body.price,
       body.url,
+      body.status,
       new Date(),
       new Date()
     );
@@ -46,14 +47,15 @@ router.post('/', (async (req, res) => {
 }) as RequestHandler);
 
 router.put('/:id', (async (req, res) => {
-  const body = <TripTrasportationInterface>req.body;
+  const body = <TripTransportationInterface>req.body;
   try {
     const tripTrasportation = await tripTransportationController.update(
       parseInt(req.params.id, 10),
       body.from_date,
       body.to_date,
       body.price,
-      body.url
+      body.url,
+      body.status
     );
     tripTrasportation
       ? res.status(200).json(tripTrasportation)

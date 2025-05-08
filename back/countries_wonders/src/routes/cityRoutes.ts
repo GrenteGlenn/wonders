@@ -5,6 +5,7 @@ import { fetchImages } from '../services/countryImage';
 import { get_city_fake } from '../Api/City';
 import { apiOpenTrip } from '../services/OpenTripMap';
 import { BodyCity, CityPosition, ResultCity, TargetImage, Ville } from '../interfaces/Globals';
+import { capitalizeFirstLetter } from '../services/util';
 
 const router = Router();
 
@@ -103,10 +104,14 @@ router.post('/ai_get_city', (async (req, res) => {
             console.error('Error in /ai route:', error);
             res.status(404).json(error);
           });
+        const getCountry = await countryController.getOneByName(capitalizeFirstLetter(country));
+        const getCity = await cityController.getOneByName(capitalizeFirstLetter(city));
         result = [
           {
             pays: country,
+            country_id: getCountry ? getCountry.id : null,
             city: city,
+            city_id: getCity ? getCity.id : null,
             description: description,
             img_full: image,
             longitude: cityPosition.lat,

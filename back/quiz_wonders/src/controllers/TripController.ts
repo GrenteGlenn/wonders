@@ -5,9 +5,8 @@ import TripDay from '../../models/tripday';
 import TripDayActivity from '../../models/tripdayactivity';
 import TripInterface from '../interfaces/TripInterface';
 import TripTransportationInterface from '../interfaces/TripTransportationInterface';
-import TripCityInterface from '../interfaces/TripCityInterface';
-import TripDayInterface from '../interfaces/TripDayInterface';
-import TripDayActivityInterface from '../interfaces/TripDayActivityInterface';
+import { City } from '../interfaces/Global';
+import TripHotel from '../../models/triphotel';
 
 export default class TripController {
   async fullTrips(id: number) {
@@ -62,22 +61,15 @@ export default class TripController {
     return trips;
   }
 
-  async createFullTrip(
-    trip: TripInterface,
-    tripTransportation: TripTransportationInterface,
-    tripCities: {
-      cities: TripCityInterface;
-      transportations: TripTransportation;
-      tripCityDays: TripDayInterface[];
-      tripDayActivities: TripDayActivityInterface[];
-    }[]
-  ) {
+  async createFullTrip(trip: TripInterface, tripTransportation: TripTransportationInterface, tripCities: City[]) {
+    // Save trip transportation detail
     const tripTransportationResponseOne = await TripTransportation.create({
       ...tripTransportation,
       created_at: new Date(),
       updated_at: new Date()
     });
 
+    // Save trip User detail
     const tripResponse = await Trip.create({
       ...trip,
       transportation_id: tripTransportationResponseOne.id,
@@ -86,17 +78,24 @@ export default class TripController {
     });
 
     for (const city of tripCities) {
-      const { cities, transportations, tripCityDays, tripDayActivities } = city;
-
+      const { city_id, transportations, tripCityDays, tripDayActivities, tripCityHotel } = city;
+      // save trip transportation avec landing
       const tripTransportResponse = await TripTransportation.create({
         ...transportations,
         created_at: new Date(),
         updated_at: new Date()
       });
+      // save city for trip
       const tripCityResponse = await TripCity.create({
-        ...cities,
+        city_id,
         transportation_id: tripTransportResponse.id,
         trip_id: tripResponse.id,
+        created_at: new Date(),
+        updated_at: new Date()
+      });
+      // save hotel
+      await TripHotel.create({
+        ...tripCityHotel,
         created_at: new Date(),
         updated_at: new Date()
       });
@@ -104,7 +103,7 @@ export default class TripController {
       if (tripCityDays) {
         for (const day of tripCityDays) {
           const tripCityDayResponse = await TripDay.create({
-            ...day,
+            date: day.date,
             trip_city_id: tripCityResponse.id,
             created_at: new Date(),
             updated_at: new Date()
@@ -113,8 +112,9 @@ export default class TripController {
           await Promise.all(
             tripDayActivities.map(async (activity) => {
               await TripDayActivity.create({
-                ...activity,
+                activity_id: activity.activity_id,
                 trip_day_id: tripCityDayResponse.id,
+                status: activity.status,
                 created_at: new Date(),
                 updated_at: new Date()
               });

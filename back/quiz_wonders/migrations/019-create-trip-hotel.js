@@ -27,6 +27,29 @@ module.exports = {
       url: {
         type: Sequelize.STRING
       },
+      adults: {
+        type: Sequelize.INTEGER
+      },
+      children: {
+        type: Sequelize.INTEGER
+      },
+      longitude: {
+        type: Sequelize.DOUBLE
+      },
+      latitude: {
+        type: Sequelize.DOUBLE
+      },
+      status: {
+        type: Sequelize.ENUM(
+          'APayer',
+          'EnAttenteDeReservation',
+          'EnAttenteDeConfirmation',
+          'ProblemeDeReservation',
+          'Reserve',
+          'Annuler'
+        ),
+        allowNull: false
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
@@ -34,25 +57,25 @@ module.exports = {
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE
-      },
+      }
     });
 
     await queryInterface.addConstraint('trip_hotels', {
       type: 'foreign key',
-      fields: ["trip_city_id"],
+      fields: ['trip_city_id'],
       name: 'trip_city',
       references: {
         table: 'trip_cities',
-        field: 'id',
+        field: 'id'
       },
-      onUpdate: "CASCADE",
-      onDelete: "NO ACTION",
+      onUpdate: 'CASCADE',
+      onDelete: 'NO ACTION'
     });
   },
   async down(queryInterface, Sequelize) {
     try {
       await queryInterface.removeConstraint('trip_hotels', 'trip_city_id');
-    } catch(error) {
+    } catch (error) {
       console.warn('Constraint not found');
     }
     await queryInterface.dropTable('trip_hotels');

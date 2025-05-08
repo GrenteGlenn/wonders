@@ -1,0 +1,21 @@
+meta {
+  name: Get Address Id
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://{{address}}/api/address/{{addressid}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

@@ -1,5 +1,5 @@
 export default interface TripCityInterface {
-  id: number;
+  id?: number;
   trip_id: number;
   city_id: number;
   transportation_id: number;

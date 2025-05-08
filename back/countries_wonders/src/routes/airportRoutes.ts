@@ -74,6 +74,9 @@ router.get('/:id', (async (req, res) => {
 router.post('/', (async (req, res) => {
   try {
     const body = <AirportInterface>req.body;
+    body.created_at = new Date();
+    body.updated_at = new Date();
+
     const airport = await airportController.create(body);
     res.status(201).json(airport);
   } catch (error) {
