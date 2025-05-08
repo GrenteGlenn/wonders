@@ -31,6 +31,7 @@ router.post('/', (async (req, res) => {
     const tripDayActivity = await tripDayActivityController.new(
       body.trip_day_id,
       body.activity_id,
+      body.status,
       new Date(),
       new Date()
     );
@@ -48,7 +49,9 @@ router.put('/:id', (async (req, res) => {
     const tripDayActivity = await tripDayActivityController.update(
       parseInt(req.params.id, 10),
       body.trip_day_id,
-      body.activity_id
+      body.activity_id,
+      body.status,
+      new Date()
     );
     tripDayActivity
       ? res.status(200).json(tripDayActivity)

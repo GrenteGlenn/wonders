@@ -20,6 +20,16 @@ class CountryController {
     return countries;
   }
 
+  async getOneByName(name: string) {
+    const country = await Country.findOne({ where: { name: name } });
+
+    if (country) {
+      return country;
+    } else {
+      return null;
+    }
+  }
+
   async one(id: number) {
     const now = Date.now();
     const country = await Country.findByPk(id, {

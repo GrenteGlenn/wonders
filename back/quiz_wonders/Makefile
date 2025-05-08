@@ -5,11 +5,17 @@ SEQUELIZE=npx sequelize-cli
 JEST=npx jest
 START=npm start
 
-.PHONY: db-all db-and-tests db-create db-drop db-migrate-undo-all db-migrate db-seed-all test start
+.PHONY: db-all db-and-tests db-create db-drop db-migrate-undo-all db-migrate db-seed-all test start import-data
 
-db-all: drop db-drop db-create db-migrate db-seed-all start
+db-all: drop db-drop db-create db-migrate import-data start
 
 db-and-tests: db-all unit-test
+
+import-data:
+	@echo "Import des données dans la base PostgreSQL..."
+	PGPASSWORD=$$DB_PASSWORD psql --pset pager=off -h $$DB_HOST -p $$DB_PORT -U $$DB_USER -d $$DB_NAME -f $$SQL_FILE
+	@echo "Import terminé."
+
 
 db-drop:
 	@echo "Dropping database..."

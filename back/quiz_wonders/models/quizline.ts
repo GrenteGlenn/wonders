@@ -10,7 +10,7 @@ export default class QuizLine
   extends Model<QuizLineInterface, QuizLineCreationAttributes>
   implements QuizLineInterface
 {
-  declare id: number;
+  declare id?: number;
   declare question: string;
   declare is_boolean?: boolean;
   declare is_text?: boolean;
