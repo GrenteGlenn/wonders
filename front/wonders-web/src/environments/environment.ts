@@ -9,7 +9,7 @@ export const environment = {
   UrlReservation: 'http://localhost:3005',
   countryImgUrl: 'http://localhost:3004',
   quizzApiUrl: '/quizz-api',
-  aiApiUrl: 'http://localhost:3004/api',
+  aiApiUrl: 'http://localhost:3004',
   API_GoogleMap : 'AIzaSyBWzw4MK4lSKCjhrCDu5EnH4ASnw2am8Ns'
 };
 

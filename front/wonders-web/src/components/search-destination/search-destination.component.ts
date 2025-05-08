@@ -69,9 +69,7 @@ export class SearchDestinationComponent implements OnInit {
 
   fetchResults(term: string) {
     this.isLoading = true;
-    let results: SearchResult[] = [];
 
-    // Recherche dans les pays (prioritaire)
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
         const filteredCountries = countries
@@ -83,54 +81,32 @@ export class SearchDestinationComponent implements OnInit {
             image: country.image
           }));
 
-        results = [...results, ...filteredCountries];
+        // Tri les résultats par pertinence
+        filteredCountries.sort((a, b) => {
+          const aExact = a.name.toLowerCase() === term.toLowerCase();
+          const bExact = b.name.toLowerCase() === term.toLowerCase();
 
-        // Après avoir récupéré les pays, on cherche les villes
-        this.cityService.getAllCities().subscribe({
-          next: (cities) => {
-            const filteredCities = cities
-              .filter((city) => city.name?.toLowerCase().includes(term.toLowerCase()))
-              .map((city) => ({
-                id: city.id || 0,
-                name: city.name,
-                type: 'city' as const
-              }));
+          if (aExact && !bExact) return -1;
+          if (!aExact && bExact) return 1;
 
-            // Combine les deux résultats
-            results = [...results, ...filteredCities];
+          const aStarts = a.name.toLowerCase().startsWith(term.toLowerCase());
+          const bStarts = b.name.toLowerCase().startsWith(term.toLowerCase());
 
-            // Tri les résultats par pertinence
-            results.sort((a, b) => {
-              const aExact = a.name.toLowerCase() === term.toLowerCase();
-              const bExact = b.name.toLowerCase() === term.toLowerCase();
+          if (aStarts && !bStarts) return -1;
+          if (!aStarts && bStarts) return 1;
 
-              if (aExact && !bExact) return -1;
-              if (!aExact && bExact) return 1;
-
-              const aStarts = a.name.toLowerCase().startsWith(term.toLowerCase());
-              const bStarts = b.name.toLowerCase().startsWith(term.toLowerCase());
-
-              if (aStarts && !bStarts) return -1;
-              if (!aStarts && bStarts) return 1;
-
-              return a.name.localeCompare(b.name);
-            });
-
-            // Limiter à 10 résultats
-            this.searchResults = results.slice(0, 10);
-            this.selectedIndex = this.searchResults.length > 0 ? 0 : -1;
-            this.isLoading = false;
-          },
-          error: (error) => {
-            console.error('Erreur lors de la récupération des villes:', error);
-            this.searchResults = results.slice(0, 10);
-            this.selectedIndex = this.searchResults.length > 0 ? 0 : -1;
-            this.isLoading = false;
-          }
+          return a.name.localeCompare(b.name);
         });
+
+        // Limite à 10 résultats
+        this.searchResults = filteredCountries.slice(0, 10);
+        this.selectedIndex = this.searchResults.length > 0 ? 0 : -1;
+        this.isLoading = false;
       },
       error: (error) => {
         console.error('Erreur lors de la récupération des pays:', error);
+        this.searchResults = [];
+        this.selectedIndex = -1;
         this.isLoading = false;
       }
     });
@@ -141,7 +117,6 @@ export class SearchDestinationComponent implements OnInit {
       this.navigateToSelectedResult();
     } else {
       this.router.navigate(['/', this.translateService.currentLang, 'destinations']);
-
     }
   }
 
@@ -186,5 +161,4 @@ export class SearchDestinationComponent implements OnInit {
       this.selectedIndex = this.selectedIndex <= 0 ? this.searchResults.length - 1 : this.selectedIndex - 1;
     }
   }
-
 }

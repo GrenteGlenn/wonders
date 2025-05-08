@@ -109,37 +109,24 @@ export class StepBodyComponent {
       }
     });
   }
-
   onCountrySelect(countryName: string) {
-    if (countryName) {
-      this.isLoading = true;
-      this.selectedCountry = countryName;
-      this.destinationParams = { country: countryName };
-
-      this.countryService.getCountryImage(countryName).subscribe({
-        next: (response) => {
-          if (response.data) {
-            this.countryImage = response.data;
-          } else {
-            this.countryImage = 'assets/images/default-country.jpg';
-          }
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error("Erreur lors de la récupération de l'image:", error);
-          this.countryImage = 'assets/images/default-country.jpg';
-          this.isLoading = false;
-        }
-      });
-      this.countryService.getAICountryInfo(countryName).subscribe({
-        next: (response) => {
-          this.countryDescription = response.data;
-        },
-        error: (error) => {
-          console.error('Erreur lors de la récupération de la description:', error);
-          this.countryDescription = 'Information not available';
-        }
-      });
+    if (!countryName || !this.countries || this.countries.length === 0) return;
+  
+    this.isLoading = true;
+    this.selectedCountry = countryName;
+    this.destinationParams = { country: countryName };
+  
+    const countryData = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+  
+    if (countryData) {
+      this.countryImage = countryData.image || 'assets/images/noimages.jpg';
+      this.countryDescription = countryData.description || 'Aucune description disponible.';
+    } else {
+      this.countryImage = 'assets/images/noimages.jpg';
+      this.countryDescription = 'Information non disponible.';
     }
+  
+    this.isLoading = false;
   }
+  
 }

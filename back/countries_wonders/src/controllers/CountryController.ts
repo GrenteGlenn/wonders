@@ -38,7 +38,7 @@ class CountryController {
       if (diffDays !== undefined && diffDays > 29) {
         const res = await this.getDataFromOpenAI(country.name);
         if (res) {
-          country.description = res as unknown as Text;
+          country.description = res as unknown as string;
           country.updated_at_description = new Date();
           await country.save();
         }
@@ -60,7 +60,7 @@ class CountryController {
   async new(
     name: string,
     code: string,
-    description: Text,
+    description: string,
     image: string,
     language: number,
     longitude: number,
@@ -86,7 +86,7 @@ class CountryController {
     id: number,
     name: string,
     code: string,
-    description: Text,
+    description: string,
     image: string,
     language: number,
     longitude: number,

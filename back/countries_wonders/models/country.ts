@@ -11,7 +11,7 @@ class Country extends Model<CountryInterface, CountryCreationAttributes> impleme
   declare name: string;
   declare code: string;
   declare image: string;
-  declare description?: Text | undefined;
+  declare description?: string;
   declare language: number;
   declare longitude: number;
   declare latitude: number;
@@ -19,12 +19,12 @@ class Country extends Model<CountryInterface, CountryCreationAttributes> impleme
   declare readonly created_at?: Date | undefined;
   declare updated_at?: Date | undefined;
 
-  get getDescription(): Text | null {
+  get getDescription(): string | null {
     const value = this.getDataValue('description');
-    return value as Text;
+    return value ?? null;
   }
 
-  set setDescription(value: Text) {
+  set setDescription(value: string) {
     if (value.length > 3000) {
       throw new Error('Description is too long');
     }
@@ -91,10 +91,10 @@ Country.init(
         const value = this.getDataValue('description');
         return value ? value : null;
       },
-      set(value: Text) {
+      set(value: string) {
         this.setDataValue('description', value);
       }
-    },
+    },    
     language: {
       type: DataTypes.INTEGER,
       allowNull: true,

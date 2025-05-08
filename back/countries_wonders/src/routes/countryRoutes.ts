@@ -3,7 +3,8 @@ import CountryController from '../controllers/CountryController';
 import { fetchImages } from '../services/countryImage';
 import { get_country_fake } from '../Api/Country';
 import { BodyCountry, Pays, ResultCountry, TargetImage } from '../interfaces/Globals';
-import { fetchImagesWithCache } from '../services/ratelimite';
+import { fetchImagesWithCache, getOpenAIDescription } from '../services/ratelimite';
+import countryModel from '../../models/country';
 
 const router = Router();
 
@@ -56,6 +57,25 @@ router.post('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
+// router.post('/ai', (async (req, res) => {
+//   try {
+//     const body = <BodyCountry>req.body;
+
+//     const prompt = `Je souhaite visiter ${body.name}. Peux-tu me donner des informations intéressantes sur ce pays,
+//              telles que les monuments célèbres, la culture locale, la gastronomie typique, ainsi que les activités incontournables ?
+//              Peux-tu également donner le lien officiel de l'office de tourisme du pays.
+//               Mentionne aussi ce pour quoi ce pays est particulièrement connu. Donne moi également des conseils de sécurité si le pays fait objet de violences,
+//             guerres, conflits. Le résumé ne doit pas dépasser les 3000 caractères.`;
+
+//     const countryData = await getOpenAIDescription(prompt, country.name);
+//     res.json({ data: countryData });
+//   } catch (error) {
+//     console.error('Error in /ai route :', error);
+//     res.status(500).json({ error: error });
+//   }
+// }) as RequestHandler);
+
+
 router.post('/ai', (async (req, res) => {
   try {
     const body = <BodyCountry>req.body;
@@ -63,16 +83,36 @@ router.post('/ai', (async (req, res) => {
     const prompt = `Je souhaite visiter ${body.name}. Peux-tu me donner des informations intéressantes sur ce pays,
              telles que les monuments célèbres, la culture locale, la gastronomie typique, ainsi que les activités incontournables ?
              Peux-tu également donner le lien officiel de l'office de tourisme du pays.
-              Mentionne aussi ce pour quoi ce pays est particulièrement connu. Donne moi également des conseils de sécurité si le pays fait objet de violences,
-            guerres, conflits. Le résumé ne doit pas dépasser les 3000 caractères.`;
+             Mentionne aussi ce pour quoi ce pays est particulièrement connu. Donne moi également des conseils de sécurité si le pays fait objet de violences,
+             guerres, conflits. Le résumé ne doit pas dépasser les 3000 caractères.`;
 
-    const countryData = await countryController.getDataFromOpenAI(prompt);
-    res.json({ data: countryData });
+    const descriptionAI = await getOpenAIDescription(prompt, body.name);
+    const imageAI = await fetchImagesWithCache(body.name, 'country');
+
+    // Met à jour le pays si trouvé
+    const country = await countryModel.findOne({ where: { name: body.name } });
+
+    if (country) {
+      country.description = descriptionAI ?? 'Aucune description disponible.';
+      country.image = imageAI ?? '';
+      country.updated_at_description = new Date();
+      await country.save();
+
+      return res.json({
+        data: {
+          description_ai: country.description,
+          image_ai: country.image
+        }
+      });
+    } else {
+      return res.status(404).json({ error: `Pays '${body.name}' introuvable.` });
+    }
   } catch (error) {
-    console.error('Error in /ai route :', error);
-    res.status(500).json({ error: error });
+    console.error('Erreur dans /ai :', error);
+    return res.status(500).json({ error: error });
   }
 }) as RequestHandler);
+
 
 router.post('/ai_get_country', (async (req, res) => {
   let result: ResultCountry[] | [] = [];
@@ -182,6 +222,38 @@ router.delete('/:id', (async (req, res) => {
     res.json(country);
   } catch (error) {
     res.json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/refreshAi', (async (_req, res) => {
+  try {
+    const countries = await countryController.list();
+    const updated: string[] = [];
+
+    for (const country of countries) {
+      if (country.description && country.image) continue;
+
+      const prompt = `Je souhaite visiter ${country.name}. Peux-tu me donner des informations intéressantes sur ce pays,
+        telles que les monuments célèbres, la culture locale, la gastronomie typique, ainsi que les activités incontournables ?
+        Peux-tu également donner le lien officiel de l'office de tourisme du pays.
+        Mentionne aussi ce pour quoi ce pays est particulièrement connu. Donne moi également des conseils de sécurité si le pays fait objet de violences,
+        guerres, conflits. Le résumé ne doit pas dépasser les 3000 caractères.`;
+
+      const description = await getOpenAIDescription(prompt, country.name);
+      const image = await fetchImagesWithCache(country.name, 'country');
+
+      if (description) country.description = description;
+      if (image) country.image = image;
+      country.updated_at_description = new Date();
+
+      await country.save();
+      updated.push(country.name);
+    }
+
+    return res.json({ message: `Mise à jour terminée pour ${updated.length} pays`, updated });
+  } catch (error) {
+    console.error('Erreur dans /refresh-ai :', error);
+    res.status(500).json({ error: 'Erreur serveur lors du préchargement.' });
   }
 }) as RequestHandler);
 

@@ -1,3 +1,4 @@
+import CountryController from '../controllers/CountryController';
 import { CustomSearchResponse } from '../interfaces/FetchExterne';
 
 // Limitation de débit
@@ -121,3 +122,23 @@ export async function fetchImagesWithCache(target: string = 'France', type: stri
 
   return null;
 }
+
+const openAiLimiter = new RateLimiter(2); // Limite à 2 requêtes/sec 
+
+const descriptionCache: Record<string, string> = {};
+
+export async function getOpenAIDescription(prompt: string, countryName: string): Promise<string> {
+  if (descriptionCache[countryName]) {
+    return descriptionCache[countryName];
+  }
+
+  return openAiLimiter.add(async () => {
+    const controller = new CountryController();
+    const result = await controller.getDataFromOpenAI(prompt);
+    descriptionCache[countryName] = result ?? 'Aucune description disponible.';
+    return descriptionCache[countryName];
+  });
+}
+
+
+
