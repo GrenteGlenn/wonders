@@ -53,7 +53,7 @@ router.get('/city/:id', (async (req, res) => {
 
 router.post('/geo', (async (req, res) => {
   try {
-    const { longitude, latitude }: { longitude: number; latitude: number } = req.body;
+    const { longitude, latitude }: { longitude: any; latitude: any } = req.body;
     const airport = await airportController.geo(longitude, latitude);
     res.json(airport);
   } catch (error) {
