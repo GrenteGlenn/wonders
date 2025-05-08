@@ -2,17 +2,23 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import TripHotelInterface from '../src/interfaces/TripHotelInterface';
 import TripCity from './tripcity';
+import { Status } from '../src/interfaces/Global';
 
 interface TripHotelCreationAttributes extends Optional<TripHotelInterface, 'id'> {}
 
 class TripHotel extends Model<TripHotelInterface, TripHotelCreationAttributes> implements TripHotelInterface {
-  declare id: number;
+  declare id?: number;
   declare trip_city_id: number;
   declare name: string;
   declare from: Date;
   declare price: number;
   declare to: Date;
   declare url: string;
+  declare adults: number;
+  declare children: number;
+  declare longitude: number;
+  declare latitude: number;
+  declare status: Status;
   declare readonly created_at: Date;
   declare updated_at: Date;
 
@@ -54,6 +60,32 @@ TripHotel.init(
       type: DataTypes.STRING,
       allowNull: false
     },
+    adults: {
+      type: DataTypes.NUMBER,
+      allowNull: false
+    },
+    children: {
+      type: DataTypes.NUMBER,
+      allowNull: true
+    },
+    longitude: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
+    },
+    latitude: {
+      type: DataTypes.DOUBLE,
+      allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM(
+        'APayer',
+        'EnAttenteDeReservation',
+        'EnAttenteDeConfirmation',
+        'ProblemeDeReservation',
+        'Reserve',
+        'Annuler'
+      )
+    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: true
@@ -61,7 +93,7 @@ TripHotel.init(
     updated_at: {
       type: DataTypes.DATE,
       allowNull: true
-    }
+    },
   },
   {
     sequelize: connection,

@@ -1,5 +1,5 @@
 export default interface QuizLineInterface {
-  id: number;
+  id?: number;
   quiz_id?: number;
   question: string;
   is_text?: boolean;

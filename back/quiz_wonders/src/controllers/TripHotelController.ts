@@ -1,4 +1,5 @@
 import TripHotel from '../../models/triphotel';
+import TripHotelInterface from '../interfaces/TripHotelInterface';
 
 export default class TripHotelController {
   async list() {
@@ -9,37 +10,28 @@ export default class TripHotelController {
     return await TripHotel.findByPk(id);
   }
 
-  async new(
-    trip_city_id: number,
-    name: string,
-    from: Date,
-    price: number,
-    to: Date,
-    url: string,
-    created_at: Date,
-    updated_at: Date
-  ) {
-    return await TripHotel.create({ trip_city_id, name, from, price, to, url, created_at, updated_at });
+  async new(hotel: TripHotelInterface, created_at: Date, updated_at: Date) {
+    return await TripHotel.create({
+      ...hotel,
+      created_at: created_at,
+      updated_at: updated_at
+    });
   }
 
-  async update(
-    id: number,
-    trip_city_id: number,
-    name: string,
-    from: Date,
-    price: number,
-    to: Date,
-    url: string,
-    updated_at: Date
-  ) {
+  async update(id: number, hotel: TripHotelInterface, updated_at: Date) {
     const tripHotel = await TripHotel.findByPk(id);
     if (tripHotel) {
-      tripHotel.name = name;
-      tripHotel.trip_city_id = trip_city_id;
-      tripHotel.from = from;
-      tripHotel.price = price;
-      tripHotel.to = to;
-      tripHotel.url = url;
+      tripHotel.name = hotel.name;
+      tripHotel.trip_city_id = hotel.trip_city_id;
+      tripHotel.from = hotel.from;
+      tripHotel.price = hotel.price;
+      tripHotel.to = hotel.to;
+      tripHotel.url = hotel.url;
+      tripHotel.adults = hotel.adults;
+      tripHotel.children = hotel.children;
+      tripHotel.longitude = hotel.longitude;
+      tripHotel.latitude = hotel.latitude;
+      tripHotel.status = hotel.status;
       tripHotel.updated_at = updated_at;
       await tripHotel.save();
       return tripHotel;

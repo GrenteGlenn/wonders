@@ -4,6 +4,7 @@ import { fetchImages } from '../services/countryImage';
 import { get_country_fake } from '../Api/Country';
 import { BodyCountry, Pays, ResultCountry, TargetImage } from '../interfaces/Globals';
 import { fetchImagesWithCache } from '../services/ratelimite';
+import { capitalizeFirstLetter } from '../services/util';
 
 const router = Router();
 
@@ -106,9 +107,11 @@ router.post('/ai_get_country', (async (req, res) => {
             console.error('Error in /ai route:', error);
             res.status(404).json(error);
           });
+        const getCountry = await countryController.getOneByName(capitalizeFirstLetter(element.trim()));
         result = [
           {
             pays: element.trim(),
+            country_id: getCountry ? getCountry.id : null,
             img_full: image
           },
           ...result

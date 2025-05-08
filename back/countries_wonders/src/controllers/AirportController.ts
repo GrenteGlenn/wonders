@@ -39,8 +39,6 @@ export default class AirportController {
   }
 
   async update(id: number, data: AirportInterface) {
-    console.log(data);
-
     const airport = await Airport.findByPk(id);
     if (!airport) throw new Error('Airport not found');
     const res = await airport.update(data);

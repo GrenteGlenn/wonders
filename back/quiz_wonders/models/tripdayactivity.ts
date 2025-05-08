@@ -2,15 +2,20 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import TripDayActivityInterface from '../src/interfaces/TripDayActivityInterface';
 import TripDay from './tripday';
+import { Status } from '../src/interfaces/Global';
 
-interface TripDayActivityCreationAttributes extends Optional<TripDayActivityInterface, 'id'> { }
+interface TripDayActivityCreationAttributes extends Optional<TripDayActivityInterface, 'id'> {}
 
-class TripDayActivity extends Model<TripDayActivityInterface, TripDayActivityCreationAttributes> implements TripDayActivityInterface {
-  declare id: number;
+class TripDayActivity
+  extends Model<TripDayActivityInterface, TripDayActivityCreationAttributes>
+  implements TripDayActivityInterface
+{
+  declare id?: number;
   declare trip_day_id: number;
   declare activity_id: number;
+  declare status: Status;
   declare readonly created_at: Date;
-  declare readonly updated_at: Date;
+  declare updated_at: Date;
 
   toJSON() {
     const values = Object.assign({}, this.get());
@@ -18,40 +23,53 @@ class TripDayActivity extends Model<TripDayActivityInterface, TripDayActivityCre
   }
 }
 
-TripDayActivity.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
-  },
-  trip_day_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: TripDay,
-      key: 'id'
+TripDayActivity.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    trip_day_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: TripDay,
+        key: 'id'
+      }
+    },
+    activity_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM(
+        'APayer',
+        'EnAttenteDeReservation',
+        'EnAttenteDeConfirmation',
+        'ProblemeDeReservation',
+        'Reserve',
+        'Annuler'
+      )
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   },
-  activity_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: true
+  {
+    sequelize: connection,
+    underscored: true,
+    modelName: 'TripDayActivity',
+    tableName: 'trip_day_activities',
+    timestamps: false
   }
-}, {
-  sequelize: connection,
-  underscored: true,
-  modelName: 'TripDayActivity',
-  tableName: 'trip_day_activities',
-  timestamps: false,
-});
+);
 
 TripDayActivity.belongsTo(TripDay, {
   foreignKey: 'trip_day_id',

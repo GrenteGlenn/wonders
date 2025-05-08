@@ -1,7 +1,7 @@
 import { RequestHandler, Router } from 'express';
 import TripController from '../controllers/TripController';
 import TripInterface from '../interfaces/TripInterface';
-import TripTransportation from '../models/triptransportation';
+import { FullTrip } from '../interfaces/Global';
 
 const router = Router();
 const tripController = new TripController();
@@ -19,15 +19,6 @@ router.get('/:id', (async (req, res) => {
   try {
     const trip = await tripController.one(parseInt(req.params.id, 10));
     trip ? res.status(200).json(trip) : res.status(404).json({ code: '404', message: 'entry does not exists' });
-  } catch (error) {
-    res.status(500).json({ code: '500', message: error });
-  }
-}) as RequestHandler);
-
-router.get('/user-full-trips/:id', (async (req, res) => {
-  try {
-    const trip = await tripController.fullTrips(parseInt(req.params.id, 10));
-    res.status(200).json(trip);
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }
@@ -65,14 +56,12 @@ router.post('/', (async (req, res) => {
 
 router.post('/create-full-trip', (async (req, res) => {
   try {
-    // eslint-disable-next-line
-    const { trip, tripTransportation, tripCities } = req.body;
+    const { trip, trip_transportation, trip_cities } = <FullTrip>req.body;
 
-    if (!trip || !tripTransportation || !tripCities) {
+    if (!trip || !trip_transportation || !trip_cities) {
       return res.status(400).json({ code: '400', message: 'Missing required fields' });
     }
-    // eslint-disable-next-line
-    const fullTrip = await tripController.createFullTrip(trip as TripInterface, tripTransportation as TripTransportation, tripCities as any);
+    const fullTrip = await tripController.createFullTrip(trip, trip_transportation, trip_cities);
 
     return res.status(201).json(fullTrip);
   } catch (error) {

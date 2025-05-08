@@ -15,6 +15,16 @@ class CityController {
     return countries;
   }
 
+  async getOneByName(name: string) {
+    const city = await Country.findOne({ where: { name: name } });
+
+    if (city) {
+      return city;
+    } else {
+      return null;
+    }
+  }
+
   async one(id: number) {
     const city = await City.findByPk(id, {
       include: [

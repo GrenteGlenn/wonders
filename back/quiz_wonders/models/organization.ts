@@ -9,7 +9,7 @@ class Organization
   extends Model<OrganizationInterface, OrganizationCreationAttributes>
   implements OrganizationInterface
 {
-  declare id: number;
+  declare id?: number;
   declare user_id: number;
   declare status_id: number;
   declare readonly created_at: Date;

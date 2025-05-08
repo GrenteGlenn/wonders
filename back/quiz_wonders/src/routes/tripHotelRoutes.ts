@@ -7,8 +7,8 @@ const tripHotelController = new TripHotelController();
 
 router.get('/', (async (req, res) => {
   try {
-    const tripDayActivity = await tripHotelController.list();
-    res.status(200).json(tripDayActivity);
+    const tripHotel = await tripHotelController.list();
+    res.status(200).json(tripHotel);
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }
@@ -16,10 +16,8 @@ router.get('/', (async (req, res) => {
 
 router.get('/:id', (async (req, res) => {
   try {
-    const tripDayActivity = await tripHotelController.one(parseInt(req.params.id, 10));
-    tripDayActivity
-      ? res.status(200).json(tripDayActivity)
-      : res.status(404).json({ message: 'No trip trip city found' });
+    const tripHotel = await tripHotelController.one(parseInt(req.params.id, 10));
+    tripHotel ? res.status(200).json(tripHotel) : res.status(404).json({ message: 'No trip trip city found' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }
@@ -29,18 +27,9 @@ router.post('/', (async (req, res) => {
   try {
     const body = <TripHotelInterface>req.body;
     console.log('body', body);
-    const tripDayActivity = await tripHotelController.new(
-      body.trip_city_id,
-      body.name,
-      body.from,
-      body.price,
-      body.to,
-      body.url,
-      new Date(),
-      new Date()
-    );
-    tripDayActivity
-      ? res.status(201).json(tripDayActivity)
+    const tripHotel = await tripHotelController.new(body, new Date(), new Date());
+    tripHotel
+      ? res.status(201).json(tripHotel)
       : res.status(400).json({ code: '400', message: 'an error occured while creating resource' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
@@ -50,18 +39,9 @@ router.post('/', (async (req, res) => {
 router.put('/:id', (async (req, res) => {
   const body = <TripHotelInterface>req.body;
   try {
-    const tripDayActivity = await tripHotelController.update(
-      parseInt(req.params.id, 10),
-      body.trip_city_id,
-      body.name,
-      body.from,
-      body.price,
-      body.to,
-      body.url,
-      new Date()
-    );
-    tripDayActivity
-      ? res.status(200).json(tripDayActivity)
+    const tripHotel = await tripHotelController.update(parseInt(req.params.id, 10), body, new Date());
+    tripHotel
+      ? res.status(200).json(tripHotel)
       : res.status(404).json({ code: '404', message: 'entry does not exists' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
