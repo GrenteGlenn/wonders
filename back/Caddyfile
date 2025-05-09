@@ -1,0 +1,23 @@
+http://activities.localhost:8080 {
+	reverse_proxy localhost:3000
+}
+
+http://blog.localhost:8080 {
+	reverse_proxy localhost:3001
+}
+
+http://countries.localhost:8080 {
+	reverse_proxy localhost:3002
+}
+
+http://fly.localhost:8080 {
+	reverse_proxy localhost:3003
+}
+
+http://quiz.localhost:8080 {
+	reverse_proxy localhost:3004
+}
+
+http://localhost:8080 {
+	reverse_proxy localhost:4200
+}
