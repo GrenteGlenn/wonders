@@ -1,7 +1,7 @@
 export interface BodyCountry {
   name: string;
   code: string;
-  description: Text;
+  description: string;
   image: string;
   language: number;
   longitude: number;

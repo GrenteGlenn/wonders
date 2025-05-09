@@ -3,7 +3,7 @@ export default interface CountryInterface {
   name: string;
   code: string;
   image: string;
-  description?: Text;
+  description?: string;
   language: number;
   longitude: number;
   latitude: number;

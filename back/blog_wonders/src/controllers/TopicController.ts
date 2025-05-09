@@ -6,7 +6,7 @@ import { Sequelize } from 'sequelize';
 export default class TopicController {
   async list() {
     return await Topic.findAll({
-      attributes: ['id', 'country_id', 'name', 'updated_at'],
+      attributes: ['id', 'country_id', 'name', 'updated_at', 'created_at'],
       include: [
         {
           model: Subject,

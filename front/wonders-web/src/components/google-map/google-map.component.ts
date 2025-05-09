@@ -13,13 +13,13 @@ export class GoogleMapComponent {
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
 
 	brLocations: any[] = [
-		{ lat: -22.9068, lng: -43.1729 }, // Rio de Janeiro
+		{ lat: 48.8651, lng: 2.35652 }, // France
 
 	];
-	caLocations: any[] = [
-		{ lat: 48.4096, lng: -123.3693 },   // Willows Beach, Victoria (British Columbia)
+	// caLocations: any[] = [
+	// 	{ lat: 48.4096, lng: -123.3693 },   // Willows Beach, Victoria (British Columbia)
 	
-	];
+	// ];
 
 	options: google.maps.MapOptions = {
 		mapId: 'DEMO_MAP_ID',
@@ -40,11 +40,11 @@ export class GoogleMapComponent {
 			location.content = parser.parseFromString(svgString, "image/svg+xml").documentElement;
 		});
 		const beachFlag = "https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png";
-		this.caLocations.forEach((location) => {
-			let imgTag = document.createElement("img");
-			imgTag.src = beachFlag;
-			location.content = imgTag;
-		});
+		// this.caLocations.forEach((location) => {
+		// 	let imgTag = document.createElement("img");
+		// 	imgTag.src = beachFlag;
+		// 	location.content = imgTag;
+		// });
 	}
 
 	onMarkerClick(marker: any) {

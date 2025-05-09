@@ -1,3 +1,5 @@
+import { FetchableUser } from "./User";
+
 export interface Subject {
     id: number;
     title: string;
@@ -17,6 +19,7 @@ export interface Subject {
   }
 
   export interface Comment {
+    user?: FetchableUser | undefined;
     id?: number;
     message: string;
     user_id: number;

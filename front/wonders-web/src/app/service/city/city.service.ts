@@ -38,7 +38,7 @@ export class CityService {
 
   // Récupère toutes les villes
   getAllCities(): Observable<City[]> {
-    return this.http.get<City[]>(this.apiUrl);
+    return this.http.get<City[]>(`${this.apiUrl}/api/cities`);
   }
 
   // Récupère une ville par son ID

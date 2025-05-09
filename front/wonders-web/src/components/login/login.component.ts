@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthentificationService, ReponseToken } from '../../app/service/auth/authentification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
+import { TranslateService } from '../../app/service/translate/translate.service';
 
 @Component({
   selector: 'app-login',
@@ -14,26 +15,28 @@ import { LucideAngularModule } from 'lucide-angular';
 export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
-  returnUrl: string = '/home';
+  returnUrl: string = '';
 
   constructor(
     private _authService: AuthentificationService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    public translateService: TranslateService 
   ) {}
 
   ngOnInit(): void {
-    // Si l'utilisateur est déjà connecté, le rediriger vers la page d'accueil
     if (this._authService.isAuthenticated()) {
-      this.router.navigate(['home']);
+      this.router.navigate(['/', this.translateService.currentLang, 'home']);
+      return;
     }
+
     this.email = '';
     this.password = '';
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/home';
+
+    const rawReturnUrl = this.route.snapshot.queryParams['returnUrl'] || 'home';
+    this.returnUrl = `/${this.translateService.currentLang}/${rawReturnUrl}`;
   }
 
-  // Pour l'instant aucune vérification n'est mis en place.
-  // Simplement envoyer les informations
   clickLogin(): void {
     if (!this.email || !this.password) return;
 
@@ -45,15 +48,13 @@ export class LoginComponent implements OnInit {
         }
       },
       error: (error) => {
-        // Gérer les erreurs de connexion ici
         console.error('Erreur de connexion:', error);
-        // Vous pouvez ajouter un message d'erreur pour l'utilisateur
       }
     });
   }
 
   href(event: Event): void {
     event.preventDefault();
-    this.router.navigate(['register'], { queryParams: { returnUrl: this.returnUrl } });
+    this.router.navigate(['/', this.translateService.currentLang, 'register'], { queryParams: { returnUrl: this.returnUrl } });
   }
 }

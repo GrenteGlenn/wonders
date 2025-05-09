@@ -5,10 +5,10 @@ import AirportInterface from '../interfaces/AirportInterface';
 const router = Router();
 const airportController = new AirportController();
 
-interface Body {
-  longitude: number;
-  latitude: number;
-}
+// interface Body {
+//   longitude: number;
+//   latitude: number;
+// }
 
 router.get('/', (async (req, res) => {
   console.log('ici');
@@ -30,11 +30,31 @@ router.get('/city/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/geo', (async (req, res) => {
-  const body = <Body>req.body;
+// router.get('/geo', (async (req, res) => {
+//   const body = <Body>req.body;
 
+//   try {
+//     const airport = await airportController.geo(body.longitude, body.latitude);
+//     res.json(airport);
+//   } catch (error) {
+//     res.status(500).json({ error });
+//   }
+// }) as RequestHandler);
+
+// router.post('/geo', async (req, res) => {
+//   const { longitude, latitude } = req.body;
+//   try {
+//     const airport = await airportController.geo(longitude, latitude);  
+//     res.json(airport);
+//   } catch (error) {
+//     res.status(500).json({ error });
+//   }
+// }) as RequestHandler;
+
+router.post('/geo', (async (req, res) => {
   try {
-    const airport = await airportController.geo(body.longitude, body.latitude);
+    const { longitude, latitude }: { longitude: number; latitude: number } = req.body;
+    const airport = await airportController.geo(longitude, latitude);
     res.json(airport);
   } catch (error) {
     res.status(500).json({ error });

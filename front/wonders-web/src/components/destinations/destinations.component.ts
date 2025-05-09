@@ -6,11 +6,14 @@ import { CityService } from '../../app/service/city/city.service';
 import { CountryService } from '../../app/service/country/country.service';
 import { GoogleMapComponent } from '../google-map/google-map.component';
 import { Destination } from '../../app/model/destination';
+import { TranslateService } from '../../app/service/translate/translate.service';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+
 
 @Component({
   selector: 'app-destinations',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, GoogleMapComponent],
+  imports: [CommonModule, LucideAngularModule, GoogleMapComponent, MatProgressSpinnerModule],
   templateUrl: './destinations.component.html',
   styleUrl: './destinations.component.css'
 })
@@ -32,7 +35,8 @@ export class DestinationsComponent implements OnInit {
     private routes: ActivatedRoute,
     private cityService: CityService,
     private countryService: CountryService,
-    private router: Router
+    private router: Router,
+    public translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -117,6 +121,7 @@ export class DestinationsComponent implements OnInit {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = Math.min(startIndex + this.itemsPerPage, this.searchResults.length);
     this.paginatedResults = this.searchResults.slice(startIndex, endIndex);
+    console.log(this.searchResults, 'searchResults');
   }
 
   goToPage(page: number) {
@@ -186,56 +191,35 @@ export class DestinationsComponent implements OnInit {
   }
 
   loadCountry(countryName: string) {
-    // console.log('Chargement du pays:', countryName);
-
-    // Initialise la destination avec le nom
-    this.destination = {
-      name: countryName,
-      image: '',
-      description: '',
-      type: 'country',
-      isDescriptionLoading: true,
-      isImageLoading: true
-    };
-
-    this.destinationSelected.emit(this.destination);
-
-    this.isLoading = false;
-
-    // Charge l'image en premier
-    this.countryService.getCountryImage(countryName).subscribe({
-      next: (imageResponse) => {
-        // Met à jour l'image dès qu'elle est disponible
-        if (this.destination && imageResponse && imageResponse.data) {
-          this.destination.image = imageResponse.data;
+    this.isLoading = true;
+  
+    this.countryService.getAllCountries().subscribe({
+      next: (countries) => {
+        const country = countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
+  
+        if (country) {
+          this.destination = {
+            name: country.name,
+            image: country.image || 'assets/images/noimages.jpeg',
+            description: this.cleanFormattedText(country.description || 'Aucune description disponible.'),
+            type: 'country',
+            isDescriptionLoading: false,
+            isImageLoading: false
+          };
+          this.destinationSelected.emit(this.destination);
+        } else {
+          this.destination = null;
         }
-        if (this.destination) {
-          this.destination.isImageLoading = false;
-        }
+  
+        this.isLoading = false;
       },
       error: (error) => {
-        console.error("Erreur lors du chargement de l'image:", error);
-      }
-    });
-
-    //Charge la description en parallèle
-    this.countryService.getAICountryDescription(countryName).subscribe({
-      next: (response) => {
-        if (this.destination && response && response.data) {
-          const cleanedDescription = this.cleanFormattedText(response.data);
-          this.destination.description = cleanedDescription;
-        } else if (this.destination) {
-          this.destination.description = `${countryName} est une destination fascinante à découvrir.`;
-        }
-        if (this.destination) {
-          this.destination.isDescriptionLoading = false;
-        }
-      },
-      error: (error) => {
-        console.error('Erreur lors du chargement de la description:', error);
+        console.error('Erreur lors du chargement du pays:', error);
+        this.isLoading = false;
       }
     });
   }
+  
 
   loadCountryImage(countryName: string) {
     this.countryService.getCountryImage(countryName).subscribe({
@@ -308,88 +292,183 @@ export class DestinationsComponent implements OnInit {
     });
   }
 
+
   loadPopularDestinations() {
     this.isLoading = true;
-
-    // Récupérer tous les pays
+    this.destination = null;
+  
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
-        // console.log('Pays récupérés:', countries.length);
-
-        // Affiche d'abord avec des images placeholder pour une meilleure UX
         this.searchResults = countries.map((country) => ({
           name: country.name,
-          image: 'assets/images/placeholder.jpg',
-          description: country.description || 'Destination populaire à découvrir.',
+          image: country.image || 'assets/images/placeholder.jpg',
+          description: this.cleanFormattedText(country.description || 'Aucune description disponible.'),
           type: 'country' as const
-        }));
-
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+  
         this.updatePagination();
         this.isLoading = false;
-
-        // Pour chaque pays, charge son image individuellement
-        this.loadImagesSequentially(countries);
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des destinations populaires:', error);
+        console.error('Erreur chargement pays:', error);
         this.isLoading = false;
       }
     });
   }
+  
+
+  // loadPopularDestinations() {
+  //   this.isLoading = true;
+  //   this.destination = null;
+  
+  //   this.countryService.getAllCountries().subscribe({
+  //     next: (countries) => {
+  //       this.searchResults = countries.map((country) => ({
+  //         name: country.name,
+  //         image: 'assets/images/placeholder.jpg',
+  //         description: 'Chargement de la description...',
+  //         type: 'country' as const
+  //       }));
+  
+  //       this.updatePagination();
+  //       this.isLoading = false;
+  
+  //       countries.forEach((country, index) => {
+  //         setTimeout(() => {
+  //           // 🔹 Charger image
+  //           this.countryService.getCountryImage(country.name).subscribe({
+  //             next: (imageResponse) => {
+  //               if (imageResponse?.data && this.searchResults[index]) {
+  //                 this.searchResults[index].image = imageResponse.data;
+  //                 this.updatePagination();
+  //               }
+  //             },
+  //             error: (error) => {
+  //               console.error(`Erreur image ${country.name}:`, error);
+  //             }
+  //           });
+  
+  //           // 🔹 Charger description AI
+  //           this.countryService.getAICountryDescription(country.name).subscribe({
+  //             next: (response) => {
+  //               const cleaned = this.cleanFormattedText(response.data);
+  //               if (this.searchResults[index]) {
+  //                 this.searchResults[index].description = cleaned;
+  //                 this.updatePagination();
+  //               }
+  //             },
+  //             error: (error) => {
+  //               console.warn(`Erreur description ${country.name}:`, error);
+  //             }
+  //           });
+  //         }, index * 50); // Délai entre chaque pour limiter les appels simultanés
+  //       });
+  //     },
+  //     error: (error) => {
+  //       console.error('Erreur chargement pays:', error);
+  //       this.isLoading = false;
+  //     }
+  //   });
+  // }
+  
+
+  // loadPopularDestinations() {
+  //   this.isLoading = true;
+  //   this.destination = null; // Important
+
+  //   this.countryService.getAllCountries().subscribe({
+  //         next: (countries) => {
+  //           // Affiche d'abord avec des images placeholder pour une meilleure UX
+  //           this.searchResults = countries.map((country) => ({
+  //             name: country.name,
+  //             image: 'assets/images/placeholder.jpg',
+  //             description:  'chargement...',
+  //             type: 'country' as const
+  //           }));
+
+  //           this.updatePagination();
+  //           this.isLoading = false;
+
+  //           // Pour chaque pays, charge son image individuellement
+  //           this.loadImagesSequentially(countries);
+
+  //       // 🔁 Ajouter ceci pour charger la description AI
+  //       countries.forEach((country, index) => {
+  //         this.countryService.getAICountryDescription(country.name).subscribe({
+  //           next: (response) => {
+  //             const cleanedDescription = this.cleanFormattedText(response.data);
+  //             if (this.searchResults[index]) {
+  //               this.searchResults[index].description = cleanedDescription;
+  //               this.updatePagination();
+  //             }
+  //           },
+  //           error: () => {
+  //             console.warn(`Impossible de charger la description de ${country.name}`);
+  //           }
+  //         });
+  //       });
+  //     },
+  //     error: (error) => {
+  //       console.error('Erreur lors du chargement des destinations populaires:', error);
+  //       this.isLoading = false;
+  //     }
+  //   });
+  // }
 
   // Charge les images une par une (pour éviter trop de requêtes simultanées)
-  loadImagesSequentially(countries: any[]) {
-    countries.forEach((country, index) => {
-      setTimeout(() => {
-        this.countryService.getCountryImage(country.name).subscribe({
-          next: (imageResponse) => {
-            console.log(`Image pour ${country.name}:`, imageResponse?.data);
+  // loadImagesSequentially(countries: any[]) {
+  //   countries.forEach((country, index) => {
+  //     setTimeout(() => {
+  //       this.countryService.getCountryImage(country.name).subscribe({
+  //         next: (imageResponse) => {
+  //           console.log(`Image pour ${country.name}:`, imageResponse?.data);
 
-            if (imageResponse && imageResponse.data) {
-              try {
-                if (imageResponse.data) {
-                  const url = new URL(imageResponse.data);
+  //           if (imageResponse && imageResponse.data) {
+  //             try {
+  //               if (imageResponse.data) {
+  //                 const url = new URL(imageResponse.data);
 
-                  const img = new Image();
-                  img.onload = () => {
-                    if (this.searchResults[index]) {
-                      this.searchResults[index].image = imageResponse.data as string;
-                      this.updatePagination();
-                    }
-                  };
-                  img.onerror = () => {
-                    console.warn(`L'image pour ${country.name} n'a pas pu être chargée`);
-                  };
-                  img.src = imageResponse.data;
-                } else {
-                  console.warn(`Pas d'URL d'image pour ${country.name}`);
-                }
-              } catch (e) {
-                console.warn(`URL invalide pour ${country.name}:`, imageResponse.data);
-              }
-            }
-          },
-          error: (error) => {
-            console.error(`Erreur de chargement d'image pour ${country.name}:`, error);
-          }
-        });
-      }, index * 20);
-    });
-  }
+  //                 const img = new Image();
+  //                 img.onload = () => {
+  //                   if (this.searchResults[index]) {
+  //                     this.searchResults[index].image = imageResponse.data as string;
+  //                     this.updatePagination();
+  //                   }
+  //                 };
+  //                 img.onerror = () => {
+  //                   console.warn(`L'image pour ${country.name} n'a pas pu être chargée`);
+  //                 };
+  //                 img.src = imageResponse.data;
+  //               } else {
+  //                 console.warn(`Pas d'URL d'image pour ${country.name}`);
+  //               }
+  //             } catch (e) {
+  //               console.warn(`URL invalide pour ${country.name}:`, imageResponse.data);
+  //             }
+  //           }
+  //         },
+  //         error: (error) => {
+  //           console.error(`Erreur de chargement d'image pour ${country.name}:`, error);
+  //         }
+  //       });
+  //     }, index * 20);
+  //   });
+  // }
 
   viewDestinationDetails(result: Destination) {
     if (result.type === 'city') {
-      this.router.navigate(['/destinations'], {
+      this.router.navigate(['/', this.translateService.currentLang, 'destination'], {
         queryParams: { city: result.name }
       });
     } else {
-      this.router.navigate(['/destinations'], {
+      this.router.navigate(['/', this.translateService.currentLang, 'destination'], {
         queryParams: { country: result.name }
       });
     }
   }
   goBackToList() {
-    this.router.navigate(['/destinations']).then(() => {
+    this.router.navigate(['/', this.translateService.currentLang, 'destination']).then(() => {
       window.location.reload();
     });
   }

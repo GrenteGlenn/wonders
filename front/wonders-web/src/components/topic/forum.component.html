@@ -1,0 +1,179 @@
+<div class="max-w-full px-4 sm:px-6 lg:px-8 py-10">
+  <!-- Header + Filters -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <span class="text-3xl font-normal px-6 text-gray-800">Catégories</span>
+
+    <!-- Bouton ouvrir modal -->
+    <div *ngIf="me">
+      <button
+        (click)="isFormVisible = true"
+        class="flex items-center gap-2 text-sm px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700"
+      >
+        <lucide-icon name="plus" class="w-4 h-4"></lucide-icon>
+        Nouveau
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal création catégorie -->
+  <div *ngIf="me && isFormVisible" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl shadow-lg w-full max-w-xl p-6 relative animate-fade-in-down">
+      <!-- Bouton fermeture -->
+      <button (click)="isFormVisible = false" class="absolute top-4 right-4 text-gray-400 hover:text-red-500">
+        <lucide-icon name="x" class="w-5 h-5"></lucide-icon>
+      </button>
+
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Créer une catégorie</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="topicName" class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+          <input
+            type="text"
+            id="topicName"
+            [(ngModel)]="newTopic.name"
+            placeholder="Nom de la catégorie"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label for="countryId" class="block text-sm font-medium text-gray-700 mb-1">Pays</label>
+          <select
+            id="countryId"
+            [(ngModel)]="newTopic.country_id"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="0" disabled>Choisissez un pays</option>
+            <option *ngFor="let country of countries" [value]="country.id">
+              {{ country.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-6">
+        <button
+          (click)="createSubject(); isFormVisible = false"
+          [disabled]="!newTopic.name || !newTopic.country_id"
+          class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 disabled:opacity-50"
+        >
+          Créer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- filtres -->
+  <div class="flex flex-col sm:flex-row items-end justify-end sm:items-center gap-2">
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="filterTopics()"
+      placeholder="Recherche par nom ou pays..."
+      class="border border-gray-300 px-3 py-2 rounded-md w-full sm:w-64"
+    />
+
+    <div class="relative">
+      <button
+        (click)="showCountryFilter = !showCountryFilter"
+        class="bg-gray-100 border px-4 py-2 rounded-md hover:bg-gray-200"
+      >
+        Filtrer par pays
+      </button>
+      <button (click)="resetFilters()" class="text-black px-4 py-2 rounded">Réinitialiser</button>
+      <div
+        *ngIf="showCountryFilter"
+        class="absolute z-10 bg-white border rounded shadow mt-2 max-h-60 overflow-y-auto w-64"
+      >
+        <div class="p-2 border-b">
+          <input
+            type="text"
+            [(ngModel)]="countryFilterTerm"
+            placeholder="Rechercher un pays..."
+            class="w-full px-2 py-1 border rounded text-sm"
+          />
+        </div>
+
+        <label
+          *ngFor="let country of countries || [] | countryNameFilter: countryFilterTerm"
+          class="flex items-center px-4 py-2 hover:bg-gray-50"
+        >
+          <input
+            type="checkbox"
+            [checked]="selectedCountries.includes(country.id!)"
+            (change)="toggleCountrySelection(country.id!)"
+            class="mr-2"
+          />
+          {{ country.name }}
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl p-6">
+    <div *ngIf="paginatedTopics.length === 0" class="text-center text-gray-500">Aucun sujet trouvé.</div>
+
+    <div *ngIf="paginatedTopics.length > 0" class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50 text-left text-sm font-semibold text-gray-600">
+          <tr>
+            <th class="px-6 py-3 cursor-pointer" (click)="sortBy('name')">
+              Nom
+              <lucide-icon name="chevrons-up-down" class="w-4 h-4 inline ml-1"></lucide-icon>
+            </th>
+            <th class="px-6 py-3 cursor-pointer" (click)="sortBy('country')">
+              Pays
+              <lucide-icon name="chevrons-up-down" class="w-4 h-4 inline ml-1"></lucide-icon>
+            </th>
+            <th class="px-6 py-3 cursor-pointer" (click)="sortBy('country')">
+              Crée le
+              <lucide-icon name="chevrons-up-down" class="w-4 h-4 inline ml-1"></lucide-icon>
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
+          <tr
+            *ngFor="let topic of paginatedTopics"
+            class="transition cursor-pointer hover:bg-slate-50 hover:text-black"
+            (click)="viewTopic(topic.id)"
+          >
+            <td class="px-6 py-4 font-medium">{{ topic.name }}</td>
+            <td class="px-6 py-4">{{ getCountryName(topic.country_id) }}</td>
+            <td class="py-4">{{ topic.created_at | date: 'd MMMM y à HH:mm' }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Pagination -->
+      <div *ngIf="totalPages > 1" class="mt-6 flex justify-center items-center gap-2">
+        <button
+          (click)="currentPage = currentPage - 1; filterTopics()"
+          [disabled]="currentPage === 1"
+          class="px-3 py-1 border rounded disabled:opacity-40"
+        >
+          Précédent
+        </button>
+
+        <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+          <button
+            (click)="currentPage = i + 1; filterTopics()"
+            [class.bg-blue-600]="currentPage === i + 1"
+            [class.text-white]="currentPage === i + 1"
+            class="px-3 py-1 border rounded hover:bg-blue-100"
+          >
+            {{ i + 1 }}
+          </button>
+        </ng-container>
+
+        <button
+          (click)="currentPage = currentPage + 1; filterTopics()"
+          [disabled]="currentPage === totalPages"
+          class="px-3 py-1 border rounded disabled:opacity-40"
+        >
+          Suivant
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
