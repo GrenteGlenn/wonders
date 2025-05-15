@@ -106,6 +106,8 @@ router.post('/ai_get_city', (async (req, res) => {
           });
         const getCountry = await countryController.getOneByName(capitalizeFirstLetter(country));
         const getCity = await cityController.getOneByName(capitalizeFirstLetter(city));
+        console.log('cityPosition', city, cityPosition);
+
         result = [
           {
             pays: country,
@@ -114,8 +116,9 @@ router.post('/ai_get_city', (async (req, res) => {
             city_id: getCity ? getCity.id : null,
             description: description,
             img_full: image,
-            longitude: cityPosition.lat,
-            latitude: cityPosition.lon
+
+            longitude: cityPosition.lon,
+            latitude: cityPosition.lat
           },
           ...result
         ];

@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FlightOffersResponse, FlightSearchParams, FlyService } from '../../../app/service/fly/fly.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
+import { Airport, AirportsService } from '../../../app/service/airports/airports.service';
 
 @Component({
   selector: 'app-fly',
@@ -13,6 +14,9 @@ import { CommonModule } from '@angular/common';
 })
 export class FlyComponent {
   @Output() flightSelected = new EventEmitter<any>();
+  @Input() latitude!: number;
+  @Input() longitude!: number;
+  
 
   searchForm: FormGroup;
   isSearching = false;
@@ -20,6 +24,12 @@ export class FlyComponent {
   flights: any[] = [];
   filteredFlights: any[] = []; // Vols filtrés
   errorMessage: string | null = null;
+  selectedCityName: string = '';
+  destinationAirports: Airport[] = [];
+  originAirports: Airport[] = [];
+
+  
+
 
   // Pour la pagination des résultats
   currentPage = 1;
@@ -67,7 +77,9 @@ export class FlyComponent {
 
   constructor(
     private fb: FormBuilder,
-    private flyService: FlyService
+    private flyService: FlyService,
+    private airportsService: AirportsService
+
   ) {
     this.searchForm = this.fb.group({
       originLocationCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
@@ -93,7 +105,45 @@ export class FlyComponent {
       departureDate: this.formatDate(today),
       returnDate: this.formatDate(returnDate)
     });
+    this.loadAllAirports();
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if ((changes['latitude'] || changes['longitude']) && this.latitude && this.longitude) {
+      this.loadNearbyAirports(this.latitude, this.longitude);
+    }
+  }
+
+  loadAllAirports(): void {
+    this.airportsService.getAll().subscribe({
+      next: (airports) => {
+        this.originAirports = airports;
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des aéroports de départ :', err);
+      }
+    });
+  }
+  
+
+  loadNearbyAirports(lat: number, lon: number) {
+    this.airportsService.getByGeo(lon, lat).subscribe({
+      next: (airports) => {
+        console.log('🛫 Aéroports proches reçus :', airports);
+        this.destinationAirports = Array.isArray(airports) ? airports : [airports];
+  
+        if (this.destinationAirports.length > 0) {
+          this.searchForm.patchValue({
+            destinationLocationCode: this.destinationAirports[0].code
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Erreur lors du chargement des aéroports par géo :', err);
+      }
+    });
+  }
+  
 
   // Formatter la date en YYYY-MM-DD
   private formatDate(date: Date): string {
@@ -201,6 +251,24 @@ export class FlyComponent {
     };
     
     return airlineMap[code] || code;
+  }
+
+  onCitySelected(cityName: string) {
+    this.selectedCityName = cityName;
+  
+    this.airportsService.getAirportsByCityName(cityName).subscribe({
+      next: (airports) => {
+        this.destinationAirports = airports;
+        // Optionnel: sélectionne le premier par défaut
+        if (airports.length) {
+          this.searchForm.patchValue({ destinationLocationCode: airports[0].code });
+        }
+      },
+      error: (err) => {
+        console.error('Erreur chargement aéroports:', err);
+        this.destinationAirports = [];
+      }
+    });
   }
 
   // Déterminer le prix minimum et maximum
@@ -388,3 +456,5 @@ export class FlyComponent {
     return airport ? airport.name : code;
   }
 }
+
+

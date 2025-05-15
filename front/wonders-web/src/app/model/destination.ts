@@ -5,4 +5,8 @@ export interface Destination {
   type: 'city' | 'country';
   isDescriptionLoading?: boolean;
   isImageLoading?: boolean;
+  longitude?: number;
+  latitude?: number;
+
+
 }

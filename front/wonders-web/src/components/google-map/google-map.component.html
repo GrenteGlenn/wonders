@@ -5,12 +5,11 @@
 	>
 	  <!-- Markers brésiliens -->
 	  <map-advanced-marker
-		*ngFor="let location of brLocations; let i = index"
+		*ngFor="let location of displayedMarkers; let i = index"
 		#markerElem="mapAdvancedMarker"
 		[position]="{ lat: location.lat, lng: location.lng }"
 		[content]="location.content"
-		[title]="'Brazil Location ' + (i + 1)"
-		(mapClick)="onMarkerClick(markerElem)">
+		(gmpClick)="onMarkerClick(markerElem)">
 	  </map-advanced-marker>
   
 	  <!-- Markers canadiens -->

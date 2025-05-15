@@ -95,10 +95,10 @@
             <!-- Image de la ville -->
             <div class="relative h-56">
               <img
-                [src]="city.img_full || 'assets/images/placeholder.jpg'"
+                [src]="city.img_full || 'assets/images/noimages.jpg'"
                 class="w-full h-full object-cover transition-transform duration-700"
                 alt="{{ city.city }}"
-                onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';"
+                onerror="this.onerror=null; this.src='assets/images/noimages.jpg';"
               />
 
               <!-- Overlay pour le texte -->

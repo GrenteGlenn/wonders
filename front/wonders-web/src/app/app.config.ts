@@ -56,11 +56,13 @@ import {
   ThumbsUp,
   FileText,
   ThumbsDown,
-  ChevronsUpDown
+  ChevronsUpDown,
+  Hotel
 } from 'lucide-angular';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './common/jwt.interceptor';
+
 
 // Chemin des fichier de traduction
 export function HttpLoaderFactory(http: HttpClient) {
@@ -126,7 +128,8 @@ export const appConfig: ApplicationConfig = {
         ThumbsUp,
         FileText,
         ThumbsDown,
-        ChevronsUpDown
+        ChevronsUpDown,
+        Hotel
       }),
       TranslateModule.forRoot({
         loader: {

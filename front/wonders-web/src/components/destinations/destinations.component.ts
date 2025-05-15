@@ -204,7 +204,10 @@ export class DestinationsComponent implements OnInit {
             description: this.cleanFormattedText(country.description || 'Aucune description disponible.'),
             type: 'country',
             isDescriptionLoading: false,
-            isImageLoading: false
+            isImageLoading: false,
+            longitude: country.longitude,
+            latitude: country.latitude
+             
           };
           this.destinationSelected.emit(this.destination);
         } else {

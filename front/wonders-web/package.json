@@ -36,6 +36,7 @@
     "lucide-angular": "^0.400.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
+    "swiper": "^11.2.6",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

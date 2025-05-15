@@ -51,12 +51,20 @@ export class StepBodyComponent {
   constructor(private countryService: CountryService) {}
 
   handleDestinationSelected(destination: Destination) {
-    this.selectedDestination = destination;
-    // console.log(' Destination reçue :', destination);
+    // this.selectedDestination = destination;
+    this.selectedDestination = {
+      name: destination.name,
+      image: destination.image,
+      description: destination.description,
+      type: 'country',
+      latitude: destination.latitude,
+      longitude: destination.longitude
+    };
+    // console.log(' Destination reçue 1 :', destination);
   }
   handleActivitySelected(activity: any) {
     this.selectedActivity = activity;
-    // console.log(' Activité reçue :', activity);
+    console.log(' Activité reçue :', activity);
   }
   handleFlightSelected(flight: any) {
     this.selectedFlight = flight;
@@ -87,6 +95,13 @@ export class StepBodyComponent {
   nextStep() {
     if (this.currentStep < this.steps.length) {
       this.currentStep++;
+
+      if (this.currentStep === 4) {
+        console.log('--- Informations accumulées avant Hôtel ---');
+        console.log('Destination :', this.selectedDestination);
+        console.log('Activité :', this.selectedActivity);
+        console.log('Vol :', this.selectedFlight);
+      }
       this.toastService.success(`Données sauvegardées avec succès !`);
     }
   }
@@ -111,22 +126,30 @@ export class StepBodyComponent {
   }
   onCountrySelect(countryName: string) {
     if (!countryName || !this.countries || this.countries.length === 0) return;
-  
+
     this.isLoading = true;
     this.selectedCountry = countryName;
     this.destinationParams = { country: countryName };
-  
-    const countryData = this.countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-  
+
+    const countryData = this.countries.find((c) => c.name.toLowerCase() === countryName.toLowerCase());
+
     if (countryData) {
       this.countryImage = countryData.image || 'assets/images/noimages.jpg';
       this.countryDescription = countryData.description || 'Aucune description disponible.';
+
+      this.selectedDestination = {
+        name: countryData.name,
+        image: countryData.image,
+        description: countryData.description,
+        type: 'country',
+        latitude: countryData.latitude,
+        longitude: countryData.longitude
+      };
     } else {
       this.countryImage = 'assets/images/noimages.jpg';
       this.countryDescription = 'Information non disponible.';
     }
-  
+
     this.isLoading = false;
   }
-  
 }

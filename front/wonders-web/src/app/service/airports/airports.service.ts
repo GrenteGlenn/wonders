@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 export interface Airport {
   id?: number;
@@ -39,16 +39,5 @@ export class AirportsService {
   getByGeo(longitude: number, latitude: number): Observable<Airport> {
     return this.http.post<Airport>(`${this.API_URL}/airports/geo`, { longitude, latitude });
   }
-  
-  create(airport: Airport): Observable<Airport> {
-    return this.http.post<Airport>(`${this.API_URL}`, airport);
-  }
-
-  update(id: number, airport: Airport): Observable<Airport> {
-    return this.http.put<Airport>(`${this.API_URL}/${id}`, airport);
-  }
-
-  delete(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.API_URL}/${id}`);
-  }
+ 
 }

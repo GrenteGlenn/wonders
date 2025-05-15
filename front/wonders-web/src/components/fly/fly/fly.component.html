@@ -26,7 +26,7 @@
                 class="pl-10 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               >
                 <option value="" disabled selected>Sélectionnez un aéroport</option>
-                <option *ngFor="let airport of airports" [value]="airport.code">
+                <option *ngFor="let airport of originAirports" [value]="airport.code">
                   {{ airport.name }} ({{ airport.code }})
                 </option>
               </select>
@@ -46,7 +46,7 @@
                 class="pl-10 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
               >
                 <option value="" disabled selected>Sélectionnez un aéroport</option>
-                <option *ngFor="let airport of airports" [value]="airport.code">
+                <option *ngFor="let airport of destinationAirports" [value]="airport.code">
                   {{ airport.name }} ({{ airport.code }})
                 </option>
               </select>
