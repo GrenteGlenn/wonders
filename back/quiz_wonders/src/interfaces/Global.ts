@@ -3,14 +3,24 @@ import TripInterface from './TripInterface';
 import TripDayActivityInterface from './TripDayActivityInterface';
 import TripHotelInterface from './TripHotelInterface';
 
-enum Status {
-  APayer,
-  EnAttenteDeReservation,
-  EnAttenteDeConfirmation,
-  ProblemeDeReservation,
-  Reserve,
-  Annuler
+// enum Status {
+//   APayer,
+//   EnAttenteDeReservation,
+//   EnAttenteDeConfirmation,
+//   ProblemeDeReservation,
+//   Reserve,
+//   Annuler
+// }
+
+ enum Status {
+  APayer = "APayer",
+  EnAttenteDeReservation = "EnAttenteDeReservation",
+  EnAttenteDeConfirmation = "EnAttenteDeConfirmation",
+  ProblemeDeReservation = "ProblemeDeReservation",
+  Reserve = "Reserve",
+  Annuler = "Annuler"
 }
+
 
 interface Activity {
   id: number;

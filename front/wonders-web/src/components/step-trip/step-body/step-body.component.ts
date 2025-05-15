@@ -64,7 +64,7 @@ export class StepBodyComponent {
   }
   handleActivitySelected(activity: any) {
     this.selectedActivity = activity;
-    console.log(' Activité reçue :', activity);
+    // console.log(' Activité reçue :', activity);
   }
   handleFlightSelected(flight: any) {
     this.selectedFlight = flight;
@@ -102,6 +102,15 @@ export class StepBodyComponent {
         console.log('Activité :', this.selectedActivity);
         console.log('Vol :', this.selectedFlight);
       }
+      // if (this.currentStep === 5) {
+      //   console.log("📦 Résumé complet des données à l'étape 5 :");
+      //   console.log({
+      //     destination: this.selectedDestination,
+      //     activity: this.selectedActivity,
+      //     flight: this.selectedFlight,
+      //     hotel: this.selectedHotel
+      //   });
+      // }
       this.toastService.success(`Données sauvegardées avec succès !`);
     }
   }

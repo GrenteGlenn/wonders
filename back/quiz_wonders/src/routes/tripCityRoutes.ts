@@ -31,9 +31,9 @@ router.post('/', (async (req, res) => {
   try {
     const body = <TripCityInterface>req.body;
     const tripCity = await tripCityController.new(
-      body.trip_id,
+      body.trip_id as number,
       body.city_id,
-      body.transportation_id,
+      body.transportation_id as number,
       new Date(),
       new Date()
     );

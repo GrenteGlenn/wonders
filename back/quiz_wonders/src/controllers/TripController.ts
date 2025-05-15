@@ -70,6 +70,9 @@ export default class TripController {
     });
 
     // Save trip User detail
+    if (tripTransportationResponseOne.id === undefined) {
+      throw new Error('Missing transportation ID');
+    }
     const tripResponse = await Trip.create({
       ...trip,
       transportation_id: tripTransportationResponseOne.id,
@@ -86,6 +89,13 @@ export default class TripController {
         updated_at: new Date()
       });
       // save city for trip
+      if (!tripTransportResponse.id) {
+        throw new Error('Missing transport response ID');
+      }
+      if (!tripResponse.id) {
+        throw new Error('Missing trip ID');
+      }
+      
       const tripCityResponse = await TripCity.create({
         city_id,
         transportation_id: tripTransportResponse.id,
@@ -102,6 +112,10 @@ export default class TripController {
 
       if (tripCityDays) {
         for (const day of tripCityDays) {
+          if (!tripCityResponse.id) {
+            throw new Error('Missing trip city ID');
+          }
+          
           const tripCityDayResponse = await TripDay.create({
             date: day.date,
             trip_city_id: tripCityResponse.id,
@@ -111,6 +125,10 @@ export default class TripController {
 
           await Promise.all(
             tripDayActivities.map(async (activity) => {
+              if (!tripCityDayResponse.id) {
+                throw new Error('Missing trip day ID');
+              }
+              
               await TripDayActivity.create({
                 activity_id: activity.activity_id,
                 trip_day_id: tripCityDayResponse.id,

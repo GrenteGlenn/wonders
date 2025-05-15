@@ -12,7 +12,6 @@
       </p>
       <button
         class="text-blue-600 text-sm mt-2 hover:underline font-medium"
-        *ngIf="destination?.description?.length > 300"
         (click)="showMore = !showMore"
       >
         {{ showMore ? 'Voir moins' : 'Voir plus' }}

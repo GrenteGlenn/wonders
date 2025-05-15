@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { GoogleMapComponent } from '../google-map/google-map.component';
+import { Destination } from '../../app/model/destination';
 
 @Component({
   selector: 'app-preview',
@@ -11,10 +12,11 @@ import { GoogleMapComponent } from '../google-map/google-map.component';
   styleUrl: './preview.component.css'
 })
 export class PreviewComponent {
-  @Input() destination: any;
-  @Input() activity: any;
-  @Input() flight: any;
-  @Input() hotel: any;
+  @Input() destination: Destination | null = null;
+  @Input() activity: any = null;
+  @Input() flight: any = null;
+  @Input() hotel: any = null;
+  
 
 
   get centerLat(): number | null {
