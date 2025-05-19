@@ -12,6 +12,7 @@
       </p>
       <button
         class="text-blue-600 text-sm mt-2 hover:underline font-medium"
+        *ngIf="destination?.description?.length > 300"
         (click)="showMore = !showMore"
       >
         {{ showMore ? 'Voir moins' : 'Voir plus' }}
@@ -24,7 +25,7 @@
         <lucide-icon name="map-pin" class="h-5 w-5 text-rose-500"></lucide-icon>
         <h3 class="text-base font-semibold">Localisation</h3>
       </div>
-      <app-google-map [lat]="centerLat" [lng]="centerLng" [markers]="markers"></app-google-map>
+      <!-- <app-google-map></app-google-map> -->
     </div>
   </div>
 

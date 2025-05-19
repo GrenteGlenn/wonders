@@ -29,6 +29,7 @@ export interface TripCityDay {
 }
 
 export interface TripHotel {
+  trip_city_id: number;
   name: string;
   price: number;
   from: string;
@@ -59,7 +60,7 @@ export interface FullTrip {
   providedIn: 'root'
 })
 export class TripService {
-  private baseUrl = 'http://localhost:3007/api'; 
+  private baseUrl = 'http://localhost:3007/api/trip'; 
 
   constructor(private http: HttpClient) {}
 
