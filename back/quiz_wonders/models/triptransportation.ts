@@ -6,7 +6,7 @@ import { Status } from '../src/interfaces/Global';
 interface TripTransportationCreationAttributes extends Optional<TripTransportationInterface, 'id'> { }
 
 class TripTransportation extends Model<TripTransportationInterface, TripTransportationCreationAttributes> implements TripTransportationInterface {
-  declare id?: number;
+  declare id: number;
   declare from_date: Date;
   declare to_date: Date;
   declare price: number;

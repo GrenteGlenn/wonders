@@ -28,7 +28,7 @@ router.post('/', (async (req, res) => {
 
 router.put('/:id', (async (req, res) => {
   const body = <Body>req.body;
-  const rating = await ratingController.update(parseInt(req.params.id, 10), body.path);
+  const rating = await ratingController.update(parseInt(req.params.id, 10), body.rating);
   res.json(rating);
 }) as RequestHandler);
 
