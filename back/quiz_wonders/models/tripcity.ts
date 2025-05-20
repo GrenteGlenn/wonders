@@ -7,7 +7,7 @@ import Trip from './trip';
 interface TripCreationAttributes extends Optional<TripCityInterface, 'id'> {}
 
 class TripCity extends Model<TripCityInterface, TripCreationAttributes> implements TripCityInterface {
-  declare id?: number;
+  declare id: number;
   declare trip_id: number;
   declare transportation_id: number;
   declare city_id: number;

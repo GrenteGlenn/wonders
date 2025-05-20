@@ -9,7 +9,7 @@ class ActivityCategory
   extends Model<ActivityCategoryInterface, ActivityCategoryCreationAttributes>
   implements ActivityCategoryInterface
 {
-  declare id: number;
+  declare id?: number;
   declare name: string;
   declare picture_id: number;
   declare readonly created_at?: Date;
