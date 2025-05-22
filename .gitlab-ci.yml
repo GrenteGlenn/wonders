@@ -1,7 +1,19 @@
 stages:
+  - rule
   - lint
-  # - pre
-  
+
+block-unallowed-branches:
+  stage: rule
+  image: alpine
+  script:
+    - exit 1
+  only:
+    refs:
+      - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "A"
+      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "B"
 
 workflow:
   rules:
