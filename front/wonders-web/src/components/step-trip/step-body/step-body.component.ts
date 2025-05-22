@@ -10,6 +10,7 @@ import { HotelComponent } from '../../hotel/hotel.component';
 import { Destination } from '../../../app/model/destination';
 import { PreviewComponent } from '../../preview/preview.component';
 import { RequirementsComponent } from '../../requirements/requirements.component';
+import { FullTrip, TripService } from '../../../app/service/trip/trip.service';
 
 @Component({
   selector: 'app-step-body',
@@ -32,6 +33,8 @@ export class StepBodyComponent {
   currentStep = 1;
 
   private toastService = inject(ToastService);
+  private tripService = inject(TripService);
+
   countries: any[] = [];
   selectedCountry: string = '';
   countryImage: string = '';
@@ -51,8 +54,16 @@ export class StepBodyComponent {
   constructor(private countryService: CountryService) {}
 
   handleDestinationSelected(destination: Destination) {
-    this.selectedDestination = destination;
-    // console.log(' Destination reçue :', destination);
+    // this.selectedDestination = destination;
+    this.selectedDestination = {
+      name: destination.name,
+      image: destination.image,
+      description: destination.description,
+      type: 'country',
+      latitude: destination.latitude,
+      longitude: destination.longitude
+    };
+    // console.log(' Destination reçue 1 :', destination);
   }
   handleActivitySelected(activity: any) {
     this.selectedActivity = activity;
@@ -87,6 +98,22 @@ export class StepBodyComponent {
   nextStep() {
     if (this.currentStep < this.steps.length) {
       this.currentStep++;
+
+      // if (this.currentStep === 4) {
+      //   console.log('--- Informations accumulées avant Hôtel ---');
+      //   console.log('Destination :', this.selectedDestination);
+      //   console.log('Activité :', this.selectedActivity);
+      //   console.log('Vol :', this.selectedFlight);
+      // }
+      if (this.currentStep === 5) {
+        console.log("📦 Résumé complet des données à l'étape 5 :");
+        console.log({
+          destination: this.selectedDestination,
+          activity: this.selectedActivity,
+          flight: this.selectedFlight,
+          hotel: this.selectedHotel
+        });
+      }
       this.toastService.success(`Données sauvegardées avec succès !`);
     }
   }
@@ -99,6 +126,76 @@ export class StepBodyComponent {
     this.loadCountries();
   }
 
+  submitTrip() {
+    if (!this.selectedDestination || !this.selectedActivity || !this.selectedFlight || !this.selectedHotel) {
+      this.toastService.error('Certains éléments du voyage sont manquants.');
+      return;
+    }
+  
+    const payload: FullTrip = {
+      trip: {
+        user_id: 1, // à remplacer dynamiquement si besoin
+        country_id: 33, // idem
+        duration: 10,
+        from_date: this.selectedFlight.departureTime,
+        to_date: this.selectedFlight.arrivalTime
+      },
+      trip_transportation: {
+        from_date: this.selectedFlight.departureTime,
+        to_date: this.selectedFlight.arrivalTime,
+        price: +this.selectedFlight.price,
+        url: 'https://www.vol.com', // à adapter
+        status: 'APayer'
+      },
+      trip_cities: [
+        {
+          city_id: 1, // à adapter si besoin
+          transportations: {
+            from_date: this.selectedFlight.departureTime,
+            to_date: this.selectedFlight.arrivalTime,
+            price: +this.selectedFlight.price,
+            url: 'https://www.vol.com',
+            status: 'APayer'
+          },
+          tripCityDays: [
+            { date: '2025-08-02' },
+            { date: '2025-08-03' }
+          ],
+          tripDayActivities: [
+            { activity_id: 101, status: 'Reserve' },
+            { activity_id: 102, status: 'Reserve' },
+            { activity_id: 103, status: 'Reserve' }
+          ],
+          tripCityHotel: {
+            trip_city_id: 1,
+            name: this.selectedHotel.name,
+            price: 100,
+            from: '2025-08-02',
+            to: '2025-08-03',
+            url: 'https://www.vol32.com',
+            adults: 2,
+            children: 0,
+            longitude: this.selectedHotel.longitude,
+            latitude: this.selectedHotel.latitude,
+            status: 'APayer'
+          }
+        }
+      ]
+    };
+  
+    this.tripService.createFullTrip(payload).subscribe({
+      next: () => {
+        this.toastService.success('Voyage enregistré avec succès !');
+        this.currentStep = 1;
+      },
+      error: (err) => {
+        console.error('Erreur lors de la création du voyage :', err);
+        this.toastService.error('Erreur lors de la création du voyage');
+      }
+    });
+  }
+  
+
   loadCountries() {
     this.countryService.getAllCountries().subscribe({
       next: (data) => {
@@ -109,37 +206,32 @@ export class StepBodyComponent {
       }
     });
   }
-
   onCountrySelect(countryName: string) {
-    if (countryName) {
-      this.isLoading = true;
-      this.selectedCountry = countryName;
-      this.destinationParams = { country: countryName };
+    if (!countryName || !this.countries || this.countries.length === 0) return;
 
-      this.countryService.getCountryImage(countryName).subscribe({
-        next: (response) => {
-          if (response.data) {
-            this.countryImage = response.data;
-          } else {
-            this.countryImage = 'assets/images/default-country.jpg';
-          }
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error("Erreur lors de la récupération de l'image:", error);
-          this.countryImage = 'assets/images/default-country.jpg';
-          this.isLoading = false;
-        }
-      });
-      this.countryService.getAICountryInfo(countryName).subscribe({
-        next: (response) => {
-          this.countryDescription = response.data;
-        },
-        error: (error) => {
-          console.error('Erreur lors de la récupération de la description:', error);
-          this.countryDescription = 'Information not available';
-        }
-      });
+    this.isLoading = true;
+    this.selectedCountry = countryName;
+    this.destinationParams = { country: countryName };
+
+    const countryData = this.countries.find((c) => c.name.toLowerCase() === countryName.toLowerCase());
+
+    if (countryData) {
+      this.countryImage = countryData.image || 'assets/images/noimages.jpg';
+      this.countryDescription = countryData.description || 'Aucune description disponible.';
+
+      this.selectedDestination = {
+        name: countryData.name,
+        image: countryData.image,
+        description: countryData.description,
+        type: 'country',
+        latitude: countryData.latitude,
+        longitude: countryData.longitude
+      };
+    } else {
+      this.countryImage = 'assets/images/noimages.jpg';
+      this.countryDescription = 'Information non disponible.';
     }
+
+    this.isLoading = false;
   }
 }

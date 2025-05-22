@@ -41,6 +41,26 @@ router.get('/geo', (async (req, res) => {
   }
 }) as RequestHandler);
 
+// router.post('/geo', async (req, res) => {
+//   const { longitude, latitude } = req.body;
+//   try {
+//     const airport = await airportController.geo(longitude, latitude);  
+//     res.json(airport);
+//   } catch (error) {
+//     res.status(500).json({ error });
+//   }
+// }) as RequestHandler;
+
+router.post('/geo', (async (req, res) => {
+  try {
+    const { longitude, latitude }: { longitude: number; latitude: number } = req.body;
+    const airport = await airportController.geo(longitude, latitude);
+    res.json(airport);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+}) as RequestHandler);
+
 router.get('/:id', (async (req, res) => {
   console.log('id');
   try {
@@ -54,6 +74,9 @@ router.get('/:id', (async (req, res) => {
 router.post('/', (async (req, res) => {
   try {
     const body = <AirportInterface>req.body;
+    body.created_at = new Date();
+    body.updated_at = new Date();
+
     const airport = await airportController.create(body);
     res.status(201).json(airport);
   } catch (error) {

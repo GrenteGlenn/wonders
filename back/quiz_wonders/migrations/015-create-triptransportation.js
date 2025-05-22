@@ -23,7 +23,18 @@ module.exports = {
       },
       url: {
         type: Sequelize.TEXT,
-        allowNull: false,
+        allowNull: false
+      },
+      status: {
+        type: Sequelize.ENUM(
+          'APayer',
+          'EnAttenteDeReservation',
+          'EnAttenteDeConfirmation',
+          'ProblemeDeReservation',
+          'Reserve',
+          'Annuler'
+        ),
+        allowNull: false
       },
       created_at: {
         allowNull: false,

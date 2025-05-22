@@ -8,11 +8,13 @@ import { FormsModule } from '@angular/forms';
 import { User, FetchableUser } from '../../app/model/User';
 import { UserLikeService } from '../../app/service/subject/userLike.service';
 import { UserLike } from '../../app/model/UserLike';
+import { LucideAngularModule } from 'lucide-angular';
+import { TranslateService } from '../../app/service/translate/translate.service';
 
 @Component({
   selector: 'app-subject',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule],
   templateUrl: './subject.component.html',
   styleUrl: './subject.component.css'
 })
@@ -21,24 +23,35 @@ export class SubjectComponent implements OnInit {
   topic_id: number | null = null;
   isFormVisible: boolean = false;
   user_id: number | null = null;
-  newSubject: InsertSubject = { title: '', content: '', user_id: this.user_id as number, topic: this.topic_id as number };
+  newSubject: InsertSubject = {
+    title: '',
+    content: '',
+    user_id: this.user_id as number,
+    topic: this.topic_id as number
+  };
 
+  //Pagination
+  paginatedSubjects: Subject[] = [];
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalPages: number = 0;
 
   constructor(
     private route: ActivatedRoute,
     private _subjectService: SubjectService,
     private _userService: UsersService,
     private _userLikeService: UserLikeService,
-    private router: Router
-  ) { }
+    private router: Router,
+    public translateService: TranslateService
+  ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe((params) => {
       this.topic_id = Number(params.get('id')) || 0;
       if (this.topic_id) {
         this.getSubjects(this.topic_id);
       }
-      this.getMe()
+      this.getMe();
     });
   }
 
@@ -48,7 +61,7 @@ export class SubjectComponent implements OnInit {
         this.user_id = data.id;
       },
       error: (error) => {
-        console.error('Erreur lors de la récupération de l\'utilisateur:', error);
+        console.error("Erreur lors de la récupération de l'utilisateur:", error);
       }
     });
   }
@@ -75,24 +88,42 @@ export class SubjectComponent implements OnInit {
     this._subjectService.getAllSubjects(topic_id).subscribe({
       next: (data: Subject[]) => {
         this.subjects = data;
+        this.currentPage = 1;
+        this.paginateSubjects();
       },
       error: (error) => {
         console.error('Erreur lors de la récupération des sujets:', error);
       }
     });
   }
+  
+  paginateSubjects(): void {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    this.totalPages = Math.ceil(this.subjects.length / this.itemsPerPage);
+    this.paginatedSubjects = this.subjects.slice(start, end);
+  }
+
+  changePage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.paginateSubjects();
+    }
+  }
+  
 
   viewDetails(id: number): void {
-    this.router.navigate(['/subjects', id]);
+    this.router.navigate(['/', this.translateService.currentLang, 'subjects', id]);
   }
 
   createSubject(): void {
-    this._subjectService.Create(this.newSubject.title, this.newSubject.content, this.user_id as number, this.topic_id as number)
+    this._subjectService
+      .Create(this.newSubject.title, this.newSubject.content, this.user_id as number, this.topic_id as number)
       .subscribe({
         next: (response) => {
-          this.isFormVisible = false
+          this.isFormVisible = false;
           this.newSubject = { title: '', content: '', user_id: 0, topic: 0 };
-          this.getSubjects(this.topic_id as number)
+          this.getSubjects(this.topic_id as number);
         },
         error: (error) => {
           console.error('Erreur lors de la création du sujet:', error);
@@ -101,14 +132,13 @@ export class SubjectComponent implements OnInit {
   }
 
   deleteSubject(id: number): void {
-    this._subjectService.Delete(id)
-      .subscribe({
-        next: () => {
-          this.getSubjects(this.topic_id as number)
-        },
-        error: (error) => {
-          console.error('Erreur lors de la création du sujet:', error);
-        }
-      });
+    this._subjectService.Delete(id).subscribe({
+      next: () => {
+        this.getSubjects(this.topic_id as number);
+      },
+      error: (error) => {
+        console.error('Erreur lors de la création du sujet:', error);
+      }
+    });
   }
 }

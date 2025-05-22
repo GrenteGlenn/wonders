@@ -13,32 +13,18 @@
     <div class="bg-white rounded-lg shadow-lg p-4 md:p-6 mt-8">
       <form [formGroup]="hotelForm" (ngSubmit)="onSearchHotels()">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <!-- Latitude -->
+          <!-- Sélecteur de ville -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
-            <div class="relative">
-              <lucide-icon name="map-pin" class="absolute top-1.5 left-1.5 h-5 w-5 text-gray-400"></lucide-icon>
-              <input
-                type="number"
-                formControlName="latitude"
-                placeholder="48.8566"
-                class="pl-10 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
-              />
-            </div>
-          </div>
-
-          <!-- Longitude -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
-            <div class="relative">
-              <lucide-icon name="map-pin" class="absolute top-1.5 left-1.5 h-5 w-5 text-gray-400"></lucide-icon>
-              <input
-                type="number"
-                formControlName="longitude"
-                placeholder="2.3522"
-                class="pl-10 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
-              />
-            </div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Ville</label>
+            <select
+              [value]="selectedCityId"
+              (change)="onCityChange($event)"
+              class="w-full p-3 border border-gray-300 rounded-lg shadow-sm"
+            >
+              <option *ngFor="let city of cities" [value]="city.id">
+                {{ city.name }}
+              </option>
+            </select>
           </div>
 
           <!-- Rayon -->

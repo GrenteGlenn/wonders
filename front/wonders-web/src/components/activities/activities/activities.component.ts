@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule } from 'lucide-angular';
-import { GoogleMapComponent } from '../../google-map/google-map.component';
 import { ActivityCategory, Picture } from '../../../app/model/activity';
 import { ToastService } from '../../../app/service/toast/toast.service';
 import { CityService } from '../../../app/service/city/city.service';
@@ -88,32 +87,6 @@ export class ActivitiesComponent {
     });
   }
 
-
-
-  // selectCategory(category: ActivityCategory) {
-  //   this.selectedCategory = category;
-  //   this.selectedPicture = category?.picture_id;
-
-  //   if (this.cityName && category) {
-  //     this.isLoadingCities = true;
-  //     this.cityService
-  //       .getAICitySuggestions({
-  //         activity: [category.name],
-  //         pays: [this.cityName]
-  //       })
-  //       .subscribe({
-  //         next: (response) => {
-  //           this.suggestedCities = response.data;
-  //           this.isLoadingCities = false;
-  //         },
-  //         error: (error) => {
-  //           console.error('Erreur lors de la recherche de villes:', error);
-  //           this.isLoadingCities = false;
-  //         }
-  //       });
-  //   }
-  // }
-
   selectCategory(category: ActivityCategory) {
     this.selectedCategory = category;
     this.selectedPicture = category?.picture_id;
@@ -124,7 +97,8 @@ export class ActivitiesComponent {
       image: this.selectedPicture || '',
       description: this.selectedCity?.description || '',
       category: this.selectedCategory?.name || '',
-      country: this.cityName
+      country: this.cityName,
+      
     });
   
     if (this.cityName && category) {
@@ -136,6 +110,8 @@ export class ActivitiesComponent {
         })
         .subscribe({
           next: (response) => {
+            console.log('🏙️ Villes suggérées par l’IA :', response.data);
+
             this.suggestedCities = response.data;
             this.isLoadingCities = false;
           },
@@ -157,22 +133,8 @@ export class ActivitiesComponent {
   }
 
 
-  // selectCity(city: SuggestedCity) {
-  //   this.selectedCity = {
-  //     city: city.city,
-  //     img_full: city.img_full,
-  //     description: city.description || '' // On gère le cas où description est null
-  //   };
-  //   this.activityName = city.city;
-  //   this.selectedPicture = city.img_full;
-  //   console.log(this.suggestedCities, 'cities');
-  // }
   selectCity(city: SuggestedCity) {
-    this.selectedCity = {
-      city: city.city,
-      img_full: city.img_full,
-      description: city.description || ''
-    };
+    this.selectedCity = city;
     this.activityName = city.city;
     this.selectedPicture = city.img_full;
   
@@ -181,7 +143,9 @@ export class ActivitiesComponent {
       image: city.img_full,
       description: city.description || '',
       category: this.selectedCategory?.name || '',
-      country: this.cityName
+      country: this.cityName,
+      longitude: city.longitude,
+      latitude: city.latitude
     });
   
     console.log('🎯 Activité émise vers parent :', {
@@ -189,7 +153,9 @@ export class ActivitiesComponent {
       image: city.img_full,
       description: city.description || '',
       category: this.selectedCategory?.name || '',
-      country: this.cityName
+      country: this.cityName,
+      longitude: city.longitude,
+      latitude: city.latitude
     });
   }
   

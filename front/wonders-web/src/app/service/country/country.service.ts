@@ -3,17 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { AIProposalCountry } from '../../model/AI';
+import { Country } from '../../model/Country';
 
-interface Country {
-  id: number;
-  name: string;
-  code: any;
-  description: string;
-  image: string;
-  language: number;
-  created_at: Date;
-  updated_at: Date;
-}
 
 interface AICountryRequest {
   langue: string[];

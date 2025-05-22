@@ -1,6 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import AuthController from '../controllers/AuthController';
-import UserInterface from '../interfaces/UserInterface';
+import UserInterface, { UserUpdateInterface } from '../interfaces/UserInterface';
 import { decryptJWT } from '../lib/JWT';
 import { JwtPayload } from '../interfaces/Global';
 
@@ -72,15 +72,15 @@ router.get('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.put('/:id', (async (req, res) => {
-  try {
-    const body = <UserInterface>req.body;
-    const client = await authController.update(parseInt(req.params.id, 10), body);
-    res.status(200).json(client);
-  } catch (error) {
-    res.status(500).json(error);
-  }
-}) as RequestHandler);
+// router.put('/:id', (async (req, res) => {
+//   try {
+//     const body = <UserUpdateInterface>req.body;
+//     const client = await authController.update(parseInt(req.params.id, 10), body);
+//     res.status(200).json(client);
+//   } catch (error) {
+//     res.status(500).json(error);
+//   }
+// }) as RequestHandler);
 
 router.delete('/:id', (async (req, res) => {
   try {

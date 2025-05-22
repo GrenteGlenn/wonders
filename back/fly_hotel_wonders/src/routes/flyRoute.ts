@@ -31,52 +31,6 @@ router.get('/', ((req, res) => {
   }
 }) as RequestHandler);
 
-// router.get('/list', (async (req, res) => {
-//   try {
-//     const validationResult = FlyParamsSchema.safeParse(req.query);
-
-//     if (!validationResult.success) {
-//       return res.status(400).json({
-//         status: 'error',
-//         message: 'Paramètres de recherche invalides',
-//         errors: validationResult.error.format()
-//       });
-//     }
-
-//     const {
-//       originLocationCode,
-//       destinationLocationCode,
-//       departureDate,
-//       returnDate,
-//       adults,
-//       children,
-//       nonStop,
-//       maxPrice
-//     } = validationResult.data;
-
-//     const flightOffers = (await getFlightOffers(
-//       originLocationCode,
-//       destinationLocationCode,
-//       departureDate,
-//       returnDate,
-//       adults,
-//       children,
-//       nonStop,
-//       maxPrice
-//     )) as typeof FlightOfferSchema;
-
-//     const validatedOffers = z.array(FlightOfferSchema).parse(flightOffers);
-
-//     return res.status(200).json({
-//       status: 'success',
-//       results: validatedOffers.length,
-//       data: validatedOffers
-//     });
-//   } catch (error) {
-//     res.json({ error: error });
-//   }
-// }) as RequestHandler);
-
 router.get('/list', (async (req, res) => {
   try {    
   

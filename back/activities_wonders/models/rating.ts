@@ -1,12 +1,9 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import connection from '../config/dbConnexion'
-import Review from './review'
+import connection from '../config/dbConnexion';
 
-import RatingInterface from '../src/interfaces/rating'
+import RatingInterface from '../src/interfaces/rating';
 
-
-interface RatingCreationAttributes extends Optional<RatingInterface, 'id'> {
-}
+interface RatingCreationAttributes extends Optional<RatingInterface, 'id'> {}
 
 class Rating extends Model<RatingInterface, RatingCreationAttributes> implements RatingInterface {
   declare id: number;
@@ -15,23 +12,26 @@ class Rating extends Model<RatingInterface, RatingCreationAttributes> implements
   declare readonly updated_at?: Date;
 }
 
-Rating.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
+Rating.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    rating: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    }
   },
-  rating: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true
+  {
+    sequelize: connection,
+    underscored: true,
+    timestamps: true,
+    modelName: 'rating'
   }
-}, {
-  sequelize: connection,
-  underscored: true,
-  timestamps: true,
-  modelName: 'rating'
-});
+);
 
 export default Rating;

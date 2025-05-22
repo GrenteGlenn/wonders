@@ -15,6 +15,17 @@ module.exports = {
       activity_id: {
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.ENUM(
+          'APayer',
+          'EnAttenteDeReservation',
+          'EnAttenteDeConfirmation',
+          'ProblemeDeReservation',
+          'Reserve',
+          'Annuler'
+        ),
+        allowNull: false
+      },
       created_at: {
         type: Sequelize.DATE
       },

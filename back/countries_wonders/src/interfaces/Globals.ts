@@ -1,7 +1,7 @@
 export interface BodyCountry {
   name: string;
   code: string;
-  description: Text;
+  description: string;
   image: string;
   language: number;
   longitude: number;
@@ -23,6 +23,7 @@ export interface Pays {
 
 export interface ResultCountry {
   pays: string;
+  country_id: number | null;
   img_full: string | null;
 }
 
@@ -46,7 +47,9 @@ export interface Ville {
 
 export interface ResultCity {
   pays: string;
+  country_id: number | null;
   city: string;
+  city_id: number | null;
   description: string;
   img_full: string | null;
   longitude: number;

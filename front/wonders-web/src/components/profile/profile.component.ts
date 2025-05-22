@@ -3,12 +3,15 @@ import { LucideAngularModule } from 'lucide-angular';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { User } from '../../app/model/User';
+import { FetchableUser, User } from '../../app/model/User';
 import { Router } from '@angular/router';
 import { AuthentificationService } from '../../app/service/auth/authentification.service';
 import { UsersService } from '../../app/service/users/users.service';
 import { LanguageService } from '../../app/service/languages/languages.service';
 import { CountryService } from '../../app/service/country/country.service';
+import { FormsModule } from '@angular/forms';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+
 
 interface r {
   image: string;
@@ -19,17 +22,21 @@ interface r {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [LucideAngularModule, MatCardModule, CommonModule, DialogModule],
+  imports: [LucideAngularModule, MatCardModule, CommonModule, DialogModule, FormsModule],
   templateUrl: './profile.component.html',
-  styleUrl: './profile.component.css'
+  styleUrl: './profile.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ProfileComponent {
   dialog = inject(Dialog);
 
-  user: User | null = null;
+  user: FetchableUser | null = null;
+
   languageName: string = '';
   countryName: string = '';
 
+  showEditModal = false;
+  showDeleteModal = false;
 
   constructor(
     // private router: Router,
@@ -37,7 +44,6 @@ export class ProfileComponent {
     private usersService: UsersService,
     private languageService: LanguageService,
     private countryService: CountryService
-
   ) {}
 
   ngOnInit(): void {
@@ -93,17 +99,11 @@ export class ProfileComponent {
       date: 'Japan'
     }
   ];
-
-  confirmDelete(): void {
-    //  modale à placer ici
-  }
-
   loadUserInfo() {
     this.usersService.getUserInfo().subscribe({
       next: (userData) => {
         this.user = userData;
-        console.log(this.user, 'users');
-        
+
         if (this.user && this.user.language_id) {
           this.loadLanguageName(this.user.language_id);
         }
@@ -140,5 +140,43 @@ export class ProfileComponent {
         this.countryName = 'Pays non disponible';
       }
     });
+  }
+
+  // modal
+
+  openEditModal() {
+    this.showEditModal = true;
+  }
+
+  closeEditModal() {
+    this.showEditModal = false;
+  }
+
+  submitEdit() {
+    if (!this.user) return;
+  
+    this.usersService.Edit(this.user).subscribe({
+      next: () => {
+        this.closeEditModal();
+        console.log('Profil mis à jour avec succès');
+        // Optionnel : tu peux afficher un toast ou notifier l'utilisateur ici
+      },
+      error: (err) => {
+        console.error('Erreur lors de la mise à jour du profil :', err);
+      }
+    });
+  }
+  
+  openDeleteModal() {
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal() {
+    this.showDeleteModal = false;
+  }
+
+  confirmDelete() {
+    // service à implémenter
+    this.closeDeleteModal();
   }
 }

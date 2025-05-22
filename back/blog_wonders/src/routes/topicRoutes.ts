@@ -13,7 +13,6 @@ const topicController = new TopicController();
 router.get('/', (async (req: Request, res: Response) => {
   try {
     const topic = await topicController.list();
-    console.log(topic);
 
     res.status(200).json(topic);
   } catch (error) {

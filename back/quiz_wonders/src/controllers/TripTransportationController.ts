@@ -1,23 +1,35 @@
 import TripTransportation from '../../models/triptransportation';
+import { Status } from '../interfaces/Global';
 
 export default class TripTransportationController {
   async list() {
     return await TripTransportation.findAll();
   }
+
   async one(id: number) {
     const tripTransportation = await TripTransportation.findByPk(id);
     if (tripTransportation) {
       return tripTransportation;
     }
   }
-  async new(from_date: Date, to_date: Date, price: number, url: string, created_at: Date, updated_at: Date) {
+
+  async new(
+    from_date: Date,
+    to_date: Date,
+    price: number,
+    url: string,
+    status: Status,
+    created_at: Date,
+    updated_at: Date
+  ) {
     try {
-      return await TripTransportation.create({ from_date, to_date, price, url, created_at, updated_at });
+      return await TripTransportation.create({ from_date, to_date, price, url, status, created_at, updated_at });
     } catch (error) {
       console.error('Error creating trip transportation:', error);
     }
   }
-  async update(id: number, from_date: Date, to_date: Date, price: number, url: string) {
+
+  async update(id: number, from_date: Date, to_date: Date, price: number, url: string, status: Status) {
     try {
       const tripTransportation = await TripTransportation.findByPk(id);
 
@@ -29,6 +41,7 @@ export default class TripTransportationController {
       tripTransportation.to_date = to_date;
       tripTransportation.price = price;
       tripTransportation.url = url;
+      tripTransportation.status = status;
       await tripTransportation.save();
 
       return tripTransportation;
@@ -36,6 +49,7 @@ export default class TripTransportationController {
       console.error('Error updating trip transportation:', error);
     }
   }
+
   async delete(id: number) {
     try {
       const trip = await TripTransportation.findByPk(id);

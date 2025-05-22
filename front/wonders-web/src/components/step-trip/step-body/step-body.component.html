@@ -104,11 +104,21 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="3">
-            <app-fly (flightSelected)="handleFlightSelected($event)"></app-fly>
+            <app-fly
+              (flightSelected)="handleFlightSelected($event)"
+              [latitude]="selectedActivity?.latitude"
+              [longitude]="selectedActivity?.longitude"
+            ></app-fly>
           </ng-container>
 
           <ng-container *ngSwitchCase="4">
-            <app-hotel (hotelSelected)="handleHotelSelected($event)"></app-hotel>
+            <app-hotel
+              [latitude]="selectedActivity?.latitude"
+              [longitude]="selectedActivity?.longitude"
+              [cityName]="selectedActivity?.name"
+              [countryName]="selectedDestination?.name"
+              (hotelSelected)="handleHotelSelected($event)"
+            ></app-hotel>
           </ng-container>
 
           <ng-container *ngSwitchCase="5">
@@ -139,7 +149,7 @@
         <ng-container *ngIf="!(currentStep === 1 && !selectedDestination)">
           <button
             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-            (click)="nextStep()"
+            (click)="currentStep === steps.length ? submitTrip() : nextStep()"
             [disabled]="!canProceedToNextStep()"
             [ngClass]="{
               'opacity-50 cursor-not-allowed': !canProceedToNextStep()

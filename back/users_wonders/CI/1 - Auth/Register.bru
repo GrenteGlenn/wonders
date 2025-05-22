@@ -1,0 +1,41 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://{{address}}/api/auth/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "first_name": "{{FirstName}}",
+      "last_name": "{{LastName}}",
+      "email": "{{Mail}}",
+      "password": "{{Password}}",
+      "birth_date": "2024-07-19T00:22:05.916Z",
+      "language_id": 1,
+      "user_id": 1,
+      "country_id": 1
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("FirstName",faker.person.firstName())
+  bru.setEnvVar("LastName",faker.person.lastName())
+  bru.setEnvVar("Password",faker.internet.password(16, false, /[A-Za-z0-9]/))
+  bru.setEnvVar("Mail",faker.internet.email())
+  
+  
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+}

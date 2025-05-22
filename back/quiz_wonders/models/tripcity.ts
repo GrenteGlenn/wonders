@@ -3,9 +3,8 @@ import connection from '../config/dbConnection';
 import TripCityInterface from '../src/interfaces/TripCityInterface';
 import TripTransportation from './triptransportation';
 import Trip from './trip';
-import TripDay from './tripday';
 
-interface TripCreationAttributes extends Optional<TripCityInterface, 'id'> { }
+interface TripCreationAttributes extends Optional<TripCityInterface, 'id'> {}
 
 class TripCity extends Model<TripCityInterface, TripCreationAttributes> implements TripCityInterface {
   declare id: number;
@@ -21,50 +20,51 @@ class TripCity extends Model<TripCityInterface, TripCreationAttributes> implemen
   }
 }
 
-
-TripCity.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
-  },
-  trip_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: Trip,
-      key: 'id'
+TripCity.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    trip_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Trip,
+        key: 'id'
+      }
+    },
+    city_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    transportation_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: TripTransportation,
+        key: 'id'
+      }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   },
-  city_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  transportation_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: TripTransportation,
-      key: 'id'
-    }
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: true
+  {
+    sequelize: connection,
+    underscored: true,
+    modelName: 'TripCity',
+    tableName: 'trip_cities',
+    timestamps: false
   }
-}, {
-  sequelize: connection,
-  underscored: true,
-  modelName: 'TripCity',
-  tableName: 'trip_cities',
-  timestamps: false
-});
-
+);
 
 Trip.hasMany(TripCity, { foreignKey: 'trip_id', as: 'cities' });
 TripCity.belongsTo(Trip, { foreignKey: 'trip_id', as: 'trip' });

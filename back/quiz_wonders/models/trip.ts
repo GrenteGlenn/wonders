@@ -3,7 +3,7 @@ import sequelize from '../config/dbConnection';
 import TripInterface from '../src/interfaces/TripInterface';
 import TripTransportation from './triptransportation';
 
-interface TripCreationAttributes extends Optional<TripInterface, 'id'> { }
+interface TripCreationAttributes extends Optional<TripInterface, 'id'> {}
 
 class Trip extends Model<TripInterface, TripCreationAttributes> implements TripInterface {
   declare id: number;
@@ -22,50 +22,59 @@ class Trip extends Model<TripInterface, TripCreationAttributes> implements TripI
   }
 }
 
-Trip.init({
-  from_date: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  to_date: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  user_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  country_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  duration: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  transportation_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: TripTransportation,
-      key: 'id'
+Trip.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    from_date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    to_date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    country_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    duration: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    transportation_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: TripTransportation,
+        key: 'id'
+      }
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true
     }
   },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: true
+  {
+    sequelize,
+    underscored: false,
+    modelName: 'Trip',
+    tableName: 'trips',
+    timestamps: false
   }
-}, {
-  sequelize,
-  underscored: false,
-  modelName: 'Trip',
-  tableName: 'trips',
-  timestamps: false,
-});
+);
 
 Trip.belongsTo(TripTransportation, {
   foreignKey: 'transportation_id',

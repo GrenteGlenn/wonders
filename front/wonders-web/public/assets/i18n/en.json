@@ -1,0 +1,25 @@
+{
+    "HomePage": {
+      "HomeTitle": "Discover your next vacation destination",
+      "HomeSubTitle": "Popular destinations in 2024",
+      "HomeShowMore": "Show more"
+    },
+    "SearchDestinationComponent":{
+        "PlaceHolder": "Search by city or country",
+        "Search": "Search",
+        "ResultNotFound": "No results found for"
+    },
+    "NavBar":{
+        "ButtonTrip": "Plan your trip",
+        "TranslateFR": "French",
+        "TranslateEN": "English",
+        "ButtonProfile": "Profil",
+        "ButtonConnection": "Login",
+        "ButtonDeconnexion": "Logout"
+
+    },
+
+    "LOGIN": "Login",
+    "REGISTER": "Register"
+}
+  

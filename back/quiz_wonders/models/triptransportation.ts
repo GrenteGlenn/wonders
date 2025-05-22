@@ -1,7 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import connection from '../config/dbConnection';
 import TripTransportationInterface from '../src/interfaces/TripTransportationInterface';
-import Trip from './trip';
+import { Status } from '../src/interfaces/Global';
 
 interface TripTransportationCreationAttributes extends Optional<TripTransportationInterface, 'id'> { }
 
@@ -11,6 +11,7 @@ class TripTransportation extends Model<TripTransportationInterface, TripTranspor
   declare to_date: Date;
   declare price: number;
   declare url: string;
+  declare status: Status;
   declare readonly created_at: Date;
   declare readonly updated_at: Date;
 
@@ -20,43 +21,56 @@ class TripTransportation extends Model<TripTransportationInterface, TripTranspor
   }
 }
 
-TripTransportation.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
+TripTransportation.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    from_date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    to_date: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: false
+    },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM(
+        'APayer',
+        'EnAttenteDeReservation',
+        'EnAttenteDeConfirmation',
+        'ProblemeDeReservation',
+        'Reserve',
+        'Annuler'
+      )
+    },
+    created_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    updated_at: {
+      type: DataTypes.DATE,
+      allowNull: true
+    }
   },
-  from_date: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  to_date: {
-    type: DataTypes.DATE,
-    allowNull: false
-  },
-  price: {
-    type: DataTypes.INTEGER,
-    allowNull: false
-  },
-  url: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  created_at: {
-    type: DataTypes.DATE,
-    allowNull: true
-  },
-  updated_at: {
-    type: DataTypes.DATE,
-    allowNull: true
+  {
+    sequelize: connection,
+    tableName: 'trip_transportations',
+    modelName: 'TripTransportation',
+    timestamps: false,
+    underscored: true
   }
-}, {
-  sequelize: connection,
-  tableName: 'trip_transportations',
-  modelName: 'TripTransportation',
-  timestamps: false,
-  underscored: true,
-});
+);
 
 export default TripTransportation;

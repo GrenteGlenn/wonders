@@ -1,12 +1,11 @@
 import { DataTypes, Model, Optional } from 'sequelize';
-import connection from '../config/dbConnexion'
+import connection from '../config/dbConnexion';
 
-import ReviewInterface from '../src/interfaces/review'
+import ReviewInterface from '../src/interfaces/review';
 import Activity from './activity';
 import Rating from './rating';
 
-interface ReviewCreationAttributes extends Optional<ReviewInterface, 'id'> {
-}
+interface ReviewCreationAttributes extends Optional<ReviewInterface, 'id'> {}
 
 export default class Review extends Model<ReviewInterface, ReviewCreationAttributes> implements ReviewInterface {
   declare id: number;
@@ -18,35 +17,38 @@ export default class Review extends Model<ReviewInterface, ReviewCreationAttribu
   declare readonly updated_at?: Date;
 }
 
-Review.init({
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false
+Review.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false
+    },
+    comment: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    rating_id: {
+      type: DataTypes.NUMBER,
+      allowNull: false
+    },
+    user_id: {
+      type: DataTypes.NUMBER,
+      allowNull: true
+    },
+    activity_id: {
+      type: DataTypes.NUMBER,
+      allowNull: false
+    }
   },
-  comment: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  rating_id: {
-    type: DataTypes.NUMBER,
-    allowNull: false,
-  },
-  user_id: {
-    type: DataTypes.NUMBER,
-    allowNull: true,
-  },
-  activity_id: {
-    type: DataTypes.NUMBER,
-    allowNull: false,
+  {
+    sequelize: connection,
+    underscored: true,
+    timestamps: true,
+    modelName: 'reviews'
   }
-}, {
-  sequelize: connection,
-  underscored: true,
-  timestamps: true,
-  modelName: 'reviews'
-});
+);
 
 Review.belongsTo(Activity, {
   foreignKey: 'activity_id',

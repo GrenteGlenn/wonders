@@ -1,9 +1,11 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule } from 'lucide-angular';
 import { HotelService } from '../../app/service/hotel/hotel.service';
 import { finalize, forkJoin, of } from 'rxjs';
+import { CityService } from '../../app/service/city/city.service';
+import { City } from '../../app/model/cities';
 
 @Component({
   selector: 'app-hotel',
@@ -12,11 +14,15 @@ import { finalize, forkJoin, of } from 'rxjs';
   templateUrl: './hotel.component.html',
   styleUrl: './hotel.component.css'
 })
-export class HotelComponent {
+export class HotelComponent implements OnInit {
   private fb = inject(FormBuilder);
   private hotelService = inject(HotelService);
+  private cityService = inject(CityService);
   @Output() hotelSelected = new EventEmitter<any>();
-
+  @Input() latitude!: number;
+  @Input() longitude!: number;
+  @Input() cityName!: string;
+  @Input() countryName!: string | undefined;
 
   hotelForm: FormGroup = this.fb.group({
     latitude: [48.8651],
@@ -25,6 +31,14 @@ export class HotelComponent {
     hotelScore: [''],
     showOnlyWithOffers: [false]
   });
+
+  ngOnInit() {
+    this.loadCitiesForCountry();
+    this.hotelForm.patchValue({
+      latitude: this.latitude,
+      longitude: this.longitude
+    });
+  }
 
   hotels: any[] = [];
   filteredHotels: any[] = [];
@@ -36,7 +50,8 @@ export class HotelComponent {
   itemsPerPage = 10;
   showOnlyWithOffers = false;
   selectedHotelId: string | null = null;
-
+  cities: City[] = [];
+  selectedCityId: number | null = null;
 
   searchByName = '';
 
@@ -45,10 +60,46 @@ export class HotelComponent {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 
+  loadCitiesForCountry() {
+    this.cityService.getAllCities().subscribe({
+      next: (cities) => {
+        this.cities = cities.filter(
+          (city) => city.country && city.country.name && city.country.name === this.countryName
+        );
+        const matchedCity = this.cities.find(
+          (city) => Math.abs(city.latitude! - this.latitude) < 0.01 && Math.abs(city.longitude! - this.longitude) < 0.01
+        );
+
+        if (matchedCity) {
+          this.selectedCityId = matchedCity.id!;
+          this.setCoordinatesFromCity(matchedCity);
+        }
+      },
+      error: (err) => console.error('Erreur chargement des villes :', err)
+    });
+  }
+
+  onCityChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    const cityId = +target.value;
+
+    const selected = this.cities.find((c) => c.id === cityId);
+    if (selected) {
+      this.setCoordinatesFromCity(selected);
+    }
+  }
+
+  setCoordinatesFromCity(city: City) {
+    this.hotelForm.patchValue({
+      latitude: city.latitude,
+      longitude: city.longitude
+    });
+  }
+
   //stock l'id de l'hotel selectionner
   selectHotel(hotel: any) {
     this.selectedHotelId = hotel.hotelId;
-  
+
     const selectedHotelData = {
       id: hotel.hotelId,
       name: hotel.nameFormatted,
@@ -57,10 +108,10 @@ export class HotelComponent {
       hasOffers: hotel.hasOffers,
       offers: hotel.offers || []
     };
-  
+
     this.hotelSelected.emit(selectedHotelData);
   }
-  
+
   isSelected(hotel: any): boolean {
     return this.selectedHotelId === hotel.hotelId;
   }

@@ -47,12 +47,13 @@ export default class AuthController {
     return await User.create(user);
   }
 
-  async update(id: number, user: UserInterface) {
+  async update(id: number, user: UserInterface ) {
     const client = await User.findByPk(id);
     if (client) {
       client.country_id = user.country_id;
       client.first_name = user.first_name;
       client.last_name = user.last_name;
+      client.img = user.img;
       client.email = user.email;
       client.birth_date = user.birth_date;
       client.language_id = user.language_id;

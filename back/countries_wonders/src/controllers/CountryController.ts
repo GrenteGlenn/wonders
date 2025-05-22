@@ -20,6 +20,16 @@ class CountryController {
     return countries;
   }
 
+  async getOneByName(name: string) {
+    const country = await Country.findOne({ where: { name: name } });
+
+    if (country) {
+      return country;
+    } else {
+      return null;
+    }
+  }
+
   async one(id: number) {
     const now = Date.now();
     const country = await Country.findByPk(id, {
@@ -38,7 +48,7 @@ class CountryController {
       if (diffDays !== undefined && diffDays > 29) {
         const res = await this.getDataFromOpenAI(country.name);
         if (res) {
-          country.description = res as unknown as Text;
+          country.description = res as unknown as string;
           country.updated_at_description = new Date();
           await country.save();
         }
@@ -60,7 +70,7 @@ class CountryController {
   async new(
     name: string,
     code: string,
-    description: Text,
+    description: string,
     image: string,
     language: number,
     longitude: number,
@@ -86,7 +96,7 @@ class CountryController {
     id: number,
     name: string,
     code: string,
-    description: Text,
+    description: string,
     image: string,
     language: number,
     longitude: number,

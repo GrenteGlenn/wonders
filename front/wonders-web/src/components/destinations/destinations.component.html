@@ -1,7 +1,7 @@
 <div class="container mx-auto px-4 py-8">
   <ng-container *ngIf="isLoading">
     <div class="flex justify-center items-center h-64">
-      <div class="animate-spin rounded-full h-12 w-full border-b-2 border-blue-500"></div>
+      <mat-spinner></mat-spinner>
     </div>
   </ng-container>
 
@@ -16,7 +16,7 @@
 
     <!-- Affichage du détail de la destination -->
     <div *ngIf="destination" class="mb-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 ">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div class="relative">
           <div
             *ngIf="destination.isImageLoading"
@@ -26,7 +26,11 @@
           </div>
           <img [src]="destination.image" class="w-full h-96 object-cover rounded-lg" alt="{{ destination.name }}" />
         </div>
-        <app-google-map></app-google-map>
+        <app-google-map
+          *ngIf="destination?.latitude && destination?.longitude"
+          [lat]="destination.latitude"
+          [lng]="destination.longitude"
+        ></app-google-map>
       </div>
       <div class="w-full">
         <h2 class="text-2xl font-semibold mb-4">Description</h2>
@@ -59,7 +63,7 @@
           <img
             [src]="result.image"
             class="w-full h-44 object-cover"
-            onerror="this.onerror=null; this.src='assets/images/placeholder.jpg';"
+            onerror="this.onerror=null; this.src='assets/images/noimages.jpg';"
             loading="lazy"
           />
           <div class="p-4">

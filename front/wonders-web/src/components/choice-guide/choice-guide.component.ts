@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
+import { TranslateService } from '../../app/service/translate/translate.service';
 
 @Component({
   selector: 'app-choice-guide',
@@ -10,13 +11,16 @@ import { LucideAngularModule } from 'lucide-angular';
   styleUrl: './choice-guide.component.css'
 })
 export class ChoiceGuideComponent {
-  constructor(public router: Router) {}
+  constructor(
+    public router: Router,
+    public translateService: TranslateService
+  ) {}
 
   goQuestion() {
-    this.router.navigate(['question']);
+    this.router.navigate(['/', this.translateService.currentLang, 'question']);
   }
 
   goPlanTrip() {
-    this.router.navigate(['stepBody']);
+    this.router.navigate(['/', this.translateService.currentLang, 'stepBody']);
   }
 }
