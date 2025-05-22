@@ -1,0 +1,13 @@
+FROM node AS builder
+WORKDIR /app
+COPY ./back/blog_wonders .
+RUN npm install
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app .
+RUN echo '{"development":{"username":"gpebackbloguser","password":"f7dF66Z5R7MXHIFixoE6m0twPvujj0FP","database":"gpebackblog","host":"163.5.107.36","port":"5432","dialect":"postgres"}}' > ./config/config.json
+RUN printf 'DB_NAME=gpebackblog \nDB_USER=gpebackbloguser \nDB_PASSWORD=f7dF66Z5R7MXHIFixoE6m0twPvujj0FP \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001' > .env
+RUN cat .env
+CMD ["npm", "start"]
+EXPOSE 3001

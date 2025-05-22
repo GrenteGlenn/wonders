@@ -1,0 +1,13 @@
+FROM node AS builder
+WORKDIR /app
+COPY ./back/countries_wonders .
+RUN npm install
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app .
+RUN echo '{"development":{"username":"gpebackcountriesuser","password":"MGH3hYgicRtZAhe2ELJMK5Qn5lF7BhS3","database":"gpebackcountries","host":"163.5.107.36","port":"5432","dialect":"postgres"}}' > ./config/config.json
+RUN printf 'DB_NAME=gpebackcountries \nDB_USER=gpebackcountriesuser \nDB_PASSWORD=MGH3hYgicRtZAhe2ELJMK5Qn5lF7BhS3 \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001 \nOPENAI_API_KEY=aefaefaefaefaefaef' > .env
+RUN cat .env
+CMD ["npm", "start"]
+EXPOSE 3001

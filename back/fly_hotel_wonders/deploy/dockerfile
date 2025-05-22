@@ -1,0 +1,10 @@
+FROM node AS builder
+WORKDIR /app
+COPY ./back/fly_hotel_wonders .
+RUN npm install
+
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=builder /app .
+CMD ["npm", "start"]
+EXPOSE 3001
