@@ -6,14 +6,14 @@ block-unallowed-branches:
   stage: rule
   image: alpine
   script:
-    - exit 1
-  only:
-    refs:
-      - merge_requests
-  except:
-    variables:
-      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "A"
-      - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME == "B"
+    - |
+      echo "Merge refusé : seule 'back-dev' ou 'dev-web' peuvent être mergées dans 'main'"
+      exit 1
+  rules:
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "back-dev" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "dev-web"'
+      when: always
+    - when: never
+
 
 workflow:
   rules:
@@ -23,16 +23,6 @@ workflow:
 
 variables:
   NODE_ENV: dev
-
-# job1:
-#   stage: pre
-#   tags:
-#     - PLI
-#   script:
-#     - echo "This job runs in merge request pipelines"
-#   rules:
-#     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-
 
 # Manque fly, activities
 lint_back_user:
