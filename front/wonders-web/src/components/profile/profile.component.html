@@ -8,7 +8,7 @@
         alt="profile"
       />
       <div>
-        <h2 class="text-2xl font-bold">{{ user?.first_name }}</h2>
+        <h2 class="text-2xl font-bold">{{ user?.first_name }} {{ user?.last_name }}</h2>
         <p class="text-sm text-gray-500">{{ user?.email }}</p>
       </div>
     </div>
@@ -84,9 +84,9 @@
   <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
     <h2 class="text-xl font-semibold mb-4">Modifier votre profil</h2>
     <form (submit)="submitEdit()" class="space-y-4">
-      <input type="text" [(ngModel)]="u.first_name" placeholder="Prénom" class="w-full p-2 border rounded" />
-      <input type="text" [(ngModel)]="u.last_name" placeholder="Nom" class="w-full p-2 border rounded" />
-      <input type="email" [(ngModel)]="u.email" placeholder="Email" class="w-full p-2 border rounded" />
+      <input type="text" name="first_name" [(ngModel)]="newUser.first_name" placeholder="Prénom" class="w-full p-2 border rounded" />
+      <input type="text" name="last_name" [(ngModel)]="newUser.last_name" placeholder="Nom" class="w-full p-2 border rounded" />
+      <input type="email" name="email" [(ngModel)]="newUser.email" placeholder="Email" class="w-full p-2 border rounded" />
       <div class="flex justify-end gap-2">
         <button type="button" (click)="closeEditModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
           Annuler

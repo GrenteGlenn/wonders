@@ -1,0 +1,42 @@
+<div class="container mx-auto px-4">
+  <div class="navigation">
+    <h3 class="text-center">Mes groupes</h3>
+    <!-- Table -->
+    <div class="bg-white rounded-xl p-6">
+      <div *ngIf="userGroups.length === 0" class="text-center text-gray-500">Aucun sujet trouvé.</div>
+
+      <div *ngIf="userGroups.length > 0" class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50 text-left text-sm font-semibold text-gray-600">
+            <tr>
+              <th class="px-6 py-3 cursor-pointer">Nom</th>
+              <th class="cursor-pointer">Participants</th>
+              <th class="px-6 py-3 cursor-pointer">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
+            <tr *ngFor="let group of userGroups" class="transition cursor-pointer hover:bg-slate-50 hover:text-black">
+              <td class="px-6 py-4 font-medium">{{ group.name }}</td>
+              <td class="px-6 py-4">
+                <div class="flex flex-wrap gap-2">
+                  <span
+                    *ngFor="let user of group.users"
+                    [ngStyle]="{ background: userLabelColors() }"
+                    class="userlabel"
+                  >
+                    {{ user.first_name }}
+                    <span *ngIf="user.UserGroupLink.is_owner" (click)="removeUserFromGroup(user.id, group.id)">X</span>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <button>Ajouter</button>
+                <button *ngIf="haveToAcceptToJoinToGroup(user)">accepter</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

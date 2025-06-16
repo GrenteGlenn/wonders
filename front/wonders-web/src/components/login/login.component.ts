@@ -4,6 +4,7 @@ import { AuthentificationService, ReponseToken } from '../../app/service/auth/au
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslateService } from '../../app/service/translate/translate.service';
+import { platform } from '@tauri-apps/plugin-os';
 import { CommonModule } from '@angular/common';
 import { platform } from '@tauri-apps/plugin-os';
 import { isTauri } from '../../utils/tauri.utils';
@@ -19,7 +20,9 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   returnUrl: string = '';
-  platformName: string | null = null; 
+  platformName: string | null = null;
+  error: boolean = false
+  errorMessage: string = 'Une erreur est survenue'
 
   constructor(
     private _authService: AuthentificationService,
@@ -27,6 +30,11 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public translateService: TranslateService
   ) {}
+
+
+  detectPlatform(): boolean {
+    return ['ios', 'android', 'linux'].includes(currentPlatform);
+  }
 
   ngOnInit(): void {
     // 🔐 Redirection si déjà connecté
@@ -62,7 +70,9 @@ export class LoginComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Erreur de connexion:', error);
+        this.error = true
+        console.error('Erreur de connexion:', error)
+        this.router.navigate(['/', this.translateService.currentLang, 'login'])
       }
     });
   }

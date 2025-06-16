@@ -10,37 +10,42 @@
     <div class="container mx-auto px-4">
       <div class="max-w-md mx-auto">
         <div class="glass-card relative z-10 p-6">
-          <div class="p-6">
-            <div class="flex justify-center mb-4">
-              <h1 class="text-3xl font-bold text-center mb-8">
-                Connexion
-              </h1>
-              <!-- <lucide-icon name="userCircle" class="w-16 h-16 text-blue-500"></lucide-icon> -->
+          <div class="flex justify-center mb-4">
+            <h1 class="text-3xl font-bold text-center mb-8">
+              Connexion
+            </h1>
+            <!-- <lucide-icon name="userCircle" class="w-16 h-16 text-blue-500"></lucide-icon> -->
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label for="lb_email" class="block text-sm font-medium text-gray-700 mb-1">Adresse mail</label>
+              <input type="text" [(ngModel)]="email" id="lb_email"
+                     class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
             </div>
 
-            <div class="space-y-4">
-              <div>
-                <label for="lb_email" class="block text-sm font-medium text-gray-700 mb-1">Adresse mail</label>
-                <input type="text" [(ngModel)]="email" id="lb_email"
-                  class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
-              </div>
-
-              <div>
-                <label for="lb_password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
-                <input type="password" [(ngModel)]="password" id="lb_password"
-                  class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
-              </div>
-
-              <button (click)="clickLogin()" class="w-full">
-                Connexion
-              </button>
-
-              <p class="text-center text-gray-600">
-                Vous n'avez pas de compte ?
-                <a href="" (click)="href($event)"
-                  class="text-blue-500 hover:text-blue-600 underline font-medium">S'inscrire</a>
-              </p>
+            <div>
+              <label for="lb_password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+              <input type="password" [(ngModel)]="password" id="lb_password"
+                     class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none" />
             </div>
+
+            <button
+              (click)="clickLogin()"
+              class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+            >
+              Connexion
+            </button>
+
+            <p *ngIf="error" class="text-red-600">{{ errorMessage }}</p>
+
+            <p class="text-center text-gray-600">
+              Vous n'avez pas de compte ?
+              <a href="" (click)="href($event)" class="text-blue-500 hover:text-blue-600 underline font-medium">
+                S'inscrire
+              </a>
+            </p>
+
             <div *ngIf="detectPlatform()">
               <div class="login-separator">
                 <div class="separator-line"></div>
@@ -49,8 +54,8 @@
 
               <div class="w-full mt-4">
                 <button (click)="goToSafe()"
-                  class="safe-button flex items-center justify-center gap-2 w-full bg-blue-500 hover:bg-orange-400 hover:text-black text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 shadow-md backdrop-blur-md"
-                  routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
+                        class="safe-button flex items-center justify-center gap-2 w-full bg-blue-500 hover:bg-orange-400 hover:text-black text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 shadow-md backdrop-blur-md"
+                        routerLink="/" routerLinkActive="active" ariaCurrentWhenActive="page">
                   <lucide-icon name="lock" class="w-5 h-5"></lucide-icon>
                   <span>Personal Safe</span>
                 </button>
@@ -61,3 +66,4 @@
       </div>
     </div>
   </div>
+</div>

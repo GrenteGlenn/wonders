@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
@@ -27,10 +27,11 @@ interface r {
   styleUrl: './profile.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   dialog = inject(Dialog);
 
   user: FetchableUser | null = null;
+  newUser = { first_name: "", last_name: "", email: "" }
 
   languageName: string = '';
   countryName: string = '';
@@ -145,6 +146,13 @@ export class ProfileComponent {
   // modal
 
   openEditModal() {
+     if (this.user) {
+      this.newUser = {
+        first_name: this.user.first_name || '',
+        last_name: this.user.last_name || '',
+        email: this.user.email || ''
+    };
+  }
     this.showEditModal = true;
   }
 
@@ -155,7 +163,7 @@ export class ProfileComponent {
   submitEdit() {
     if (!this.user) return;
   
-    this.usersService.Edit(this.user).subscribe({
+    this.usersService.Edit(this.user, this.newUser).subscribe({
       next: () => {
         this.closeEditModal();
         console.log('Profil mis à jour avec succès');
