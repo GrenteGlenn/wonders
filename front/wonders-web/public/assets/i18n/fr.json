@@ -1,23 +1,23 @@
 {
-    "HomePage": {
-      "HomeTitle": "Découvrez votre prochaine destination de vacances",
-      "HomeSubTitle": "Destinations populaires en 2024",
-      "HomeShowMore": "Voir plus"
-    },
-    "SearchDestinationComponent":{
-        "PlaceHolder": "Recherche par ville ou pays",
-        "Search": "Rechercher",
-        "ResultNotFound": "Aucun résultat trouvé pour"
-    },
-    "NavBar":{
-        "ButtonTrip": "Plannifier votre voyage",
-        "TranslateFR": "Français",
-        "TranslateEN": "Anglais",
-        "ButtonProfile": "Profile",
-        "ButtonConnection": "Connexion",
-        "ButtonDeconnexion": "Déconnexion"
-    },
-    "LOGIN": "Login",
-    "REGISTER": "Register"
+  "HomePage": {
+    "HomeTitle": "Découvrez votre prochaine destination de vacances",
+    "HomeSubTitle": "Destinations populaires en 2024",
+    "HomeShowMore": "Voir plus",
+    "PlanMyTrip": "Planifier mon voyage"
+  },
+  "SearchDestinationComponent": {
+    "PlaceHolder": "Recherche par ville ou pays",
+    "Search": "Rechercher",
+    "ResultNotFound": "Aucun résultat trouvé pour"
+  },
+  "NavBar": {
+    "ButtonTrip": "Planifier votre voyage",
+    "TranslateFR": "🇫🇷",
+    "TranslateEN": "🇬🇧",
+    "ButtonProfile": "Profil",
+    "ButtonConnection": "Connexion",
+    "ButtonDeconnexion": "Déconnexion"
+  },
+  "LOGIN": "Login",
+  "REGISTER": "Register"
 }
-  

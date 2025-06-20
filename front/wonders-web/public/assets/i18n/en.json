@@ -2,7 +2,8 @@
     "HomePage": {
       "HomeTitle": "Discover your next vacation destination",
       "HomeSubTitle": "Popular destinations in 2024",
-      "HomeShowMore": "Show more"
+      "HomeShowMore": "Show more",
+      "PlanMyTrip": "Plan my trip"
     },
     "SearchDestinationComponent":{
         "PlaceHolder": "Search by city or country",
@@ -11,8 +12,8 @@
     },
     "NavBar":{
         "ButtonTrip": "Plan your trip",
-        "TranslateFR": "French",
-        "TranslateEN": "English",
+        "TranslateFR": "🇫🇷",
+        "TranslateEN": "🇬🇧",
         "ButtonProfile": "Profil",
         "ButtonConnection": "Login",
         "ButtonDeconnexion": "Logout"

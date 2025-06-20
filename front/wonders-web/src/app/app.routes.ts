@@ -17,6 +17,7 @@ import { ActivitiesComponent } from '../components/activities/activities/activit
 import { HotelComponent } from '../components/hotel/hotel.component';
 import { PreviewComponent } from '../components/preview/preview.component';
 import { ForumComponent } from '../components/topic/forum.component';
+import { SecureSafeComponent } from '../components/secure-safe/secure-safe.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'fr/home' },
@@ -41,7 +42,8 @@ export const routes: Routes = [
       { path: 'stepBody', component: StepBodyComponent },
       { path: 'activity', component: ActivitiesComponent },
       { path: 'hotel', component: HotelComponent },
-      { path: 'preview', component: PreviewComponent }
+      { path: 'preview', component: PreviewComponent },
+      { path: 'secure-safe', component: SecureSafeComponent }
     ]
   }
 ];

@@ -1,0 +1,112 @@
+:host {
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1A87CC;
+  padding: 0.5rem 1rem;
+  color: white;
+}
+
+.logo {
+  height: 40px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.nav-button {
+  background-color: #FFA500; /* orange */
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-family: 'Quicksand', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-button:hover {
+  background-color: #1A87CC;
+  color: white;
+  outline: none;
+}
+
+.nav-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Pour le bouton mobile fixe */
+.fixed .nav-button {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Style icône */
+.nav-button lucide-icon {
+  color: inherit;
+  height: 1.2em;
+  width: 1.2em;
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.5rem;
+  width: 12rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 50;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: #333;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu a:hover {
+  background-color: #f0f0f0;
+}
+
+.language-button {
+  background-color: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.3s ease;
+  color: #FFA500;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.language-button:hover {
+  color: #1A87CC;
+  transform: scale(1.2);
+  background-color: #f0f8ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}

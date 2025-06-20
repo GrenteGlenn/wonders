@@ -1,0 +1,26 @@
+<div class="safe-wrapper">
+  <img src="assets/images/safe-bg.jpg" alt="Background" class="safe-background" />
+
+  <div class="glass-container">
+    <h2 class="lock-title">Mes documents</h2>
+
+    <button mat-mini-fab color="primary" class="upload-btn" (click)="moveFile()">
+      Ajouter un fichier
+    </button>
+
+    <hr class="divider" />
+
+    <mat-list class="custom-list" *ngIf="uploadedFiles.length > 0">
+      <ul>
+        <li *ngFor="let file of uploadedFiles" class="file-item">
+          <span>{{ file.name }}</span>
+          <button class="open-btn" (click)="openFile(file)">Ouvrir</button>
+        </li>
+      </ul>
+    </mat-list>
+
+    <p *ngIf="uploadedFiles.length === 0" class="empty-msg">
+      Aucun fichier ajouté pour le moment.
+    </p>
+  </div>
+</div>

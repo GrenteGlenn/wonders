@@ -1,69 +1,52 @@
-<div class="w-7/12 mx-auto py-10">
-  <div *ngIf="!selectedCountry" class="text-center mb-8">
-    <h1 class="text-3xl font-bold mb-6">Sélectionnez votre destination</h1>
-    <div class="relative w-full max-w-md mx-auto">
-      <select
-        [(ngModel)]="selectedCountry"
-        (ngModelChange)="onCountrySelect($event)"
-        class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-      >
-        <option value="" disabled selected>Choisissez votre destination</option>
-        <option *ngFor="let country of countries" [value]="country.name">
-          {{ country.name }}
-        </option>
-      </select>
-      
-    </div>
-  </div>
+<div class="relative flex justify-center items-center min-h-screen bg-cover bg-center" style="background-image: url('assets/images/hero-home-3.jpg');">
+  <!-- Filtre sombre -->
+  <div class="absolute inset-0 bg-black bg-opacity-30"></div>
 
-  <div *ngIf="selectedCountry">
-    <h1 class="text-3xl font-bold mb-2">Votre voyage en {{ selectedCountry }}</h1>
-    <div class="relative rounded-lg overflow-hidden">
-      <!-- Loader pendant le chargement -->
-      <div *ngIf="isLoading" class="w-full h-96 bg-gray-200 animate-pulse flex justify-center items-center">
-        <span class="text-gray-500">Chargement de l'image...</span>
+  <!-- Contenu principal -->
+  <div class="relative z-10 glass-card grid grid-cols-1 justify-items-center max-w-4xl w-full mx-4 my-10 p-6">
+    
+    <!-- Sélection du pays -->
+    <div *ngIf="!selectedCountry" class="w-full text-center mb-8">
+      <h1 class="text-3xl text-white font-bold mb-6">Sélectionnez votre destination</h1>
+      <div class="relative w-full max-w-md mx-auto">
+        <select
+          [(ngModel)]="selectedCountry"
+          (ngModelChange)="onCountrySelect($event)"
+          class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        >
+          <option value="" disabled selected>Choisissez votre destination</option>
+          <option *ngFor="let country of countries" [value]="country.name">{{ country.name }}</option>
+        </select>
       </div>
+    </div>
 
-      <!-- Image une fois chargée -->
-      <div *ngIf="!isLoading">
-        <img
-          [src]="countryImage"
-          class="w-full h-96 object-cover"
-          (error)="countryImage = 'assets/images/default-country.jpg'"
-        />
-        <div class="absolute inset-0 flex items-center justify-center">
-          <div class="text-white text-center justify-center px-8">
-            <p class="text-4xl w-full font-bold mb-4">
+    <!-- Affichage destination sélectionnée -->
+    <div *ngIf="selectedCountry" class="w-full">
+      <h1 class="text-3xl font-bold text-white text-center mb-6">Votre voyage en {{ selectedCountry }}</h1>
+
+      <div class="relative rounded-xl overflow-hidden shadow-lg">
+        <!-- Loader -->
+        <div *ngIf="isLoading" class="w-full h-96 bg-gray-300 animate-pulse flex justify-center items-center rounded-xl">
+          <span class="text-gray-600">Chargement de l'image...</span>
+        </div>
+
+        <!-- Image affichée -->
+        <div *ngIf="!isLoading" class="relative">
+          <img
+            [src]="countryImage"
+            class="w-full h-96 object-cover rounded-xl"
+            (error)="countryImage = 'assets/images/default-country.jpg'"
+          />
+          <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center px-6">
+            <p class="text-white text-2xl md:text-4xl font-bold text-center leading-snug">
               Préparez-vous à explorer {{ selectedCountry }}. {{ countryDescription }}
             </p>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Section Activités -->
-    <!-- <div class="mt-10">
-      <h1 class="text-3xl font-bold mb-2">Activités</h1>
-      <div class="overflow-hidden grid gap-4 md:grid-cols-4">
-        <div *ngFor="let activity of activities" class="relative h-44 rounded-lg overflow-hidden">
-          <img [src]="activity.image" class="w-full h-full object-cover" />
-          <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col items-center justify-center text-white p-4">
-            <h3 class="font-bold text-md text-center">{{ activity.name }}</h3>
-            <span class="text-sm font-medium">{{ activity.category }}</span>
-            <p class="text-sm mt-1">{{ activity.date | date }}</p>
-          </div>
-        </div>
-
-        <div
-          (click)="openModal()"
-          class="card border-4 border-dotted rounded-lg h-44 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-50 transition-colors"
-        >
-          <lucide-icon name="plus" class="text-slate-600 mb-2 w-8 h-8"></lucide-icon>
-          <span class="text-slate-600 text-center">Sélectionnez vos activités</span>
-        </div>
-      </div>
-    </div> -->
   </div>
- 
+
+  <!-- Toasts -->
+  <app-toast></app-toast>
 </div>
-<app-toast></app-toast>
