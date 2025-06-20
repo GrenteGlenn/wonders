@@ -7,7 +7,5 @@ RUN npm run build
 FROM node
 WORKDIR /app
 COPY --from=builder /app .
-RUN echo -e 'ROUTE_ACTIVITY=\nROUTE_BLOG=\nROUTE_COUNTRY=\nROUTE_FLY_HOTEL=\nROUTE_QUIZ=\nROUTE_USER=\nAPI_GOOGLE_MAP=AIzaSyAdCTrUOHm3FP7IIvkZ0Y8BH1Mc7ukgM1k' > .env
-RUN cat .env
 CMD ["npm", "start"]
 EXPOSE 4200
