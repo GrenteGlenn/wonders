@@ -4,13 +4,18 @@ import { AuthentificationService, ReponseToken } from '../../app/service/auth/au
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslateService } from '../../app/service/translate/translate.service';
+import { platform } from '@tauri-apps/plugin-os';
+import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '../navbar/navbar.component';
+
+const currentPlatform = platform();
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, LucideAngularModule],
+  imports: [FormsModule, LucideAngularModule, CommonModule, NavbarComponent],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css' 
 })
 export class LoginComponent implements OnInit {
   email: string = '';
@@ -23,7 +28,11 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public translateService: TranslateService 
   ) {}
-
+  
+  detectPlatform(): boolean {
+    return ['ios', 'android', 'linux'].includes(currentPlatform);
+  }
+  
   ngOnInit(): void {
     if (this._authService.isAuthenticated()) {
       this.router.navigate(['/', this.translateService.currentLang, 'home']);
@@ -51,6 +60,10 @@ export class LoginComponent implements OnInit {
         console.error('Erreur de connexion:', error);
       }
     });
+  }
+
+  goToSafe() {
+    this.router.navigate(['/fr/secure-safe']);
   }
 
   href(event: Event): void {

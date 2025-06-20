@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { SearchDestinationComponent } from "../search-destination/search-destination.component";
 import { CountryService } from '../../app/service/country/country.service';
 import { CityService } from '../../app/service/city/city.service';
 import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs';
 import { Router } from '@angular/router';
 import { TranslateService } from '../../app/service/translate/translate.service';
 import { TranslateModule } from '@ngx-translate/core';
@@ -24,7 +23,21 @@ interface PopularDestination {
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
-export class HomePageComponent implements OnInit {
+export class HomePageComponent implements OnInit, OnDestroy {
+
+  heroImages: string[] = [
+    'assets/images/hero-home-1.jpg',
+    'assets/images/hero-home-2.jpg',
+    'assets/images/hero-home-3.jpg',
+    'assets/images/hero-home-4.jpg',
+    'assets/images/hero-home-5.jpg',
+    'assets/images/hero-home-6.jpg',
+    'assets/images/hero-home-7.jpg',
+    'assets/images/hero-home-8.jpg'
+  ];
+  currentHeroIndex = 0;
+  intervalId?: any;
+
   popularDestinations: PopularDestination[] = [
     {
       cityName: 'Bangkok',
@@ -57,6 +70,7 @@ export class HomePageComponent implements OnInit {
   ];
 
   fallbackImage: string = 'assets/images/placeholder.jpg';
+  isMobile: boolean = false;
 
   constructor(
     private countryService: CountryService,
@@ -66,18 +80,36 @@ export class HomePageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.updateViewport();
     this.loadDestinationImages();
+
+    this.intervalId = setInterval(() => {
+      this.currentHeroIndex = (this.currentHeroIndex + 1) % this.heroImages.length;
+    }, 4000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  @HostListener('window:resize', [])
+  onResize(): void {
+    this.updateViewport();
+  }
+
+  updateViewport(): void {
+    this.isMobile = window.innerWidth <= 768;
   }
 
   loadDestinationImages(): void {
-    // Pour chaque destination, on charge l'image du pays
     this.popularDestinations.forEach((destination, index) => {
       this.countryService.getCountryImage(destination.countryName).subscribe({
         next: (response) => {
           if (response && response.data) {
             this.popularDestinations[index].imageSrc = response.data;
           } else {
-            // Si l'image n'est pas disponible, on utilise une image par défaut
             this.popularDestinations[index].imageSrc = this.fallbackImage;
           }
           this.popularDestinations[index].loading = false;
@@ -97,6 +129,5 @@ export class HomePageComponent implements OnInit {
 
   showMore(): void {
     this.router.navigate(['/', this.translateService.currentLang, 'destinations']);
-
   }
 }

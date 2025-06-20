@@ -1,37 +1,37 @@
-<div class="flex justify-center items-center min-h-screen bg-gray-100">
-  <div class="container mx-auto px-4">
-    <h1 class="text-3xl font-bold text-center mb-8">Choisissez votre expérience de voyage</h1>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-      <div
-        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer cardTransition"
-        (click)="goQuestion()"
-      >
-        <div class="p-6">
-          <div class="flex justify-center mb-4">
-            <lucide-icon name="CircleHelp" class="w-16 h-16 text-blue-500"></lucide-icon>
-          </div>
-          <h2 class="text-2xl font-semibold text-center mb-4">Guide personnalisé</h2>
-          <p class="text-gray-600 text-center">
-            Répondez à notre questionnaire pour obtenir un plan de voyage personnalisé en fonction de vos préférences.
-          </p>
-        </div>
+<div class="flex flex-col md:flex-row h-screen">
+  <!-- Guide personnalisé -->
+  <div
+    class="relative flex-1 bg-cover bg-center cursor-pointer group"
+    style="background-image: url('assets/images/guide-personnalise.jpg');"
+    (click)="goQuestion()"
+  >
+    <div class="absolute inset-0 bg-black bg-opacity-50 group-hover:bg-opacity-60 transition duration-300"></div>
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white p-6">
+      <div class="icon-wrapper mb-4">
+        <lucide-icon name="circle-help" class="w-12 h-12 text-white"></lucide-icon>
       </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-2">Guide personnalisé</h2>
+      <p class="text-lg max-w-md">
+        Répondez à notre questionnaire pour obtenir un plan de voyage personnalisé selon vos préférences.
+      </p>
+    </div>
+  </div>
 
-      <div
-        class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer cardTransition"
-        (click)="goPlanTrip()"
-      >
-        <div class="p-6">
-          <div class="flex justify-center mb-4">
-            <lucide-icon name="map" class="w-16 h-16 text-green-500"></lucide-icon>
-          </div>
-          <h2 class="text-2xl font-semibold text-center mb-4">Planification directe</h2>
-          <p class="text-gray-600 text-center">
-            Commencez à planifier votre voyage directement si vous connaissez déjà votre destination
-          </p>
-        </div>
+  <!-- Planification directe -->
+  <div
+    class="relative flex-1 bg-cover bg-center cursor-pointer group"
+    style="background-image: url('assets/images/planification-directe.jpg');"
+    (click)="goPlanTrip()"
+  >
+    <div class="absolute inset-0 bg-black bg-opacity-50 group-hover:bg-opacity-60 transition duration-300"></div>
+    <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white p-6">
+      <div class="icon-wrapper mb-4">
+        <lucide-icon name="map" class="w-12 h-12 text-white"></lucide-icon>
       </div>
+      <h2 class="text-3xl md:text-4xl font-bold mb-2">Planification directe</h2>
+      <p class="text-lg max-w-md">
+        Commencez à planifier votre voyage directement si vous connaissez déjà votre destination.
+      </p>
     </div>
   </div>
 </div>

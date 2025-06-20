@@ -1,0 +1,62 @@
+:host {
+  font-family: 'Quicksand', sans-serif;
+  display: block;
+}
+
+/* SLIDER full screen */
+.swiper-container {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400px; /* ajuste à ta hauteur souhaitée */
+  overflow: hidden;
+}
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: 0;
+}
+
+.hero-image.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+/* Button style */
+button {
+  background-color: #1A87CC;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #FFA500;
+  color: black;
+}
+
+/* Responsive title */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2rem;
+  }
+}
