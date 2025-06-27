@@ -21,6 +21,7 @@ import { SecureSafeComponent } from '../components/secure-safe/secure-safe.compo
 import { PrivacyPolicyComponent } from '../components/privacy-policy/privacy-policy.component';
 import { TermsOfServiceComponent } from '../components/terms-of-service/terms-of-service.component';
 import { ChatComponent } from '../components/chat/chat.component';
+import { DiscussionComponent } from '../components/discussion/discussion.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'fr/home' },
@@ -48,6 +49,9 @@ export const routes: Routes = [
       { path: 'preview', component: PreviewComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'preview', component: PreviewComponent },
+      { path: 'secure-safe', component: SecureSafeComponent },
+      { path: 'chat', component: ChatComponent },
+      { path: 'discussion', component: DiscussionComponent }
       { path: 'secure-safe', component: SecureSafeComponent },
       { path: 'privacy-policy', component: PrivacyPolicyComponent },
       { path: 'terms-of-service', component: TermsOfServiceComponent },

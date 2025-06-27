@@ -31,8 +31,9 @@
               </td>
               <td>
                 {{ haveToAcceptToJoinToGroup(group.users)}}
-                <button>Ajouter</button>
+                <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Ajouter</button>
                 <button *ngIf="haveToAcceptToJoinToGroup(group.users)">accepter</button>
+                <button (click)="goToDiscussion()">Entrer</button>
               </td>
             </tr>
           </tbody>

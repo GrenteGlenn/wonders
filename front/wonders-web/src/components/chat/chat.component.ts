@@ -7,6 +7,7 @@ import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { FormGroupDirective } from '@angular/forms';
 import { find } from 'rxjs';
+import { Router } from '@angular/router';
 
 interface UserGroupInterface {
   id: number,
@@ -61,7 +62,8 @@ const ELEMENT_DATA: PeriodicElement[] = [
 export class ChatComponent {
   constructor(
     private _userService: UsersService,
-    private _chatService: ChatService
+    private _chatService: ChatService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -155,5 +157,9 @@ export class ChatComponent {
        return true
       }
       return false
+  }
+    // voir retour en arrière
+  goToDiscussion(): void {
+    this.router.navigate(['/discussion']);
   }
 }
