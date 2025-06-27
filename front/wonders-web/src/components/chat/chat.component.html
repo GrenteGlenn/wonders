@@ -30,8 +30,9 @@
                 </div>
               </td>
               <td>
+                {{ haveToAcceptToJoinToGroup(group.users)}}
                 <button>Ajouter</button>
-                <button *ngIf="haveToAcceptToJoinToGroup(user)">accepter</button>
+                <button *ngIf="haveToAcceptToJoinToGroup(group.users)">accepter</button>
               </td>
             </tr>
           </tbody>

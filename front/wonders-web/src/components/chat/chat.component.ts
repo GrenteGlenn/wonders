@@ -6,13 +6,31 @@ import { ChatService } from '../../app/service/chat/chat.service'
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { FormGroupDirective } from '@angular/forms';
+import { find } from 'rxjs';
 
-  interface UserGroupInterface {
-    id: number,
-    name: number,
-    users: User[]
+interface UserGroupInterface {
+  id: number,
+  name: number,
+  users: User[]
+}
 
-  }
+interface UserTestInterface {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  img: string | null;
+  role_id: number;
+  UserGroupLink: {
+    user_id: number;
+    user_group_id: number;
+    is_owner: boolean;
+    is_accepted: boolean;
+    user_quiz_answer_id: number | null;
+    created_at: string;
+    updated_at: string;
+  };
+}
 
 interface PeriodicElement {
   name: string;
@@ -48,7 +66,6 @@ export class ChatComponent {
 
   ngOnInit(): void {
     this.getMe();
-
   }
 
   user_id: number | null = null;
@@ -57,27 +74,27 @@ export class ChatComponent {
   dataSource = ELEMENT_DATA;
 
   colors = [
-  "#FF0000", // rouge vif
-  "#007BFF", // bleu électrique
-  "#3EB489", // vert menthe
-  "#FFF700", // jaune citron
-  "#DA70D6", // violet orchidée
-  "#FF7F50", // orange corail
-  "#E30B5C", // rose framboise
-  "#40E0D0", // turquoise
-  "#2F4F4F", // gris anthracite
-  "#191970", // bleu nuit
-  "#808000", // vert olive
-  "#8B4513", // brun chocolat
-  "#E0FFFF", // cyan clair
-  "#FF00FF", // magenta
-  "#FFD700", // or
-  "#E6E6FA", // lavande
-  "#7FFFD4", // aigue-marine
-  "#FFDAB9", // pêche
-  "#A52A2A", // marron
-  "#00FA9A"  // vert mentholé
-];
+    "#FF0000", // rouge vif
+    "#007BFF", // bleu électrique
+    "#3EB489", // vert menthe
+    "#FFF700", // jaune citron
+    "#DA70D6", // violet orchidée
+    "#FF7F50", // orange corail
+    "#E30B5C", // rose framboise
+    "#40E0D0", // turquoise
+    "#2F4F4F", // gris anthracite
+    "#191970", // bleu nuit
+    "#808000", // vert olive
+    "#8B4513", // brun chocolat
+    "#E0FFFF", // cyan clair
+    "#FF00FF", // magenta
+    "#FFD700", // or
+    "#E6E6FA", // lavande
+    "#7FFFD4", // aigue-marine
+    "#FFDAB9", // pêche
+    "#A52A2A", // marron
+    "#00FA9A"  // vert mentholé
+  ];
 
   getMe(): void {
     this._userService.getUserInfo().subscribe({
@@ -96,8 +113,10 @@ export class ChatComponent {
   }
 
   addUserToGroup(groupId: number, email: string): void {
-      this._chatService.addUserToGroup({email, groupId}).subscribe({
+    this._chatService.addUserToGroup({ email, groupId }).subscribe({
       next: (data) => {
+        console.log(data);
+
       },
       error: (error) => {
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
@@ -105,8 +124,8 @@ export class ChatComponent {
     })
   }
 
-  removeUserFromGroup (user_id: number, group_id: number): void {
-        this._chatService.removeUserFromGroup(user_id, group_id).subscribe({
+  removeUserFromGroup(user_id: number, group_id: number): void {
+    this._chatService.removeUserFromGroup(user_id, group_id).subscribe({
       next: (data) => {
         this.getUserGroups()
       },
@@ -121,7 +140,7 @@ export class ChatComponent {
       next: (data) => {
         this.userGroups = data
         console.log(data);
-        
+
       },
       error: (error) => {
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
@@ -129,7 +148,12 @@ export class ChatComponent {
     })
   }
 
-  haveToAcceptToJoinToGroup(user: any): boolean {
-    return user.id === this.user_id && !user.UserGroupLink.is_accepted
+  haveToAcceptToJoinToGroup(users: UserTestInterface[]) {
+    // const user = users.filter((user) => user.id == this.user_id);
+    const test = users.find((user) => user.id === this.user_id)
+      if (!test?.UserGroupLink.is_accepted) {
+       return true
+      }
+      return false
   }
 }
