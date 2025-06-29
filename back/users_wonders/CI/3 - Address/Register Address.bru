@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://{{address}}/api/address/register
+  url: {{address}}api/address/register
   body: json
   auth: bearer
 }
@@ -27,10 +27,12 @@ body:json {
 }
 
 script:pre-request {
-  // bru.setGlobalEnvVar("StreetName", pm.variables.replaceIn("{{$randomStreetName}}"));
-  // bru.setGlobalEnvVar("StreetAddress", pm.variables.replaceIn("{{$randomStreetAddress}}"));
-  // bru.setGlobalEnvVar("City", pm.variables.replaceIn("{{$randomCity}}"));
-  // bru.setGlobalEnvVar("CountryCode", pm.variables.replaceIn("{{$randomCountryCode}}"));
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("StreetName", faker.location.street());
+  bru.setEnvVar("StreetAddress", faker.location.streetAddress());
+  bru.setEnvVar("City", faker.location.city());
+  bru.setEnvVar("CountryCode", faker.location.countryCode());
 }
 
 tests {
