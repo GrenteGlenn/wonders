@@ -15,7 +15,7 @@
   "scripts": {
     "start": "ts-node src/app.ts",
     "test": "jest",
-    "build": "tsc",
+    "build": "esbuild src/app.ts --bundle --platform=node --target=node18 --minify --packages=external --outfile=dist/index.js",
     "init": "npm install",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix"
