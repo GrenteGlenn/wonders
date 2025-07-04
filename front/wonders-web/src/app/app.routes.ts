@@ -51,7 +51,8 @@ export const routes: Routes = [
       { path: 'preview', component: PreviewComponent },
       { path: 'secure-safe', component: SecureSafeComponent },
       { path: 'chat', component: ChatComponent },
-      { path: 'discussion', component: DiscussionComponent }
+      { path: 'discussion/:id', component: DiscussionComponent },
+      { path: 'discussion', component: DiscussionComponent },
       { path: 'secure-safe', component: SecureSafeComponent },
       { path: 'privacy-policy', component: PrivacyPolicyComponent },
       { path: 'terms-of-service', component: TermsOfServiceComponent },

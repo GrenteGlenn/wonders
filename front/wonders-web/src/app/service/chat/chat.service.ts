@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { City } from '../../model/cities';
 
 interface UserGroupInterface {
   id?: number;
@@ -30,30 +29,32 @@ interface UserGroupLinkInterface {
 export class ChatService {
   private apiUrl = `${environment.userApiUrl}/api/user-group`;
 
-  constructor(private http: HttpClient, ) {}
+  constructor(private http: HttpClient,) { }
 
   getAllGroups(id: number): Observable<UserGroupInterface[]> {
     return this.http.get<UserGroupInterface[]>(`${this.apiUrl}/by-user/${id}`);
   }
 
-  getGroupById(id: number): Observable<City> {
-    return this.http.get<City>(`${this.apiUrl}/${id}`);
+  getGroupById(id: number): Observable<UserGroupInterface> {
+    return this.http.get<UserGroupInterface>(`${this.apiUrl}/${id}`);
+  }
+
+  createGroup(name: string, user_id: string | number): Observable<any> {
+    return this.http.post(`${this.apiUrl}`, {name: name, user_id: user_id})
   }
 
   addUserToGroup(body: any): Observable<any> {
-    return this.http.post<City>(`${this.apiUrl}/add-user`, body);
+    return this.http.post(`${this.apiUrl}/add-user`, body);
   }
 
   acceptToJoinToGroup(body: any): Observable<any> {
-    return this.http.post<City>(`${this.apiUrl}/accept-join-group`, body);
+    return this.http.post(`${this.apiUrl}/accept-join-group`, body);
   }
   removeUserFromGroup(id: number, groupId: number): Observable<any> {
-    return this.http.get<City>(`${this.apiUrl}/remove-user/${id}/${groupId}`);
+    return this.http.get(`${this.apiUrl}/remove-user/${id}/${groupId}`);
   }
 
   deleteGroup(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
-
-
 }

@@ -10,6 +10,7 @@ export interface User {
 }
 
 export interface FetchableUser {
+  [x: string]: any
   id: number,
   email: string,
   password?: string,

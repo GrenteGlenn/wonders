@@ -5,9 +5,10 @@ import { FetchableUser, User } from '../../app/model/User';
 import { ChatService } from '../../app/service/chat/chat.service'
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
-import { FormGroupDirective } from '@angular/forms';
+import { FormGroupDirective, FormsModule, NgForm } from '@angular/forms';
 import { find } from 'rxjs';
 import { Router } from '@angular/router';
+import { TranslateService } from '../../app/service/translate/translate.service';
 
 interface UserGroupInterface {
   id: number,
@@ -33,6 +34,11 @@ interface UserTestInterface {
   };
 }
 
+interface CreateGroup {
+  name: string,
+  user_id: number
+}
+
 interface PeriodicElement {
   name: string;
   position: number;
@@ -55,7 +61,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [MatTableModule, LucideAngularModule, CommonModule],
+  imports: [MatTableModule, LucideAngularModule, CommonModule, FormsModule],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.css'
 })
@@ -64,16 +70,26 @@ export class ChatComponent {
     private _userService: UsersService,
     private _chatService: ChatService,
     private router: Router,
+    public translateService: TranslateService
   ) { }
 
   ngOnInit(): void {
-    this.getMe();
+    this.getMe().then(
+      this.getUserGroups(this.user_id as number)
+    )
   }
 
   user_id: number | null = null;
-  userGroups: any | null = null
+  userGroups: any = [];
+  user: FetchableUser | null = null;
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
+  isAccepted: boolean = false;
+  showGroupForm: boolean = false
+  newGroupName: string = ""
+  showAddUserModal: boolean = false
+  guest_email: string = ""
+  userGroupId: number = 0
 
   colors = [
     "#FF0000", // rouge vif
@@ -98,11 +114,14 @@ export class ChatComponent {
     "#00FA9A"  // vert mentholé
   ];
 
-  getMe(): void {
+  private userColorCache = new Map<string, string>();
+
+  getMe(): any {
     this._userService.getUserInfo().subscribe({
       next: (data: FetchableUser) => {
         this.user_id = data.id;
-        this.getUserGroups()
+        this.user = data
+        this.getUserGroups(data.id)
       },
       error: (error) => {
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
@@ -110,15 +129,69 @@ export class ChatComponent {
     });
   }
 
-  userLabelColors() {
-    return this.colors[Math.floor(Math.random() * this.colors.length)]
+  submitGroupForm(form: NgForm): void {
+
+    if (!form.valid) {
+      console.error("Formulaire invalide");
+      return;
+    }
+
+    if (this.user && this.user.id && this.newGroupName) {
+      const groupData: CreateGroup = {
+        name: this.newGroupName,
+        user_id: this.user.id
+      };
+
+      this._chatService.createGroup(
+        groupData.name,
+        groupData.user_id
+      ).subscribe({
+        next: (data) => {
+          this.newGroupName = '';
+          form.resetForm();
+          this.getUserGroups(this.user_id as number);
+          this.showGroupForm = false
+        },
+        error: (error) => {
+          console.error("Erreur lors de la création du groupe:", error);
+        }
+      });
+    } else {
+      console.error("Utilisateur non défini ou nom du groupe manquant.");
+    }
   }
 
-  addUserToGroup(groupId: number, email: string): void {
-    this._chatService.addUserToGroup({ email, groupId }).subscribe({
+  userLabelColors(user: any) {
+    const userIdStr = user.id.toString();
+    if (!this.userColorCache.has(userIdStr)) {
+      const color = this.colors[Math.floor(Math.random() * this.colors.length)];
+      this.userColorCache.set(userIdStr, color);
+    }
+    return this.userColorCache.get(userIdStr);
+  }
+
+  addUserToGroup(): void {
+    console.log(this.userGroupId, this.guest_email);
+    
+    this._chatService.addUserToGroup({ email: this.guest_email, group_id: this.userGroupId }).subscribe({
       next: (data) => {
         console.log(data);
+      },
+      error: (error) => {
+        console.error("Erreur lors de la récupération de l'utilisateur:", error);
+      }
+    })
+  }
+  showModal() {
 
+  }
+
+  removeUserFromGroup(group: any): void {
+
+    const userId = group.users.find((user: FetchableUser) => user.id === this.user_id).id
+    this._chatService.removeUserFromGroup(userId, Number(group.id)).subscribe({
+      next: (data) => {
+        this.getUserGroups(userId)
       },
       error: (error) => {
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
@@ -126,40 +199,31 @@ export class ChatComponent {
     })
   }
 
-  removeUserFromGroup(user_id: number, group_id: number): void {
-    this._chatService.removeUserFromGroup(user_id, group_id).subscribe({
+  getUserGroups(user_id: number): void {
+
+    this._chatService.getAllGroups(user_id as number).subscribe({
       next: (data) => {
-        this.getUserGroups()
+        this.userGroups = data;
       },
       error: (error) => {
-        console.error("Erreur lors de la récupération de l'utilisateur:", error);
+        console.log(user_id);
+        console.error("Erreur lors de la récupération de l'utilisateur:", user_id);
       }
-    })
-  }
-
-  getUserGroups(): void {
-    this._chatService.getAllGroups(this.user_id as number).subscribe({
-      next: (data) => {
-        this.userGroups = data
-        console.log(data);
-
-      },
-      error: (error) => {
-        console.error("Erreur lors de la récupération de l'utilisateur:", error);
-      }
-    })
+    });
   }
 
   haveToAcceptToJoinToGroup(users: UserTestInterface[]) {
     // const user = users.filter((user) => user.id == this.user_id);
     const test = users.find((user) => user.id === this.user_id)
-      if (!test?.UserGroupLink.is_accepted) {
-       return true
-      }
-      return false
+    if (!test?.UserGroupLink.is_accepted) {
+      return true
+    }
+
+    return false
   }
-    // voir retour en arrière
-  goToDiscussion(): void {
-    this.router.navigate(['/discussion']);
+  // voir retour en arrière
+  goToDiscussion(groupId: number): void {
+    console.log("voici l'id: ", groupId, this.translateService.currentLang)
+    this.router.navigate(['/', this.translateService.currentLang, 'discussion', groupId]);
   }
 }

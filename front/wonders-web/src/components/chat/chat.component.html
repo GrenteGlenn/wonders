@@ -1,11 +1,55 @@
 <div class="container mx-auto px-4">
   <div class="navigation">
     <h3 class="text-center">Mes groupes</h3>
+    <div>
+      <button
+        (click)="showGroupForm = !showGroupForm"
+        class="mr-5 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+      >
+        Nouveau groupe
+      </button>
+      <div *ngIf="showGroupForm">
+        <form
+          #groupForm="ngForm"
+          (ngSubmit)="submitGroupForm(groupForm)"
+          class="bg-white rounded-lg p-6 space-y-4 max-w-md mx-auto"
+        >
+          <div class="space-y-2">
+            <label for="name" class="block text-sm font-medium text-gray-700"> Nom du groupe </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              [(ngModel)]="newGroupName"
+              #nameField="ngModel"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+              placeholder="Entrez le nom du groupe"
+              required
+            />
+
+            <!-- Affichage des erreurs -->
+            <div *ngIf="nameField.invalid && (nameField.dirty || nameField.touched)" class="text-red-600 text-sm mt-1">
+              <p *ngIf="nameField.errors?.['required']">Le nom du groupe est requis</p>
+            </div>
+          </div>
+
+          <div class="pt-4">
+            <button
+              type="submit"
+              [disabled]="groupForm.invalid"
+              class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Créer le groupe
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
     <!-- Table -->
     <div class="bg-white rounded-xl p-6">
-      <div *ngIf="userGroups.length === 0" class="text-center text-gray-500">Aucun sujet trouvé.</div>
+      <div *ngIf="userGroups" class="text-center text-gray-500">Aucun sujet trouvé.</div>
 
-      <div *ngIf="userGroups.length > 0" class="overflow-x-auto">
+      <div *ngIf="userGroups" class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
           <thead class="bg-gray-50 text-left text-sm font-semibold text-gray-600">
             <tr>
@@ -21,24 +65,74 @@
                 <div class="flex flex-wrap gap-2">
                   <span
                     *ngFor="let user of group.users"
-                    [ngStyle]="{ background: userLabelColors() }"
+                    [ngStyle]="{ background: userLabelColors(user) }"
                     class="userlabel"
                   >
                     {{ user.first_name }}
-                    <span *ngIf="user.UserGroupLink.is_owner" (click)="removeUserFromGroup(user.id, group.id)">X</span>
+                    <span *ngIf="user.UserGroupLink.is_owner" (click)="removeUserFromGroup(group)">X</span>
                   </span>
                 </div>
               </td>
               <td>
-                {{ haveToAcceptToJoinToGroup(group.users)}}
-                <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Ajouter</button>
-                <button *ngIf="haveToAcceptToJoinToGroup(group.users)">accepter</button>
-                <button (click)="goToDiscussion()">Entrer</button>
+                <button (click)="showAddUserModal = !showAddUserModal && userGroupId = group.id" class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Ajouter</button>
+                <button
+                  *ngIf="haveToAcceptToJoinToGroup(group.users)"
+                  class="mr-5 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                >
+                  accepter
+                </button>
+                <button
+                  *ngIf="!haveToAcceptToJoinToGroup(group.users)"
+                  (click)="removeUserFromGroup(group)"
+                  class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-red-700"
+                >
+                  Sortir
+                </button>
+                <button
+                  (click)="goToDiscussion(group.id)"
+                  class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                >
+                  Entrer
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
+  </div>
+</div>
+
+<div
+  *ngIf="showAddUserModal"
+  class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
+    <h2 class="text-xl font-semibold mb-4">Ajouter un memebre au chat</h2>
+    
+    <form (ngSubmit)="addUserToGroup()" class="space-y-4">
+      <input 
+        type="email" 
+        name="guest_email" 
+        [(ngModel)]="guest_email" 
+        placeholder="Email" 
+        class="w-full p-2 border rounded" 
+        required />
+      
+      <div class="flex gap-2">
+        <button 
+          type="submit" 
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          Sauvegarder
+        </button>
+        
+        <button 
+          type="button" 
+          (click)="showAddUserModal = false" 
+          class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+          Annuler
+        </button>
+      </div>
+    </form>
   </div>
 </div>
