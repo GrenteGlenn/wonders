@@ -78,6 +78,7 @@
                 <button
                   *ngIf="haveToAcceptToJoinToGroup(group.users)"
                   class="mr-5 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                  (click)="acceptGroupInvitation(group)"
                 >
                   accepter
                 </button>

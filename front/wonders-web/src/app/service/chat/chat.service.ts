@@ -48,7 +48,7 @@ export class ChatService {
   }
 
   acceptToJoinToGroup(body: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/accept-join-group`, body);
+    return this.http.put(`${this.apiUrl}/accept-join-group`, body);
   }
   removeUserFromGroup(id: number, groupId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/remove-user/${id}/${groupId}`);

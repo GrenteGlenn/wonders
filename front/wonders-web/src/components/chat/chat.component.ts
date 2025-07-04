@@ -174,9 +174,6 @@ export class ChatComponent {
     console.log(this.userGroupId, this.guest_email);
     
     this._chatService.addUserToGroup({ email: this.guest_email, group_id: this.userGroupId }).subscribe({
-      next: (data) => {
-        console.log(data);
-      },
       error: (error) => {
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
       }
@@ -208,6 +205,17 @@ export class ChatComponent {
       error: (error) => {
         console.log(user_id);
         console.error("Erreur lors de la récupération de l'utilisateur:", user_id);
+      }
+    });
+  }
+
+  acceptGroupInvitation(group: any) {
+    this._chatService.acceptToJoinToGroup({user_id: this.user?.id as number, group_id: group.id as number}).subscribe({
+      next: (data) => {
+        this.getUserGroups(Number(this.user?.id))
+      },
+      error: (error) => {
+        console.error(error);
       }
     });
   }
