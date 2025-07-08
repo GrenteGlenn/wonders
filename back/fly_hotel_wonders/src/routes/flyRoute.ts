@@ -32,9 +32,8 @@ router.get('/', ((req, res) => {
 }) as RequestHandler);
 
 router.get('/list', (async (req, res) => {
-  try {    
-  
-    // cast manuellement 
+  try {
+    // cast manuellement
     const {
       originLocationCode,
       destinationLocationCode,
@@ -57,10 +56,10 @@ router.get('/list', (async (req, res) => {
       maxPrice
     )) as typeof FlightOfferSchema;
 
-
     const parsedQuery = {
       originLocationCode: typeof originLocationCode === 'string' ? originLocationCode.toUpperCase() : undefined,
-      destinationLocationCode: typeof destinationLocationCode === 'string' ? destinationLocationCode.toUpperCase() : undefined,
+      destinationLocationCode:
+        typeof destinationLocationCode === 'string' ? destinationLocationCode.toUpperCase() : undefined,
       departureDate: typeof departureDate === 'string' ? departureDate : undefined,
       returnDate: typeof returnDate === 'string' ? returnDate : undefined,
       adults: typeof adults === 'string' ? adults : '2',
@@ -81,7 +80,6 @@ router.get('/list', (async (req, res) => {
     const validatedOffers = z.array(FlightOfferSchema).parse(flightOffers);
     console.log('REQ QUERY', req.query);
 
-
     return res.status(200).json({
       status: 'success',
       results: validatedOffers.length,
@@ -91,6 +89,5 @@ router.get('/list', (async (req, res) => {
     res.status(500).json({ error: error });
   }
 }) as RequestHandler);
-
 
 export default router;
