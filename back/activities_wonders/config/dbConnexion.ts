@@ -18,7 +18,8 @@ const sequelizeConnection = new Sequelize(
     define: {
       underscored: true,
       timestamps: true
-    }
+    },
+    logging: false,
   }
 );
 

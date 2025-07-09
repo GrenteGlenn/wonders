@@ -12,7 +12,8 @@ const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
   dialect: dbdialect,
   define: {
     timestamps: false
-  }
+  },
+  logging: false,
 });
 
 export default sequelize;
