@@ -95,7 +95,7 @@ export default class TripController {
       if (!tripResponse.id) {
         throw new Error('Missing trip ID');
       }
-      
+
       const tripCityResponse = await TripCity.create({
         city_id,
         transportation_id: tripTransportResponse.id,
@@ -115,7 +115,7 @@ export default class TripController {
           if (!tripCityResponse.id) {
             throw new Error('Missing trip city ID');
           }
-          
+
           const tripCityDayResponse = await TripDay.create({
             date: day.date,
             trip_city_id: tripCityResponse.id,
@@ -128,7 +128,7 @@ export default class TripController {
               if (!tripCityDayResponse.id) {
                 throw new Error('Missing trip day ID');
               }
-              
+
               await TripDayActivity.create({
                 activity_id: activity.activity_id,
                 trip_day_id: tripCityDayResponse.id,
