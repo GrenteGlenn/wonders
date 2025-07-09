@@ -15,7 +15,8 @@ const sequelize = new Sequelize(dbname, dbuser, dbpassword, {
   define: {
     underscored: true,
     timestamps: true
-  }
+  },
+  logging: false,
 });
 
 export default sequelize;

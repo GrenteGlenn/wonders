@@ -28,4 +28,3 @@ export interface UserUpdateInterface {
   birth_date?: Date;
   language_id?: number;
 }
-
