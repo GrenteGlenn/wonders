@@ -12,15 +12,14 @@ import TripHotelInterface from './TripHotelInterface';
 //   Annuler
 // }
 
- enum Status {
-  APayer = "APayer",
-  EnAttenteDeReservation = "EnAttenteDeReservation",
-  EnAttenteDeConfirmation = "EnAttenteDeConfirmation",
-  ProblemeDeReservation = "ProblemeDeReservation",
-  Reserve = "Reserve",
-  Annuler = "Annuler"
+enum Status {
+  APayer = 'APayer',
+  EnAttenteDeReservation = 'EnAttenteDeReservation',
+  EnAttenteDeConfirmation = 'EnAttenteDeConfirmation',
+  ProblemeDeReservation = 'ProblemeDeReservation',
+  Reserve = 'Reserve',
+  Annuler = 'Annuler'
 }
-
 
 interface Activity {
   id: number;
