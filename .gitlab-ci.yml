@@ -8,10 +8,10 @@ block-unallowed-branches:
   image: alpine
   script:
     - |
-      echo "Merge refusé : seule 'back-dev' ou 'dev-web' peuvent être mergées dans 'main'"
+      echo "Merge refusé : seule 'back_dev' ou 'dev_web' peuvent être mergées dans 'main'"
       exit 1
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "back-dev" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "dev-web"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "back_dev" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "dev_web"'
       when: always
     - when: never
 
