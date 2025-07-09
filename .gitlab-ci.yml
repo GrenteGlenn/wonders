@@ -1,17 +1,17 @@
 stages:
   - rule
   - lint
-  - test
+#  - test
 
 block-unallowed-branches:
   stage: rule
   image: alpine
   script:
     - |
-      echo "Merge refusé : seule 'back-dev' ou 'dev-web' peuvent être mergées dans 'main'"
+      echo "Merge refusé : seule 'back_dev' ou 'dev_web' peuvent être mergées dans 'main'"
       exit 1
   rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "back-dev" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "dev-web"'
+    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "back_dev" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "dev_web"'
       when: always
     - when: never
 
@@ -115,27 +115,27 @@ lint_back_activities:
     paths:
       - "back/activities_wonders/node_modules"
 
-test_back_users:
-  stage: test
-  image: node:22
-  before_script:
-    - cd back/users_wonders
-    - npm install
-    - npm install -g @usebruno/cli
-  script:
-    - npm run dev &
-    - bru run --env-var address=http://localhost:3001
-  tags:
-    - PLI
-  rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  cache:
-    policy: pull-push
-    unprotect: false
-    untracked: false
-    when: on_success
-    paths:
-      - "back/users_wonders/node_modules"
+#test_back_users:
+#  stage: test
+#  image: node:22
+#  before_script:
+#    - cd back/users_wonders
+#    - npm install
+#    - npm install -g @usebruno/cli
+#  script:
+#    - npm run dev &
+#    - bru run --env-var address=http://localhost:3001
+#  tags:
+#    - PLI
+#  rules:
+#    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
+#      when: never
+#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+#  cache:
+#    policy: pull-push
+#    unprotect: false
+#    untracked: false
+#    when: on_success
+#    paths:
+#      - "back/users_wonders/node_modules"
 

@@ -57,7 +57,8 @@ import {
   FileText,
   ThumbsDown,
   ChevronsUpDown,
-  Hotel
+  Hotel,
+  Bug
 } from 'lucide-angular';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
@@ -129,7 +130,8 @@ export const appConfig: ApplicationConfig = {
         FileText,
         ThumbsDown,
         ChevronsUpDown,
-        Hotel
+        Hotel,
+        Bug
       }),
       TranslateModule.forRoot({
         loader: {
