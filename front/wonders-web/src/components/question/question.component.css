@@ -1,33 +1,49 @@
-.cardTransition{
-  transition: 1s ease;
+.cardTransition {
+  transition: transform 0.5s ease-in-out;
   height: 30em;
   margin-top: 5em;
   background-size: cover;
-
+  background-position: center;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
 .cardTransition:hover {
-  -webkit-transform: scale(1.1);
-  -ms-transform: scale(1.2);
-  transform: scale(1.1);
-  transition: 0.5s ease;
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
-.londre{
+.londre, .paris, .japon {
   padding-top: 10em;
   color: white;
-  background-image: url(../../../public/assets/images/londre.avif);
-}
-.paris{
-  padding-top: 10em;
-  color: white;
-  background-image: url(../../../public/assets/images/paris.avif);
-}
-.japon{
-  padding-top: 10em;
-  color: white;
-  background-image: url(../../../public/assets/images/japon.avif);
+  background-size: cover;
+  background-position: center;
+  border-radius: 1rem;
 }
 
-.myImg{
+.londre {
+  background-image: url('/assets/images/londre.avif');
+}
+.paris {
+  background-image: url('/assets/images/paris.avif');
+}
+.japon {
+  background-image: url('/assets/images/japon.avif');
+}
+
+.myImg {
   height: 25em;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+.decorative-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

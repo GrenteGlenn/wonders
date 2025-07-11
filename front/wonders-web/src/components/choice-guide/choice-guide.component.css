@@ -1,17 +1,32 @@
 :host {
-    display: block;
-    min-height: 100vh;
-    background-color: #f3f4f6;
+  display: block;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.icon-wrapper {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  padding: 1rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.group:hover .icon-wrapper {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+@media (max-width: 768px) {
+  .text-3xl {
+    font-size: 1.5rem;
   }
-  .cardTransition{
-    transition: 1s ease;
-    margin-top: 5em;
-    background-size: cover;
-  
+
+  .text-lg {
+    font-size: 1rem;
   }
-  .cardTransition:hover {
-    -webkit-transform: scale(1.1);
-    -ms-transform: scale(1.2);
-    transform: scale(1.1);
-    transition: 0.5s ease;
+
+  .icon-wrapper {
+    padding: 0.75rem;
   }
+}

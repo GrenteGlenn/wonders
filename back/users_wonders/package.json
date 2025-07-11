@@ -5,10 +5,12 @@
   "main": "./src/app.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon --ext ts --exec ts-node src/app.ts",
+    "start": "ts-node src/app.ts",
+    "nodemon": "nodemon --ext ts --exec ts-node src/app.ts",
     "migration:run": "npx sequelize-cli db:migrate",
     "migration:seeder": "npx sequelize-cli db:seed:all",
     "migration:undo:all": "npx sequelize-cli db:migrate:undo:all",
+    "build": "esbuild src/app.ts --bundle --platform=node --target=node18 --minify --packages=external --outfile=dist/index.js",
     "lint": "eslint src/**/*.ts",
     "format": "eslint src/**/*.ts --fix",
     "test": "jest --config=jest.config.ts",

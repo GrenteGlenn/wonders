@@ -5,7 +5,7 @@ export default interface TripInterface {
   duration: number;
   from_date: Date;
   to_date: Date;
-  transportation_id: number ;
+  transportation_id: number;
   created_at: Date;
   updated_at: Date;
 }

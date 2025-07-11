@@ -25,7 +25,7 @@ app.use('/api/auth', jsonParser, authRoutes);
 
 app.use(userCheck);
 
-app.use('/api/users', jsonParser,  userRoutes);
+app.use('/api/users', jsonParser, userRoutes);
 app.use('/api/address', jsonParser, addressRoutes);
 app.use('/api/role', jsonParser, roleRoutes);
 app.use('/api/session', jsonParser, sessionRoutes);

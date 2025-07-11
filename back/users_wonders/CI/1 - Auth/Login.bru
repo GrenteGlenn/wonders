@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: http://{{address}}/api/auth/login
+  url: {{address}}api/auth/login
   body: json
   auth: none
 }
@@ -24,6 +24,6 @@ tests {
   
   const response = res.getBody();
   
-  bru.setGlobalEnvVar("token", response.data.token);
-  bru.setGlobalEnvVar("userId", response.data.userId);
+  bru.setEnvVar("token", response.data.token);
+  bru.setEnvVar("userId", response.data.userId);
 }

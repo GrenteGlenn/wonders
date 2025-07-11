@@ -8,20 +8,28 @@ import { AuthentificationService } from '../../app/service/auth/authentification
 import { UsersService } from '../../app/service/users/users.service';
 import { User } from '../../app/model/User';
 import { TranslateService } from '../../app/service/translate/translate.service';
-import { filter, timeout } from 'rxjs';
+import { filter } from 'rxjs';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [LucideAngularModule, MatButtonModule, MatTooltipModule, CommonModule, TranslateModule],
+  imports: [
+    LucideAngularModule,
+    MatButtonModule,
+    MatTooltipModule,
+    CommonModule,
+    TranslateModule
+  ],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
 export class NavbarComponent implements OnInit {
   isMenuOpen = false;
+  isMobileMenuOpen = false;
   isAuthenticated = false;
   user: User | null = null;
+  showBottomCTA = false;
 
   constructor(
     private router: Router,
@@ -31,32 +39,49 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._authService.isAuthenticated$.subscribe((isAuth) => (this.isAuthenticated = isAuth));
+    this._authService.isAuthenticated$.subscribe(
+      (isAuth) => (this.isAuthenticated = isAuth)
+    );
+
     this.loadUserInfo();
+
+    // Fermer les menus quand on navigue (route change)
     this.router.events
-    .pipe(filter(event => event instanceof NavigationEnd))
-    .subscribe(() => {
-      this.syncLanguageWithUrl();
-    });
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.syncLanguageWithUrl();
+        this.closeMenu();
+        this.closeMobileMenu();
+        this.checkIfHomePage();
+      });
   }
 
   loadUserInfo() {
     this.usersService.getUserInfo().subscribe({
       next: (userData) => {
-        this.user = userData;        
+        this.user = userData;
       },
       error: (error) => {
         console.error('Erreur lors du chargement des informations utilisateur:', error);
       }
     });
   }
+
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
   }
-  
+
   closeMenu(): void {
     this.isMenuOpen = false;
-  }  
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
 
   goHomePage() {
     this.router.navigate(['/', this.translateService.currentLang, 'home']);
@@ -83,8 +108,6 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/', this.translateService.currentLang, 'home']);
   }
 
-  // Switch des traductions
-
   onLanguageChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const lang = target.value;
@@ -97,12 +120,21 @@ export class NavbarComponent implements OnInit {
 
   private syncLanguageWithUrl(): void {
     const urlSegments = this.router.url.split('/');
-    const potentialLang = urlSegments[1]; 
+    const potentialLang = urlSegments[1];
 
     if (potentialLang && (potentialLang === 'fr' || potentialLang === 'en')) {
       if (this.translateService.currentLang !== potentialLang) {
         this.translateService.currentLang = potentialLang;
       }
     }
+  }
+
+  private checkIfHomePage(): void {
+    const segments = this.router.url.split('/');
+    this.showBottomCTA = segments.length >= 3 && segments[2] === 'home';
+  }
+
+  goToSafe() {
+    this.router.navigate(['/fr/secure-safe']);
   }
 }

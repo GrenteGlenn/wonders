@@ -21,25 +21,22 @@ export default class AirportController {
 
   async geo(longitude: number, latitude: number) {
     const radius = 100;
-  
-    const latDelta = radius / 111; 
-    const lonDelta = radius / (111 * Math.cos((latitude * Math.PI) / 180)); 
-  
+
+    const latDelta = radius / 111;
+    const lonDelta = radius / (111 * Math.cos((latitude * Math.PI) / 180));
+
     const minLat = latitude - latDelta;
     const maxLat = latitude + latDelta;
     const minLon = longitude - lonDelta;
     const maxLon = longitude + lonDelta;
-  
+
     return await Airport.findAll({
       where: {
-        [Op.and]: [
-          { longitude: { [Op.between]: [minLon, maxLon] } },
-          { latitude: { [Op.between]: [minLat, maxLat] } }
-        ]
+        [Op.and]: [{ longitude: { [Op.between]: [minLon, maxLon] } }, { latitude: { [Op.between]: [minLat, maxLat] } }]
       }
     });
   }
-  
+
   async update(id: number, data: AirportInterface) {
     const airport = await Airport.findByPk(id);
     if (!airport) throw new Error('Airport not found');

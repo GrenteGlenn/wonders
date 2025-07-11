@@ -1,5 +1,5 @@
 export default interface activityCategory {
-  id: number;
+  id?: number;
   name: string;
   picture_id: number;
   created_at?: Date;

@@ -1,13 +1,19 @@
-FROM node AS builder
+FROM node:18-alpine AS builder
 WORKDIR /app
 COPY ./back/users_wonders .
+RUN rm -r deploy/ CI/
 RUN npm install
+RUN npm install -D esbuild && npm run build
 
 FROM node:18-alpine
 WORKDIR /app
-COPY --from=builder /app .
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./
+
+RUN npm install --omit=dev && npm cache clean --force
+
+RUN mkdir config/
 RUN echo '{"development":{"username":"gpebackuseruser","password":"LBWQd3UEEAfHFKPKfzAEut6wX0RWk1hg","database":"gpebackuser","host":"163.5.107.36","port":"5432","dialect":"postgres"}}' > ./config/config.json
-RUN printf 'DB_NAME=gpebackuser \nDB_USER=gpebackuseruser \nDB_PASSWORD=LBWQd3UEEAfHFKPKfzAEut6wX0RWk1hg \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001' > .env
-RUN cat .env
-CMD ["npm", "start"]
-EXPOSE 3000
+RUN echo -e 'DB_NAME=gpebackuser \nDB_USER=gpebackuseruser \nDB_PASSWORD=LBWQd3UEEAfHFKPKfzAEut6wX0RWk1hg \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001' > .env
+CMD ["node", "dist/index.js"]
+EXPOSE 3001

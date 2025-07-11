@@ -3,13 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0 --disable-host-check",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "init": "npm install",
-    "lint": "eslint src/**/*.ts",
-    "format": "eslint src/**/*.ts --fix"
+    "tauri": "tauri",
+    "dev": "ng serve --host 0.0.0.0"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +26,11 @@
     "@ng-select/ng-select": "^13.2.0",
     "@ngx-translate/core": "^16.0.4",
     "@ngx-translate/http-loader": "^16.0.1",
+    "@tauri-apps/plugin-dialog": "^2.2.2",
+    "@tauri-apps/plugin-fs": "^2.3.0",
+    "@tauri-apps/plugin-opener": "^2.2.7",
+    "@tauri-apps/plugin-os": "^2.2.1",
+    "@tauri-apps/plugin-upload": "^2.2.1",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "eslint": "^8",
@@ -47,6 +50,7 @@
     "@angular/cli": "^18.0.7",
     "@angular/compiler-cli": "^18.0.0",
     "@angular/localize": "^18.2.13",
+    "@tauri-apps/cli": "^2.5.0",
     "@types/jasmine": "~5.1.0",
     "autoprefixer": "^10.4.19",
     "jasmine-core": "~5.1.0",

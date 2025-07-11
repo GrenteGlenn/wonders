@@ -1,7 +1,92 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Reset et base */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Quicksand', Roboto, "Helvetica Neue", sans-serif;
+  background-color: white;
+  color: #1f2937; /* gris foncé par défaut */
+}
+
+/* Palette principale - Variables CSS */
+:root {
+  --color-primary-orange: #FFA500; /* orange */
+  --color-primary-blue: #1A87CC;   /* bleu */
+  --color-text-default: #1f2937;   /* gris foncé */
+  --color-placeholder: #6b7280;    /* gris moyen */
+  --color-background: #ffffff;     /* blanc */
+  --color-gray-light: #f9fafb;     /* très clair */
+}
+
+/* Personnalisation des placeholders */
+::placeholder {
+  color: var(--color-placeholder);
+  opacity: 1; /* pour que ce soit bien visible sur tous les navigateurs */
+}
+
+/* Boutons principaux */
+.btn-primary {
+  background-color: var(--color-primary-orange);
+  color: white;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.5rem 1.5rem;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #cc8400; /* orange foncé au hover/focus */
+  outline: none;
+}
+
+/* Focus ring pour inputs */
+.input-focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary-blue);
+}
+
+/* Texte sélectionné dans les dropdown */
+.dropdown-item.selected,
+.dropdown-item:hover {
+  background-color: var(--color-primary-orange);
+  color: white;
+}
+
+/* Scrollbar personnalisée pour dropdown (optionnel) */
+.dropdown-results::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-results::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-blue);
+  border-radius: 3px;
+}
+
+/* Animation spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+.spinner {
+  border-radius: 9999px;
+  height: 1.5rem;
+  width: 1.5rem;
+  border-bottom-width: 2px;
+  border-style: solid;
+  border-color: var(--color-primary-orange) transparent transparent transparent;
+  animation: spin 1s linear infinite;
+}
+
+/* Utility pour texte avec la police Quicksand (si besoin) */
+.font-quicksand {
+  font-family: 'Quicksand', sans-serif !important;
+}
