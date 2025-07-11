@@ -47,7 +47,7 @@ export default class AuthController {
     return await User.create(user);
   }
 
-  async update(id: number, user: UserInterface ) {
+  async update(id: number, user: UserInterface) {
     const client = await User.findByPk(id);
     if (client) {
       client.country_id = user.country_id;

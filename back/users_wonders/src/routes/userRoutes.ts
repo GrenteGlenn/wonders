@@ -1,6 +1,5 @@
 import { RequestHandler, Router } from 'express';
 import AuthController from '../controllers/AuthController';
-import UserInterface, { UserUpdateInterface } from '../interfaces/UserInterface';
 import { decryptJWT } from '../lib/JWT';
 import { JwtPayload } from '../interfaces/Global';
 

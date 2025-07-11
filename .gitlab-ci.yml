@@ -25,7 +25,7 @@ workflow:
 variables:
   NODE_ENV: dev
 
-# Manque fly, activities
+
 lint_back_user:
   stage: lint
   image: node:22

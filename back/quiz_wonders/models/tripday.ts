@@ -6,7 +6,7 @@ import TripCity from './tripcity';
 interface TripCreationAttributes extends Optional<TripDayInterface, 'id'> { }
 
 class TripDay extends Model<TripDayInterface, TripCreationAttributes> implements TripDayInterface {
-  declare id: number;
+  declare id?: number;
   declare trip_city_id: number;
   declare date: Date;
   declare readonly created_at: Date;
