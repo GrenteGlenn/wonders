@@ -1,25 +1,23 @@
 <!-- Icône déclencheur -->
-<div class="border b-white p-3 w-80 float-end flex cursor-pointer" (click)="openModal()">
-  <lucide-icon name="bug"></lucide-icon>
-  <span class="ml-10">Retour Bug</span>
+<div class=" w-80 float-end flex cursor-pointer" (click)="openModal()">
+  <span class="text-gray-400">Retour erreurs</span>
 </div>
 
 <!-- Contenu à capturer (wrap toute la page sauf la modale) -->
-<div #pageContent>
-  <!-- Le reste de votre app ici -->
-</div>
+<div #pageContent></div>
 
 <!-- Modal -->
 <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
   <div class="bg-white p-6 rounded-lg w-[500px] max-w-full">
-    <h2 class="text-xl font-semibold mb-4">Signaler un bug</h2>
+    <h4 class="text-xl text-black font-semibold items-start justify-start flex">Signaler un problème</h4>
 
-    <textarea [(ngModel)]="bugDescription"
+    <textarea
+      [(ngModel)]="bugDescription"
       class="w-full h-32 p-2 border rounded mb-4"
-      placeholder="Décrivez le problème..."></textarea>
+      placeholder="Décrivez le problème..."
+    ></textarea>
 
     <div class="flex justify-between items-center">
-      <button class="bg-gray-800 text-white px-4 py-2 rounded" (click)="takeScreenshot()">📸 Capture écran</button>
       <button class="bg-blue-600 text-white px-4 py-2 rounded" (click)="sendEmail()">✉️ Envoyer</button>
       <button class="text-red-500" (click)="closeModal()">Fermer</button>
     </div>

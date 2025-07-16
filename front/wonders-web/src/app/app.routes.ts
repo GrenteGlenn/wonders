@@ -18,6 +18,8 @@ import { HotelComponent } from '../components/hotel/hotel.component';
 import { PreviewComponent } from '../components/preview/preview.component';
 import { ForumComponent } from '../components/topic/forum.component';
 import { SecureSafeComponent } from '../components/secure-safe/secure-safe.component';
+import { PrivacyPolicyComponent } from '../components/privacy-policy/privacy-policy.component';
+import { TermsOfServiceComponent } from '../components/terms-of-service/terms-of-service.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'fr/home' },
@@ -34,7 +36,7 @@ export const routes: Routes = [
       { path: 'choice-guide', component: ChoiceGuideComponent },
       { path: 'direct-planning', component: DirectPlanningComponent },
       { path: 'trip-details', component: TripDetailsComponent },
-      { path: 'forum', component: ForumComponent},
+      { path: 'forum', component: ForumComponent },
       { path: 'blog/:id', component: SubjectComponent },
       { path: 'subjects/:id', component: SubjectDetailComponent },
       { path: 'destinations', component: DestinationsComponent },
@@ -43,7 +45,9 @@ export const routes: Routes = [
       { path: 'activity', component: ActivitiesComponent },
       { path: 'hotel', component: HotelComponent },
       { path: 'preview', component: PreviewComponent },
-      { path: 'secure-safe', component: SecureSafeComponent }
+      { path: 'secure-safe', component: SecureSafeComponent },
+      { path: 'privacy-policy', component: PrivacyPolicyComponent },
+      { path: 'terms-of-service', component: TermsOfServiceComponent }, 
     ]
   }
 ];

@@ -69,7 +69,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
     }
   ];
 
-  fallbackImage: string = 'assets/images/placeholder.jpg';
+  fallbackImage: string = 'assets/images/noimages.jpg';
   isMobile: boolean = false;
 
   constructor(
