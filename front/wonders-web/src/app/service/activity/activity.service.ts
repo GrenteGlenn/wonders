@@ -27,7 +27,7 @@ export class ActivityService {
 
   // Activity Categories
   getAllCategories(): Observable<ActivityCategory[]> {
-    return this.http.get<ActivityCategory[]>(`${this.API_URL}/activity-category`);
+    return this.http.get<ActivityCategory[]>(`${this.API_URL}/api/activity-category`);
   }
 
   getCategoryById(id: number): Observable<ActivityCategory> {

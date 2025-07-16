@@ -257,7 +257,7 @@ export class DestinationsComponent implements OnInit {
         if (response.data && response.data.length > 0) {
           const cityResults = response.data.map((city) => ({
             name: city.city,
-            image: city.img_full || 'assets/images/placeholder.jpg',
+            image: city.img_full || 'assets/images/noimagesjpg',
             description: city.description || 'Aucune description disponible.',
             type: 'city' as const
           }));
@@ -271,7 +271,7 @@ export class DestinationsComponent implements OnInit {
               .filter((country) => country.name.toLowerCase().includes(term.toLowerCase()))
               .map((country) => ({
                 name: country.name,
-                image: country.image || 'assets/images/placeholder.jpg',
+                image: country.image || 'assets/images/noimagesjpg',
                 description: country.description || 'Découvrez ce pays magnifique.',
                 type: 'country' as const
               }));
@@ -304,7 +304,7 @@ export class DestinationsComponent implements OnInit {
       next: (countries) => {
         this.searchResults = countries.map((country) => ({
           name: country.name,
-          image: country.image || 'assets/images/placeholder.jpg',
+          image: country.image || 'assets/images/noimagesjpg',
           description: this.cleanFormattedText(country.description || 'Aucune description disponible.'),
           type: 'country' as const
         }))
@@ -329,7 +329,7 @@ export class DestinationsComponent implements OnInit {
   //     next: (countries) => {
   //       this.searchResults = countries.map((country) => ({
   //         name: country.name,
-  //         image: 'assets/images/placeholder.jpg',
+  //         image: 'assets/images/noimagesjpg',
   //         description: 'Chargement de la description...',
   //         type: 'country' as const
   //       }));
@@ -382,10 +382,10 @@ export class DestinationsComponent implements OnInit {
 
   //   this.countryService.getAllCountries().subscribe({
   //         next: (countries) => {
-  //           // Affiche d'abord avec des images placeholder pour une meilleure UX
+  //           // Affiche d'abord avec des images noimagespour une meilleure UX
   //           this.searchResults = countries.map((country) => ({
   //             name: country.name,
-  //             image: 'assets/images/placeholder.jpg',
+  //             image: 'assets/images/noimagesjpg',
   //             description:  'chargement...',
   //             type: 'country' as const
   //           }));

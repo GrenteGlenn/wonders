@@ -67,6 +67,51 @@ export class SearchDestinationComponent implements OnInit {
     }
   }
 
+  // fetchResults(term: string) {
+  //   this.isLoading = true;
+
+  //   this.countryService.getAllCountries().subscribe({
+  //     next: (countries) => {
+  //       const filteredCountries = countries
+  //         .filter((country) => country.name.toLowerCase().includes(term.toLowerCase()))
+  //         .map((country) => ({
+  //           id: country.id,
+  //           name: country.name,
+  //           type: 'country' as const,
+  //           image: country.image
+  //         }));
+
+  //       // Tri les résultats par pertinence
+  //       filteredCountries.sort((a, b) => {
+  //         const aExact = a.name.toLowerCase() === term.toLowerCase();
+  //         const bExact = b.name.toLowerCase() === term.toLowerCase();
+
+  //         if (aExact && !bExact) return -1;
+  //         if (!aExact && bExact) return 1;
+
+  //         const aStarts = a.name.toLowerCase().startsWith(term.toLowerCase());
+  //         const bStarts = b.name.toLowerCase().startsWith(term.toLowerCase());
+
+  //         if (aStarts && !bStarts) return -1;
+  //         if (!aStarts && bStarts) return 1;
+
+  //         return a.name.localeCompare(b.name);
+  //       });
+
+  //       // Limite à 10 résultats
+  //       this.searchResults = filteredCountries.slice(0, 10);
+  //       this.selectedIndex = this.searchResults.length > 0 ? 0 : -1;
+  //       this.isLoading = false;
+  //     },
+  //     error: (error) => {
+  //       console.error('Erreur lors de la récupération des pays:', error);
+  //       this.searchResults = [];
+  //       this.selectedIndex = -1;
+  //       this.isLoading = false;
+  //     }
+  //   });
+  // }
+
   fetchResults(term: string) {
     this.isLoading = true;
 
@@ -81,25 +126,26 @@ export class SearchDestinationComponent implements OnInit {
             image: country.image
           }));
 
-        // Tri les résultats par pertinence
-        filteredCountries.sort((a, b) => {
+        // Supprime les doublons potentiels par nom
+        const uniqueResults = filteredCountries.filter(
+          (result, index, self) => index === self.findIndex((r) => r.name.toLowerCase() === result.name.toLowerCase())
+        );
+
+        uniqueResults.sort((a, b) => {
           const aExact = a.name.toLowerCase() === term.toLowerCase();
           const bExact = b.name.toLowerCase() === term.toLowerCase();
-
           if (aExact && !bExact) return -1;
           if (!aExact && bExact) return 1;
 
           const aStarts = a.name.toLowerCase().startsWith(term.toLowerCase());
           const bStarts = b.name.toLowerCase().startsWith(term.toLowerCase());
-
           if (aStarts && !bStarts) return -1;
           if (!aStarts && bStarts) return 1;
 
           return a.name.localeCompare(b.name);
         });
 
-        // Limite à 10 résultats
-        this.searchResults = filteredCountries.slice(0, 10);
+        this.searchResults = uniqueResults.slice(0, 10);
         this.selectedIndex = this.searchResults.length > 0 ? 0 : -1;
         this.isLoading = false;
       },
