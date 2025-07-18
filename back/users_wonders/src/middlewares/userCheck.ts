@@ -9,12 +9,14 @@ const userCheck = async function (req: Request, res: Response, next: NextFunctio
   const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
   if (token) {
     const decrypt = decryptJWT(token) as JwtPayload;
-
-    if (!decrypt) {
+    const email = decrypt.email;
+    if (!decrypt && email) {
       res.status(403).send('Forbidden');
     } else {
       const client = await authController.getOneByEmail(decrypt.email);
-      if (client) {
+      if (!client) {
+        res.status(403).send('Forbidden');
+      } else {
         next();
       }
     }

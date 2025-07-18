@@ -91,6 +91,10 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/', this.translateService.currentLang, 'forum']);
   }
 
+  goChat() {
+    this.router.navigate(['/', this.translateService.currentLang, 'chat']);
+  }
+
   goChoiceGuide() {
     this.router.navigate(['/', this.translateService.currentLang, 'choice-guide']);
   }
