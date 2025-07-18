@@ -129,6 +129,14 @@ export class ChatComponent {
     });
   }
 
+  isUserOwner(group: any): boolean {
+    return group.users.some((user: any) => {
+      const isOwner = user.UserGroupLink.is_owner && user.id === this.user_id;
+      console.log(isOwner, user.id, this.user_id);
+      return isOwner;
+    });
+  }
+
   submitGroupForm(form: NgForm): void {
 
     if (!form.valid) {
@@ -171,10 +179,13 @@ export class ChatComponent {
   }
 
   addUserToGroup(): void {
-    console.log(this.userGroupId, this.guest_email);
-    
     this._chatService.addUserToGroup({ email: this.guest_email, group_id: this.userGroupId }).subscribe({
+      next: () => {
+        this.showAddUserModal = false
+        this.getUserGroups(this.user_id as number)
+      },
       error: (error) => {
+        this.showAddUserModal = false
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
       }
     })

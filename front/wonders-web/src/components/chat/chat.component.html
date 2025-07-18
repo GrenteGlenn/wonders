@@ -69,12 +69,12 @@
                     class="userlabel"
                   >
                     {{ user.first_name }}
-                    <span *ngIf="user.UserGroupLink.is_owner" (click)="removeUserFromGroup(group)">X</span>
+                    <span *ngIf="isUserOwner(group)" (click)="removeUserFromGroup(group)">X</span>
                   </span>
                 </div>
               </td>
               <td>
-                <button (click)="showAddUserModal = !showAddUserModal && userGroupId = group.id" class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Ajouter</button>
+                <button (click)="showAddUserModal = !showAddUserModal && userGroupId = group.id" *ngIf="!haveToAcceptToJoinToGroup(group.users)" class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Ajouter</button>
                 <button
                   *ngIf="haveToAcceptToJoinToGroup(group.users)"
                   class="mr-5 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
@@ -90,6 +90,7 @@
                   Sortir
                 </button>
                 <button
+                  *ngIf="!haveToAcceptToJoinToGroup(group.users)"
                   (click)="goToDiscussion(group.id)"
                   class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
@@ -110,26 +111,26 @@
 >
   <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
     <h2 class="text-xl font-semibold mb-4">Ajouter un memebre au chat</h2>
-    
+
     <form (ngSubmit)="addUserToGroup()" class="space-y-4">
-      <input 
-        type="email" 
-        name="guest_email" 
-        [(ngModel)]="guest_email" 
-        placeholder="Email" 
-        class="w-full p-2 border rounded" 
+      <input
+        type="email"
+        name="guest_email"
+        [(ngModel)]="guest_email"
+        placeholder="Email"
+        class="w-full p-2 border rounded"
         required />
-      
+
       <div class="flex gap-2">
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Sauvegarder
         </button>
-        
-        <button 
-          type="button" 
-          (click)="showAddUserModal = false" 
+
+        <button
+          type="button"
+          (click)="showAddUserModal = false"
           class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
           Annuler
         </button>

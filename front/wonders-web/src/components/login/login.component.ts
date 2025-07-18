@@ -4,11 +4,9 @@ import { AuthentificationService, ReponseToken } from '../../app/service/auth/au
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslateService } from '../../app/service/translate/translate.service';
-import { platform } from '@tauri-apps/plugin-os';
 import { CommonModule } from '@angular/common';
 import { platform } from '@tauri-apps/plugin-os';
 import { isTauri } from '../../utils/tauri.utils';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -30,11 +28,6 @@ export class LoginComponent implements OnInit {
     private router: Router,
     public translateService: TranslateService
   ) {}
-
-
-  detectPlatform(): boolean {
-    return ['ios', 'android', 'linux'].includes(currentPlatform);
-  }
 
   ngOnInit(): void {
     // 🔐 Redirection si déjà connecté
