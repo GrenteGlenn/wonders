@@ -2,8 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { City } from '../../model/cities';
+import { Country } from '../../model/Country';
 
+
+interface City {
+  id?: number;
+  name: string;
+  country: Country;
+  created_at?: Date;
+  updated_at?: Date;
+}
 
 interface CityAIRequest {
   activity: string[];
@@ -25,7 +33,7 @@ interface CityAIResponse {
   providedIn: 'root'
 })
 export class CityService {
-  private apiUrl = environment.aiApiUrl;
+  private apiUrl = environment.Country;
 
   constructor(private http: HttpClient, ) {}
 
@@ -42,7 +50,7 @@ export class CityService {
 
   // Supprime une ville
   deleteCity(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/api/cities/${id}`);
   }
 
   // Obtenir des suggestions de villes via l'IA

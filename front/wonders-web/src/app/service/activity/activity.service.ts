@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class ActivityService {
-  private API_URL = environment.activityApiUrl;
+  private API_URL = environment.Activity;
 
   constructor(private http: HttpClient) {}
 
@@ -33,6 +33,7 @@ export class ActivityService {
   getCategoryById(id: number): Observable<ActivityCategory> {
     return this.http.get<ActivityCategory>(`${this.API_URL}/api/activity-category/${id}`);
   }
+
   deleteCategory(id: number): Observable<any> {
     return this.http.delete(`${this.API_URL}/api/activity-category/${id}`);
   }
