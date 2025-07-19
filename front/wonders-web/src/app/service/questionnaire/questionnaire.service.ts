@@ -12,8 +12,8 @@ import { AnswerAI } from '../../model/Answer';
   providedIn: 'root'
 })
 export class QuestionnaireService {
-  private apiUrl = environment.quizzApiUrl;
-  private aiUrl = environment.aiApiUrl;
+  private apiUrl = environment.Quiz;
+  private aiUrl = environment.Country;
 
   constructor(
     private http: HttpClient,

@@ -125,6 +125,7 @@ export class HomePageComponent implements OnInit, OnDestroy {
   handleImageError(event: any): void {
     event.target.src = this.fallbackImage;
   }
+
   showMore(): void {
     this.router.navigate(['/', this.translateService.currentLang, 'destinations']);
   }

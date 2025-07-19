@@ -1,24 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Topic } from '../../model/Topic';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { UserLike } from '../../model/UserLike';
+
 @Injectable({
   providedIn: 'root'
 })
 export class UserLikeService {
+  private API_URL = environment.Blog;
 
-  private API_URL = `${environment.blogApiUrl}/api`
-
-  constructor(
-    private http: HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
   Create(user_id: number, subject_id: number | null) {
-    return this.http.post<UserLike>(`${this.API_URL}/like`, { user_id: user_id, subject_id: subject_id})
+    return this.http.post<UserLike>(`${this.API_URL}/api/like`, { user_id: user_id, subject_id: subject_id });
   }
 
   Delete(userLike: UserLike) {
-    return this.http.delete(`${this.API_URL}/like/${userLike.id}`)
+    return this.http.delete(`${this.API_URL}/api/like/${userLike.id}`);
   }
 }
