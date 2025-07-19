@@ -16,7 +16,6 @@ export class FlyComponent {
   @Output() flightSelected = new EventEmitter<any>();
   @Input() latitude!: number;
   @Input() longitude!: number;
-  
 
   searchForm: FormGroup;
   isSearching = false;
@@ -54,7 +53,7 @@ export class FlyComponent {
   originalMaxPrice: number = 5000;
 
   // Pour le filtre des compagnies aériennes
-  airlines: { code: string, name: string, selected: boolean }[] = [];
+  airlines: { code: string; name: string; selected: boolean }[] = [];
 
   // Codes IATA courants pour les villes françaises (à adapter selon vos besoins)
   airports = [
@@ -76,7 +75,6 @@ export class FlyComponent {
     private fb: FormBuilder,
     private flyService: FlyService,
     private airportsService: AirportsService
-
   ) {
     this.searchForm = this.fb.group({
       originLocationCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
@@ -121,14 +119,13 @@ export class FlyComponent {
       }
     });
   }
-  
 
   loadNearbyAirports(lat: number, lon: number) {
     this.airportsService.getByGeo(lon, lat).subscribe({
       next: (airports) => {
         // console.log('🛫 Aéroports proches reçus :', airports);
         this.destinationAirports = Array.isArray(airports) ? airports : [airports];
-  
+
         if (this.destinationAirports.length > 0) {
           this.searchForm.patchValue({
             destinationLocationCode: this.destinationAirports[0].code
@@ -140,7 +137,6 @@ export class FlyComponent {
       }
     });
   }
-  
 
   // Formatter la date en YYYY-MM-DD
   private formatDate(date: Date): string {
@@ -175,13 +171,13 @@ export class FlyComponent {
         this.isSearching = false;
         this.searchCompleted = true;
         this.currentPage = 1;
-        
+
         // Extraire les compagnies aériennes uniques
         this.extractAirlines();
-        
+
         // Déterminer le prix minimum et maximum
         this.setMinMaxPrices();
-        
+
         // Appliquer le tri par défaut
         this.sortFlights();
       },
@@ -205,22 +201,21 @@ export class FlyComponent {
       duration: flight.itineraries[0].duration,
       vol: flight.itineraries[0].segments[0].number
     };
-  
+
     this.flightSelected.emit(selected);
   }
-  
 
   // Extraire les compagnies aériennes uniques des résultats
   extractAirlines(): void {
     const uniqueAirlines = new Set<string>();
-    
-    this.flights.forEach(flight => {
+
+    this.flights.forEach((flight) => {
       flight.validatingAirlineCodes.forEach((code: string) => {
         uniqueAirlines.add(code);
       });
     });
-    
-    this.airlines = Array.from(uniqueAirlines).map(code => {
+
+    this.airlines = Array.from(uniqueAirlines).map((code) => {
       // On pourrait avoir une liste de correspondance code/nom complète
       // mais pour simplifier, on utilise juste le code si on n'a pas le nom
       const airlineName = this.getAirlineName(code);
@@ -235,25 +230,25 @@ export class FlyComponent {
   // Noms de quelques compagnies aériennes
   getAirlineName(code: string): string {
     const airlineMap: { [key: string]: string } = {
-      'AF': 'Air France',
-      'LH': 'Lufthansa',
-      'BA': 'British Airways',
-      'IB': 'Iberia',
-      'AZ': 'Alitalia',
-      'KL': 'KLM',
-      'LX': 'Swiss',
-      'DL': 'Delta',
-      'UA': 'United Airlines',
-      'AA': 'American Airlines',
+      AF: 'Air France',
+      LH: 'Lufthansa',
+      BA: 'British Airways',
+      IB: 'Iberia',
+      AZ: 'Alitalia',
+      KL: 'KLM',
+      LX: 'Swiss',
+      DL: 'Delta',
+      UA: 'United Airlines',
+      AA: 'American Airlines',
       '6X': 'AirMock' // Compagnie fictive dans votre exemple
     };
-    
+
     return airlineMap[code] || code;
   }
 
   onCitySelected(cityName: string) {
     this.selectedCityName = cityName;
-  
+
     this.airportsService.getAirportsByCityName(cityName).subscribe({
       next: (airports) => {
         this.destinationAirports = airports;
@@ -272,16 +267,16 @@ export class FlyComponent {
   // Déterminer le prix minimum et maximum
   setMinMaxPrices(): void {
     if (this.flights.length === 0) return;
-    
+
     let min = Infinity;
     let max = 0;
-    
-    this.flights.forEach(flight => {
+
+    this.flights.forEach((flight) => {
       const price = parseFloat(flight.price.total);
       if (price < min) min = price;
       if (price > max) max = price;
     });
-    
+
     this.minPriceFilter = Math.floor(min);
     this.maxPriceFilter = Math.ceil(max);
     this.originalMaxPrice = this.maxPriceFilter;
@@ -327,43 +322,43 @@ export class FlyComponent {
   parseDuration(duration: string): number {
     const matches = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
     if (!matches) return 0;
-    
+
     const hours = matches[1] ? parseInt(matches[1], 10) : 0;
     const minutes = matches[2] ? parseInt(matches[2], 10) : 0;
-    
+
     return hours * 60 + minutes;
   }
 
   // Appliquer les filtres
   applyFilters(): void {
-    this.filteredFlights = this.flights.filter(flight => {
+    this.filteredFlights = this.flights.filter((flight) => {
       // Filtre par prix
       const price = parseFloat(flight.price.total);
       if (price > this.maxPriceFilter) return false;
-      
+
       // Filtre par compagnie aérienne
       const airlineMatch = flight.validatingAirlineCodes.some((code: string) => {
-        const airline = this.airlines.find(a => a.code === code);
+        const airline = this.airlines.find((a) => a.code === code);
         return airline && airline.selected;
       });
       if (!airlineMatch) return false;
-      
+
       // Filtre par nombre d'escales (aller uniquement pour simplifier)
       const stops = flight.itineraries[0].segments.length - 1;
       if (stops === 0 && !this.filters.direct) return false;
       if (stops === 1 && !this.filters.oneStop) return false;
       if (stops > 1 && !this.filters.multiStop) return false;
-      
+
       // Filtre par heure de départ
       const departureHour = new Date(flight.itineraries[0].segments[0].departure.at).getHours();
       if (departureHour >= 6 && departureHour < 12 && !this.filters.departureTime.morning) return false;
       if (departureHour >= 12 && departureHour < 18 && !this.filters.departureTime.afternoon) return false;
       if (departureHour >= 18 && departureHour < 24 && !this.filters.departureTime.evening) return false;
-      if ((departureHour >= 0 && departureHour < 6) && !this.filters.departureTime.night) return false;
-      
+      if (departureHour >= 0 && departureHour < 6 && !this.filters.departureTime.night) return false;
+
       return true;
     });
-    
+
     // Réappliquer le tri après filtrage
     this.sortFlights();
   }
@@ -381,13 +376,13 @@ export class FlyComponent {
         night: true
       }
     };
-    
+
     // Réinitialiser le filtre de prix
     this.maxPriceFilter = this.originalMaxPrice;
-    
+
     // Réinitialiser le filtre des compagnies aériennes
-    this.airlines.forEach(airline => airline.selected = true);
-    
+    this.airlines.forEach((airline) => (airline.selected = true));
+
     // Réappliquer les filtres (qui seront tous actifs)
     this.filteredFlights = [...this.flights];
     this.sortFlights();
@@ -454,5 +449,3 @@ export class FlyComponent {
     return airport ? airport.name : code;
   }
 }
-
-

@@ -7,7 +7,7 @@ import { CountryService } from '../../app/service/country/country.service';
 import { GoogleMapComponent } from '../google-map/google-map.component';
 import { Destination } from '../../app/model/destination';
 import { TranslateService } from '../../app/service/translate/translate.service';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @Component({
@@ -178,6 +178,7 @@ export class DestinationsComponent implements OnInit {
       }
     });
   }
+
   //Clean les texts
   private cleanFormattedText(text: string): string {
     if (!text) return '';
@@ -194,11 +195,11 @@ export class DestinationsComponent implements OnInit {
 
   loadCountry(countryName: string) {
     this.isLoading = true;
-  
+
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
-        const country = countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
-  
+        const country = countries.find((c) => c.name.toLowerCase() === countryName.toLowerCase());
+
         if (country) {
           this.destination = {
             id: country.id,
@@ -210,13 +211,12 @@ export class DestinationsComponent implements OnInit {
             isImageLoading: false,
             longitude: country.longitude,
             latitude: country.latitude
-             
           };
           this.destinationSelected.emit(this.destination);
         } else {
           this.destination = null;
         }
-  
+
         this.isLoading = false;
       },
       error: (error) => {
@@ -225,7 +225,6 @@ export class DestinationsComponent implements OnInit {
       }
     });
   }
-  
 
   loadCountryImage(countryName: string) {
     this.countryService.getCountryImage(countryName).subscribe({
@@ -302,7 +301,7 @@ export class DestinationsComponent implements OnInit {
   loadPopularDestinations() {
     this.isLoading = true;
     this.destination = null;
-  
+
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
         this.searchResults = countries.map((country) => ({
@@ -312,7 +311,7 @@ export class DestinationsComponent implements OnInit {
           type: 'country' as const
         }))
         .sort((a, b) => a.name.localeCompare(b.name));
-  
+
         this.updatePagination();
         this.isLoading = false;
       },
@@ -322,12 +321,11 @@ export class DestinationsComponent implements OnInit {
       }
     });
   }
-  
 
   // loadPopularDestinations() {
   //   this.isLoading = true;
   //   this.destination = null;
-  
+
   //   this.countryService.getAllCountries().subscribe({
   //     next: (countries) => {
   //       this.searchResults = countries.map((country) => ({
@@ -336,10 +334,10 @@ export class DestinationsComponent implements OnInit {
   //         description: 'Chargement de la description...',
   //         type: 'country' as const
   //       }));
-  
+
   //       this.updatePagination();
   //       this.isLoading = false;
-  
+
   //       countries.forEach((country, index) => {
   //         setTimeout(() => {
   //           // 🔹 Charger image
@@ -354,7 +352,7 @@ export class DestinationsComponent implements OnInit {
   //               console.error(`Erreur image ${country.name}:`, error);
   //             }
   //           });
-  
+
   //           // 🔹 Charger description AI
   //           this.countryService.getAICountryDescription(country.name).subscribe({
   //             next: (response) => {
@@ -377,7 +375,6 @@ export class DestinationsComponent implements OnInit {
   //     }
   //   });
   // }
-  
 
   // loadPopularDestinations() {
   //   this.isLoading = true;
@@ -473,6 +470,7 @@ export class DestinationsComponent implements OnInit {
       });
     }
   }
+
   goBackToList() {
     this.router.navigate(['/', this.translateService.currentLang, 'destination']).then(() => {
       window.location.reload();

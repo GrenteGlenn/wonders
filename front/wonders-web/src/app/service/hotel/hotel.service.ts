@@ -8,13 +8,13 @@ import { Hotel, HotelSearchParams } from '../../model/hotel';
   providedIn: 'root'
 })
 export class HotelService {
-  private apiUrl = `${environment.UrlReservation}/api/hotel`;
+  private apiUrl = `${environment.FlyHotel}`;
 
   constructor(private http: HttpClient) {}
 
   // Récupère la liste des hôtels (route '/')
   getHotels(): Observable<Hotel[]> {
-    return this.http.get<Hotel[]>(this.apiUrl);
+    return this.http.get<Hotel[]>(`${this.apiUrl}/api/hotel`);
   }
 
   searchHotels(params: HotelSearchParams): Observable<any> {
@@ -29,7 +29,7 @@ export class HotelService {
       );
     const httpParams = new HttpParams({ fromObject: filteredParams });
 
-    return this.http.get<any>(`${this.apiUrl}/list`, { params: httpParams });
+    return this.http.get<any>(`${this.apiUrl}/api/hotel/list`, { params: httpParams });
   }
 
   // Méthode pour les offres d'hôtel
@@ -41,7 +41,7 @@ export class HotelService {
       }
     });
     return this.http
-      .get<any>(`${this.apiUrl}/offers`, {
+      .get<any>(`${this.apiUrl}/api/hotel/offers`, {
         params: httpParams
       })
       .pipe(
