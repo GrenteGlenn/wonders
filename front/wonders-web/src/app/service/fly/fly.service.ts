@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
@@ -17,34 +17,33 @@ export interface FlightSearchParams {
 export interface FlightOffersResponse {
   status: string;
   results: number;
-  data: any[]; 
+  data: any[];
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class FlyService {
-  private apiUrl = `${environment.UrlReservation}/api/fly`;
+  private apiUrl = `${environment.FlyHotel}`;
 
   constructor(private http: HttpClient) {}
 
   // Récupère la liste des vols (route '/')
   getFlights(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(`${this.apiUrl}/api/fly`);
   }
+
   searchFlights(params: FlightSearchParams): Observable<FlightOffersResponse> {
-    const httpParams = new HttpParams({ fromObject: {
-      ...params,
-      nonStop: params.nonStop ? 'true' : 'false',
-      adults: params.adults ?? '2',
-      children: params.children ?? '',
-      maxPrice: params.maxPrice?.toString() ?? ''
-    }});
-  
-    return this.http.get<FlightOffersResponse>(`${this.apiUrl}/list`, { params: httpParams });
+    const httpParams = new HttpParams({
+      fromObject: {
+        ...params,
+        nonStop: params.nonStop ? 'true' : 'false',
+        adults: params.adults ?? '2',
+        children: params.children ?? '',
+        maxPrice: params.maxPrice?.toString() ?? ''
+      }
+    });
+
+    return this.http.get<FlightOffersResponse>(`${this.apiUrl}/api/fly/list`, { params: httpParams });
   }
-  
-
-
- 
 }

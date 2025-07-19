@@ -9,7 +9,7 @@ import { AuthentificationService } from '../auth/authentification.service';
 })
 export class UsersService {
 
-  private API_URL = environment.userApiUrl
+  private API_URL = environment.Users
 
   constructor(
     private http: HttpClient,
@@ -35,7 +35,7 @@ export class UsersService {
   }
 
   Delete(user: FetchableUser) {
-    return this.http.delete(`${this.API_URL}/users/${user.id}`)
+    return this.http.delete(`${this.API_URL}/api/users/${user.id}`)
   }
 
 

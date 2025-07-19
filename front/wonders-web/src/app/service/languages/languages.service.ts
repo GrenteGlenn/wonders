@@ -12,7 +12,7 @@ export interface Language {
   providedIn: 'root'
 })
 export class LanguageService {
-  private API_URStandard = environment.UrlStandard;
+  private API_URStandard = environment.Country;
 
   constructor(private http: HttpClient) {}
 
