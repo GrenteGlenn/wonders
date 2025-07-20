@@ -1,0 +1,21 @@
+meta {
+  name: Delete Organization ( status 204 need change )
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/organization/:id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  id: {{Id}}
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("Id", faker.number.int({max : 5, min : 1}))
+}
