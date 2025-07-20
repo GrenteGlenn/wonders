@@ -1,0 +1,25 @@
+meta {
+  name: Save Organization (Check problem Save Id Unique)
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/organization/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user_id": {{User_id}},
+    "status_id": {{Status_id}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("User_id",faker.number.int({max: 10}))
+  bru.setEnvVar("Status_id",faker.number.int({ max: 3 }))
+}
