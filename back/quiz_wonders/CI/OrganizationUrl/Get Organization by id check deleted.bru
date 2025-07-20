@@ -1,0 +1,17 @@
+meta {
+  name: Get Organization by id check deleted
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{base_url}}/organization/{{organisationid}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status code is 404", function () {
+      expect(res.getStatus()).to.equal(404);
+  });
+}
