@@ -1,5 +1,5 @@
 meta {
-  name: Save Organization (Check problem Save Id Unique)
+  name: Create Organization (Check problem Save Id Unique)
   type: http
   seq: 2
 }
@@ -22,4 +22,14 @@ script:pre-request {
   
   bru.setEnvVar("User_id",faker.number.int({max: 10}))
   bru.setEnvVar("Status_id",faker.number.int({ max: 3 }))
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("organisationid", response.id);
 }
