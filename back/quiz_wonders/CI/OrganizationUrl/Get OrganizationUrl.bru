@@ -1,11 +1,17 @@
 meta {
   name: Get OrganizationUrl
   type: http
-  seq: 3
+  seq: 4
 }
 
 get {
-  url: {{base_url}}/organization-url/16
+  url: {{base_url}}/organization-url/{{organisationurlid}}
   body: none
   auth: none
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
 }
