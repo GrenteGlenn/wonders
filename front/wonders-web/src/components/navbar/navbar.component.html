@@ -34,9 +34,10 @@
 
     <div *ngIf="isAuthenticated" class="relative">
       <img
-        src="https://github.com/shadcn.png"
+        [src]="user?.img ?? genericAvatar"
         alt="User Avatar"
-        class="h-8 w-8 rounded-full cursor-pointer"
+        class="h-8 w-8 rounded-full cursor-pointer navbar-avatar border border-[2px] border-blue-950"
+
         (click)="toggleMenu()"
       />
       <div *ngIf="isMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">

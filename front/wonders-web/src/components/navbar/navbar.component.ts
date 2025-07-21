@@ -30,6 +30,7 @@ export class NavbarComponent implements OnInit {
   isAuthenticated = false;
   user: User | null = null;
   showBottomCTA = false;
+  genericAvatar = 'https://github.com/shadcn.png'
 
   constructor(
     private router: Router,
@@ -45,7 +46,6 @@ export class NavbarComponent implements OnInit {
 
     this.loadUserInfo();
 
-    // Fermer les menus quand on navigue (route change)
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -60,9 +60,10 @@ export class NavbarComponent implements OnInit {
     this.usersService.getUserInfo().subscribe({
       next: (userData) => {
         this.user = userData;
+        
       },
       error: (error) => {
-        console.error('Erreur lors du chargement des informations utilisateur:', error);
+        console.error('Error while getting user data:', error);
       }
     });
   }
