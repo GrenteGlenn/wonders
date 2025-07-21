@@ -6,7 +6,8 @@ export interface User {
   last_name: string,
   birth_date: Date,
   country_id: any,
-  language_id: number
+  language_id: number,
+  img?: string
 }
 
 export interface FetchableUser {
@@ -20,5 +21,6 @@ export interface FetchableUser {
   role_id: number,
   country_id: any,
   language_id: number,
-  user?: User
+  user?: User,
+  img?: string
 }

@@ -1,0 +1,20 @@
+.avatar-list {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.avatar {
+  max-width: 50px;
+}
+
+.avatar-list div {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  padding: 4px;
+  cursor: pointer;
+  transition: border 0.2s;
+}
+
+.avatar-list div.selected {
+  border-color: #3b82f6;
+}
