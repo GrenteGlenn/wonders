@@ -17,11 +17,11 @@
         "ButtonProfile": "Profil",
         "ButtonConnection": "Login",
         "ButtonDeconnexion": "Logout",
-        "Forum": "Forum"
+        "Forum": "Forum",
+        "Chat": "Chat"
 
     },
 
     "LOGIN": "Login",
     "REGISTER": "Register"
 }
-  

@@ -17,7 +17,8 @@
     "ButtonProfile": "Profil",
     "ButtonConnection": "Connexion",
     "ButtonDeconnexion": "Déconnexion",
-    "Forum": "Forum"
+    "Forum": "Forum",
+    "Chat": "Chat"
   },
   "LOGIN": "Login",
   "REGISTER": "Register"

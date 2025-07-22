@@ -10,7 +10,7 @@ export default interface UserInterface {
   last_name: string;
   email: string;
   password: string;
-  img: string;
+  img?: string;
   created_at?: Date;
   updated_at?: Date;
   birth_date: Date;
@@ -23,7 +23,6 @@ export interface UserUpdateInterface {
   email?: string;
   password?: string;
   country_id?: number;
-  role_id?: number;
   img?: string;
   birth_date?: Date;
   language_id?: number;
