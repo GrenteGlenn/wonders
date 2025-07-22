@@ -8,13 +8,13 @@ import {
   query,
   orderBy,
   serverTimestamp,
-  where,
+  where
 } from 'firebase/firestore';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, firstValueFrom } from 'rxjs';
 import { UserGroupInterface, UserGroupLinkInterface } from '../../model/UserGroup';
 import { FetchableUser } from '../../model/User';
-import { environment } from '../../../environments/environment'
+import { environment } from '../../../environments/environment';
 import { UsersService } from '../users/users.service';
 
 export interface Message {
@@ -49,12 +49,10 @@ export interface ApiGroupResponse {
   users: FetchableUser[];
 }
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class FirebaseService {
-
   private firebaseConfig = environment.firebaseConfig;
 
   private app = initializeApp(this.firebaseConfig);
@@ -73,16 +71,16 @@ export class FirebaseService {
   private currentGroup: Group | null = null;
   private messagesUnsubscribe: (() => void) | null = null;
 
-  user: FetchableUser | null = null
+  user: FetchableUser | null = null;
 
   constructor(
     private http: HttpClient,
     private userService: UsersService
-  ) { }
+  ) {}
 
   async getUser(id: number): Promise<FetchableUser> {
     try {
-      return await firstValueFrom(this.userService.getUserInfoByUserID(id))
+      return await firstValueFrom(this.userService.getUserInfoByUserID(id));
     } catch (error) {
       console.error("Erreur lors de la récupération de l'utilisateur:", error);
       throw error;
@@ -93,31 +91,28 @@ export class FirebaseService {
    * Initialise le service avec un groupe spécifique
    */
   async initializeWithGroup(group: UserGroupInterface, currentUserId: number): Promise<void> {
-
     try {
       const groupData = group;
 
-      const userIds = groupData.users.map(user => user.id);
+      const userIds = groupData.users.map((user) => user.id);
       console.log(userIds, currentUserId, groupData);
       // 3. Vérifier que l'utilisateur actuel fait partie du groupe
       if (!userIds.includes(currentUserId)) {
-
         throw new Error('Utilisateur non trouvé dans ce groupe');
       }
 
       // 4. Créer les objets User avec les IDs seulement
-      const users: any = groupData.users
-        .map((user) => {
-          const u = user;
-          console.log(u, groupData);
+      const users: any = groupData.users.map((user) => {
+        const u = user;
+        console.log(u, groupData);
 
-          return {
-            id: u.id,
-            first_name: u.is_owner,
-            email: u.is_owner,
-            avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${u.id}`
-          };
-        });
+        return {
+          id: u.id,
+          first_name: u.is_owner,
+          email: u.is_owner,
+          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${u.id}`
+        };
+      });
 
       // 5. Créer l'objet Group
       this.currentGroup = {
@@ -140,9 +135,8 @@ export class FirebaseService {
 
       // 8. Écouter les messages du groupe
       this.listenToGroupMessages(groupData.id!.toString());
-
     } catch (error) {
-      console.error('Erreur lors de l\'initialisation:', error);
+      console.error("Erreur lors de l'initialisation:", error);
       throw error;
     }
   }
@@ -157,11 +151,7 @@ export class FirebaseService {
     }
 
     const messagesRef = collection(this.db, 'messages');
-    const q = query(
-      messagesRef,
-      where('groupId', '==', groupId),
-      orderBy('timestamp', 'asc')
-    );
+    const q = query(messagesRef, where('groupId', '==', groupId), orderBy('timestamp', 'asc'));
 
     this.messagesUnsubscribe = onSnapshot(q, (snapshot) => {
       const messages: Message[] = [];
@@ -179,7 +169,7 @@ export class FirebaseService {
   }
 
   private getUserAvatar(userId: string): string {
-    const user = this.currentGroup?.users.find(u => u.id === userId);
+    const user = this.currentGroup?.users.find((u) => u.id === userId);
     return user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${userId}`;
   }
 

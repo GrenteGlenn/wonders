@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
-import { SearchDestinationComponent } from "../search-destination/search-destination.component";
+import { SearchDestinationComponent } from '../search-destination/search-destination.component';
 import { CountryService } from '../../app/service/country/country.service';
 import { CityService } from '../../app/service/city/city.service';
 import { CommonModule } from '@angular/common';
@@ -24,7 +24,6 @@ interface PopularDestination {
   styleUrl: './home-page.component.css'
 })
 export class HomePageComponent implements OnInit, OnDestroy {
-
   heroImages: string[] = [
     'assets/images/hero-home-1.jpg',
     'assets/images/hero-home-2.jpg',
@@ -126,7 +125,6 @@ export class HomePageComponent implements OnInit, OnDestroy {
   handleImageError(event: any): void {
     event.target.src = this.fallbackImage;
   }
-
   showMore(): void {
     this.router.navigate(['/', this.translateService.currentLang, 'destinations']);
   }
