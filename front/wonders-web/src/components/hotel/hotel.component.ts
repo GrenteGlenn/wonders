@@ -106,7 +106,9 @@ export class HotelComponent implements OnInit {
       distance: hotel.distance,
       country: hotel.address?.countryCode,
       hasOffers: hotel.hasOffers,
-      offers: hotel.offers || []
+      offers: hotel.offers || [],
+      latitude: hotel.latitude ?? this.hotelForm.value.latitude,
+      longitude: hotel.longitude ?? this.hotelForm.value.longitude
     };
 
     this.hotelSelected.emit(selectedHotelData);

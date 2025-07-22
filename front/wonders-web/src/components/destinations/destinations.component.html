@@ -13,6 +13,9 @@
     >
       <lucide-icon name="ArrowLeft" class="w-5 h-5"></lucide-icon>
     </button>
+    <div *ngIf="destination">
+      <span class="flex py-3 text-2xl font-semibold">{{ destination.name }}</span>
+    </div>
 
     <!-- Affichage du détail de la destination -->
     <div *ngIf="destination" class="mb-8">

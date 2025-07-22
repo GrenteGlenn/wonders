@@ -60,6 +60,8 @@ export class DestinationsComponent implements OnInit {
 
   // Méthode pour traiter les queryParams (soit de l'URL, soit des inputs)
   processQueryParams(params: any) {
+      if (this.searchTerm === params['city'] || this.searchTerm === params['country']) return;
+
     this.isLoading = true;
 
     if (params['page']) {
