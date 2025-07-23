@@ -38,27 +38,40 @@ export class GoogleMapComponent implements OnChanges {
         zoom: 4
       };
     }
-  
+
     // Charge tous les marqueurs reçus
-    this.displayedMarkers = (this.markers || []).map(marker => ({
+    this.displayedMarkers = (this.markers || []).map((marker) => ({
       lat: marker.lat,
       lng: marker.lng,
       content: this.createCustomMarker(marker.label)
     }));
   }
-  
-
-  createCustomMarker(label: string = '') {
-    const parser = new DOMParser();
-    const svgString = `
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#0A612B" stroke="#fff" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" fill="#0A612B" />
-        <text x="12" y="16" font-size="10" text-anchor="middle" fill="#fff">${label[0]}</text>
-      </svg>
-    `;
-    return parser.parseFromString(svgString, 'image/svg+xml').documentElement;
+  createCustomMarker(label: string = ''): HTMLElement {
+    const wrapper = document.createElement('div');
+    wrapper.innerHTML = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="10" fill="#0A612B" />
+      <text x="12" y="16" font-size="10" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif">
+        ${label?.charAt(0) ?? '?'}
+      </text>
+    </svg>
+  `;
+    return wrapper;
   }
-  
+
+  //   createCustomMarker(label: string = '') {
+  //     const parser = new DOMParser();
+  //     const svgString = `
+  // <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  //   <circle cx="12" cy="12" r="10" fill="#0A612B" />
+  //   <text x="12" y="16" font-size="10" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif">
+  //     ${label?.charAt(0) ?? '?'}
+  //   </text>
+  // </svg>
+  // `;
+
+  //     return parser.parseFromString(svgString, 'image/svg+xml').documentElement;
+  //   }
 
   onMarkerClick(marker: any) {
     this.infoWindow.openAdvancedMarkerElement(marker.advancedMarker, marker.advancedMarker.title);

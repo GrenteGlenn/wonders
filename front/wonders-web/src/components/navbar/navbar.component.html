@@ -37,14 +37,19 @@
         [src]="user?.img ?? genericAvatar"
         alt="User Avatar"
         class="h-8 w-8 rounded-full cursor-pointer navbar-avatar border-[2px] border-blue-950"
-
         (click)="toggleMenu()"
       />
-      <div *ngIf="isMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+
+      <div
+        *ngIf="isMenuOpen"
+        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+        (mouseenter)="isMenuOpen = true"
+        (mouseleave)="closeMenu()"
+      >
         <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="goProfile()">
           {{ 'NavBar.ButtonProfile' | translate }}
         </a>
-         <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="goForum()">
+        <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="goForum()">
           Forum
         </a>
         <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="goChat()">
@@ -207,4 +212,3 @@
     {{ 'NavBar.ButtonTrip' | translate }}
   </button>
 </div> -->
-

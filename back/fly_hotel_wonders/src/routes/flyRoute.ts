@@ -56,6 +56,7 @@ router.get('/list', (async (req, res) => {
       maxPrice
     )) as typeof FlightOfferSchema;
 
+
     const parsedQuery = {
       originLocationCode: typeof originLocationCode === 'string' ? originLocationCode.toUpperCase() : undefined,
       destinationLocationCode:
