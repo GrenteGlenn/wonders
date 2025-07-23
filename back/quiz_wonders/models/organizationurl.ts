@@ -88,7 +88,8 @@ OrganizationUrl.init(
   }
 );
 OrganizationUrl.belongsTo(Organization, {
-  foreignKey: 'organization_id'
+  foreignKey: 'organization_id',
+  as: 'organization'
 });
 OrganizationUrl.belongsTo(Status, {
   foreignKey: 'status_id'
