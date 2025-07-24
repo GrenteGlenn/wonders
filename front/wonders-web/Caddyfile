@@ -1,9 +1,0 @@
-:4200 {
-	root * /usr/share/caddy/browser/fr
-	file_server
-
-	@notStatic {
-		not path_regexp static \.(js|css|png|jpg|jpeg|gif|ico|svg|woff2?)$
-	}
-	rewrite @notStatic /index.html
-}

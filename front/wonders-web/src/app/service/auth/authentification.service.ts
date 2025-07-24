@@ -18,7 +18,7 @@ export interface ReponseToken {
   providedIn: 'root'
 })
 export class AuthentificationService {
-  private url = environment.Users;
+  private url = environment.userApiUrl;
 
   public user: Observable<string>;
   public userSubject: BehaviorSubject<string>;
