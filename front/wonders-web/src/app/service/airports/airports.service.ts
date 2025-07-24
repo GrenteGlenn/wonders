@@ -16,27 +16,28 @@ export interface Airport {
   providedIn: 'root'
 })
 export class AirportsService {
-  private API_URL = `${environment.Country}`;
+  private API_URL = `${environment.airportUrl}/api`; 
 
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Airport[]> {
-    return this.http.get<Airport[]>(`${this.API_URL}/api/airports/`);
+    return this.http.get<Airport[]>(`${this.API_URL}/airports/`);
   }
 
   getById(id: number): Observable<Airport> {
-    return this.http.get<Airport>(`${this.API_URL}/api/airports/${id}`);
+    return this.http.get<Airport>(`${this.API_URL}/airports/${id}`);
   }
 
   getByCity(cityId: number): Observable<Airport[]> {
-    return this.http.get<Airport[]>(`${this.API_URL}/api/airports/city/${cityId}`);
+    return this.http.get<Airport[]>(`${this.API_URL}/airports/city/${cityId}`);
   }
 
   getAirportsByCityName(cityName: string): Observable<any[]> {
-    return this.http.post<Airport[]>(`${this.API_URL}/api/airports/cityName`, { cityName });
+    return this.http.post<Airport[]>(`${this.API_URL}/airports/cityName`, { cityName });
   }
 
   getByGeo(longitude: number, latitude: number): Observable<Airport> {
-    return this.http.post<Airport>(`${this.API_URL}/api/airports/geo`, { longitude, latitude });
+    return this.http.post<Airport>(`${this.API_URL}/airports/geo`, { longitude, latitude });
   }
+ 
 }
