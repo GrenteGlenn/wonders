@@ -45,9 +45,9 @@ interface CountryAIResponse {
   providedIn: 'root'
 })
 export class CountryService {
-  private API_URL = environment.Quiz;
-  private API_URLImg = environment.Country;
-  private API_URStandard = environment.Country;
+  private API_URL = environment.quizzApiUrl;
+  private API_URLImg = environment.countryImgUrl;
+  private API_URStandard = environment.UrlStandard;
 
   constructor(private http: HttpClient) {}
 

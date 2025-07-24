@@ -7,7 +7,7 @@ import { CountryService } from '../../app/service/country/country.service';
 import { GoogleMapComponent } from '../google-map/google-map.component';
 import { Destination } from '../../app/model/destination';
 import { TranslateService } from '../../app/service/translate/translate.service';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @Component({
@@ -178,7 +178,6 @@ export class DestinationsComponent implements OnInit {
       }
     });
   }
-
   //Clean les texts
   private cleanFormattedText(text: string): string {
     if (!text) return '';
@@ -198,7 +197,7 @@ export class DestinationsComponent implements OnInit {
 
     this.countryService.getAllCountries().subscribe({
       next: (countries) => {
-        const country = countries.find((c) => c.name.toLowerCase() === countryName.toLowerCase());
+        const country = countries.find(c => c.name.toLowerCase() === countryName.toLowerCase());
 
         if (country) {
           this.destination = {
@@ -211,6 +210,7 @@ export class DestinationsComponent implements OnInit {
             isImageLoading: false,
             longitude: country.longitude,
             latitude: country.latitude
+
           };
           this.destinationSelected.emit(this.destination);
         } else {
@@ -225,6 +225,7 @@ export class DestinationsComponent implements OnInit {
       }
     });
   }
+
 
   loadCountryImage(countryName: string) {
     this.countryService.getCountryImage(countryName).subscribe({
