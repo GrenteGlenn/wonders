@@ -5,6 +5,17 @@ export default class ActivityController {
     return await Activity.findAll();
   }
 
+  async listId({ ids }: { ids: number[] }) {
+    return await Activity.findAll({
+      where: {
+        id: ids
+      },
+      attributes: {
+        exclude: ['created_at', 'updated_at']
+      }
+    });
+  }
+
   async one(id: number) {
     return await Activity.findByPk(id);
   }

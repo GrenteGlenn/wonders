@@ -1,0 +1,40 @@
+meta {
+  name: Create OrganizationUrl
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/organization-url/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "url": "{{organisationurl}}",
+    "organization_id": {{organisationid}},
+    "rank": 2,
+    "partner": "{{organisationpartner}}",
+    "status_id": 2,
+    "key": "ts"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("organisationid",faker.number.int({max: 3, min: 1}));
+  bru.setEnvVar("organisationurl",faker.internet.url());
+  bru.setEnvVar("organisationpartner",faker.person.firstName());
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("organisationurlid", response.id);
+}

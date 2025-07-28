@@ -1,0 +1,17 @@
+docker_back_activities:
+  stage: docker
+  image: docker
+  services:
+    - docker:dind
+  needs: ["build_back_activities"]
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -f back/activities_wonders/deploy/dockerfile -t back_activities_$CI_COMMIT_REF_NAME .
+    - docker push back_activities_$CI_COMMIT_REF_NAME
+    - echo "Docker image for back_activities_$CI_COMMIT_REF_NAME built and pushed successfully."
+  tags:
+    - PLI
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'

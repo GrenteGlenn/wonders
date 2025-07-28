@@ -1,0 +1,17 @@
+meta {
+  name: Get Activity by id checked delete
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/activity/{{activityid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

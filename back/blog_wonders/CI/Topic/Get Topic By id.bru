@@ -1,0 +1,15 @@
+meta {
+  name: Get Topic By id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/topics/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 2
+}

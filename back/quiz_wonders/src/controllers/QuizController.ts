@@ -1,5 +1,4 @@
 import Quiz from '../../models/quiz';
-import QuizAnswerText from '../../models/quizanswertext';
 import QuizLine from '../../models/quizline';
 import ResponseKind from '../../models/responsekind';
 import Tag from '../../models/tag';
@@ -17,11 +16,11 @@ export default class QuizController {
             {
               model: ResponseKind,
               as: 'response_kind'
-            },
-            {
-              model: QuizAnswerText,
-              as: 'quiz_answer_texts'
             }
+            // {
+            //   model: QuizAnswerText,
+            //   as: 'quiz_answer_texts'
+            // }
           ]
         },
         {
@@ -52,11 +51,11 @@ export default class QuizController {
             {
               model: ResponseKind,
               as: 'response_kind'
-            },
-            {
-              model: QuizAnswerText,
-              as: 'quiz_answer_texts'
             }
+            // {
+            //   model: QuizAnswerText,
+            //   as: 'quiz_answer_texts'
+            // }
           ]
         },
         {
@@ -69,13 +68,13 @@ export default class QuizController {
 
   async getQuizWithQuestions(quizId: number) {
     const quiz = await Quiz.findOne({
-      where: { id: quizId }
-      // include: [
-      //   {
-      //     model: QuizLine,
-      //     as: 'quizLines'
-      //   }
-      // ]
+      where: { id: quizId },
+      include: [
+        {
+          model: QuizLine,
+          as: 'quiz_lines'
+        }
+      ]
     });
 
     return quiz;

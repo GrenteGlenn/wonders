@@ -1,0 +1,23 @@
+meta {
+  name: Edit Rating
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/rating/{{pictureid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "rating": 100
+  }
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

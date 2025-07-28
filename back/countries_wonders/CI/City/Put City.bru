@@ -1,0 +1,30 @@
+meta {
+  name: Put City
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{base_url}}/cities/{{cityid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "name": "{{cityname}}",
+      "code": "TS1"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("cityname",faker.lorem.word())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

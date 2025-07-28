@@ -1,0 +1,34 @@
+meta {
+  name: Update Langague c
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{base_url}}/languages/{{languageid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "name": "{{languagename}}",
+      "code": "TS"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("languagename",faker.lorem.word())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("languageid", response.id);
+}

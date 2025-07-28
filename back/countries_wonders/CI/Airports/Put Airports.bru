@@ -1,0 +1,30 @@
+meta {
+  name: Put Airports
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{base_url}}/airports/{{airportid}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "name": "{{airportname}}",
+      "code": "TS1"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("airportname",faker.lorem.word())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

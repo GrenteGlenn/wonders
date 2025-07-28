@@ -1,0 +1,18 @@
+meta {
+  name: Delete TripHotel
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/trip-hotel/{{triphotelid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 204", function () {
+      expect(res.getStatus()).to.equal(204);
+  });
+  
+}

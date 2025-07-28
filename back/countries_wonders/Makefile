@@ -7,7 +7,9 @@ START=npm start
 
 .PHONY: db-all db-and-tests db-create db-drop db-migrate-undo-all db-migrate db-seed-all test start
 
-db-all: db-drop db-create db-migrate db-seed-all 
+db-all: drop db-drop db-create db-migrate db-seed-all start
+
+db-all-no-run: db-drop db-create db-migrate db-seed-all
 
 db-and-tests: db-all unit-test
 

@@ -1,6 +1,7 @@
 import { RequestHandler, Router } from 'express';
 import UserAnswerController from '../controllers/UserAnswerController';
 import UserAnswer from '../interfaces/UserAnswerInterface';
+
 interface UpdatedFields {
   quiz_answer_text_id?: number;
   quiz_line_id: number;
@@ -57,7 +58,6 @@ router.post('/', (async (req, res) => {
 router.patch('/:id', (async (req, res) => {
   const body = req.body;
   try {
-
     const updatedFields: UpdatedFields = {
       quiz_answer_text_id: body.quiz_answer_text_id,
       quiz_line_id: body.quiz_line_id,

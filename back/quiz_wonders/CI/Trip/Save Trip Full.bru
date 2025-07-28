@@ -1,0 +1,99 @@
+meta {
+  name: Save Trip Full
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/trip/create-full-trip
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "trip": {
+      "user_id": {{user_id}},
+      "country_id": {{country_id}},
+      "duration": {{duration}},
+      "from_date": {{from_date}},
+      "to_date": {{to_date}},
+      "transportation_id": {{transportation_id}}
+    },
+    "trip_transportation":{
+      "from_date": {{from_date}},
+      "to_date": {{to_date}},
+      "price": {{price}},
+      "url": "{{url}}",
+      "status": "APayer" 
+    },
+    "trip_cities": [
+      {
+        "trip_id": {{user_id}},
+        "city_id": {{user_id}},
+        "tripCityDays": [
+          {
+            "trip_city_id": {{user_id}},
+            "date": {{from_date}},
+            "tripDayActivities": [
+            {
+              "activity_id": {{user_id}},
+              "activityName": "{{name}}"
+            }
+          ]
+          }
+        ],
+        "transportations": {
+          "from_date": {{from_date}},
+          "to_date": {{to_date}},
+          "price":  {{price}},
+          "url": "{{url}}",
+          "status": "APayer"
+        },
+        "tripDayActivities": [
+          {
+            "trip_day_id": {{user_id}},
+            "activity_id": {{user_id}},
+            "status": "APayer"
+          }
+        ],
+        "tripCityHotel": {
+            "trip_city_id": {{user_id}},
+            "name": "{{name}}",
+            "price": {{price}},
+            "from": {{from_date}},
+            "to": {{to_date}},
+            "url": "{{url}}",
+            "adults": {{user_id}},
+            "children": {{user_id}},
+            "longitude": {{float}},
+            "latitude": {{float}},
+            "status": "APayer"
+        }
+      }
+    ]
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("user_id",faker.number.int({max: 10, min: 1}))
+  bru.setEnvVar("country_id",faker.number.int({ max: 100 }))
+  bru.setEnvVar("duration",faker.number.int({ max: 10 }))
+  bru.setEnvVar("from_date",faker.date.soon())
+  bru.setEnvVar("to_date",faker.date.soon())
+  bru.setEnvVar("transportation_id",faker.number.int({ max: 5, min: 0 }))
+  bru.setEnvVar("price",faker.number.int({ max: 500 }))
+  bru.setEnvVar("url",faker.internet.url({ appendSlash: true }))
+  bru.setEnvVar("name",faker.company.name())
+  bru.setEnvVar("float",faker.number.float())
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  
+}

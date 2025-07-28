@@ -12,9 +12,23 @@ const router = Router();
 const cityController = new CityController();
 const countryController = new CountryController();
 
+interface Body {
+  ids: number[];
+}
+
 router.get('/', (async (req, res) => {
   try {
     const cities = await cityController.list();
+    res.json(cities);
+  } catch (error) {
+    res.json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/batch', (async (req, res) => {
+  const { ids } = <Body>req.body;
+  try {
+    const cities = await cityController.listId({ ids });
     res.json(cities);
   } catch (error) {
     res.json({ error: error });
@@ -106,7 +120,6 @@ router.post('/ai_get_city', (async (req, res) => {
           });
         const getCountry = await countryController.getOneByName(capitalizeFirstLetter(country));
         const getCity = await cityController.getOneByName(capitalizeFirstLetter(city));
-        console.log('cityPosition', city, cityPosition);
 
         result = [
           {
@@ -116,7 +129,6 @@ router.post('/ai_get_city', (async (req, res) => {
             city_id: getCity ? getCity.id : null,
             description: description,
             img_full: image,
-
             longitude: cityPosition.lon,
             latitude: cityPosition.lat
           },

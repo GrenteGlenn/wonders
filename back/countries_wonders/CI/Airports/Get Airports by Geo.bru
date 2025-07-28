@@ -1,0 +1,46 @@
+meta {
+  name: Get Airports by Geo
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/airports/geo
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "longitude": {{longitude}},
+    "lattitude": {{latitude}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  // Configuration pour les coordonnées européennes
+  const europeBounds = {
+    latitude: {
+      min: 35,
+      max: 71,
+      precision: 4
+    },
+    longitude: {
+      min: -25,
+      max: 40
+    }
+  };
+  
+  
+  bru.setEnvVar("latitude",faker.location.latitude(europeBounds.latitude));
+  bru.setEnvVar("longitude",faker.location.longitude(europeBounds.longitude));
+  
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

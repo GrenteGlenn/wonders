@@ -13,10 +13,11 @@ export default class LanguageController {
     }
   }
 
-  async create(name: string, code: string, updated_at: Date, created_at: Date) {
-    const language = await Language.create({ name: name, code: code, created_at: created_at, updated_at: updated_at });
+  async create(name: string, code: string) {
+    const language = await Language.create({ name: name, code: code, updated_at: new Date(), created_at: new Date() });
     return language;
   }
+
   async update(id: number, name: string, code: string, updated_at: Date) {
     const language = await Language.findByPk(id);
     if (language) {

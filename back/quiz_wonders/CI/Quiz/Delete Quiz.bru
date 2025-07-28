@@ -1,0 +1,17 @@
+meta {
+  name: Delete Quiz
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{base_url}}/quiz/{{quizzid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 204", function () {
+      expect(res.getStatus()).to.equal(204);
+  });
+}

@@ -1,10 +1,10 @@
 import { RequestHandler, Router } from 'express';
 import AuthController from '../controllers/AuthController';
-import UserInterface from '../interfaces/UserInterface';
+import ResetPasswordController from '../controllers/ResetPasswordController';
+import { UserInterface } from '../interfaces/UserInterface';
 import { checkPassword, decryptPassword, encryptPassword } from '../lib/CheckPassword';
 import { createJWT, createToken, updateJWT } from '../lib/JWT';
 import { sendMail } from '../lib/Mailer';
-import ResetPasswordController from '../controllers/ResetPasswordController';
 import { addHours } from '../lib/Date';
 
 const router = Router();
@@ -55,6 +55,7 @@ router.post('/login', (async (req, res, next) => {
   }
 }) as RequestHandler);
 
+// DOTO check if work
 router.post('/refresh', ((req, res) => {
   let refresh;
   const token = req.headers.authorization?.split(' ')[1];
@@ -67,7 +68,7 @@ router.post('/register', (async (req, res) => {
   try {
     const body = <UserInterface>req.body;
     const check = checkPassword(body.password);
-    if (check.score === 1) return res.json(check.feedback);
+    if (check.score <= 2) return res.json(check.feedback);
     body.password = await encryptPassword(body.password);
     body.role_id = 1;
     const client = await authController.getOneByEmail(body.email);

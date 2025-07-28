@@ -1,50 +1,50 @@
 .search-container {
   font-family: 'Quicksand', sans-serif;
-  max-width: 40rem; /* max-w-2xl */
+  max-width: 40rem;
   width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin-left: auto;
-  margin-right: auto;
+  padding: 0 1rem;
+  margin: 0 auto;
+  position: relative;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 1em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding-left: 2.5rem;
+  padding-right: 0.5rem;
+  margin-top: 0.25rem;
   position: relative;
 }
 
 .search-input {
-  width: 100%;
-  margin-top: 0.25rem;
-  padding: 0.75rem 7rem 0.75rem 3rem; /* py-3, pr-28, pl-12 */
-  border-radius: 9999px;
-  background-color: white;
-  color: #1f2937; /* text-gray-800 */
-  font-size: 1rem;
-  outline: none;
+  flex: 1;
   border: none;
-  box-shadow: none;
+  outline: none;
+  font-size: 1rem;
+  color: #1f2937;
+  background: transparent;
+  padding: 1rem 1rem;
+  width: 100%;;
   transition: box-shadow 0.2s ease;
-
-  &:focus {
-    box-shadow: 0 0 0 2px #1A87CC; /* ring bleu */
-  }
+  
 }
 
-/* Responsive input padding */
+.search-input:focus {
+  box-shadow: 0 0 0 2px #1A87CC;
+}
+
+/* Responsive font-size */
 @media (min-width: 640px) {
   .search-input {
-    padding: 1rem 8rem 1rem 3.5rem; /* sm:py-4 pr-32 pl-14 */
-    font-size: 1.125rem;
-  }
-}
-
-@media (min-width: 768px) {
-  .search-input {
-    padding: 1rem 9rem 1rem 4rem; /* md:py-4 pr-36 pl-16 */
     font-size: 1.125rem;
   }
 }
 
 @media (min-width: 1024px) {
   .search-input {
-    padding: 1.25rem 10rem 1.25rem 5rem; /* lg:py-5 pr-40 pl-20 */
     font-size: 1.25rem;
   }
 }
@@ -52,18 +52,23 @@
 /* Icon search */
 .search-icon {
   position: absolute;
-  left: 0.75rem;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #9ca3af; /* text-gray-400 */
+  color: #9ca3af;
   width: 1.25rem;
   height: 1.25rem;
+}
 
-  @media (min-width: 640px) {
+@media (min-width: 640px) {
+  .search-icon {
     width: 1.5rem;
     height: 1.5rem;
   }
-  @media (min-width: 768px) {
+}
+
+@media (min-width: 768px) {
+  .search-icon {
     width: 1.75rem;
     height: 1.75rem;
   }
@@ -71,50 +76,53 @@
 
 /* Bouton */
 .search-button {
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: #FFA500; /* orange */
+  background-color: #FFA500;
   color: white;
   font-weight: 600;
   padding: 0.5rem 1.25rem;
   border-radius: 9999px;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
   transition: background-color 0.2s ease;
+}
 
-  &:hover {
-    background-color: #cc8400;
-  }
+.search-button:hover {
+  background-color: #cc8400;
+}
 
-  @media (min-width: 640px) {
+@media (min-width: 640px) {
+  .search-button {
     padding: 0.75rem 1.75rem;
   }
+}
 
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
+  .search-button {
     padding: 0.75rem 2rem;
   }
 }
 
-/* Dropdown résultats */
+/* ------------------ Dropdown & autres éléments conservés ------------------ */
+
 .dropdown-results {
   position: absolute;
   z-index: 10;
-  width: 100%;
+  width: 95%;
   margin-top: 0.25rem;
   background: white;
-  border-radius: 0.5rem;
+  border-radius: 1rem;
   box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
   max-height: 20rem;
   overflow-y: auto;
+}
 
-  @media (min-width: 640px) {
+@media (min-width: 640px) {
+  .dropdown-results {
     max-height: 24rem;
   }
 }
 
-/* Item du dropdown */
 .dropdown-item {
   padding: 0.75rem;
   display: flex;
@@ -122,11 +130,11 @@
   cursor: pointer;
   border-radius: 0.375rem;
   transition: background-color 0.15s ease, color 0.15s ease;
+}
 
-  &:hover {
-    background-color: #FFA500; /* orange */
-    color: white;
-  }
+.dropdown-item:hover {
+  background-color: #FFA500;
+  color: white;
 }
 
 .dropdown-item.selected {
@@ -134,22 +142,25 @@
   color: white;
 }
 
-/* Image dans dropdown */
 .dropdown-item-image {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 9999px;
-  background-color: #e5e7eb; /* bg-gray-200 */
+  background-color: #e5e7eb;
   margin-right: 0.75rem;
   overflow: hidden;
   flex-shrink: 0;
+}
 
-  @media (min-width: 640px) {
+@media (min-width: 640px) {
+  .dropdown-item-image {
     width: 3rem;
     height: 3rem;
   }
+}
 
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
+  .dropdown-item-image {
     width: 3.5rem;
     height: 3.5rem;
   }
@@ -161,7 +172,6 @@
   object-fit: cover;
 }
 
-/* Texte */
 .dropdown-item-text {
   overflow: hidden;
   white-space: nowrap;
@@ -170,21 +180,19 @@
   font-size: 1rem;
 }
 
-/* Message quand aucun résultat */
 .no-result-message {
   position: absolute;
   z-index: 10;
-  width: 100%;
+  width: 95%;
   margin-top: 0.25rem;
   background: white;
   border-radius: 0.5rem;
   box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
   padding: 1rem;
-  color: #4b5563; /* text-gray-600 */
+  color: #4b5563;
   text-align: center;
 }
 
-/* Loading */
 .loading-indicator {
   position: absolute;
   z-index: 10;
@@ -208,7 +216,6 @@
   animation: spin 1s linear infinite;
 }
 
-/* Animation spin */
 @keyframes spin {
   0% { transform: rotate(0deg);}
   100% { transform: rotate(360deg);}

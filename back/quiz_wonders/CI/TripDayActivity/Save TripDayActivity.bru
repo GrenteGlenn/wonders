@@ -1,0 +1,41 @@
+meta {
+  name: Save TripDayActivity
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/trip-day-activity/
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "trip_day_id": {{trip_day_id}},
+    "activity_id": {{activity_id}},
+    "status": "APayer"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("trip_day_id",faker.number.int({max: 10, min: 1}))
+  bru.setEnvVar("activity_id",faker.number.int({max: 10, min: 1}))
+  
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("tripdayactivityid", response.id);
+}

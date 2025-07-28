@@ -1,6 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/dbConnection';
-import { TopicInterface } from '../src/interfaces/interfaces'
+import { TopicInterface } from '../src/interfaces/interfaces';
 
 interface TopicCreationAttributes extends Optional<TopicInterface, 'id'> {}
 
@@ -12,7 +12,8 @@ export default class Topic extends Model<TopicInterface, TopicCreationAttributes
   declare updated_at?: Date;
 }
 
-  Topic.init({
+Topic.init(
+  {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -35,13 +36,11 @@ export default class Topic extends Model<TopicInterface, TopicCreationAttributes
       type: DataTypes.DATE,
       allowNull: true
     }
-  }, 
-    {
-      sequelize,
-      underscored: true,
-      modelName: 'Topic',
-      timestamps: false
-    }
-  );
-  
-  
+  },
+  {
+    sequelize,
+    underscored: true,
+    modelName: 'Topic',
+    timestamps: false
+  }
+);

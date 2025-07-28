@@ -160,11 +160,6 @@ Country.init(
   }
 );
 
-Language.belongsTo(Country, {
-  foreignKey: 'language',
-  as: 'lang'
-});
-
 Country.belongsTo(Language, {
   foreignKey: 'language',
   as: 'lang'

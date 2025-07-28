@@ -28,8 +28,10 @@ export class UsersService {
   //   return this.http.get<User[]>(`${this.API_URL}/users/users`)
   // }
 
-  Edit(user: FetchableUser) {
-    return this.http.put<FetchableUser[]>(`${this.API_URL}/api/users/${user.id}`,{username: user.first_name, password: user.password, email: user.email })
+  Edit(user: FetchableUser, newUser: any) {
+    console.log(newUser);
+
+    return this.http.put<FetchableUser[]>(`${this.API_URL}/api/users/${user.id}`,{language_id: user.language_id, country_id: user.country_id, first_name: newUser.first_name, last_name: newUser.last_name, password: user.password, email: newUser.email, img: newUser.img })
   }
 
   Delete(user: FetchableUser) {

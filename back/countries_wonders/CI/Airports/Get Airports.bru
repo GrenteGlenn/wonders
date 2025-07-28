@@ -1,0 +1,17 @@
+meta {
+  name: Get Airports
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/airports
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

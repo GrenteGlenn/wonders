@@ -1,5 +1,5 @@
 import AuthController from '../controllers/AuthController';
-import UserInterface from '../interfaces/UserInterface';
+import { UserInterface } from '../interfaces/UserInterface';
 import User from '../../models/user';
 
 jest.mock('../../models/user');
@@ -158,6 +158,9 @@ describe('Auth model', () => {
         id: 1,
         name: 'Un Truc'
       },
+      country_id: 0,
+      role_id: 0,
+      img: ''
     };
 
     (User.findByPk as jest.Mock).mockResolvedValue(mockUser);

@@ -9,7 +9,13 @@ START=npm start
 
 db-all: drop db-drop db-create db-migrate db-seed-all start
 
+db-all-no-run: db-drop db-create db-migrate db-seed-all
+
 db-and-tests: db-all unit-test
+
+start-bruno:
+	@echo "start bruno for activities microservice"
+	cd CI/ && npm run bruno
 
 db-drop:
 	@echo "Dropping database..."

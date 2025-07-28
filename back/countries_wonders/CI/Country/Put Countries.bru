@@ -1,0 +1,29 @@
+meta {
+  name: Put Countries
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{base_url}}/countries/6
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "France",
+    "code": "FR",
+    "description": "La France est un pays magnifique.",
+    "image": "https://example.com/france.jpg",
+    "language": 1,
+    "longitude": 2.3522,
+    "latitude": 48.8566
+  }
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

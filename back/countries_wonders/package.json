@@ -17,8 +17,11 @@
     "build": "esbuild src/app.ts --bundle --platform=node --target=node18 --minify --packages=external --outfile=dist/index.js",
     "init": "npm install",
     "lint": "eslint src/**/*.ts",
+    "migration:run": "npx sequelize-cli db:migrate --env development",
+    "migration:seeder": "npx sequelize-cli db:seed:all --env development",
+    "migration:undo:all": "npx sequelize-cli db:migrate:undo:all",
     "format": "eslint src/**/*.ts --fix",
-    "test": "jest -c ./jest.unit.json"
+    "test": "jest -c ./jest.unit.json"  
   },
   "keywords": [],
   "author": "",

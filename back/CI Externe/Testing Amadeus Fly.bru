@@ -1,0 +1,22 @@
+meta {
+  name: Testing Amadeus Fly
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{base_url_fly}}/fly/list/?originLocationCode=CDG&destinationLocationCode=YYZ&departureDate=2025-10-01&returnDate=2025-12-10&adults=2&children=0&nonStop=false&maxPrice=5000
+  body: none
+  auth: inherit
+}
+
+params:query {
+  originLocationCode: CDG
+  destinationLocationCode: YYZ
+  departureDate: 2025-10-01
+  returnDate: 2025-12-10
+  adults: 2
+  children: 0
+  nonStop: false
+  maxPrice: 5000
+}

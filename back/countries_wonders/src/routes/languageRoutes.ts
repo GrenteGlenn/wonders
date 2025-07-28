@@ -27,7 +27,7 @@ router.get('/:id', (async (req, res) => {
 router.post('/', (async (req, res) => {
   try {
     const body = <BodyLangague>req.body;
-    const language = await languageController.create(body.name, body.code, new Date(), new Date());
+    const language = await languageController.create(body.name, body.code);
     res.json(language);
   } catch (error) {
     res.json({ error: error });

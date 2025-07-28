@@ -5,14 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslateService } from '../../app/service/translate/translate.service';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { platform } from '@tauri-apps/plugin-os';
 import { isTauri } from '../../utils/tauri.utils';
-
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, LucideAngularModule, CommonModule, NavbarComponent],
+  imports: [FormsModule, LucideAngularModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -20,7 +18,9 @@ export class LoginComponent implements OnInit {
   email: string = '';
   password: string = '';
   returnUrl: string = '';
-  platformName: string | null = null; // ✅ valeur chargée dynamiquement
+  platformName: string | null = null;
+  error: boolean = false
+  errorMessage: string = 'Une erreur est survenue'
 
   constructor(
     private _authService: AuthentificationService,
@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit {
     this.email = '';
     this.password = '';
 
-    const rawReturnUrl = this.route.snapshot.queryParams['returnUrl'] || 'home';
-    this.returnUrl = `/${this.translateService.currentLang}/${rawReturnUrl}`;
+    // const rawReturnUrl = this.route.snapshot.queryParams['returnUrl'] || 'home';
+    this.returnUrl = `/${this.translateService.currentLang}/home`;
 
     // ✅ Chargement conditionnel de Tauri platform
     if (isTauri()) {
@@ -63,7 +63,9 @@ export class LoginComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Erreur de connexion:', error);
+        this.error = true
+        console.error('Erreur de connexion:', error)
+        this.router.navigate(['/', this.translateService.currentLang, 'login'])
       }
     });
   }
@@ -74,9 +76,8 @@ export class LoginComponent implements OnInit {
 
   href(event: Event): void {
     event.preventDefault();
-    this.router.navigate(
-      ['/', this.translateService.currentLang, 'register'],
-      { queryParams: { returnUrl: this.returnUrl } }
-    );
+    this.router.navigate(['/', this.translateService.currentLang, 'register'], {
+      queryParams: { returnUrl: this.returnUrl }
+    });
   }
 }

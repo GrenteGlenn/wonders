@@ -6,7 +6,7 @@
     "PlanMyTrip": "Planifier mon voyage"
   },
   "SearchDestinationComponent": {
-    "PlaceHolder": "Recherche par ville ou pays",
+    "PlaceHolder": "Ville ou pays",
     "Search": "Rechercher",
     "ResultNotFound": "Aucun résultat trouvé pour"
   },
@@ -16,7 +16,9 @@
     "TranslateEN": "🇬🇧",
     "ButtonProfile": "Profil",
     "ButtonConnection": "Connexion",
-    "ButtonDeconnexion": "Déconnexion"
+    "ButtonDeconnexion": "Déconnexion",
+    "Forum": "Forum",
+    "Chat": "Chat"
   },
   "LOGIN": "Login",
   "REGISTER": "Register"

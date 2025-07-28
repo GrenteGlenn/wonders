@@ -2,6 +2,7 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { provideToastr } from 'ngx-toastr';
 import { provideTranslateService, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import {
   ChevronsLeft,
@@ -76,6 +77,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideTranslateService(),
     provideAnimationsAsync(),
+    provideToastr(),
     importProvidersFrom(
       LucideAngularModule.pick({
         ChevronsLeft,

@@ -37,6 +37,8 @@ export interface Hotel {
   address?: HotelAddress;
   distance?: HotelDistance;
   lastUpdate?: Date;
+  latitude?: number;
+  longitude?: number;
   
   showOffers?: boolean;
   isLoadingOffers?: boolean;

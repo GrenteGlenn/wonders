@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "CI Quiz",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

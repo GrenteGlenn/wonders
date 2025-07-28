@@ -1,0 +1,33 @@
+meta {
+  name: Create Picture
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/picture/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "path": "{{picturepath}}"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("picturepath",faker.lorem.word())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("pictureid", response.id);
+}

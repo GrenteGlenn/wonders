@@ -1,0 +1,36 @@
+meta {
+  name: Create Review
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/review/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "review": "{{review}}",
+    "rating_id": 1,
+    "user_id": 1,
+    "activity_id": 1
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("review",faker.lorem.text())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("reviewid", response.id);
+}

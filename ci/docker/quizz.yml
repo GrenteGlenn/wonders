@@ -1,0 +1,17 @@
+docker_back_quizz:
+  stage: docker
+  image: docker
+  services:
+    - docker:dind
+  needs: ["build_back_quizz"]
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -f back/quiz_wonders/deploy/dockerfile -t back_quizz_$CI_COMMIT_REF_NAME .
+    - docker push back_quizz_$CI_COMMIT_REF_NAME
+    - echo "Docker image for back_quizz_$CI_COMMIT_REF_NAME built and pushed successfully."
+  tags:
+    - PLI
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'

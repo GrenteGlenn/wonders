@@ -1,0 +1,15 @@
+meta {
+  name: Get Comment by Id
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/comments/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 9
+}
