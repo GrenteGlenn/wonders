@@ -16,11 +16,12 @@
         "TranslateEN": "🇬🇧",
         "ButtonProfile": "Profil",
         "ButtonConnection": "Login",
-        "ButtonDeconnexion": "Logout"
+        "ButtonDeconnexion": "Logout",
+        "Forum": "Forum",
+        "Chat": "Chat"
 
     },
 
     "LOGIN": "Login",
     "REGISTER": "Register"
 }
-  

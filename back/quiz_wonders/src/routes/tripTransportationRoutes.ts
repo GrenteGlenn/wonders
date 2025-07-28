@@ -29,7 +29,7 @@ router.get('/:id', (async (req, res) => {
 router.post('/', (async (req, res) => {
   try {
     const body = <TripTransportationInterface>req.body;
-    const tripTrasportation = await tripTransportationController.new(
+    const tripTransportation = await tripTransportationController.new(
       body.from_date,
       body.to_date,
       body.price,
@@ -38,8 +38,8 @@ router.post('/', (async (req, res) => {
       new Date(),
       new Date()
     );
-    tripTrasportation
-      ? res.status(201).json(tripTrasportation)
+    tripTransportation
+      ? res.status(201).json(tripTransportation)
       : res.status(400).json({ code: '400', message: 'an error occured while creating resource' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
@@ -49,7 +49,7 @@ router.post('/', (async (req, res) => {
 router.put('/:id', (async (req, res) => {
   const body = <TripTransportationInterface>req.body;
   try {
-    const tripTrasportation = await tripTransportationController.update(
+    const tripTransportation = await tripTransportationController.update(
       parseInt(req.params.id, 10),
       body.from_date,
       body.to_date,
@@ -57,8 +57,8 @@ router.put('/:id', (async (req, res) => {
       body.url,
       body.status
     );
-    tripTrasportation
-      ? res.status(200).json(tripTrasportation)
+    tripTransportation
+      ? res.status(200).json(tripTransportation)
       : res.status(404).json({ code: '404', message: 'entry does not exists' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });

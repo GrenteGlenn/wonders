@@ -14,7 +14,7 @@ app.use('/api/hotel', hotelRoute);
 app.use('/api/fly', flyRoute);
 
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.send('Hello World! Fly Hotel Wonders');
 });
 
 app.listen(port, () => {

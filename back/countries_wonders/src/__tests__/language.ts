@@ -14,8 +14,8 @@ describe('CountryController', () => {
     jest.clearAllMocks();
   });
 
-  const created_at = new Date;
-  const updated_at = new Date;
+  const created_at = new Date();
+  const updated_at = new Date();
 
   it('should list all languages', async () => {
     const mockLanguages = [{ id: 1, name: 'Francais', code: 'fr' }];
@@ -43,7 +43,7 @@ describe('CountryController', () => {
 
     const result = await controller.create('Francais', 'fr', created_at, updated_at);
 
-    expect(Language.create).toHaveBeenCalledWith({ name: 'Francais', code: 'fr' , created_at, updated_at });
+    expect(Language.create).toHaveBeenCalledWith({ name: 'Francais', code: 'fr', created_at, updated_at });
     expect(result).toEqual(mockLanguage);
   });
 

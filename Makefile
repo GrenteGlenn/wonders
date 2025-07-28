@@ -2,7 +2,11 @@ PREFIX_BACK = ./back/
 SERVICES = blog_wonders countries_wonders fly_hotel_wonders quiz_wonders users_wonders activities_wonders 
 FRONT = ./front/wonders-web/
 
-.PHONY: db-all-services start-front all kill-ports
+.PHONY: db-all-services start-front all kill-ports caddy-start caddy-stop
+
+# Lance tous les container docker pour le Back
+start-docker:
+	@echo "🚀 Starting docker"
 
 # Tuer les processus qui occupent les ports 3000 à 3010
 kill-ports:
@@ -13,6 +17,15 @@ kill-ports:
 			echo "❌ Killed port $$port"; \
 		fi \
 	done
+
+# Stop Caddy
+caddy-stop:
+	echo "🚫 Stoping Caddy"; \
+	if [ -d "$(PREFIX_BACK)$$service" ]; then \
+		(cd $(PREFIX_BACK) && make caddy-start) || echo "⚠️ Failed to start Caddy"; \
+	else \
+        echo "⚠️ Caddy directory $(PREFIX_BACK) does not exist. Skipping."; \
+    fi
 
 # Lancer make db sans démarrer le service
 db-only-services:
@@ -25,12 +38,21 @@ db-only-services:
 		fi \
 	done
 
+# Lance Caddy
+caddy-start:
+	echo "🚀 Starting Caddy"; \
+	if [ -d "$(PREFIX_BACK)$$service" ]; then \
+		(cd $(PREFIX_BACK) && make caddy-start) || echo "⚠️ Failed to start Caddy"; \
+	else \
+        echo "⚠️ Caddy directory $(PREFIX_BACK) does not exist. Skipping."; \
+    fi
+
 # Démarrer tous les microservices
 start-services:
 	@for service in $(SERVICES); do \
 		echo "🚀 Starting service $$service..."; \
 		if [ -d "$(PREFIX_BACK)$$service" ]; then \
-			(cd $(PREFIX_BACK)$$service && make db-all) || echo "⚠️ Failed to start $$service"; \
+			(cd $(PREFIX_BACK)$$service && make db-all -k) || echo "⚠️ Failed to start $$service"; \
 		else \
 			echo "⚠️ Directory $(PREFIX_BACK)$$service does not exist. Skipping."; \
 		fi \
@@ -40,12 +62,13 @@ start-services:
 start-front:
 	@echo "🚀 Starting web app"
 	@if [ -d "$(FRONT)" ]; then \
-		(cd $(FRONT) && npm start &); \
+		(cd $(FRONT) && npm start); \
 	else \
 		echo "⚠️ Front-end directory $(FRONT) does not exist. Skipping."; \
 	fi
 
 # Lancer db pour tous les services et démarrer le front-end et les services
-start: start-services start-front
+start: start-services caddy-start start-front
+end: kill-ports caddy-stop
 restart: kill-ports start-services start-front
 all: kill-ports db-only-services start-services start-front kill-ports

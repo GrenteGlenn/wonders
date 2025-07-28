@@ -1,95 +1,86 @@
 import { z } from 'zod';
 
-// Schéma pour les segments de vol
-const SegmentSchema = z.object({
-  departure: z.object({
-    iataCode: z.string(),
-    terminal: z.string().optional(),
-    at: z.string()
-  }),
-  arrival: z.object({
-    iataCode: z.string(),
-    terminal: z.string().optional(),
-    at: z.string()
-  }),
+const airportSchema = z.object({
+  iataCode: z.string(),
+  terminal: z.string().optional(),
+  at: z.string()
+});
+
+const segmentSchema = z.object({
+  departure: airportSchema,
+  arrival: airportSchema,
   carrierCode: z.string(),
   number: z.string(),
-  aircraft: z
-    .object({
-      code: z.string()
-    })
-    .optional(),
+  aircraft: z.object({ code: z.string() }),
   operating: z
     .object({
-      carrierCode: z.string()
+      carrierCode: z.string().optional()
     })
     .optional(),
-  duration: z.string().optional(),
-  id: z.string().optional(),
-  numberOfStops: z.number().optional(),
-  blacklistedInEU: z.boolean().optional()
-});
-
-// Schéma pour les itinéraires
-const ItinerarySchema = z.object({
   duration: z.string(),
-  segments: z.array(SegmentSchema)
+  id: z.string(),
+  numberOfStops: z.number(),
+  blacklistedInEU: z.boolean()
 });
 
-// Schéma pour les frais
-const FeeSchema = z.object({
-  amount: z.string(),
-  type: z.string()
+const itinerarySchema = z.object({
+  duration: z.string(),
+  segments: z.array(segmentSchema)
 });
 
-// Schéma pour le prix
-const PriceSchema = z.object({
+const feeSchema = z.object({ amount: z.string(), type: z.string() });
+
+const priceSchema = z.object({
   currency: z.string(),
   total: z.string(),
   base: z.string(),
-  fees: z.array(FeeSchema),
-  grandTotal: z.string()
+  fees: z.array(feeSchema),
+  grandTotal: z.string(),
+  additionalServices: z.array(feeSchema).optional()
 });
 
-// Schéma pour les options de tarification
-const PricingOptionsSchema = z.object({
+const pricingOptionsSchema = z.object({
   fareType: z.array(z.string()),
   includedCheckedBagsOnly: z.boolean()
 });
 
-// Schéma pour les informations de bagages
-const BaggageAllowanceSchema = z.object({
-  quantity: z.number().optional(),
-  weight: z.number().optional(),
-  weightUnit: z.string().optional()
+const bagSchema = z.object({ quantity: z.number().optional() });
+
+const amenitySchema = z.object({
+  description: z.string(),
+  isChargeable: z.boolean(),
+  amenityType: z.string(),
+  amenityProvider: z.object({ name: z.string() })
 });
 
-// Schéma pour les détails de tarif par segment
-const FareDetailsBySegmentSchema = z.object({
+const fareDetailSchema = z.object({
   segmentId: z.string(),
   cabin: z.string(),
-  fareBasis: z.string().optional(),
+  fareBasis: z.string(),
   brandedFare: z.string().optional(),
-  class: z.string().optional(),
-  includedCheckedBags: BaggageAllowanceSchema.optional()
+  brandedFareLabel: z.string().optional(),
+  class: z.string(),
+  includedCheckedBags: bagSchema.optional(),
+  includedCabinBags: bagSchema.optional(),
+  amenities: z.array(amenitySchema).optional()
 });
 
-// Schéma pour les informations de tarification par voyageur
-const TravelerPricingSchema = z.object({
+const travelerPriceSchema = z.object({
+  currency: z.string(),
+  total: z.string(),
+  base: z.string()
+});
+
+const travelerPricingSchema = z.object({
   travelerId: z.string(),
   fareOption: z.string(),
   travelerType: z.string(),
-  price: z.object({
-    currency: z.string(),
-    total: z.string(),
-    base: z.string()
-  }),
-  fareDetailsBySegment: z.array(FareDetailsBySegmentSchema).optional()
+  price: travelerPriceSchema,
+  fareDetailsBySegment: z.array(fareDetailSchema)
 });
 
-// Schéma principal pour l'offre de vol
-const FlightOfferSchema = z.object({
-  type: z.literal('flight-offer'),
+const flightOfferSchema = z.object({
+  type: z.string(),
   id: z.string(),
   source: z.string(),
   instantTicketingRequired: z.boolean(),
@@ -99,31 +90,21 @@ const FlightOfferSchema = z.object({
   lastTicketingDate: z.string(),
   lastTicketingDateTime: z.string(),
   numberOfBookableSeats: z.number(),
-  itineraries: z.array(ItinerarySchema),
-  price: PriceSchema,
-  pricingOptions: PricingOptionsSchema,
+  itineraries: z.array(itinerarySchema),
+  price: priceSchema,
+  pricingOptions: pricingOptionsSchema,
   validatingAirlineCodes: z.array(z.string()),
-  travelerPricings: z.array(TravelerPricingSchema)
+  travelerPricings: z.array(travelerPricingSchema)
 });
 
-// Schéma pour une liste d'offres de vol
-const FlightOffersSchema = z.array(FlightOfferSchema);
-
-// Types inférés à partir des schémas
-type FlightOffer = z.infer<typeof FlightOfferSchema>;
-type FlightOffers = z.infer<typeof FlightOffersSchema>;
-
-// Fonction utilitaire pour valider les données d'API
-function validateFlightOffers(data: unknown): FlightOffers {
-  try {
-    return FlightOffersSchema.parse(data);
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      console.error('Erreur de validation:', error.format());
-    }
-    throw error;
-  }
-}
+// const resultFlightOfferSchema = z.array(
+//   z.object({
+//     success: z.boolean(),
+//     data: z.array(flightOfferSchema).optional(),
+//     error: z.string().optional(),
+//     details: z.string()
+//   })
+// );
 
 // Schéma Zod pour "geoCode"
 const GeoCodeSchema = z.object({
@@ -244,11 +225,12 @@ const HotelOffersSchema = z.object({
 });
 
 export {
-  FlightOfferSchema,
-  FlightOffersSchema,
-  validateFlightOffers,
+  // FlightOfferSchema,
+  // FlightOffersSchema,
+  // validateFlightOffers,
+  flightOfferSchema,
   HotelSchema,
-  HotelOffersSchema,
-  type FlightOffer,
-  type FlightOffers
+  HotelOffersSchema
+  // type FlightOffer,
+  // type FlightOffers
 };

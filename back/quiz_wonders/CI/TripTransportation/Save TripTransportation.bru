@@ -1,0 +1,46 @@
+meta {
+  name: Save TripTransportation
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/trip-transportation/
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "from_date": {{date}},
+    "to_date": {{date}},
+    "price": {{price}},
+    "url": "{{url}}",
+    "status": "APayer"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("number",faker.number.int({max: 10, min : 1}))
+  bru.setEnvVar("date",faker.date.soon())
+  bru.setEnvVar("price",faker.number.int({ max: 500 }))
+  bru.setEnvVar("url",faker.internet.url({ appendSlash: true }))
+  bru.setEnvVar("name",faker.company.name())
+  bru.setEnvVar("float",faker.number.float())
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("triptransportationid", response.id);
+}

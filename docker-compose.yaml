@@ -1,0 +1,178 @@
+services:
+  activity:
+    build:
+      context: .
+      dockerfile: back/activities_wonders/deploy/dockerfile
+      tags:
+        - activity-wonders
+    ports:
+      - "3000:3001"
+    command: [ "npm", "run", "start" ]
+    volumes:
+      - ./back/activities_wonders:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=activity_wonders
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+
+  blog:
+    build:
+      context: .
+      dockerfile: back/blog_wonders/deploy/dockerfile
+      tags:
+        - blog-wonders
+    ports:
+      - "3001:3001"
+    command: [ "npm", "run", "start" ]
+    volumes:
+      - ./back/blog_wonders:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=blog_wonders
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  country:
+    build:
+      context: .
+      dockerfile: back/countries_wonders/deploy/dockerfile
+      tags:
+        - country-wonders
+    ports:
+      - "3002:3001"
+    command: [ "npm", "run", "start" ]
+    volumes:
+      - ./back/countries_wonders:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=countries_wonders
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  fly-hotel:
+    build:
+      context: .
+      dockerfile: back/fly_hotel_wonders/deploy/dockerfile
+      tags:
+        - fly-hotel-wonders
+    ports:
+      - "3003:3001"
+    command: [ "npm", "run", "start" ]
+    volumes:
+      - ./back/fly_hotel_wonders:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+    networks:
+      - app-network
+
+  quiz:
+    build:
+      context: .
+      dockerfile: back/quiz_wonders/deploy/dockerfile
+      tags:
+        - quiz-wonders
+    ports:
+      - "3004:3001"
+    command: [ "npm", "run", "start" ]
+    volumes:
+      - ./back/quiz_wonders:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=quiz_wonders
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  users:
+    build:
+      context: .
+      dockerfile: back/users_wonders/deploy/dockerfile
+      tags:
+        - user-wonders
+    ports:
+      - "3005:3001"
+    command: [ "npm", "run", "start" ]
+    volumes:
+      - ./back/users_wonders:/app
+      - /app/node_modules
+    environment:
+      - PORT=3001
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=users_wonders
+    networks:
+      - app-network
+    depends_on:
+      - db
+
+  front:
+    build:
+      context: .
+      dockerfile: front/wonders-web/deploy/dockerfile
+      tags:
+        - front-web
+    ports:
+      - "8000:5000"
+    depends_on:
+      - activity
+      - blog
+      - country
+      - fly-hotel
+      - quiz
+      - users
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init/restore.sh:/docker-entrypoint-initdb.d/restore.sh
+      - ./init/activity.sql:/activity.sql
+      - ./init/blog.sql:/blog.sql
+      - ./init/country.sql:/country.sql
+      - ./init/quiz.sql:/quiz.sql
+      - ./init/user.sql:/user.sql
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge

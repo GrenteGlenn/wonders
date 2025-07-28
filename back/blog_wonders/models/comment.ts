@@ -2,7 +2,7 @@
 
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/dbConnection';
-import { CommentInterface } from '../src/interfaces/interfaces'
+import { CommentInterface } from '../src/interfaces/interfaces';
 import Subject from './subject';
 
 interface CommentCreationAttributes extends Optional<CommentInterface, 'id'> {}
@@ -16,7 +16,8 @@ export default class Comment extends Model<CommentInterface, CommentCreationAttr
   declare updated_at: Date;
 }
 
-  Comment.init({
+Comment.init(
+  {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -47,21 +48,21 @@ export default class Comment extends Model<CommentInterface, CommentCreationAttr
       type: DataTypes.DATE,
       allowNull: true
     }
-  }, 
-    {
-      sequelize,
-      underscored: true,
-      modelName: 'Comment',
-      timestamps: false
-    }
-  );
+  },
+  {
+    sequelize,
+    underscored: true,
+    modelName: 'Comment',
+    timestamps: false
+  }
+);
 
-  Comment.belongsTo(Subject, {
-    foreignKey: 'subject',
-    as: 'subjectDetails'
-  });
-  
-  Subject.hasMany(Comment, {
-    foreignKey: 'subject',
-    as: 'comments'
-  });
+Comment.belongsTo(Subject, {
+  foreignKey: 'subject',
+  as: 'subjectDetails'
+});
+
+Subject.hasMany(Comment, {
+  foreignKey: 'subject',
+  as: 'comments'
+});

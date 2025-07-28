@@ -1,0 +1,17 @@
+meta {
+  name: Delete Organization
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/organization/{{organisationid}}
+  body: json
+  auth: none
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(204);
+  });
+}

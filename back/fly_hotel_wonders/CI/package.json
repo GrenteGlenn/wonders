@@ -1,0 +1,17 @@
+{
+  "name": "ci",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "bruno": "bru run",
+    "test": "bru run --env-var base_url=http://localhost:3003/api --bail --iteration-count 200 "
+  },
+  "type": "commonjs",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^9.6.0",
+    "@usebruno/cli": "^2.2.2"
+  }
+}

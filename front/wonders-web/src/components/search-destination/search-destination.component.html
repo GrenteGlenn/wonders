@@ -1,9 +1,15 @@
 <div class="search-container font-quicksand">
-  <div class="relative">
+  <div class="search-wrapper">
+    <lucide-icon
+      name="search"
+      class="search-icon"
+      aria-hidden="true"
+    ></lucide-icon>
+
     <input
       type="text"
       placeholder="{{ 'SearchDestinationComponent.PlaceHolder' | translate }}"
-      class="search-input"
+      class="search-input "
       [(ngModel)]="searchTerm"
       (input)="onSearchChange()"
       (focus)="showDropdown = true"
@@ -11,12 +17,9 @@
       (keydown.arrowup)="onArrowUp()"
       (keydown.enter)="navigateToSelectedResult()"
       aria-label="Search destination"
+      
     />
-    <lucide-icon
-      name="search"
-      class="search-icon"
-      aria-hidden="true"
-    ></lucide-icon>
+
     <button
       class="search-button"
       (click)="search()"
@@ -25,54 +28,52 @@
     >
       {{ 'SearchDestinationComponent.Search' | translate }}
     </button>
+  </div>
 
+  <!-- Dropdown results -->
+  <div
+    *ngIf="showDropdown && searchResults.length > 0"
+    class="dropdown-results"
+    role="listbox"
+    tabindex="-1"
+  >
     <div
-      *ngIf="showDropdown && searchResults.length > 0"
-      class="dropdown-results"
-      role="listbox"
-      tabindex="-1"
+      *ngFor="let result of searchResults; let i = index"
+      (click)="navigateToResult(result)"
+      (mouseenter)="selectedIndex = i"
+      [class.selected]="i === selectedIndex"
+      class="dropdown-item"
+      role="option"
+      [attr.aria-selected]="i === selectedIndex"
     >
-      <div
-        *ngFor="let result of searchResults; let i = index"
-        (click)="navigateToResult(result)"
-        (mouseenter)="selectedIndex = i"
-        [class.selected]="i === selectedIndex"
-        class="dropdown-item"
-        role="option"
-        [attr.aria-selected]="i === selectedIndex"
-      >
-        <div
-          *ngIf="result.image"
-          class="dropdown-item-image"
-        >
-          <img
-            [src]="result.image"
-            class="dropdown-item-img"
-            alt="{{ result.name }}"
-            loading="lazy"
-          />
-        </div>
-        <div class="dropdown-item-text">
-          <span>{{ result.name }}</span>
-        </div>
+      <div *ngIf="result.image" class="dropdown-item-image">
+        <img
+          [src]="result.image"
+          class="dropdown-item-img"
+          alt="{{ result.name }}"
+          loading="lazy"
+        />
+      </div>
+      <div class="dropdown-item-text">
+        <span>{{ result.name }}</span>
       </div>
     </div>
+  </div>
 
-    <div
-      *ngIf="showDropdown && searchTerm && searchResults.length === 0 && !isLoading"
-      class="no-result-message"
-      role="alert"
-    >
-      {{ 'SearchDestinationComponent.ResultNotFound' | translate }} "{{ searchTerm }}"
-    </div>
+  <div
+    *ngIf="showDropdown && searchTerm && searchResults.length === 0 && !isLoading"
+    class="no-result-message"
+    role="alert"
+  >
+    {{ 'SearchDestinationComponent.ResultNotFound' | translate }} "{{ searchTerm }}"
+  </div>
 
-    <div
-      *ngIf="isLoading"
-      class="loading-indicator"
-      role="status"
-      aria-live="polite"
-    >
-      <div class="spinner"></div>
-    </div>
+  <div
+    *ngIf="isLoading"
+    class="loading-indicator"
+    role="status"
+    aria-live="polite"
+  >
+    <div class="spinner"></div>
   </div>
 </div>

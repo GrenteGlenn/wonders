@@ -4,7 +4,8 @@
   "description": " Micro service qui gère les blog de l'application wonder",
   "main": "app.ts",
   "scripts": {
-    "start": "nodemon --ext ts --exec ts-node src/app.ts",
+    "start": "ts-node src/app.ts",
+    "nodemon": "nodemon --ext ts --exec ts-node src/app.ts",
     "migration:run": "npx sequelize-cli db:migrate",
     "migration:seeder": "npx sequelize-cli db:seed:all",
     "migration:undo:all": "npx sequelize-cli db:migrate:undo:all",

@@ -1,0 +1,15 @@
+meta {
+  name: Get Subject
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/subjects/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}

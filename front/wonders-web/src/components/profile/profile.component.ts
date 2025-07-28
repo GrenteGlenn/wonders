@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,7 @@ import { LanguageService } from '../../app/service/languages/languages.service';
 import { CountryService } from '../../app/service/country/country.service';
 import { FormsModule } from '@angular/forms';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { AvatarsService } from '../../app/service/users/avatars.service';
 
 
 interface r {
@@ -27,23 +28,27 @@ interface r {
   styleUrl: './profile.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
   dialog = inject(Dialog);
 
   user: FetchableUser | null = null;
+  newUser = { first_name: "", last_name: "", email: "", img: "" }
 
   languageName: string = '';
   countryName: string = '';
 
   showEditModal = false;
   showDeleteModal = false;
+  userAvatar: string = '';
+  genericAvatar: string = 'https://github.com/shadcn.png'
 
   constructor(
     // private router: Router,
     // private _authService: AuthentificationService,
     private usersService: UsersService,
     private languageService: LanguageService,
-    private countryService: CountryService
+    private countryService: CountryService,
+    protected avatarsService: AvatarsService
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +57,8 @@ export class ProfileComponent {
     // );
 
     this.loadUserInfo();
+    const avatars = this.avatarsService.getAvatars();
+    //this.userAvatar = this.user.avatar
   }
 
   history: r[] = [
@@ -145,6 +152,14 @@ export class ProfileComponent {
   // modal
 
   openEditModal() {
+     if (this.user) {
+      this.newUser = {
+        first_name: this.user.first_name || '',
+        last_name: this.user.last_name || '',
+        email: this.user.email || '',
+        img: this.user.img || ''
+    };
+  }
     this.showEditModal = true;
   }
 
@@ -154,19 +169,18 @@ export class ProfileComponent {
 
   submitEdit() {
     if (!this.user) return;
-  
-    this.usersService.Edit(this.user).subscribe({
+
+    this.usersService.Edit(this.user, this.newUser).subscribe({
       next: () => {
         this.closeEditModal();
-        console.log('Profil mis à jour avec succès');
-        // Optionnel : tu peux afficher un toast ou notifier l'utilisateur ici
+        this.loadUserInfo()
       },
       error: (err) => {
-        console.error('Erreur lors de la mise à jour du profil :', err);
+        console.error('Error occured while updating user profile :', err);
       }
     });
   }
-  
+
   openDeleteModal() {
     this.showDeleteModal = true;
   }

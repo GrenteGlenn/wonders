@@ -3,7 +3,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import AddressInterface from '../src/interfaces/AddressInterface';
 import CountryInterface from '../src/interfaces/CountryInterface';
-import UserInterface from '../src/interfaces/UserInterface';
+import { UserInterface } from '../src/interfaces/UserInterface';
 import sequelize from '../config/dbConnection';
 import Country from './country';
 import User from './user';

@@ -15,6 +15,15 @@ router.get('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
+router.get('/detail', (async (req, res) => {
+  try {
+    const trips = await tripController.getAllTrips();
+    res.status(200).json(trips);
+  } catch (error) {
+    res.status(500).json({ code: '500', message: error });
+  }
+}) as RequestHandler);
+
 router.get('/:id', (async (req, res) => {
   try {
     const trip = await tripController.one(parseInt(req.params.id, 10));
@@ -27,6 +36,15 @@ router.get('/:id', (async (req, res) => {
 router.get('/user-full-trip/:id', (async (req, res) => {
   try {
     const trip = await tripController.fullTrip(parseInt(req.params.id, 10));
+    trip ? res.status(200).json(trip) : res.status(404).json({ code: '404', message: 'entry does not exists' });
+  } catch (error) {
+    res.status(500).json({ code: '500', message: error });
+  }
+}) as RequestHandler);
+
+router.get('/user-full-trip-detail/:id', (async (req, res) => {
+  try {
+    const trip = await tripController.fullTripDetail(parseInt(req.params.id, 10));
     trip ? res.status(200).json(trip) : res.status(404).json({ code: '404', message: 'entry does not exists' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });

@@ -5,10 +5,75 @@ import TripDay from '../../models/tripday';
 import TripDayActivity from '../../models/tripdayactivity';
 import TripInterface from '../interfaces/TripInterface';
 import TripTransportationInterface from '../interfaces/TripTransportationInterface';
-import { City } from '../interfaces/Global';
+import { ActivityDetail, City, CityDetail, Country, User } from '../interfaces/Global';
 import TripHotel from '../../models/triphotel';
 
+const addressCountry = process.env.ADDRESS_COUNTRY;
+const addressUser = process.env.ADDRESS_USER;
+const addressActivity = process.env.ADDRESS_ACTIVITY;
+
 export default class TripController {
+  async getAllTrips() {
+    const trips = await Trip.findAll({
+      attributes: {
+        exclude: ['created_at', 'updated_at', 'transportation_id']
+      },
+      include: [
+        {
+          model: TripTransportation,
+          as: 'trip_transportation',
+          attributes: {
+            exclude: ['created_at', 'updated_at']
+          }
+        }
+      ]
+    });
+
+    // Extraire les Id uniques
+    const countryIds = [...new Set(trips.map((t) => t.country_id))];
+    const userIds = [...new Set(trips.map((t) => t.user_id))];
+
+    // Appeler les microservices en parallèle
+    let countries: [] | Country[] = [];
+
+    await fetch(`${addressCountry}/countries/batch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: countryIds })
+    })
+      .then(async (res) => {
+        countries = (await res.json()) as Country[];
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    let users: [] | User[] = [];
+
+    await fetch(`${addressUser}/users/batch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: userIds })
+    })
+      .then(async (res) => {
+        users = (await res.json()) as User[];
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const countryMap = Object.fromEntries(countries.map((c) => [c.id, c])) as Country[];
+    const userMap = Object.fromEntries(users.map((u) => [u.id, u])) as User[];
+
+    const enrichedTrips = trips.map((trip) => ({
+      ...trip.toJSON(),
+      country: countryMap[trip.country_id] || null,
+      user: userMap[trip.user_id] || null
+    }));
+
+    return enrichedTrips;
+  }
+
   async fullTrips(id: number) {
     const trips = await Trip.findAll({
       where: { user_id: id },
@@ -191,6 +256,89 @@ export default class TripController {
         }
       ]
     });
+  }
+
+  async fullTripDetail(id: number) {
+    // Get the TRIP
+    const tripDetail = await Trip.findOne({
+      where: { id: id },
+      attributes: {
+        exclude: ['created_at', 'updated_at']
+      }
+    });
+
+    // Get the Trip Transportation
+    if (!tripDetail) return null;
+    const transportation = await TripTransportation.findOne({
+      where: { id: tripDetail.transportation_id },
+      attributes: {
+        exclude: ['from_date', 'to_date', 'created_at', 'updated_at']
+      }
+    });
+
+    // Get All City for the trip
+    if (!transportation) return null;
+    const tripCity = await TripCity.findAll({
+      where: { transportation_id: transportation?.id },
+      attributes: {
+        exclude: ['created_at', 'updated_at']
+      }
+    });
+
+    const tripActivity = await TripDayActivity.findAll({
+      where: { trip_day_id: tripCity.map((item) => item.trip_id) },
+      attributes: {
+        exclude: ['created_at', 'updated_at']
+      }
+    });
+
+    // Extraire les Id uniques
+    const countryIds = tripDetail?.country_id;
+    const cityIds = [...new Set(tripCity.map((t) => t.city_id))];
+    const activityIds = [...new Set(tripActivity.map((t) => t.activity_id))];
+
+    // Appeler les microservices en parallèle
+    let countries: Country | null = null;
+
+    await fetch(`${addressCountry}/countries/${countryIds}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' }
+    }).then(async (res) => {
+      countries = (await res.json()) as Country;
+    });
+
+    let city: [] | CityDetail[] = [];
+
+    await fetch(`${addressCountry}/cities/batch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: cityIds })
+    }).then(async (res) => {
+      city = (await res.json()) as CityDetail[];
+    });
+
+    let activity: [] | ActivityDetail[] = [];
+
+    await fetch(`${addressActivity}/activity/batch`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ids: activityIds })
+    }).then(async (res) => {
+      activity = (await res.json()) as ActivityDetail[];
+    });
+
+    const cityMap = Object.fromEntries(city.map((u) => [u.id, u])) as unknown as CityDetail[];
+    const activityMap = Object.fromEntries(activity.map((u) => [u.id, u])) as unknown as ActivityDetail[];
+
+    const value = {
+      tripDetail,
+      countries,
+      cityMap,
+      tripActivity,
+      activityMap
+    };
+
+    return value;
   }
 
   async list() {

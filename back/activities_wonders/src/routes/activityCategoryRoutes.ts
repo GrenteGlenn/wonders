@@ -10,7 +10,7 @@ interface Body {
   picture_id: number;
 }
 
-router.get('/', (async (req, res) => {
+router.get('/', (async (_, res) => {
   const activityCategory = await activityCategoryController.list();
   res.json(activityCategory);
 }) as RequestHandler);

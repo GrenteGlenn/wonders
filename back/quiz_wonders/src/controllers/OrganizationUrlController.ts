@@ -7,7 +7,8 @@ export default class OrganizationUrlController {
     return await OrganizationUrl.findAll({
       include: [
         {
-          model: Organization
+          model: Organization,
+          as: 'organization'
         },
         {
           model: Status

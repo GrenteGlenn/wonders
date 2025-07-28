@@ -1,0 +1,15 @@
+meta {
+  name: Delete User Subject
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{base_url}}/like/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 1
+}

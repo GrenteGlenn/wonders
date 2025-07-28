@@ -1,0 +1,45 @@
+meta {
+  name: Edit TripHotel
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/trip-hotel/{{triphotelid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "trip_city_id": {{number}},
+    "name": "{{name}}",
+    "price": {{price}},
+    "from": {{date}},
+    "to": {{date}},
+    "url": "{{url}}",
+    "adults": {{number}},
+    "children": {{number}},
+    "longitude": {{float}},
+    "latitude": {{float}},
+    "status": "APayer"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("number",faker.number.int({max: 10, min : 1}))
+  bru.setEnvVar("date",faker.date.soon())
+  bru.setEnvVar("price",faker.number.int({ max: 500 }))
+  bru.setEnvVar("url",faker.internet.url({ appendSlash: true }))
+  bru.setEnvVar("name",faker.company.name())
+  bru.setEnvVar("float",faker.number.float())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+}
