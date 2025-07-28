@@ -167,8 +167,7 @@ export class HotelComponent implements OnInit {
   // Méthode pour charger les offres de tous les hôtels
   loadAllHotelsOffers() {
     this.isLoadingOffers = true;
-    const hotelsToCheck = this.hotels.slice(0, 10);
-
+    const hotelsToCheck = this.hotels;
     const requests = hotelsToCheck.map((hotel) => {
       return this.hotelService.checkHotelOffers(hotel.hotelId).pipe(
         finalize(() => {
@@ -239,21 +238,21 @@ export class HotelComponent implements OnInit {
   }
 
   // Méthode pour basculer le filtre d'offres
-  // toggleFilter() {
-  //   this.showOnlyWithOffers = !this.showOnlyWithOffers;
-  //   this.hotelForm.patchValue({ showOnlyWithOffers: this.showOnlyWithOffers });
+  toggleFilter() {
+    this.showOnlyWithOffers = !this.showOnlyWithOffers;
+    this.hotelForm.patchValue({ showOnlyWithOffers: this.showOnlyWithOffers });
 
-  //   if (this.showOnlyWithOffers && this.hotels.length > 0) {
-  //     const uncheckedHotels = this.hotels.filter((hotel) => hotel.offers === null);
-  //     if (uncheckedHotels.length > 0) {
-  //       this.loadAllHotelsOffers();
-  //     } else {
-  //       this.applyFilters();
-  //     }
-  //   } else {
-  //     this.applyFilters();
-  //   }
-  // }
+    if (this.showOnlyWithOffers && this.hotels.length > 0) {
+      const uncheckedHotels = this.hotels.filter((hotel) => hotel.offers === null);
+      if (uncheckedHotels.length > 0) {
+        this.loadAllHotelsOffers();
+      } else {
+        this.applyFilters();
+      }
+    } else {
+      this.applyFilters();
+    }
+  }
 
   onResetForm() {
     this.hotelForm.reset({

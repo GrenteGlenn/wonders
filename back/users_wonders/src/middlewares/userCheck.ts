@@ -8,7 +8,7 @@ const authController = new AuthController();
 const userCheck = async function (req: Request, res: Response, next: NextFunction) {
   const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
   if (token) {
-    const decrypt = decryptJWT(token) as JwtPayload;
+    const decrypt = decryptJWT(token) as JwtPayload ;
     const email = decrypt.email;
     if (!decrypt && email) {
       res.status(403).send('Forbidden');

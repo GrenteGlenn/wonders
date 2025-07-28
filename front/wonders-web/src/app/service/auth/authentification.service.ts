@@ -61,4 +61,5 @@ export class AuthentificationService {
     this.userSubject.next(token);
     this.isAuthenticatedSubject.next(true);
   }
+
 }

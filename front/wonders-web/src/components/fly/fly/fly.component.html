@@ -169,7 +169,7 @@
               />
               <label for="nonStop" class="ml-2 block text-sm text-gray-700">Vol direct uniquement</label>
             </div>
-            <div class="flex items-center">
+            <!-- <div class="flex items-center">
               <input
                 type="checkbox"
                 id="includeNearbyAirports"
@@ -177,7 +177,7 @@
                 class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <label for="includeNearbyAirports" class="ml-2 block text-sm text-gray-700">Aéroports à proximité</label>
-            </div>
+            </div> -->
           </div>
 
           <div class="flex space-x-3">
@@ -234,7 +234,7 @@
 
           <!-- Prix -->
           <div class="mb-6">
-            <h4 class="font-medium text-gray-700 mb-2">Prix</h4>
+            <span class="font-semibold text-gray-700 mb-2">Prix</span>
             <div class="space-y-3">
               <div>
                 <label class="text-sm text-gray-600 flex justify-between">
@@ -254,7 +254,7 @@
 
           <!-- Escales -->
           <div class="mb-6">
-            <h4 class="font-medium text-gray-700 mb-2">Escales</h4>
+            <span class="font-semibold text-gray-700 mb-2">Escales</span>
             <div class="space-y-2">
               <div class="flex items-center">
                 <input
@@ -288,7 +288,7 @@
 
           <!-- Compagnies aériennes -->
           <div class="mb-6">
-            <h4 class="font-medium text-gray-700 mb-2">Compagnies aériennes</h4>
+            <span class="font-semibold text-gray-700 mb-2">Compagnies aériennes</span>
             <div class="max-h-40 overflow-y-auto pr-2 space-y-2">
               <div class="flex items-center" *ngFor="let airline of airlines">
                 <input
@@ -304,7 +304,7 @@
 
           <!-- Heures de départ -->
           <div class="mb-6">
-            <h4 class="font-medium text-gray-700 mb-2">Heure de départ</h4>
+            <span class="font-semibold text-gray-700 mb-2">Heure de départ</span>
             <div class="space-y-2">
               <div class="flex items-center">
                 <input
@@ -352,14 +352,14 @@
               class="w-full py-2 px-4 bg-blue-600 text-white rounded-md shadow hover:bg-blue-700 transition flex items-center justify-center"
             >
               <lucide-icon name="check" class="h-4 w-4 mr-2"></lucide-icon>
-              Appliquer les filtres
+              Appliquer
             </button>
             <button
               (click)="resetFilters()"
               class="w-full py-2 px-4 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition flex items-center justify-center"
             >
               <lucide-icon name="x" class="h-4 w-4 mr-2"></lucide-icon>
-              Réinitialiser les filtres
+              <span class="text-md">Réinitialiser</span>
             </button>
           </div>
         </div>
@@ -387,8 +387,7 @@
             </div>
           </div>
           <div class="flex items-center">
-            <lucide-icon name="info" class="h-5 w-5 text-blue-500 mr-2"></lucide-icon>
-            <p class="text-gray-600 text-sm">{{ filteredFlights.length }} vols trouvés pour votre recherche</p>
+            <span class="text-gray-600 text-sm">{{ filteredFlights.length }} vols trouvés pour votre recherche</span>
           </div>
         </div>
 
@@ -396,90 +395,178 @@
         <div *ngIf="filteredFlights.length > 0" class="bg-white rounded-b-lg shadow-md overflow-hidden mb-6">
           <div class="divide-y divide-gray-200">
             <div *ngFor="let flight of paginatedFlights" class="p-5 hover:bg-blue-50 transition-colors">
-              <!-- Vol aller -->
-              <div class="flex flex-col lg:flex-row lg:items-center mb-4 lg:mb-0">
-                <!-- Compagnie aérienne -->
-                <div class="w-full lg:w-1/5 mb-3 lg:mb-0">
-                  <div class="flex items-center">
-                    <!-- <img
-                      [src]="'assets/images/airlines/' + flight.validatingAirlineCodes[0] + '.png'"
-                      [alt]="flight.validatingAirlineCodes[0]"
-                      class="h-10 w-10 mr-3 object-contain"
-                      onError="this.src='assets/images/airlines/default.png'"
-                    /> -->
-                    <div>
-                      <div class="font-medium">{{ flight.validatingAirlineCodes[0] }}</div>
-                      <div class="text-xs text-gray-500">Vol {{ flight.itineraries[0].segments[0].number }}</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Détails du vol -->
-                <div class="w-full lg:w-3/5 mb-3 lg:mb-0">
-                  <div class="flex items-center">
-                    <div class="text-center">
-                      <div class="text-lg font-bold">{{ flight.itineraries[0].segments[0].departure.iataCode }}</div>
-                      <div class="text-sm text-gray-600">
-                        {{ flight.itineraries[0].segments[0].departure.at | date: 'HH:mm' }}
-                      </div>
+              <div class="flex flex-col lg:flex-row lg:items-center justify-between">
+                <!-- Vol aller + retour -->
+                <div class="flex-1 flex flex-col">
+                  <!-- Vol aller -->
+                  <div>
+                    <div
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-3"
+                    >
+                      <lucide-icon name="plane-takeoff" class="h-3 w-3 mr-1"></lucide-icon>
+                      Vol aller
                     </div>
 
-                    <div class="flex-grow flex flex-col items-center mx-4">
-                      <div class="text-xs text-gray-500">{{ flight.itineraries[0].duration.replace('PT', '') }}</div>
-                      <div class="w-full h-px bg-gray-300 my-2 relative">
-                        <!-- Points pour les escales -->
-                        <!-- Points pour les escales -->
-                        <ng-container *ngFor="let segment of flight.itineraries[1].segments; let i = index">
-                          <div
-                            *ngIf="i < flight.itineraries[1].segments.length - 1"
-                            class="absolute top-1/2 transform -translate-y-1/2 w-2 h-2 bg-blue-600 rounded-full"
-                            [style.left]="((i + 1) / (flight.itineraries[1].segments.length + 1)) * 100 + '%'"
-                          ></div>
-                        </ng-container>
-                        <!-- Icône avion -->
-                        <div class="absolute top-1/2 transform -translate-y-1/2 text-blue-600" style="left: 85%">
-                          <lucide-icon name="plane" class="h-4 w-4"></lucide-icon>
+                    <div class="flex flex-col lg:flex-row lg:items-center">
+                      <!-- Compagnie aérienne -->
+                      <div class="w-full lg:w-1/5 mb-3 lg:mb-0">
+                        <div>
+                          <div class="font-medium">{{ flight.validatingAirlineCodes[0] }}</div>
+                          <div class="text-xs text-gray-500">Vol {{ flight.itineraries[0].segments[0].number }}</div>
                         </div>
                       </div>
-                      <div class="text-xs text-gray-500">
-                        <span *ngIf="flight.itineraries[0].segments.length === 1">Vol direct</span>
-                        <span *ngIf="flight.itineraries[0].segments.length > 1">
-                          {{ flight.itineraries[0].segments.length - 1 }} escale(s)
-                        </span>
-                      </div>
-                    </div>
 
-                    <div class="text-center">
-                      <div class="text-lg font-bold">
-                        {{ flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival.iataCode }}
-                      </div>
-                      <div class="text-sm text-gray-600">
-                        {{
-                          flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival.at
-                            | date: 'HH:mm'
-                        }}
+                      <!-- Détails du vol aller -->
+                      <div class="w-full lg:w-4/5 mb-3 lg:mb-0">
+                        <div class="flex items-center">
+                          <div class="text-center">
+                            <div class="text-lg font-bold">
+                              {{ flight.itineraries[0].segments[0].departure.iataCode }}
+                            </div>
+                            <div class="text-sm text-gray-600">
+                              {{ flight.itineraries[0].segments[0].departure.at | date: 'HH:mm' }}
+                            </div>
+                          </div>
+
+                          <div class="flex-grow flex flex-col items-center mx-4">
+                            <div class="text-xs text-gray-500">
+                              {{ flight.itineraries[0].duration.replace('PT', '') }}
+                            </div>
+                            <div class="w-full h-px bg-gray-300 my-2 relative">
+                              <div
+                                class="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/2 text-blue-600"
+                              >
+                                <lucide-icon name="chevron-right" class="h-4 w-4"></lucide-icon>
+                              </div>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                              <span *ngIf="flight.itineraries[0].segments.length === 1">Vol direct</span>
+                              <span *ngIf="flight.itineraries[0].segments.length > 1">
+                                {{ flight.itineraries[0].segments.length - 1 }} escale(s)
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="text-center">
+                            <div class="text-lg font-bold">
+                              {{
+                                flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival
+                                  .iataCode
+                              }}
+                            </div>
+                            <div class="text-sm text-gray-600">
+                              {{
+                                flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival.at
+                                  | date: 'HH:mm'
+                              }}
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Détails des escales si présentes -->
+                        <div
+                          *ngIf="flight.itineraries[0].segments.length > 1"
+                          class="mt-3 text-xs text-gray-500 flex items-center"
+                        >
+                          <lucide-icon name="git-branch" class="h-3 w-3 mr-1"></lucide-icon>
+                          Escales:
+                          <span *ngFor="let segment of flight.itineraries[0].segments; let i = index">
+                            <span *ngIf="i < flight.itineraries[0].segments.length - 1">
+                              {{ segment.arrival.iataCode }}
+                              <span *ngIf="i < flight.itineraries[0].segments.length - 2">, </span>
+                            </span>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Détails des escales si présentes -->
-                  <div
-                    *ngIf="flight.itineraries[0].segments.length > 1"
-                    class="mt-3 text-xs text-gray-500 flex items-center"
-                  >
-                    <lucide-icon name="git-branch" class="h-3 w-3 mr-1"></lucide-icon>
-                    Escales:
-                    <span *ngFor="let segment of flight.itineraries[0].segments; let i = index">
-                      <span *ngIf="i < flight.itineraries[0].segments.length - 1">
-                        {{ segment.arrival.iataCode }}
-                        <span *ngIf="i < flight.itineraries[0].segments.length - 2">, </span>
-                      </span>
-                    </span>
+                  <!-- Vol retour -->
+                  <div *ngIf="flight.itineraries.length > 1" class="mt-6 pt-4 border-t border-dashed border-gray-300">
+                    <div
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-3"
+                    >
+                      <lucide-icon name="plane-landing" class="h-3 w-3 mr-1"></lucide-icon>
+                      Vol retour
+                    </div>
+
+                    <div class="flex flex-col lg:flex-row lg:items-center">
+                      <!-- Compagnie -->
+                      <div class="w-full lg:w-1/5 mb-3 lg:mb-0">
+                        <div>
+                          <div class="font-medium">{{ flight.validatingAirlineCodes[0] }}</div>
+                          <div class="text-xs text-gray-500">Vol {{ flight.itineraries[1].segments[0].number }}</div>
+                        </div>
+                      </div>
+
+                      <!-- Détails vol retour -->
+                      <div class="w-full lg:w-4/5 mb-3 lg:mb-0">
+                        <div class="flex items-center">
+                          <div class="text-center">
+                            <div class="text-lg font-bold">
+                              {{ flight.itineraries[1].segments[0].departure.iataCode }}
+                            </div>
+                            <div class="text-sm text-gray-600">
+                              {{ flight.itineraries[1].segments[0].departure.at | date: 'HH:mm' }}
+                            </div>
+                          </div>
+
+                          <div class="flex-grow flex flex-col items-center mx-4">
+                            <div class="text-xs text-gray-500">
+                              {{ flight.itineraries[1].duration.replace('PT', '') }}
+                            </div>
+                            <div class="w-full h-px bg-gray-300 my-2 relative">
+                              <div
+                                class="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-1/2 text-blue-600"
+                              >
+                                <lucide-icon name="chevron-left" class="h-4 w-4"></lucide-icon>
+                              </div>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                              <span *ngIf="flight.itineraries[1].segments.length === 1">Vol direct</span>
+                              <span *ngIf="flight.itineraries[1].segments.length > 1">
+                                {{ flight.itineraries[1].segments.length - 1 }} escale(s)
+                              </span>
+                            </div>
+                          </div>
+
+                          <div class="text-center">
+                            <div class="text-lg font-bold">
+                              {{
+                                flight.itineraries[1].segments[flight.itineraries[1].segments.length - 1].arrival
+                                  .iataCode
+                              }}
+                            </div>
+                            <div class="text-sm text-gray-600">
+                              {{
+                                flight.itineraries[1].segments[flight.itineraries[1].segments.length - 1].arrival.at
+                                  | date: 'HH:mm'
+                              }}
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Escales retour -->
+                        <div
+                          *ngIf="flight.itineraries[1].segments.length > 1"
+                          class="mt-3 text-xs text-gray-500 flex items-center"
+                        >
+                          <lucide-icon name="git-branch" class="h-3 w-3 mr-1"></lucide-icon>
+                          Escales:
+                          <span *ngFor="let segment of flight.itineraries[1].segments; let i = index">
+                            <span *ngIf="i < flight.itineraries[1].segments.length - 1">
+                              {{ segment.arrival.iataCode
+                              }}<span *ngIf="i < flight.itineraries[1].segments.length - 2">, </span>
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Prix et action -->
-                <div class="w-full lg:w-1/5 text-right">
+                <!-- Prix + action -->
+                <div class="mt-4 lg:mt-0 lg:ml-6 w-full lg:w-[200px] flex flex-col items-end justify-center text-right">
                   <div class="text-2xl font-bold text-blue-600">
                     {{ formatPrice(flight.price.total, flight.price.currency) }}
                   </div>
@@ -487,108 +574,13 @@
                     {{ flight.numberOfBookableSeats }} siège(s) disponible(s)
                   </div>
                   <button
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md text-sm transition flex items-center justify-center"
+                    class="w-40 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md text-sm transition flex items-center justify-center"
                     (click)="selectFlight(flight)"
                   >
                     <lucide-icon name="check" class="h-4 w-4 mr-2"></lucide-icon>
                     Sélectionner
                   </button>
                 </div>
-              </div>
-
-              <!-- Vol retour si présent -->
-              <div *ngIf="flight.itineraries.length > 1" class="mt-6 pt-4 border-t border-dashed border-gray-300">
-                <div
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mb-3"
-                >
-                  <lucide-icon name="repeat" class="h-3 w-3 mr-1"></lucide-icon>
-                  Vol retour
-                </div>
-
-                <div class="flex flex-col lg:flex-row lg:items-center">
-                  <!-- Compagnie aérienne -->
-                  <div class="w-full lg:w-1/5 mb-3 lg:mb-0">
-                    <div class="flex items-center">
-                      <div>
-                        <div class="font-medium">{{ flight.validatingAirlineCodes[0] }}</div>
-                        <div class="text-xs text-gray-500">Vol {{ flight.itineraries[1].segments[0].number }}</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Détails du vol retour -->
-                  <div class="w-full lg:w-3/5 mb-3 lg:mb-0">
-                    <div class="flex items-center">
-                      <div class="text-center">
-                        <div class="text-lg font-bold">{{ flight.itineraries[1].segments[0].departure.iataCode }}</div>
-                        <div class="text-sm text-gray-600">
-                          {{ flight.itineraries[1].segments[0].departure.at | date: 'HH:mm' }}
-                        </div>
-                      </div>
-
-                      <div class="flex-grow flex flex-col items-center mx-4">
-                        <div class="text-xs text-gray-500">{{ flight.itineraries[1].duration.replace('PT', '') }}</div>
-                        <div class="w-full h-px bg-gray-300 my-2 relative">
-                          <!-- Points pour les escales -->
-                          <ng-container *ngFor="let segment of flight.itineraries[0].segments; let i = index">
-                            <div
-                              *ngIf="i < flight.itineraries[0].segments.length - 1"
-                              class="absolute top-1/2 transform -translate-y-1/2 w-2 h-2 bg-blue-600 rounded-full"
-                              [style.left]="((i + 1) / (flight.itineraries[0].segments.length + 1)) * 100 + '%'"
-                            ></div>
-                          </ng-container>
-                          <!-- Icône avion -->
-                          <div class="absolute top-1/2 transform -translate-y-1/2 text-blue-600" style="left: 85%">
-                            <lucide-icon name="plane" class="h-4 w-4"></lucide-icon>
-                          </div>
-                        </div>
-                        <div class="text-xs text-gray-500">
-                          <span *ngIf="flight.itineraries[1].segments.length === 1">Vol direct</span>
-                          <span *ngIf="flight.itineraries[1].segments.length > 1">
-                            {{ flight.itineraries[1].segments.length - 1 }} escale(s)
-                          </span>
-                        </div>
-                      </div>
-
-                      <div class="text-center">
-                        <div class="text-lg font-bold">
-                          {{
-                            flight.itineraries[1].segments[flight.itineraries[1].segments.length - 1].arrival.iataCode
-                          }}
-                        </div>
-                        <div class="text-sm text-gray-600">
-                          {{
-                            flight.itineraries[1].segments[flight.itineraries[1].segments.length - 1].arrival.at
-                              | date: 'HH:mm'
-                          }}
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Détails des escales si présentes -->
-                    <div
-                      *ngIf="flight.itineraries[1].segments.length > 1"
-                      class="mt-3 text-xs text-gray-500 flex items-center"
-                    >
-                      <lucide-icon name="git-branch" class="h-3 w-3 mr-1"></lucide-icon>
-                      Escales:
-                      <span *ngFor="let segment of flight.itineraries[1].segments; let i = index">
-                        <span *ngIf="i < flight.itineraries[1].segments.length - 1">
-                          {{ segment.arrival.iataCode }}
-                          <span *ngIf="i < flight.itineraries[1].segments.length - 2">, </span>
-                        </span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Bouton pour voir les détails -->
-              <div class="mt-4 flex justify-center">
-                <button class="text-blue-600 text-sm hover:text-blue-800 flex items-center">
-                  <lucide-icon name="chevron-down" class="h-4 w-4 mr-1"></lucide-icon>
-                  Voir les détails du vol
-                </button>
               </div>
             </div>
           </div>

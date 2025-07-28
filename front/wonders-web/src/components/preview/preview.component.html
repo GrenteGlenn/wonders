@@ -22,7 +22,6 @@
     <!-- Carte -->
     <div class="bg-white rounded-xl shadow-md p-4">
       <div class="flex items-center mb-3 gap-2">
-        <lucide-icon name="map-pin" class="h-5 w-5 text-rose-500"></lucide-icon>
         <h3 class="text-base font-semibold">Localisation</h3>
       </div>
       <app-google-map></app-google-map>
@@ -48,7 +47,6 @@
     <!-- Vol -->
     <div class="bg-white p-6 rounded-xl shadow-md lg:col-span-2" *ngIf="flight">
       <div class="flex items-center mb-4 gap-2">
-        <lucide-icon name="plane" class="h-5 w-5 text-green-600"></lucide-icon>
         <h2 class="text-xl font-bold">Vol sélectionné</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
@@ -72,7 +70,6 @@
     <!-- Hôtel -->
     <div class="bg-white p-6 rounded-xl shadow-md lg:col-span-2" *ngIf="hotel">
       <div class="flex items-center mb-4 gap-2">
-        <lucide-icon name="hotel" class="h-5 w-5 text-teal-600"></lucide-icon>
         <h2 class="text-xl font-bold">Hôtel sélectionné</h2>
       </div>
       <h3 class="text-lg font-semibold">{{ hotel?.name }}</h3>
