@@ -1,0 +1,22 @@
+build_back_quizz:
+  stage: build
+  image: node:22
+  needs: ["test_back_quizz"]
+  before_script:
+    - cd back/quiz_wonders
+    - npm install
+  script:
+    - npm install -D esbuild && npm run build
+  tags:
+    - PLI
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  cache:
+    policy: pull-push
+    unprotect: false
+    untracked: false
+    when: on_success
+    paths:
+      - "back/quiz_wonders/node_modules"
