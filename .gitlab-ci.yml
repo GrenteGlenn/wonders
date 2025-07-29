@@ -23,6 +23,7 @@ include:
   # Docker jobs
   # - local: 'ci/docker/users.yml'
   # - local: 'ci/docker/countries.yml'
+  # - local: 'ci/docker/quizz.yml'
   # - local: 'ci/docker/activities.yml'
 
 workflow:
