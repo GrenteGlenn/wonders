@@ -1,4 +1,4 @@
-test_back_activities:
+test_back_quizz:
   stage: test
   image: node:22
   resource_group: test
