@@ -8,6 +8,7 @@ import { CityService } from '../../../app/service/city/city.service';
 import { ActivityService } from '../../../app/service/activity/activity.service';
 
 export interface Activity {
+  id?: number;
   name: string;
   date: string;
   image: string;
@@ -38,7 +39,6 @@ interface SuggestedCity {
 export class ActivitiesComponent {
   @Input() cityName: string = '';
   @Output() activitySelected = new EventEmitter<any>();
-
 
   categories: ActivityCategory[] = [];
   selectedCategory: ActivityCategory | null = null;
@@ -90,17 +90,17 @@ export class ActivitiesComponent {
   selectCategory(category: ActivityCategory) {
     this.selectedCategory = category;
     this.selectedPicture = category?.picture_id;
-  
+
     // 🆕 Émission partielle de l'activité dès sélection de catégorie
     this.activitySelected.emit({
+      id: this.selectedCategory?.id,
       name: this.activityName || '',
       image: this.selectedPicture || '',
       description: this.selectedCity?.description || '',
       category: this.selectedCategory?.name || '',
-      country: this.cityName,
-      
+      country: this.cityName
     });
-  
+
     if (this.cityName && category) {
       this.isLoadingCities = true;
       this.cityService
@@ -122,33 +122,33 @@ export class ActivitiesComponent {
         });
     }
   }
-  
+
   selectPicture(picture: Picture) {
     this.selectedPicture = picture.path;
   }
-
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
   }
 
-
   selectCity(city: SuggestedCity) {
     this.selectedCity = city;
     this.activityName = city.city;
     this.selectedPicture = city.img_full;
-  
+
     this.activitySelected.emit({
+      id: this.selectedCategory?.id,
       name: city.city,
       image: city.img_full,
       description: city.description || '',
-      category: this.selectedCategory?.name || '',
+      category: this.selectedCategory, 
       country: this.cityName,
       longitude: city.longitude,
       latitude: city.latitude
     });
-  
+
     console.log('🎯 Activité émise vers parent :', {
+      id: this.selectedCategory?.id,
       name: city.city,
       image: city.img_full,
       description: city.description || '',
@@ -158,7 +158,7 @@ export class ActivitiesComponent {
       latitude: city.latitude
     });
   }
-  
+
   // onSubmit() {
   //   if (this.selectedCategory && this.selectedCity) {
   //     const activity = {
@@ -174,6 +174,4 @@ export class ActivitiesComponent {
 
   //   }
   // }
-
- 
 }

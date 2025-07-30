@@ -46,6 +46,7 @@
         Ville :
         <ng-container *ngIf="selectedActivity?.name; else noCity">
           {{ selectedActivity.name }}
+          
         </ng-container>
         <ng-template #noCity>Non sélectionnée</ng-template>
       </span>

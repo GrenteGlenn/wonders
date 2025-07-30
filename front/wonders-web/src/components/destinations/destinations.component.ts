@@ -201,6 +201,7 @@ export class DestinationsComponent implements OnInit {
   
         if (country) {
           this.destination = {
+            id: country.id,
             name: country.name,
             image: country.image || 'assets/images/noimages.jpeg',
             description: this.cleanFormattedText(country.description || 'Aucune description disponible.'),
