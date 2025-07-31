@@ -47,7 +47,6 @@ export class StepBodyComponent {
   isModalOpen = false;
   isLoading = false;
   isSubmitting = false;
-  isSubmitting = false;
 
   //stock les données pour l'étape 5
 
