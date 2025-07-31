@@ -1,0 +1,31 @@
+meta {
+  name: Edit QuizResponse
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/quiz-response/{{quizresponseid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "quiz_id": {{quiz_id}},
+    "user_id": {{user_id}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+    
+  bru.setEnvVar("quiz_id",faker.number.int({max: 3, min : 2}));
+  bru.setEnvVar("user_id",faker.number.int({max: 3, min : 2}));
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

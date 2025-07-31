@@ -8,7 +8,6 @@ import roleRoutes from './routes/roleRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import userGroupRoutes from './routes/userGroupRoutes';
 import cors from 'cors';
-import userCheck from './middlewares/userCheck';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
@@ -18,12 +17,12 @@ app.use(cors());
 const port = process.env.PORT;
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+  res.send('Hello World! User Wonders');
 });
 
 app.use('/api/auth', jsonParser, authRoutes);
 
-app.use(userCheck);
+// app.use(userCheck);
 
 app.use('/api/users', jsonParser, userRoutes);
 app.use('/api/address', jsonParser, addressRoutes);

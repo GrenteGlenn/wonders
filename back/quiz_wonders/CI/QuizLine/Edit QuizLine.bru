@@ -1,0 +1,45 @@
+meta {
+  name: Edit QuizLine
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/quiz-line/{{quizlineid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "quiz_id": {{quiz_id}},
+    "question": "{{question}}",
+    "is_required": {{is_required}},
+    "is_text": {{is_text}},
+    "is_boolean": {{is_boolean}},
+    "mutiple_type_answer": {{mutiple_type_answer}},
+    "parent": {{parent}},
+    "response_kind_id": {{response_kind_id}},
+    "step": {{step}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+    
+  bru.setEnvVar("quiz_id",faker.number.int({max: 3, min : 2}));
+  bru.setEnvVar("question",faker.string.alphanumeric({length: 10}));
+  bru.setEnvVar("is_required",faker.datatype.boolean(0.5));
+  bru.setEnvVar("is_text",faker.datatype.boolean(0.5));
+  bru.setEnvVar("is_boolean",faker.datatype.boolean(0.5));
+  bru.setEnvVar("mutiple_type_answer",faker.datatype.boolean(0.5));
+  bru.setEnvVar("parent",faker.number.int({max: 3, min : 2}));
+  bru.setEnvVar("response_kind_id",faker.number.int({max: 3, min : 1}));
+  bru.setEnvVar("step",faker.number.int({max: 3, min : 1}));
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

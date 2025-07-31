@@ -1,0 +1,41 @@
+meta {
+  name: Create Activity
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/activity/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "url": "https://www.exemple.fr/",
+    "name": "{{activityname}}",
+    "description": "{{activitydescription}}",
+    "is_free": true,
+    "duration": 10,
+    "partner": "owner",
+    "price": 180.09,
+    "category_id": 6
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("activityname",faker.company.name());
+  bru.setEnvVar("activitydescription",faker.company.name());
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("activityid", response.id);
+}

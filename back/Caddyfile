@@ -18,6 +18,10 @@ http://quiz.localhost:8080 {
 	reverse_proxy localhost:3004
 }
 
+http://user.localhost:8080 {
+	reverse_proxy localhost:3005
+}
+
 http://localhost:8080 {
 	reverse_proxy localhost:4200
 }

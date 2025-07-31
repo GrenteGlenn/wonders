@@ -1,0 +1,20 @@
+meta {
+  name: Create User Subject
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/like/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "message": "test",
+      "user_id": 1,
+      "subject": 1
+  }
+}
+

@@ -1,0 +1,22 @@
+meta {
+  name: Edit Topic
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{base_url}}/topics/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 2
+}
+
+body:json {
+  {
+      "country_id": 1,
+      "name": "test"
+  }
+}

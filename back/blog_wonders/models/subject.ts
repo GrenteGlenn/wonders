@@ -1,8 +1,7 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/dbConnection';
-import { SubjectInterface } from '../src/interfaces/interfaces'
+import { SubjectInterface } from '../src/interfaces/interfaces';
 import Topic from './topic';
-
 
 interface SubjectCreationAttributes extends Optional<SubjectInterface, 'id'> {}
 
@@ -14,10 +13,10 @@ export default class Subject extends Model<SubjectInterface, SubjectCreationAttr
   declare topic: number;
   declare created_at?: Date;
   declare updated_at?: Date;
-
 }
 
-  Subject.init({
+Subject.init(
+  {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -52,22 +51,21 @@ export default class Subject extends Model<SubjectInterface, SubjectCreationAttr
       type: DataTypes.DATE,
       allowNull: true
     }
-  }, 
-    {
-      sequelize,
-      underscored: true,
-      modelName: 'Subject',
-      timestamps: false
-    }
-  );
+  },
+  {
+    sequelize,
+    underscored: true,
+    modelName: 'Subject',
+    timestamps: false
+  }
+);
 
-  Subject.belongsTo(Topic, {
-    foreignKey: 'topic',
-    as: 'topicDetails'
-  });
-  
+Subject.belongsTo(Topic, {
+  foreignKey: 'topic',
+  as: 'topicDetails'
+});
 
-  Topic.hasMany(Subject, {
-    foreignKey: 'topic',
-    as: 'subjects'
-  });
+Topic.hasMany(Subject, {
+  foreignKey: 'topic',
+  as: 'subjects'
+});

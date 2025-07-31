@@ -1,0 +1,50 @@
+*.wonders-travel.fr {
+    tls {
+        dns ovh {
+                      endpoint "ovh-eu"
+                      application_key 49680bf7dbdfa0b1
+                      application_secret cee9054bbe88af81e4ceb9f0276bc6ca
+                      consumer_key f3e9a8d17f33ebdeab0adf384fd5861f
+                }
+    }
+
+    @front host web.wonders-travel.fr
+    handle @front {
+        reverse_proxy front-web:4200
+    }
+
+    @quizz host quizz.wonders-travel.fr
+    handle @quizz {
+        reverse_proxy back-quizz:3001
+    }
+
+    @users host users.wonders-travel.fr
+    handle @users {
+        reverse_proxy back-user:3001
+}
+
+        @activities host activities.wonders-travel.fr
+    handle @activities {
+        reverse_proxy back-activities:3001
+    }
+
+        @blog host blog.wonders-travel.fr
+    handle @blog {
+        reverse_proxy back-blog:3001
+    }
+
+        @countries host countries.wonders-travel.fr
+    handle @countries {
+        reverse_proxy back-countries:3001
+    }
+
+        @fly host fly.wonders-travel.fr
+    handle @fly {
+        reverse_proxy back-fly:3001
+    }
+
+    # Fallback for otherwise unhandled domains
+    handle {
+        abort
+    }
+}

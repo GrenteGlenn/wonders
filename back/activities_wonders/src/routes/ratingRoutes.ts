@@ -10,7 +10,7 @@ const router = Router();
 
 const ratingController = new RatingController();
 
-router.get('/', (async (req, res) => {
+router.get('/', (async (_, res) => {
   const rating = await ratingController.list();
   res.json(rating);
 }) as RequestHandler);

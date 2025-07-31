@@ -1,0 +1,21 @@
+meta {
+  name: Create Subject
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/subjects/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "title": "test",
+      "content": "test",
+      "user_id": 1,
+      "topic": 1
+  }
+}
+

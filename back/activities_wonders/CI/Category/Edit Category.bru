@@ -1,0 +1,24 @@
+meta {
+  name: Edit Category
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{base_url}}/activity-category/{{categoryid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "picture_id": 1,
+    "name": "{{category}}%"
+  }
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

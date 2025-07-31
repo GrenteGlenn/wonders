@@ -1,0 +1,39 @@
+meta {
+  name: Edit Trip
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{base_url}}/trip/{{tripid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user_id": {{user_id}},
+    "country_id": {{country_id}},
+    "duration": {{duration}},
+    "from_date": {{from_date}},
+    "to_date": {{to_date}},
+    "transportation_id": {{transportation_id}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("user_id",faker.number.int({max: 10, min: 1}))
+  bru.setEnvVar("country_id",faker.number.int({ max: 100, min: 1 }))
+  bru.setEnvVar("duration",faker.number.int({ max: 10 }))
+  bru.setEnvVar("from_date",faker.date.soon())
+  bru.setEnvVar("to_date",faker.date.soon())
+  bru.setEnvVar("transportation_id",faker.number.int({ max: 5, min: 1 }))
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

@@ -1,0 +1,22 @@
+build_back_activities:
+  stage: build
+  image: node:22
+  needs: ["test_back_activities"]
+  before_script:
+    - cd back/activities_wonders
+    - npm install
+  script:
+    - npm install -D esbuild && npm run build
+  tags:
+    - PLI
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  cache:
+    policy: pull-push
+    unprotect: false
+    untracked: false
+    when: on_success
+    paths:
+      - "back/activities_wonders/node_modules"

@@ -17,8 +17,18 @@ interface Body {
   path: string;
 }
 
+interface BodyIds {
+  ids: number[];
+}
+
 router.get('/', (async (req, res) => {
   const activity = await activityController.list();
+  res.json(activity);
+}) as RequestHandler);
+
+router.post('/batch', (async (req, res) => {
+  const { ids } = <BodyIds>req.body;
+  const activity = await activityController.listId({ ids });
   res.json(activity);
 }) as RequestHandler);
 

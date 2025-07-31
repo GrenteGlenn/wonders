@@ -1,0 +1,29 @@
+meta {
+  name: Edit Picture
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/picture/{{pictureid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "path": "{{picturepath}}"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("picturepath",faker.lorem.word())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

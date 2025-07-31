@@ -13,8 +13,8 @@ COPY --from=builder /app/package.json ./
 RUN npm install --omit=dev && npm cache clean --force
 
 RUN mkdir config/
-RUN echo '{"development":{"username":"gpebackactivitiesuser","password":"bAAG5BGaCyE6qXrhoXmQBW8lClvajWQT","database":"gpebackactivities","host":"163.5.107.36","port":"5432","dialect":"postgres"}}' > ./config/config.json
-RUN echo -e 'DB_NAME=gpebackactivities \nDB_USER=gpebackactivitiesuser \nDB_PASSWORD=bAAG5BGaCyE6qXrhoXmQBW8lClvajWQT \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001' > .env
+RUN echo '{"development":{"username":"gpeactivitiesuser","password":"EL6hC6STOdeWIwO3mpXZgkxCq1u2OskC","database":"gpeactivities","host":"163.5.107.36","port":"5432","dialect":"postgres"}}' > ./config/config.json
+RUN echo -e 'DB_NAME=gpeactivities \nDB_USER=gpeactivitiesuser \nDB_PASSWORD=EL6hC6STOdeWIwO3mpXZgkxCq1u2OskC \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001' > .env
 RUN cat .env
 CMD ["node", "dist/index.js"]
 EXPOSE 3001

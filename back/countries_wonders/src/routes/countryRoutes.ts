@@ -11,9 +11,23 @@ const router = Router();
 
 const countryController = new CountryController();
 
+interface Body {
+  ids: number[];
+}
+
 router.get('/', (async (req, res) => {
   try {
     const countries = await countryController.list();
+    res.json(countries);
+  } catch (error) {
+    res.json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/batch', (async (req, res) => {
+  const { ids } = <Body>req.body;
+  try {
+    const countries = await countryController.listId({ ids });
     res.json(countries);
   } catch (error) {
     res.json({ error: error });
@@ -49,6 +63,7 @@ router.post('/', (async (req, res) => {
       body.language,
       body.longitude,
       body.latitude,
+      new Date(),
       new Date(),
       new Date()
     );
@@ -121,9 +136,9 @@ router.post('/ai_get_country', (async (req, res) => {
 
     const populaire = body.populaire ? `Qui est une destination populaire.` : `Qui est une destination populaire.`;
     const prompt =
-      `Je souhaite visiter un ou des pays qui parle ${body.langue.join(', ')}. 
-      Qui a un climat ${body.climat}. 
-      Qui a des paysage de type ${body.paysage}. 
+      `Je souhaite visiter un ou des pays qui parle ${body.langue.join(', ')}.
+      Qui a un climat ${body.climat}.
+      Qui a des paysage de type ${body.paysage}.
       Qui propose ce type d'activité : ${body.activity.join(', ')}.` +
       populaire +
       `le prix par semaine ne doit pas depasser les ${body.budget} euros pour 7 jours et la durée ne doit pas depasser les ${body.duration} jours.
@@ -185,6 +200,7 @@ router.post('/country_image', (async (req, res) => {
     res.status(500).json({ error: error });
   }
 }) as RequestHandler);
+
 router.post('/ai_get_country_fake', ((req, res) => {
   const body = <Pays>req.body;
   try {

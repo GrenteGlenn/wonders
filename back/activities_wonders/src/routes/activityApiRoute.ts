@@ -16,7 +16,7 @@ const router = Router();
 const activityController = new ActivityApiController();
 
 // Va être supprimé, car n'a plus d'utilité
-router.get('/', ((req, res) => {
+router.get('/', ((_, res) => {
   try {
     const activity = activityController.list();
     res.json(activity);

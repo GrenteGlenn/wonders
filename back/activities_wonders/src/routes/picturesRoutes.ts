@@ -9,7 +9,7 @@ interface Body {
   path: string;
 }
 
-router.get('/', (async (req, res) => {
+router.get('/', (async (_, res) => {
   const picture = await pictureController.list();
   res.json(picture);
 }) as RequestHandler);

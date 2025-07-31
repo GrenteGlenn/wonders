@@ -4,10 +4,12 @@
     <div class="flex items-center gap-4">
       <img
         [src]="user?.img ?? genericAvatar"
+        [src]="user?.img ?? genericAvatar"
         class="w-24 h-24 rounded-full object-cover ring-4 ring-blue-500"
         alt="profile"
       />
       <div>
+        <h2 class="text-2xl font-bold">{{ user?.first_name }} {{ user?.last_name }}</h2>
         <h2 class="text-2xl font-bold">{{ user?.first_name }} {{ user?.last_name }}</h2>
         <p class="text-sm text-gray-500">{{ user?.email }}</p>
       </div>

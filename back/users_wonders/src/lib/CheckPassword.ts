@@ -1,6 +1,7 @@
 import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common';
 import * as zxcvbnFrPackage from '@zxcvbn-ts/language-fr';
+import * as zxcvbnEnPackage from '@zxcvbn-ts/language-en';
 import argon2 from 'argon2';
 
 // Fonction pour check si le password est assez fort
@@ -11,8 +12,10 @@ export function checkPassword(password: string) {
     graphs: zxcvbnCommonPackage.adjacencyGraphs,
     dictionary: {
       ...zxcvbnCommonPackage.dictionary,
+      ...zxcvbnEnPackage.dictionary,
       ...zxcvbnFrPackage.dictionary
-    }
+    },
+    useLevenshteinDistance: true
   };
 
   zxcvbnOptions.setOptions(options);

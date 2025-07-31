@@ -1,0 +1,24 @@
+meta {
+  name: Edit QuizAnswerText
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/quiz-answer-text/{{quizzanswertextid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "answer": "{{answer}}",
+    "quiz_line_id": {{quiz_line_id}}
+  }
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

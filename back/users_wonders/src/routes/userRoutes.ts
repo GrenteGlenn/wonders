@@ -8,9 +8,23 @@ const router = Router();
 
 const authController = new AuthController();
 
+interface Body {
+  ids: number[];
+}
+
 router.get('/', (async (req, res) => {
   try {
     const client = await authController.list();
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(404).json('Error! Something went wrong.');
+  }
+}) as RequestHandler);
+
+router.post('/batch', (async (req, res) => {
+  const { ids } = <Body>req.body;
+  try {
+    const client = await authController.listId({ ids });
     res.status(200).json(client);
   } catch (error) {
     res.status(404).json('Error! Something went wrong.');

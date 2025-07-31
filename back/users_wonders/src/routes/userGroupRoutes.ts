@@ -26,6 +26,11 @@ interface AddAndRemoveQuiz {
   group_id: number;
 }
 
+interface CreateGroup {
+  name: string;
+  user_id: number;
+}
+
 router.get('/by-user/:id', (async (req, res) => {
   try {
     const groups = await userGroupController.getAllByUser(parseInt(req.params.id));
@@ -52,8 +57,19 @@ router.post('/add-user', (async (req: Request, res: Response) => {
     }
 
     const groupLink = await userGroupController.addUserToGroup(body.email, body.group_id);
-    console.log(groupLink);
     groupLink ? res.status(201).json(groupLink) : res.status(400).end();
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/', (async (req: Request, res: Response) => {
+  try {
+    const body = <CreateGroup>req.body;
+
+    const group = await userGroupController.create(body.name, body.user_id);
+
+    group ? res.status(201).json(group) : res.status(400).end();
   } catch (error) {
     res.status(500).json({ error: error });
   }

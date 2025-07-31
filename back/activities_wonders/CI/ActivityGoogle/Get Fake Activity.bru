@@ -1,0 +1,32 @@
+meta {
+  name: Get Fake Activity
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/activityApi/get_activity_fake
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "latitude": -33.8670522,
+    "longitude": 151.1957362,
+    "radius": 1500,
+    "language": "fr",
+    "activity": "tourist_attraction",
+    "max": 10
+  }
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}
+
+docs {
+  Get activity for google (fake) 
+}

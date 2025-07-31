@@ -1,0 +1,17 @@
+meta {
+  name: Get Review
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/review/
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

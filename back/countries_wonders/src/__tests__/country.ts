@@ -81,7 +81,7 @@ describe('CountryController', () => {
       'DE',
       'test' as unknown as Text,
       'test',
-      1,
+      1
       // updated_at
     );
 

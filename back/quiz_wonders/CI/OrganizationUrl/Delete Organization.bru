@@ -1,0 +1,17 @@
+meta {
+  name: Delete OrganizationUrl
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/organization-url/{{organisationurlid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 204", function () {
+      expect(res.getStatus()).to.equal(204);
+  });
+}

@@ -20,11 +20,7 @@ app.use('/api/languages', jsonParser, languageRoutes);
 app.use('/api/airports', jsonParser, airportRoutes);
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World! This is Quiz Wonders micro service');
-});
-
-app.get('/test', function (req: Request, res: Response) {
-  res.send('Hello World!');
+  res.send('Hello World! Country Wonders');
 });
 
 app.listen(port, () => {

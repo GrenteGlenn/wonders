@@ -1,0 +1,17 @@
+meta {
+  name: Get Langague By Id check delete
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{base_url}}/languages/{{languageid}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

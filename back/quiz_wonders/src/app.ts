@@ -47,7 +47,7 @@ app.use('/api/trip-hotel', tripHotelRoutes);
 
 // Route par défaut
 app.get('/', (req: Request, res: Response) => {
-  res.json('Hello World!');
+  res.send('Hello World! Quiz Wonders');
 });
 
 // Démarrer le serveur

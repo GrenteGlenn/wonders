@@ -8,7 +8,7 @@ export interface BodyCountry {
   latitude: number;
   created_at: Date;
   updated_at: Date;
-  data: string;
+  updated_at_description: Date;
 }
 
 export interface Pays {

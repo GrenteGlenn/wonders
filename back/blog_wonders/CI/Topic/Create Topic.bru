@@ -1,0 +1,18 @@
+meta {
+  name: Create Topic
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/topics/
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "country_id": 1,
+      "name": "test"
+  }
+}

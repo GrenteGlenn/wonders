@@ -1,0 +1,17 @@
+meta {
+  name: Delete TripDayActivity
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/trip-day-activity/{{tripdayactivityid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 204", function () {
+      expect(res.getStatus()).to.equal(204);
+  });
+}
