@@ -20,7 +20,7 @@ export default class TripTransportationController {
     url: string,
     status: Status,
     created_at: Date,
-    updated_at: Date  
+    updated_at: Date
   ) {
     try {
       return await TripTransportation.create({ from_date, to_date, price, url, status, created_at, updated_at });

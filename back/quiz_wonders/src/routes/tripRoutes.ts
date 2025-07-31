@@ -42,7 +42,7 @@ router.get('/:id', (async (req, res) => {
 //   }
 // }) as RequestHandler);
 
-router.get('/user-full-trip/:id', async (req, res) => {
+router.get('/user-full-trip/:id', (async (req, res) => {
   try {
     const trips = await tripController.fullTrips(parseInt(req.params.id, 10));
     trips.length
@@ -51,7 +51,7 @@ router.get('/user-full-trip/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }
-});
+}) as RequestHandler);
 
 router.get('/user-full-trip-detail/:id', (async (req, res) => {
   try {
