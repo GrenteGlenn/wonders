@@ -10,6 +10,11 @@ interface AddUserToGroupBody {
   group_id: number;
 }
 
+interface CreateGroup {
+  name: string;
+  user_id: number;
+}
+
 interface AcceptJoinGroupBody {
   user_id: number;
   group_id: number;
@@ -121,6 +126,18 @@ router.patch('/remove-quiz', (async (req: Request, res: Response) => {
     const body = <AddAndRemoveQuiz>req.body;
     const result = await userGroupController.removeUserQuizAnswerToUserGroup(body.user_id, body.group_id);
     result !== null ? res.status(200).end() : res.status(400).end();
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/', (async (req: Request, res: Response) => {
+  try {
+    const body = <CreateGroup>req.body;
+
+    const group = await userGroupController.create(body.name, body.user_id);
+
+    res.status(201).json(group);
   } catch (error) {
     res.status(500).json({ error: error });
   }

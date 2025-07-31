@@ -22,14 +22,11 @@ export class FlyComponent {
   isSearching = false;
   searchCompleted = false;
   flights: any[] = [];
-  filteredFlights: any[] = []; // Vols filtrés
+  filteredFlights: any[] = []; 
   errorMessage: string | null = null;
   selectedCityName: string = '';
   destinationAirports: Airport[] = [];
   originAirports: Airport[] = [];
-
-  
-
 
   // Pour la pagination des résultats
   currentPage = 1;
@@ -205,7 +202,8 @@ export class FlyComponent {
       currency: flight.price.currency,
       departureTime: flight.itineraries[0].segments[0].departure.at,
       arrivalTime: flight.itineraries[0].segments[flight.itineraries[0].segments.length - 1].arrival.at,
-      duration: flight.itineraries[0].duration
+      duration: flight.itineraries[0].duration,
+      vol: flight.itineraries[0].segments[0].number
     };
   
     this.flightSelected.emit(selected);

@@ -122,90 +122,93 @@
 
   <!-- Résultats -->
   <div class="px-4 py-6" *ngIf="displayedHotels && displayedHotels.length > 0 && !isLoadingOffers">
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-6">
-      <div
-        *ngFor="let hotel of paginatedHotels"
-        [class.border-2]="isSelected(hotel)"
-        [class.border-teal-600]="isSelected(hotel)"
-        [class.cursor-pointer]="true"
-        class="bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-xl transition duration-300 border border-transparent"
-      >
-        <div class="p-5 space-y-3">
-          <!-- Titre -->
-          <div class="flex rounded-md">
-            <div class="flex items-center gap-2">
-              <h3 class="text-lg font-bold text-gray-800">{{ hotel.nameFormatted }}</h3>
-            </div>
-          </div>
+    <div class="overflow-auto rounded-lg shadow">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-teal-600 text-white">
+          <tr>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Nom</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Localisation</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Offre</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider">Mis à jour</th>
+            <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-100">
+          <ng-container *ngFor="let hotel of paginatedHotels">
+            <ng-container *ngIf="hotel.offers?.length > 0; else noOffersTemplate">
+              <tr *ngFor="let offer of hotel.offers" [class.bg-gray-50]="isSelected(hotel)">
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <div class="font-medium text-gray-800">{{ hotel.nameFormatted }}</div>
+                </td>
 
-          <!-- Badge Offres disponibles -->
-          <div *ngIf="hotel.hasOffers" class="flex">
-            <span
-              class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded-full flex items-center gap-1"
-            >
-              <lucide-icon name="check" class="h-3 w-3"></lucide-icon>
-              Offres disponibles
-            </span>
-          </div>
+                <td class="px-4 py-3 text-sm text-gray-600">
+                  <div>{{ hotel.address?.cityName || 'Ville inconnue' }}</div>
+                  <div class="text-xs text-gray-400">
+                    {{ hotel.address?.countryCode || 'Pays inconnu' }} – à {{ hotel.distance?.value || '?' }}
+                    {{ hotel.distance?.unit || 'km' }}
+                  </div>
+                </td>
 
-          <!-- Infos -->
-          <div class="space-y-1 text-sm text-gray-600">
-            <div class="flex items-center gap-2">
-              <lucide-icon name="map-pin" class="h-4 w-4 text-gray-400"></lucide-icon>
-              <span>{{ hotel.address?.countryCode || 'Pays inconnu' }}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <span>À {{ hotel.distance?.value }} {{ hotel.distance?.unit }}</span>
-            </div>
-          </div>
+                <td class="px-4 py-3 text-sm">
+                  {{ offer.room?.typeEstimated?.category || offer.room?.type || 'Chambre' }}
+                  <div class="text-xs italic text-gray-500">
+                    {{ offer.room?.description?.text || 'Pas de description' }}
+                  </div>
+                </td>
 
-          <!-- Offres (nouvelle section) -->
-          <div *ngFor="let offer of hotel.offers" class="border-t pt-2">
-            <div class="flex justify-between items-center">
-              <span class="font-medium">
-                {{ offer.room?.typeEstimated?.category || offer.room?.type || 'Chambre standard' }}
-              </span>
-              <span class="text-teal-700 font-bold">
-                {{ offer.price?.total || 'N/A' }} {{ offer.price?.currency || '€' }}
-              </span>
-            </div>
-            <div class="text-xs text-gray-600 mt-1 flex items-center justify-between">
-              <span>{{ offer.checkInDate || 'N/A' }} - {{ offer.checkOutDate || 'N/A' }}</span>
-              <span>{{ offer.guests?.adults || '2' }} adulte(s)</span>
-            </div>
-            <div class="text-xs text-gray-500 italic mt-1">
-              {{ offer.room?.description?.text || 'Aucune description disponible' }}
-            </div>
-          </div>
+                <td class="px-4 py-3 text-xs text-gray-500">
+                  {{ hotel.lastUpdate | date: 'short' }}
+                </td>
 
-          <!-- Footer -->
-          <div class="mt-4 border-t pt-3 text-xs text-gray-500 flex items-center justify-between">
-            <span>Maj : {{ hotel.lastUpdate | date: 'short' }}</span>
-            <button
-              class="text-teal-600 font-medium hover:text-teal-800 text-sm flex items-center gap-1"
-              (click)="toggleOffers(hotel)"
-              [class.text-gray-400]="hotel.isLoadingOffers"
-              [disabled]="hotel.isLoadingOffers"
-            >
-              <lucide-icon
-                name="search"
-                class="h-4 w-4"
-                *ngIf="!hotel.showOffers && !hotel.isLoadingOffers"
-              ></lucide-icon>
-              <lucide-icon name="x" class="h-4 w-4" *ngIf="hotel.showOffers && !hotel.isLoadingOffers"></lucide-icon>
-              <lucide-icon name="loader" class="h-4 w-4 animate-spin" *ngIf="hotel.isLoadingOffers"></lucide-icon>
-              {{ hotel.showOffers ? 'Masquer' : 'Offres' }}
-            </button>
-            <button
-              (click)="selectHotel(hotel)"
-              class="w-34 px-4 float-right bg-teal-600 hover:bg-teal-700 text-white rounded-md text-sm font-medium"
-            >
-              Sélectionner
-            </button>
-          </div>
-        </div>
-      </div>
+                <td class="px-4 py-3 text-center">
+                  <button
+                    (click)="selectHotel(hotel)"
+                    class="px-4 py-1 text-sm font-medium bg-teal-600 hover:bg-teal-700 text-white rounded-md"
+                  >
+                    Sélectionner
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+
+            <!-- Sinon : pas d’offres -->
+            <ng-template #noOffersTemplate>
+              <tr [class.bg-gray-50]="isSelected(hotel)">
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <div class="font-medium text-gray-800">{{ hotel.nameFormatted }}</div>
+                </td>
+
+                <td class="px-4 py-3 text-sm text-gray-600">
+                  <div>{{ hotel.address?.cityName || 'Ville inconnue' }}</div>
+                  <div class="text-xs text-gray-400">
+                    {{ hotel.address?.countryCode || 'Pays inconnu' }} – à {{ hotel.distance?.value || '?' }}
+                    {{ hotel.distance?.unit || 'km' }}
+                  </div>
+                </td>
+
+                <td class="px-4 py-3 text-sm italic text-gray-400">Aucune offre disponible</td>
+
+                <!-- <td class="px-4 py-3 text-sm text-gray-400">–</td> -->
+
+                <td class="px-4 py-3 text-xs text-gray-400">
+                  {{ hotel.lastUpdate ? (hotel.lastUpdate | date: 'short') : '—' }}
+                </td>
+
+                <td class="px-4 py-3 text-center">
+                  <button
+                    (click)="selectHotel(hotel)"
+                    class="px-4 py-1 text-sm font-medium bg-teal-600 hover:bg-teal-700 text-white rounded-md"
+                  >
+                    Sélectionner
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </ng-container>
+        </tbody>
+      </table>
     </div>
+
     <!-- Pagination -->
     <div class="flex justify-center items-center space-x-4 mt-8" *ngIf="totalPages > 1">
       <button

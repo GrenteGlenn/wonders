@@ -13,6 +13,9 @@ import { RequirementsComponent } from '../../requirements/requirements.component
 import { FullTrip, TripService } from '../../../app/service/trip/trip.service';
 import { Router } from '@angular/router';
 import { TranslateService } from '../../../app/service/translate/translate.service';
+import { UsersService } from '../../../app/service/users/users.service';
+import { Country } from '../../../app/model/Country';
+import { identity } from 'rxjs';
 
 @Component({
   selector: 'app-step-body',
@@ -51,18 +54,21 @@ export class StepBodyComponent {
   selectedActivity: any = null;
   selectedFlight: any = null;
   selectedHotel: any = null;
+  selectedUser: any = null;
 
   destinationParams: { [key: string]: string } = {};
 
   constructor(
     private countryService: CountryService,
     private router: Router,
-    public translateService: TranslateService
+    public translateService: TranslateService,
+    private user: UsersService
   ) {}
 
   handleDestinationSelected(destination: Destination) {
     // this.selectedDestination = destination;
     this.selectedDestination = {
+      id: destination.id,
       name: destination.name,
       image: destination.image,
       description: destination.description,
@@ -70,11 +76,20 @@ export class StepBodyComponent {
       latitude: destination.latitude,
       longitude: destination.longitude
     };
-    // console.log(' Destination reçue 1 :', destination);
+    console.log(' Destination reçue 1 :', destination);
   }
   handleActivitySelected(activity: any) {
-    this.selectedActivity = activity;
-    // console.log(' Activité reçue :', activity);
+    this.selectedActivity = {
+      id: activity.category.id,
+      category: activity.category,
+      name: activity.name,
+      description: activity.description,
+      image: activity.image,
+      latitude: activity.latitude,
+      longitude: activity.longitude
+    };
+
+    console.log(' Activité reçue 556 :', activity);
   }
   handleFlightSelected(flight: any) {
     this.selectedFlight = flight;
@@ -109,7 +124,7 @@ export class StepBodyComponent {
       if (this.currentStep === 4) {
         console.log('--- Informations accumulées avant Hôtel ---');
         console.log('Destination :', this.selectedDestination);
-        console.log('Activité :', this.selectedActivity);
+        console.log('Activité :', this.selectedActivity.category.id);
         console.log('Vol :', this.selectedFlight);
       }
       if (this.currentStep === 5) {
@@ -139,53 +154,82 @@ export class StepBodyComponent {
       return;
     }
 
-    const payload: FullTrip = {
-      trip: {
-        user_id: 1,
-        country_id: 33,
-        duration: 10,
-        from_date: this.selectedFlight.departureTime,
-        to_date: this.selectedFlight.arrivalTime
-      },
-      trip_transportation: {
-        from_date: this.selectedFlight.departureTime,
-        to_date: this.selectedFlight.arrivalTime,
-        price: +this.selectedFlight.price,
-        url: 'https://www.vol.com',
-        status: 'APayer'
-      },
-      trip_cities: [
-        {
-          city_id: 1,
-          transportations: {
+    const activityId = this.selectedActivity?.id;
+
+    if (!activityId) {
+      this.toastService.error('Aucune activité sélectionnée.');
+      return;
+    }
+
+    this.user.getUserInfo().subscribe({
+      next: (user) => {
+        const payload: FullTrip = {
+          trip: {
+            user_id: user.id,
+            country_id: this.selectedDestination?.id || 0,
+            duration: 10,
+            from_date: this.selectedFlight.departureTime,
+            to_date: this.selectedFlight.arrivalTime
+          },
+          trip_transportation: {
             from_date: this.selectedFlight.departureTime,
             to_date: this.selectedFlight.arrivalTime,
             price: +this.selectedFlight.price,
             url: 'https://www.vol.com',
             status: 'APayer'
           },
-          tripCityDays: [{ date: '2025-08-02' }, { date: '2025-08-03' }],
-          tripDayActivities: [
-            { activity_id: 101, status: 'Reserve' },
-            { activity_id: 102, status: 'Reserve' },
-            { activity_id: 103, status: 'Reserve' }
-          ],
-          tripCityHotel: {
-            trip_city_id: 1,
-            name: this.selectedHotel.name,
-            price: 100,
-            from: '2025-08-02',
-            to: '2025-08-03',
-            url: 'https://www.vol32.com',
-            adults: 2,
-            children: 0,
-            longitude: this.selectedHotel.longitude,
-            latitude: this.selectedHotel.latitude,
-            status: 'APayer'
+          trip_cities: [
+            {
+              city_id: 1,
+              transportations: {
+                from_date: this.selectedFlight.departureTime,
+                to_date: this.selectedFlight.arrivalTime,
+                price: +this.selectedFlight.price,
+                url: 'https://www.vol.com',
+                status: 'APayer'
+              },
+              tripCityDays: [{ date: '2025-08-02' }, { date: '2025-08-03' }],
+              tripDayActivities: [
+                {
+                  activity_id: activityId,
+                  status: 'Reserve'
+                }
+              ],
+              tripCityHotel: {
+                trip_city_id: 1,
+                name: this.selectedHotel.name,
+                price: 100,
+                from: '2025-08-02',
+                to: '2025-08-03',
+                url: 'https://www.vol32.com',
+                adults: 2,
+                children: 0,
+                longitude: this.selectedHotel.longitude,
+                latitude: this.selectedHotel.latitude,
+                status: 'APayer'
+              }
+            }
+          ]
+        };
+
+        this.tripService.createFullTrip(payload).subscribe({
+          next: () => {
+            this.toastService.success('Voyage enregistré avec succès !');
+            this.isSubmitting = true;
+            this.currentStep = 1;
+            this.router.navigate(['/', this.translateService.currentLang, 'home']);
+          },
+          error: (err) => {
+            console.error('Erreur lors de la création du voyage :', err);
+            this.toastService.error('Erreur lors de la création du voyage');
+            this.isSubmitting = false;
           }
-        }
-      ]
-    };
+        });
+      },
+      error: () => {
+        this.toastService.error("Impossible de récupérer l'utilisateur connecté.");
+      }
+    });
 
     // this.tripService.createFullTrip(payload).subscribe({
     //   next: () => {
@@ -197,20 +241,6 @@ export class StepBodyComponent {
     //     this.toastService.error('Erreur lors de la création du voyage');
     //   }
     // });
-
-    this.tripService.createFullTrip(payload).subscribe({
-      next: () => {
-        this.toastService.success('Voyage enregistré avec succès !');
-        this.isSubmitting = true;
-        this.currentStep = 1;
-        this.router.navigate(['/', this.translateService.currentLang, 'home']);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la création du voyage :', err);
-        this.toastService.error('Erreur lors de la création du voyage');
-        this.isSubmitting = false;
-      }
-    });
   }
 
   loadCountries() {
