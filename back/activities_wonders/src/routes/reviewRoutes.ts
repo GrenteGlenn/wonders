@@ -12,7 +12,7 @@ const router = Router();
 
 const reviewController = new ReviewController();
 
-router.get('/', (async (req, res) => {
+router.get('/', (async (_, res) => {
   const review = await reviewController.list();
   res.json(review);
 }) as RequestHandler);

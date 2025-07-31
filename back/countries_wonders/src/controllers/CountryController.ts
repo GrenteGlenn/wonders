@@ -20,6 +20,27 @@ class CountryController {
     return countries;
   }
 
+  async listId({ ids }: { ids: number[] }) {
+    const countries = await Country.findAll({
+      where: {
+        id: ids
+      },
+      attributes: {
+        exclude: [
+          'language',
+          'description',
+          'image',
+          'longitude',
+          'latitude',
+          'created_at',
+          'updated_at',
+          'updated_at_description'
+        ]
+      }
+    });
+    return countries;
+  }
+
   async getOneByName(name: string) {
     const country = await Country.findOne({ where: { name: name } });
 
@@ -75,6 +96,7 @@ class CountryController {
     language: number,
     longitude: number,
     latitude: number,
+    updated_at_description: Date,
     created_at: Date,
     updated_at: Date
   ) {
@@ -86,6 +108,7 @@ class CountryController {
       language,
       longitude,
       latitude,
+      updated_at_description,
       created_at,
       updated_at
     });

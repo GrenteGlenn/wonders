@@ -1,141 +1,36 @@
-stages:
-  - rule
-  - lint
-#  - test
+include:
+  - local: 'ci/rules/block-unallowed-branches.yml'
 
-block-unallowed-branches:
-  stage: rule
-  image: alpine
-  script:
-    - |
-      echo "Merge refusé : seule 'back_dev' ou 'dev_web' peuvent être mergées dans 'main'"
-      exit 1
-  rules:
-    - if: '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "back_dev" && $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME != "dev_web"'
-      when: always
-    - when: never
+  # Lint jobs
+  - local: 'ci/lint/users.yml'
+  - local: 'ci/lint/quizz.yml'
+  - local: 'ci/lint/countries.yml'
+  - local: 'ci/lint/activities.yml'
 
+  # Test jobs
+  - local: 'ci/test/users.yml'
+  - local: 'ci/test/countries.yml'
+  - local: 'ci/test/activities.yml'
+
+  # Build jobs
+  - local: 'ci/build/users.yml'
+  - local: 'ci/build/countries.yml'
+  - local: 'ci/build/activities.yml'
+
+  # Docker jobs
+  # - local: 'ci/docker/users.yml'
+  # - local: 'ci/docker/countries.yml'
+  # - local: 'ci/docker/activities.yml'
 
 workflow:
   rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/ 
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
-variables:
-  NODE_ENV: dev
-
-
-lint_back_user:
-  stage: lint
-  image: node:22
-  before_script:
-    - cd back/users_wonders
-    - npm install
-  script:
-    - npm run lint
-  tags:
-    - PLI
-  rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-      when: never
-  cache:
-    policy: pull-push
-    unprotect: false
-    untracked: false
-    when: on_success
-    paths:
-      - "back/users_wonders/node_modules"
-
-lint_back_quizz:
-  stage: lint
-  image: node:22
-  before_script:
-    - cd back/quiz_wonders
-    - npm install
-  script:
-    - npm run lint
-  tags:
-    - PLI
-  rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  cache:
-    policy: pull-push
-    unprotect: false
-    untracked: false
-    when: on_success
-    paths:
-      - "back/quiz_wonders/node_modules"
-
-lint_back_country:
-  stage: lint
-  image: node:22
-  before_script:
-    - cd back/countries_wonders
-    - npm install
-  script:
-    - npm run lint
-  tags:
-    - PLI
-  rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  cache:
-    policy: pull-push
-    unprotect: false
-    untracked: false
-    when: on_success
-    paths:
-      - "back/countries_wonders/node_modules"
-
-lint_back_activities:
-  stage: lint
-  image: node:22
-  before_script:
-    - cd back/activities_wonders
-    - npm install
-  script:
-    - npm run lint
-  tags:
-    - PLI
-  rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
-      when: never
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-  cache:
-    policy: pull-push
-    unprotect: false
-    untracked: false
-    when: on_success
-    paths:
-      - "back/activities_wonders/node_modules"
-
-#test_back_users:
-#  stage: test
-#  image: node:22
-#  before_script:
-#    - cd back/users_wonders
-#    - npm install
-#    - npm install -g @usebruno/cli
-#  script:
-#    - npm run dev &
-#    - bru run --env-var address=http://localhost:3001
-#  tags:
-#    - PLI
-#  rules:
-#    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
-#      when: never
-#    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-#  cache:
-#    policy: pull-push
-#    unprotect: false
-#    untracked: false
-#    when: on_success
-#    paths:
-#      - "back/users_wonders/node_modules"
-
+stages:
+  - rule
+  - lint
+  - test
+  - build
+  # - docker

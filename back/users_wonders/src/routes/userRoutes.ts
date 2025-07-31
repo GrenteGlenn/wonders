@@ -2,14 +2,29 @@ import { RequestHandler, Router } from 'express';
 import AuthController from '../controllers/AuthController';
 import { decryptJWT } from '../lib/JWT';
 import { JwtPayload } from '../interfaces/Global';
+import { UserUpdateInterface } from '../interfaces/UserInterface';
 
 const router = Router();
 
 const authController = new AuthController();
 
+interface Body {
+  ids: number[];
+}
+
 router.get('/', (async (req, res) => {
   try {
     const client = await authController.list();
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(404).json('Error! Something went wrong.');
+  }
+}) as RequestHandler);
+
+router.post('/batch', (async (req, res) => {
+  const { ids } = <Body>req.body;
+  try {
+    const client = await authController.listId({ ids });
     res.status(200).json(client);
   } catch (error) {
     res.status(404).json('Error! Something went wrong.');
@@ -71,15 +86,15 @@ router.get('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-// router.put('/:id', (async (req, res) => {
-//   try {
-//     const body = <UserUpdateInterface>req.body;
-//     const client = await authController.update(parseInt(req.params.id, 10), body);
-//     res.status(200).json(client);
-//   } catch (error) {
-//     res.status(500).json(error);
-//   }
-// }) as RequestHandler);
+router.put('/:id', (async (req, res) => {
+  try {
+    const body = <UserUpdateInterface>req.body;
+    const client = await authController.update(parseInt(req.params.id, 10), body);
+    res.status(200).json(client);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+}) as RequestHandler);
 
 router.delete('/:id', (async (req, res) => {
   try {

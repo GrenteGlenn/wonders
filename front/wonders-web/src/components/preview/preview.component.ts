@@ -16,19 +16,18 @@ export class PreviewComponent {
   @Input() flight: any;
   @Input() hotel: any;
 
-
   get centerLat(): number | null {
     return this.activity?.latitude ?? this.destination?.latitude ?? null;
   }
-  
+
   get centerLng(): number | null {
     return this.activity?.longitude ?? this.destination?.longitude ?? null;
   }
-  
+
   // Liste des marqueurs à afficher
   get markers(): { lat: number; lng: number; label: string }[] {
     const result: { lat: number; lng: number; label: string }[] = [];
-  
+
     if (this.destination?.latitude && this.destination?.longitude) {
       result.push({
         lat: this.destination.latitude,
@@ -36,7 +35,7 @@ export class PreviewComponent {
         label: this.destination.name ?? 'Pays'
       });
     }
-  
+
     if (this.activity?.latitude && this.activity?.longitude) {
       result.push({
         lat: this.activity.latitude,
@@ -44,7 +43,7 @@ export class PreviewComponent {
         label: this.activity.name ?? 'Ville'
       });
     }
-  
+
     return result;
   }
   showMore = false;

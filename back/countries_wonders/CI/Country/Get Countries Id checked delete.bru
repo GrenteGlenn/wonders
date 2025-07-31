@@ -1,0 +1,17 @@
+meta {
+  name: Get Countries Id checked delete
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{base_url}}/countries/6
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

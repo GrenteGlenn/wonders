@@ -1,7 +1,7 @@
 'use strict';
 
 import { DataTypes, Model, Optional, Sequelize } from 'sequelize';
-import UserInterface from '../src/interfaces/UserInterface';
+import { UserInterface } from '../src/interfaces/UserInterface';
 import LanguageInterface from '../src/interfaces/LanguageInterface';
 import sequelize from '../config/dbConnection';
 import Language from './language';
@@ -11,7 +11,6 @@ interface UserCreationAttributes extends Optional<UserInterface, 'id'> {}
 
 class User extends Model<UserInterface, UserCreationAttributes> implements UserInterface {
   declare id: number;
-
   declare first_name: string;
   declare last_name: string;
   declare email: string;
@@ -61,7 +60,7 @@ User.init(
     },
     img: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: true
     },
     created_at: {
       type: DataTypes.DATE,

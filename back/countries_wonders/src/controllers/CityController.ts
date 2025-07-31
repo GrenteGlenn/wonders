@@ -3,7 +3,7 @@ import Country from '../../models/country';
 
 class CityController {
   async list() {
-    const countries = await City.findAll({
+    const city = await City.findAll({
       include: [
         {
           model: Country,
@@ -12,7 +12,19 @@ class CityController {
         }
       ]
     });
-    return countries;
+    return city;
+  }
+
+  async listId({ ids }: { ids: number[] }) {
+    const city = await Country.findAll({
+      where: {
+        id: ids
+      },
+      attributes: {
+        exclude: ['description', 'image', 'longitude', 'latitude', 'created_at', 'updated_at', 'updated_at_description']
+      }
+    });
+    return city;
   }
 
   async getOneByName(name: string) {

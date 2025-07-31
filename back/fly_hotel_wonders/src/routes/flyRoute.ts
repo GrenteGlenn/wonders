@@ -2,7 +2,7 @@ import { RequestHandler, Router } from 'express';
 import FlyController from '../controllers/FlyController';
 import { getFlightOffers } from '../services/Amadeus';
 import { z } from 'zod';
-import { FlightOfferSchema } from '../interface/Global';
+import { flightOfferSchema } from '../interface/Global';
 
 const FlyParamsSchema = z.object({
   originLocationCode: z.string().length(3).toUpperCase(),
@@ -45,6 +45,27 @@ router.get('/list', (async (req, res) => {
       maxPrice
     } = req.query;
 
+    const options = {
+      originLocationCode,
+      destinationLocationCode,
+      departureDate,
+      returnDate,
+      adults,
+      children,
+      nonStop: nonStop !== 'false',
+      maxPrice: parseInt(maxPrice as string, 10)
+    };
+
+    const validationResult = FlyParamsSchema.safeParse(options);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        status: 'error',
+        message: 'Paramètres de recherche invalides',
+        errors: validationResult.error.format()
+      });
+    }
+
     const flightOffers = (await getFlightOffers(
       originLocationCode,
       destinationLocationCode,
@@ -54,31 +75,16 @@ router.get('/list', (async (req, res) => {
       children,
       nonStop,
       maxPrice
-    )) as typeof FlightOfferSchema;
+    )) as typeof flightOfferSchema;
 
-    const parsedQuery = {
-      originLocationCode: typeof originLocationCode === 'string' ? originLocationCode.toUpperCase() : undefined,
-      destinationLocationCode:
-        typeof destinationLocationCode === 'string' ? destinationLocationCode.toUpperCase() : undefined,
-      departureDate: typeof departureDate === 'string' ? departureDate : undefined,
-      returnDate: typeof returnDate === 'string' ? returnDate : undefined,
-      adults: typeof adults === 'string' ? adults : '2',
-      children: typeof children === 'string' ? children : undefined,
-      nonStop: typeof nonStop === 'string' ? nonStop === 'true' : false,
-      maxPrice: typeof maxPrice === 'string' && !isNaN(Number(maxPrice)) ? Number(maxPrice) : undefined
-    };
+    // if (flightOffers[0].description) {
+    //   return res.status(503).json({
+    //     error: 'External service error',
+    //     message: 'A technical problem occurred. Please try again later.'
+    //   });
+    // }
 
-    const validationResult = FlyParamsSchema.safeParse(parsedQuery);
-
-    if (!validationResult.success) {
-      return res.status(400).json({
-        status: 'error',
-        message: 'Paramètres de recherche invalides',
-        errors: validationResult.error.format()
-      });
-    }
-    const validatedOffers = z.array(FlightOfferSchema).parse(flightOffers);
-    console.log('REQ QUERY', req.query);
+    const validatedOffers = z.array(flightOfferSchema).parse(flightOffers);
 
     return res.status(200).json({
       status: 'success',

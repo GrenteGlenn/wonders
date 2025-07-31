@@ -1,0 +1,36 @@
+meta {
+  name: Edit Review
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/review/:id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  id: 6
+}
+
+body:json {
+  {
+    "review": "{{review}}",
+    "rating_id": 1,
+    "user_id": 1,
+    "activity_id": 1
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("review",faker.lorem.text())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

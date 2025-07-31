@@ -1,0 +1,17 @@
+meta {
+  name: Get ResponseKind by id
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/response-kind/{{responsekindid}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+}

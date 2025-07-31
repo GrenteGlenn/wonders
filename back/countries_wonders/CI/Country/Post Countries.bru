@@ -1,0 +1,55 @@
+meta {
+  name: Post Countries
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/countries
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "{{countryname}}",
+    "code": "FR",
+    "description": "La France est un pays magnifique.",
+    "image": "https://example.com/france.jpg",
+    "language": 1,
+    "longitude": {{longitude}},
+    "latitude": {{latitude}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  // Configuration pour les coordonnées européennes
+  const europeBounds = {
+    latitude: {
+      min: 35,
+      max: 71,
+      precision: 4
+    },
+    longitude: {
+      min: -25,
+      max: 40
+    }
+  };
+  
+  bru.setEnvVar("latitude",faker.location.latitude(europeBounds.latitude));
+  bru.setEnvVar("longitude",faker.location.longitude(europeBounds.longitude));
+  
+  bru.setEnvVar("countryname",faker.lorem.word())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("countryid", response.id);
+}

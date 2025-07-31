@@ -1,0 +1,35 @@
+meta {
+  name: Create Organization
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/organization/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user_id": {{User_id}},
+    "status_id": {{Status_id}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("User_id",faker.number.int({max: 10, min: 1}))
+  bru.setEnvVar("Status_id",faker.number.int({ max: 3, min: 1 }))
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("organisationid", response.id);
+}

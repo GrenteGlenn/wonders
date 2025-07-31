@@ -1,0 +1,47 @@
+meta {
+  name: Save Trip
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/trip
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "user_id": {{user_id}},
+    "country_id": {{country_id}},
+    "duration": {{duration}},
+    "from_date": {{from_date}},
+    "to_date": {{to_date}},
+    "transportation_id": {{transportation_id}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("user_id",faker.number.int({max: 10, min: 1}))
+  bru.setEnvVar("country_id",faker.number.int({ max: 100, min: 1 }))
+  bru.setEnvVar("duration",faker.number.int({ max: 10 }))
+  bru.setEnvVar("from_date",faker.date.soon())
+  bru.setEnvVar("to_date",faker.date.soon())
+  bru.setEnvVar("transportation_id",faker.number.int({ max: 5, min: 1 }))
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("tripid", response.id);
+}

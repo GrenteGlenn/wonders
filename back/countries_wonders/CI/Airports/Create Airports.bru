@@ -1,0 +1,53 @@
+meta {
+  name: Create Airports
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/airports
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "name": "{{airportname}}",
+      "code": "TS",
+      "city_id": 1,
+      "longitude": {{longitude}},
+      "latitude": {{latitude}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  // Configuration pour les coordonnées européennes
+  const europeBounds = {
+    latitude: {
+      min: 35,
+      max: 71,
+      precision: 4
+    },
+    longitude: {
+      min: -25,
+      max: 40
+    }
+  };
+  
+  
+  bru.setEnvVar("latitude",faker.location.latitude(europeBounds.latitude));
+  bru.setEnvVar("longitude",faker.location.longitude(europeBounds.longitude));
+  bru.setEnvVar("airportname",faker.lorem.word())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("airportid", response.id);
+}

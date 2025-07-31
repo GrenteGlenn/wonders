@@ -1,0 +1,17 @@
+meta {
+  name: Delete Tags
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/tags/{{tagid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 204", function () {
+      expect(res.getStatus()).to.equal(204);
+  });
+}

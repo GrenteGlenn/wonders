@@ -1,0 +1,79 @@
+<div class="chat-container">
+  <!-- Header -->
+  <mat-toolbar class="chat-header">
+
+    <div class="header-content">
+      Discussion - {{ currentGroup?.name }}
+    </div>
+  </mat-toolbar>
+
+  <div class="chat-content">
+    <mat-sidenav-container class="sidenav-container">
+
+      <!-- Messages -->
+      <mat-sidenav-content class="messages-container">
+        <div class="messages-area" #messagesContainer>
+          <div
+            *ngFor="let message of messages; trackBy: trackByMessage"
+            class="message-wrapper"
+            [class.own-message]="isOwnMessage(message)">
+            <div class="message-bubble" [class.own]="isOwnMessage(message)">
+              <div class="message-header" *ngIf="!isOwnMessage(message)">
+                <img
+                  [src]="message.avatar || 'https://ui-avatars.com/api/?name=' + message.username"
+                  [alt]="message.username"
+                  class="message-avatar">
+                <span class="sender-name">{{ message.username }}</span>
+              </div>
+              <div class="message-text">{{ message.text }}</div>
+              <div class="message-time">
+                {{ formatTime(message.timestamp) }}
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="messages.length === 0" class="empty-state">
+            <mat-icon>chat_bubble_outline</mat-icon>
+            <p>Aucun message pour le moment</p>
+            <p>Soyez le premier à démarrer la conversation !</p>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="message-input-container">
+          <mat-form-field appearance="outline" class="message-input">
+            <input
+              matInput
+              [(ngModel)]="newMessage"
+              (keyup.enter)="sendMessage()"
+              placeholder="Tapez votre message..."
+              #messageInput>
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="sendMessage()"
+              [disabled]="!newMessage.trim()"
+              class="send-button">
+              <mat-icon>send</mat-icon>
+            </button>
+          </mat-form-field>
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</div>
+
+<div
+  *ngIf="openQuizModal"
+  class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
+    <h4 class="text-l font-semibold mb-4">Ajouter un questionnaire au groupe</h4>
+        <button
+          type="button"
+          (click)="openQuizModal = false"
+          class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+          Fermer
+        </button>
+  </div>
+</div>

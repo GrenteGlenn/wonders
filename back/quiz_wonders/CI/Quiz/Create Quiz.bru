@@ -1,0 +1,35 @@
+meta {
+  name: Create Quiz
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/quiz/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "{{quizzname}}",
+    "tag_id": {{tag_id}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+    
+  bru.setEnvVar("quizzname",faker.string.alphanumeric({}));
+  bru.setEnvVar("tag_id",faker.number.int({max: 3, min : 1}));
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("quizzid", response.id);
+}

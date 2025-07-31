@@ -1,0 +1,17 @@
+meta {
+  name: Delete Trip
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{base_url}}/trip/{{tripid}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 204", function () {
+      expect(res.getStatus()).to.equal(204);
+  });
+}

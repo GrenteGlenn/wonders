@@ -56,15 +56,18 @@ export default class UserGroupController {
   async create(name: string, user_id: number) {
     const group = await UserGroup.create({ name: name, created_at: new Date(), updated_at: new Date() });
     if (group) {
-      await UserGroupLink.create({
+      const link = await UserGroupLink.create({
         user_group_id: group.id,
         user_id: user_id,
         is_accepted: true,
         is_owner: true,
+        user_quiz_answer_id: null,
         created_at: new Date(),
         updated_at: new Date()
       });
+      return link;
     }
+    return false;
   }
 
   async delete(groupId: number, userId: number) {

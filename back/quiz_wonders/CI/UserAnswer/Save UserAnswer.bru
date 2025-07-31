@@ -1,0 +1,48 @@
+meta {
+  name: Save UserAnswer
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/user-answer/
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "quiz_answer_text_id": {{number}},
+    "quiz_line_id": {{number}},
+    "quiz_response_id": {{number}},
+    "boolean": {{boolean}},
+    "text": "{{name}}",
+    "updated_at": {{date}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("number",faker.number.int({max: 3, min : 1}))
+  bru.setEnvVar("date",faker.date.soon())
+  bru.setEnvVar("price",faker.number.int({ max: 500 }))
+  bru.setEnvVar("url",faker.internet.url({ appendSlash: true }))
+  bru.setEnvVar("name",faker.company.name())
+  bru.setEnvVar("float",faker.number.float())
+  bru.setEnvVar("boolean",faker.datatype.boolean(0.5))
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("useraswerid", response.id);
+}

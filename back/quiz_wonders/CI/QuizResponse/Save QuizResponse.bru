@@ -1,0 +1,39 @@
+meta {
+  name: Save QuizResponse
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/quiz-response/
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "quiz_id": {{quiz_id}},
+    "user_id": {{user_id}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+    
+  bru.setEnvVar("quiz_id",faker.number.int({max: 3, min : 2}));
+  bru.setEnvVar("user_id",faker.number.int({max: 3, min : 2}));
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("quizresponseid", response.id);
+}

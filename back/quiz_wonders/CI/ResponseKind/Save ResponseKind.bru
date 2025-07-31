@@ -1,0 +1,38 @@
+meta {
+  name: Save ResponseKind
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/response-kind/
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "type": "{{type}}"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+    
+  bru.setEnvVar("type",faker.string.alphanumeric({ length: { min: 5, max: 10 } }));
+  
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("responsekindid", response.id);
+}

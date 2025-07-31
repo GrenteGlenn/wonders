@@ -1,14 +1,12 @@
 import { RequestHandler, Router, Request, Response } from 'express';
 import UserGroupController from '../controllers/UserGroupController';
-import UserGroupLink from '../../models/user-group-link';
-import { UserGroupLinkInterface } from '../interfaces/UserGroup';
 
 const router = Router();
 
 const userGroupController = new UserGroupController();
 
 interface AddUserToGroupBody {
-  user_id: number;
+  email: string;
   group_id: number;
 }
 
@@ -21,6 +19,11 @@ interface AddAndRemoveQuiz {
   quiz_answer_id: number | null;
   user_id: number;
   group_id: number;
+}
+
+interface CreateGroup {
+  name: string;
+  user_id: number;
 }
 
 router.get('/by-user/:id', (async (req, res) => {
@@ -44,16 +47,24 @@ router.get('/:id', (async (req: Request, res: Response) => {
 router.post('/add-user', (async (req: Request, res: Response) => {
   try {
     const body = <AddUserToGroupBody>req.body;
-    if (!req.body || !body.user_id || !body.group_id) {
+    if (!req.body || !body.email || !body.group_id) {
       return res.status(400).json({ error: 'Données manquantes ou invalides' });
     }
-    const groupLink = await UserGroupLink.create({
-      user_id: body.user_id,
-      user_group_id: body.group_id,
-      is_accepted: false,
-      is_owner: false
-    } as UserGroupLinkInterface);
+
+    const groupLink = await userGroupController.addUserToGroup(body.email, body.group_id);
     groupLink ? res.status(201).json(groupLink) : res.status(400).end();
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+}) as RequestHandler);
+
+router.post('/', (async (req: Request, res: Response) => {
+  try {
+    const body = <CreateGroup>req.body;
+
+    const group = await userGroupController.create(body.name, body.user_id);
+
+    group ? res.status(201).json(group) : res.status(400).end();
   } catch (error) {
     res.status(500).json({ error: error });
   }

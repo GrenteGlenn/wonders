@@ -1,11 +1,14 @@
 import User from '../../models/user';
-import UserInterface from '../interfaces/UserInterface';
+import { UserInterface, UserUpdateInterface } from '../interfaces/UserInterface';
 import { encryptPassword } from '../lib/CheckPassword';
 import Role from '../../models/role';
 
 export default class AuthController {
   async list() {
     return await User.findAll({
+      attributes: {
+        exclude: ['role_id']
+      },
       include: [
         {
           model: Role,
@@ -13,6 +16,15 @@ export default class AuthController {
           attributes: ['role']
         }
       ]
+    });
+  }
+
+  async listId({ ids }: { ids: number[] }) {
+    return await User.findAll({
+      where: { id: ids },
+      attributes: {
+        exclude: ['created_at', 'updated_at', 'country_id', 'language_id', 'password', 'img', 'role_id']
+      }
     });
   }
 
@@ -47,16 +59,19 @@ export default class AuthController {
     return await User.create(user);
   }
 
-  async update(id: number, user: UserInterface) {
+  async update(id: number, user: UserUpdateInterface) {
     const client = await User.findByPk(id);
     if (client) {
-      client.country_id = user.country_id;
       client.first_name = user.first_name;
       client.last_name = user.last_name;
-      client.img = user.img;
       client.email = user.email;
       client.birth_date = user.birth_date;
-      client.language_id = user.language_id;
+      if (user.img) client.img = user.img;
+      else client.img;
+      if (user.country_id) client.country_id = user.country_id;
+      else client.country_id;
+      if (user.language_id) client.language_id = user.language_id;
+      else client.language_id;
       await client.save();
     }
     return client;

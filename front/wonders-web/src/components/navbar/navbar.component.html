@@ -34,17 +34,26 @@
 
     <div *ngIf="isAuthenticated" class="relative">
       <img
-        src="https://github.com/shadcn.png"
+        [src]="user?.img ?? genericAvatar"
         alt="User Avatar"
-        class="h-8 w-8 rounded-full cursor-pointer"
+        class="h-8 w-8 rounded-full cursor-pointer navbar-avatar border-[2px] border-blue-950"
         (click)="toggleMenu()"
       />
-      <div *ngIf="isMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+
+      <div
+        *ngIf="isMenuOpen"
+        class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+        (mouseenter)="isMenuOpen = true"
+        (mouseleave)="closeMenu()"
+      >
         <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="goProfile()">
           {{ 'NavBar.ButtonProfile' | translate }}
         </a>
-         <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="goForum()">
+        <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="goForum()">
           Forum
+        </a>
+        <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="goChat()">
+          {{ 'NavBar.Chat' | translate }}
         </a>
         <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="disconnect()">
           {{ 'NavBar.ButtonDeconnexion' | translate }}
@@ -129,6 +138,66 @@
             {{ 'NavBar.ButtonDeconnexion' | translate }}
           </button>
         </div>
+        <button
+          (click)="goProfile()"
+          *ngIf="isAuthenticated"
+          class="px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+        >
+          <lucide-icon name="user-round" class="mr-3 h-5 w-5"></lucide-icon>
+          {{ 'NavBar.ButtonProfile' | translate }}
+        </button>
+
+        <button (click)="goForum()" class="px-4 py-2 text-sm w-full text-gray-700 hover:bg-gray-100 flex items-center">
+          <lucide-icon name="message-square-text" class="mr-3 h-5 w-5"></lucide-icon>
+          Forum
+        </button>
+        <button (click)="goChat()" class="px-4 py-2 text-sm w-full text-gray-700 hover:bg-gray-100 flex items-center">
+          <lucide-icon name="message-square-text" class="mr-3 h-5 w-5"></lucide-icon>
+          Chat
+        </button>
+        <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="users" class="mr-3 h-5 w-5"></lucide-icon>
+                Communities
+              </a>
+              -->
+        <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="message-circle" class="mr-3 h-5 w-5"></lucide-icon>
+                Chat
+              </a>
+              -->
+        <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-red-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="shield" class="mr-3 h-5 w-5"></lucide-icon>
+                Panel administrator
+              </a>
+              -->
+        <div class="border-t my-1"></div>
+        <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="plane" class="mr-3 h-5 w-5"></lucide-icon>
+                Flights
+              </a>
+              -->
+        <!-- A rajouter quand la fonctionnalitée sera disponible
+              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+                <lucide-icon name="bed" class="mr-3 h-5 w-5"></lucide-icon>
+                Hotels
+              </a>
+              -->
+        <!-- <a href="activities" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
+          <lucide-icon name="tree-palm" class="mr-3 h-5 w-5"></lucide-icon>
+          Activités
+        </a> -->
+        <a
+          class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center cursor-pointer"
+          (click)="isAuthenticated ? disconnect() : login()"
+        >
+          <lucide-icon name="power" class="mr-3 h-5 w-5"></lucide-icon>
+
+          {{ isAuthenticated ? ('NavBar.ButtonDeconnexion' | translate) : ('NavBar.ButtonConnexion' | translate) }}
+        </a>
       </div>
     </div>
   </div>

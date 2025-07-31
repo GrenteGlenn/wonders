@@ -1,0 +1,38 @@
+meta {
+  name: Save Tags
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/tags/
+  body: json
+  auth: none
+}
+
+params:path {
+  id: 1
+}
+
+body:json {
+  {
+    "name": "{{name}}"
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+    
+  bru.setEnvVar("name",faker.string.alphanumeric({ length: { min: 5, max: 10 } }));
+  
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus()).to.equal(201);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("tagid", response.id);
+}

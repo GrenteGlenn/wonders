@@ -1,0 +1,32 @@
+meta {
+  name: Edit TripDay
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{base_url}}/trip-day/{{tripdayid}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "trip_city_id": {{trip_city_id}},
+    "date": {{date}}
+  }
+}
+
+script:pre-request {
+  const { faker } = require('@faker-js/faker');
+  
+  bru.setEnvVar("trip_city_id",faker.number.int({max: 10, min: 1}))
+  bru.setEnvVar("date",faker.date.soon())
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+}

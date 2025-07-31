@@ -1,0 +1,65 @@
+test_back_users:
+  stage: test
+  image: node:22
+  resource_group: test
+  needs: ["lint_back_users"]
+  before_script:
+    - cd back/users_wonders
+    # Génération du .env à partir des variables GitLab
+    - echo "DB_NAME=$DB_CI_NAME" >> .env
+    - echo "DB_USER=$DB_CI_USER" >> .env
+    - echo "DB_PASSWORD=$DB_CI_PASSWORD" >> .env
+    - echo "DB_HOST=$DB_HOST" >> .env
+    - echo "DB_PORT=$DB_PORT" >> .env
+    - echo "PORT=3666" >> .env
+    - echo "DB_DIALECT=$DB_DIALECT" >> .env
+    - echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env
+    - cat .env
+  script:
+    - export NODE_ENV=development
+    - rm -rf node_modules package-lock.json
+    - npm cache clean --force
+    - npm install
+    - npm run migration:undo:all
+    - npm run migration:run
+    - npm run migration:seeder
+    - cd CI/
+    - rm -rf node_modules package-lock.json
+    - npm cache clean --force
+    - npm install
+    - npm install -g @usebruno/cli
+    - cd ../ && npm run start &
+    - sleep 5 && bru run --env-var base_url=http://localhost:3666/api --iteration-count 200 --bail
+  after_script:
+    - cd back/users_wonders
+    - ls -la
+    # Génération du .env à partir des variables GitLab
+    - echo "DB_NAME=$DB_CI_NAME" >> .env
+    - echo "DB_USER=$DB_CI_USER" >> .env
+    - echo "DB_PASSWORD=$DB_CI_PASSWORD" >> .env
+    - echo "DB_HOST=$DB_HOST" >> .env
+    - echo "DB_PORT=$DB_PORT" >> .env
+    - echo "PORT=3666" >> .env
+    - echo "DB_DIALECT=$DB_DIALECT" >> .env
+    - echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env
+    - echo "OPENAI_API_KEY=afafaf" >> .env
+    - export NODE_ENV=development
+    - npm install
+    - pwd
+    - ls -la
+    - ls -la ./migrations
+    - npm run migration:undo:all
+  tags:
+    - PLI
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
+      when: never
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+  #cache:
+  #  policy: pull-push
+  #  unprotect: false
+  #  untracked: false
+  #  when: on_success
+  #  paths:
+  #    - "back/users_wonders/node_modules"
+  #    - "back/users_wonders/package-lock.json"
