@@ -8,11 +8,34 @@ import roleRoutes from './routes/roleRoutes';
 import sessionRoutes from './routes/sessionRoutes';
 import userGroupRoutes from './routes/userGroupRoutes';
 import cors from 'cors';
+import userCheck from './middlewares/userCheck';
 
 const app: Express = express();
 const jsonParser = bodyParser.json();
 
-app.use(cors());
+const corsOptions = {
+  origin: function (origin: string | undefined, callback: (error: Error | null, options?: boolean) => void) {
+    const allowedOrigins = [
+      'https://users.wonders-travel.fr',
+      'https://quizz.wonders-travel.fr',
+      'https://countries.wonders-travel.fr',
+      'https://activities.wonders-travel.fr',
+      'https://blog.wonders-travel.fr',
+      'https://fly.wonders-travel.fr',
+      'https://back-office.wonders-travel.fr',
+      'https://web.wonders-travel.fr'
+    ];
+
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origin non autorisé'));
+    }
+  },
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 
 const port = process.env.PORT;
 
@@ -22,7 +45,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/auth', jsonParser, authRoutes);
 
-// app.use(userCheck);
+app.use(userCheck);
 
 app.use('/api/users', jsonParser, userRoutes);
 app.use('/api/address', jsonParser, addressRoutes);

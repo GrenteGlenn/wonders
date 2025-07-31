@@ -2,7 +2,7 @@ import { Status } from './Global';
 
 export default interface TripHotelInterface {
   id?: number;
-  trip_city_id: number;
+  trip_city_id?: number;
   name: string;
   price: number;
   from: Date;

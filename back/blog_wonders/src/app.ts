@@ -6,9 +6,32 @@ import commentRoutes from './routes/commentRoutes';
 import userSubjectRouter from './routes/userSubjectRoutes';
 
 const app: Express = express();
-app.use(cors());
-// app.use(userCheck);
 
+const corsOptions = {
+  origin: function (origin: string | undefined, callback: (error: Error | null, options?: boolean) => void) {
+    const allowedOrigins = [
+      'https://users.wonders-travel.fr',
+      'https://quizz.wonders-travel.fr',
+      'https://countries.wonders-travel.fr',
+      'https://activities.wonders-travel.fr',
+      'https://blog.wonders-travel.fr',
+      'https://fly.wonders-travel.fr',
+      'https://back-office.wonders-travel.fr',
+      'https://web.wonders-travel.fr'
+    ];
+
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origin non autorisé'));
+    }
+  },
+  credentials: true
+};
+
+app.use(cors(corsOptions));
+
+// app.use(userCheck);
 const port = process.env.PORT || 3004;
 
 app.use(express.json());

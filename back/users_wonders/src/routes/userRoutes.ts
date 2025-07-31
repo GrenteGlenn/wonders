@@ -46,7 +46,7 @@ router.get('/me', (async (req, res) => {
       const client = await authController.getOneByEmail(decrypt.email);
 
       if (!client) return res.status(401).json('Not authorized');
-      res.status(200).json(client);
+      else res.status(200).json(client);
     }
   } catch (error: unknown) {
     res.status(500).json('Internal server error');
