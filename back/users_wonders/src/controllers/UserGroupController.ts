@@ -153,7 +153,6 @@ export default class UserGroupController {
     if (existingUser === null) {
       throw new Error('user not found');
     }
-    const existingGroupOwned = await UserGroup.findAll({});
 
     const existingGroupeAlereadyJoined = await UserGroupLink.findAll({
       where: {
@@ -162,7 +161,7 @@ export default class UserGroupController {
       }
     });
 
-    if (!existingGroupOwned && !existingGroupeAlereadyJoined) {
+    if (existingGroupeAlereadyJoined.length === 0) {
       return await UserGroupLink.create({
         user_id: existingUser.id,
         user_group_id: group_id,

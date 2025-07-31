@@ -10,7 +10,7 @@ export interface UserInterface {
   last_name: string;
   email: string;
   password: string;
-  img: string;
+  img?: string;
   created_at?: Date;
   updated_at?: Date;
   birth_date: Date;

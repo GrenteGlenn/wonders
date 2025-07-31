@@ -41,11 +41,24 @@ export function updateJWT(token: string) {
   }
 }
 
-export function decryptJWT(token: string) {
-  if (SECRET !== undefined) {
-    return jwt.verify(token, SECRET);
-  } else {
-    return 'Secret is undefined';
+export function decryptJWT(token: string): JwtPayload | undefined {
+  try {
+    if (!SECRET) {
+      console.error('❌ SECRET non défini dans .env');
+      return undefined;
+    }
+
+    const decoded = jwt.verify(token, SECRET);
+
+    // S'assurer que c'est bien un objet avec email et userId
+    if (typeof decoded === 'object' && 'email' in decoded && 'userId' in decoded) {
+      return decoded as JwtPayload;
+    }
+
+    return undefined;
+  } catch (error) {
+    console.error('❌ Erreur de vérification JWT:', error);
+    return undefined;
   }
 }
 
