@@ -2,21 +2,25 @@
   <h2 class="text-lg font-bold mb-4">Résumé</h2>
 
   <!-- Étape 1 : Destination -->
-  <ng-container *ngIf="currentStep === 1">
+  <ng-container *ngIf="currentStep >= 1">
     <div class="flex items-center gap-2 mb-2">
-      <ng-container *ngIf="selectedDestination; else noDest">
-        <lucide-icon name="check" class="text-green-500 w-4 h-4"></lucide-icon>
-        <span>Destination : {{ selectedDestination.name }}</span>
-      </ng-container>
-      <ng-template #noDest>
-        <lucide-icon name="circleX" class="text-red-500 w-4 h-4"></lucide-icon>
-        <span>Destination manquante</span>
-      </ng-template>
+      <lucide-icon
+        [name]="selectedDestination ? 'check' : 'circleX'"
+        [ngClass]="selectedDestination ? 'text-green-500' : 'text-red-500'"
+        class="w-4 h-4"
+      ></lucide-icon>
+      <span>
+        Destination :
+        <ng-container *ngIf="selectedDestination; else noDest">
+          {{ selectedDestination.name }}
+        </ng-container>
+        <ng-template #noDest>Non sélectionnée</ng-template>
+      </span>
     </div>
   </ng-container>
 
-  <!-- Étape 2 : Activité -->
-  <ng-container *ngIf="currentStep === 2">
+  <!-- Étape 2 : Activité (seulement si currentStep >= 2) -->
+  <ng-container *ngIf="currentStep >= 2">
     <div class="flex items-center gap-2 mb-2">
       <lucide-icon
         [name]="selectedActivity?.category ? 'check' : 'circleX'"
@@ -25,10 +29,10 @@
       ></lucide-icon>
       <span>
         Catégorie :
-        <ng-container *ngIf="selectedActivity?.category; else noCategory">
+        <ng-container *ngIf="selectedActivity?.category; else noCat">
           {{ selectedActivity.category }}
         </ng-container>
-        <ng-template #noCategory>Non sélectionnée</ng-template>
+        <ng-template #noCat>Non sélectionnée</ng-template>
       </span>
     </div>
 
@@ -42,60 +46,46 @@
         Ville :
         <ng-container *ngIf="selectedActivity?.name; else noCity">
           {{ selectedActivity.name }}
+          
         </ng-container>
         <ng-template #noCity>Non sélectionnée</ng-template>
       </span>
     </div>
-
-    <!-- Détails ville -->
-    <div *ngIf="selectedActivity?.name || selectedActivity?.description || selectedActivity?.image" class="pl-5 mt-2">
-      <p *ngIf="selectedActivity?.description" class="text-sm text-gray-600 mb-1">
-        <strong>Description :</strong> {{ selectedActivity.description }}
-      </p>
-
-      <div *ngIf="selectedActivity?.image && selectedActivity?.name" class="mt-2">
-        <img
-          [src]="selectedActivity.image"
-          alt="Image activité"
-          class="rounded-md w-full h-32 object-cover"
-          onerror="this.style.display='none'"
-        />
-      </div>
-    </div>
   </ng-container>
 
-  <!-- Étape 3 : Vol -->
-  <ng-container *ngIf="currentStep === 3">
+  <!-- Étape 3 : Vol (currentStep >= 3) -->
+  <ng-container *ngIf="currentStep >= 3">
     <div class="flex items-center gap-2 mb-2">
       <lucide-icon
         [name]="selectedFlight ? 'check' : 'circleX'"
         [ngClass]="selectedFlight ? 'text-green-500' : 'text-red-500'"
         class="w-4 h-4"
       ></lucide-icon>
-      <span
-        >Vol :
-        <ng-container *ngIf="selectedFlight; else noFlightInfo"> Sélectionné </ng-container>
-        <ng-template #noFlightInfo>Non sélectionné</ng-template>
+      <span>
+        Vol :
+        <ng-container *ngIf="selectedFlight; else noFlight">{{ selectedFlight.vol }}</ng-container>
+        <ng-template #noFlight>Non sélectionné</ng-template>
       </span>
     </div>
 
-    <!-- Détails du vol -->
-    <div *ngIf="selectedFlight" class="pl-5 mt-2 text-sm text-gray-600 space-y-1">
+    <!-- Détails -->
+    <!-- <div *ngIf="selectedFlight" class="pl-5 mt-2 text-sm text-gray-600 space-y-1">
       <p><strong>Compagnie :</strong> {{ selectedFlight.airline }}</p>
       <p>
         <strong>Départ :</strong> {{ selectedFlight.departure }} à
         {{ selectedFlight.departureTime | date: 'shortTime' }}
       </p>
       <p>
-        <strong>Arrivée :</strong> {{ selectedFlight.arrival }} à {{ selectedFlight.arrivalTime | date: 'shortTime' }}
+        <strong>Arrivée :</strong> {{ selectedFlight.arrival }} à
+        {{ selectedFlight.arrivalTime | date: 'shortTime' }}
       </p>
       <p><strong>Durée :</strong> {{ selectedFlight.duration.replace('PT', '').toLowerCase() }}</p>
       <p><strong>Prix :</strong> {{ selectedFlight.price }} {{ selectedFlight.currency }}</p>
-    </div>
+    </div> -->
   </ng-container>
 
-  <!-- Étape 4 : Hôtel -->
-  <ng-container *ngIf="currentStep === 4">
+  <!-- Étape 4 : Hôtel (currentStep >= 4) -->
+  <ng-container *ngIf="currentStep >= 4">
     <div class="flex items-center gap-2 mb-2">
       <lucide-icon
         [name]="selectedHotel?.name ? 'check' : 'circleX'"
@@ -111,8 +101,7 @@
       </span>
     </div>
 
-    <!-- Détails de l'hôtel -->
-    <div *ngIf="selectedHotel?.name" class="pl-5 mt-2 text-sm text-gray-600 space-y-1">
+    <!-- <div *ngIf="selectedHotel?.name" class="pl-5 mt-2 text-sm text-gray-600 space-y-1">
       <p *ngIf="selectedHotel?.country"><strong>Pays :</strong> {{ selectedHotel.country }}</p>
       <p *ngIf="selectedHotel?.distance?.value">
         <strong>Distance :</strong> {{ selectedHotel.distance.value }} {{ selectedHotel.distance.unit }}
@@ -121,6 +110,6 @@
         <strong>Offres :</strong>
         {{ selectedHotel.hasOffers ? 'Oui' : 'Aucune offre disponible' }}
       </p>
-    </div>
+    </div> -->
   </ng-container>
 </div>

@@ -33,10 +33,21 @@ router.get('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
+// router.get('/user-full-trip/:id', (async (req, res) => {
+//   try {
+//     const trip = await tripController.fullTrip(parseInt(req.params.id, 10));
+//     trip ? res.status(200).json(trip) : res.status(404).json({ code: '404', message: 'entry does not exists' });
+//   } catch (error) {
+//     res.status(500).json({ code: '500', message: error });
+//   }
+// }) as RequestHandler);
+
 router.get('/user-full-trip/:id', (async (req, res) => {
   try {
-    const trip = await tripController.fullTrip(parseInt(req.params.id, 10));
-    trip ? res.status(200).json(trip) : res.status(404).json({ code: '404', message: 'entry does not exists' });
+    const trips = await tripController.fullTrips(parseInt(req.params.id, 10));
+    trips.length
+      ? res.status(200).json(trips)
+      : res.status(404).json({ code: '404', message: 'Aucun voyage trouvé pour cet utilisateur' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }

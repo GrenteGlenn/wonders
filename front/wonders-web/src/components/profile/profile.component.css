@@ -18,3 +18,11 @@
 .avatar-list div.selected {
   border-color: #3b82f6;
 }
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;   
+}

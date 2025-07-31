@@ -20,6 +20,8 @@ export class RequirementsComponent {
   @Input() selectedFlight: any = null;
   @Input() selectedHotel: any = null;
 
+
+  
  
   hasFullActivity(): boolean {
     return !!(
@@ -29,6 +31,5 @@ export class RequirementsComponent {
       this.selectedActivity?.category
     );
   }
-  
   
 }

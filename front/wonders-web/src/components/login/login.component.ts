@@ -58,6 +58,8 @@ export class LoginComponent implements OnInit {
     this._authService.login(this.email, this.password).subscribe({
       next: (data: ReponseToken) => {
         if (data.success) {
+          console.log(data, 'Connexion réussie');
+          
           this._authService.setAuthenticated(data.data.token);
           this.router.navigateByUrl(this.returnUrl);
         }
