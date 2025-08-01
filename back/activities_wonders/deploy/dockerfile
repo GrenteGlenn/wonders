@@ -1,6 +1,6 @@
 FROM node:18-alpine AS builder
 WORKDIR /app
-COPY ./back/users_wonders .
+COPY ./back/activities_wonders .
 RUN rm -r deploy/ CI/
 RUN npm install
 RUN npm install -D esbuild && npm run build
