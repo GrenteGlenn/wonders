@@ -29,7 +29,7 @@ export class QuestionnaireService {
     return this.http
       .get<QuizLine[]>(`${this.apiUrl}/api/quiz-line`)
       .pipe(
-        map((lines) => lines.filter((line) => line.Quiz.name === 'Type of vacation').sort((a, b) => a.step - b.step))
+        map((lines) => lines.filter((line) => line.Quiz_id = 2).sort((a, b) => a.step - b.step))
       );
   }
 
