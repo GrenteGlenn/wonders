@@ -171,6 +171,7 @@ export default class TripController {
       // save hotel
       await TripHotel.create({
         ...tripCityHotel,
+        trip_city_id: tripCityResponse.id,
         created_at: new Date(),
         updated_at: new Date()
       });

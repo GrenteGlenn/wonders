@@ -24,7 +24,14 @@ const app = express();
 const port = process.env.PORT || 3009;
 
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 
 // Routes
 app.use('/api/status', statusRoutes);

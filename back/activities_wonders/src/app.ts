@@ -14,11 +14,13 @@ const app = express();
 const port = process.env.PORT;
 app.use(express.json());
 
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    optionsSuccessStatus: 200
+};
 
-// Routes
-
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use('/api/picture', pictureRoutes);
 app.use('/api/activity-category', activityCategoryRoutes);

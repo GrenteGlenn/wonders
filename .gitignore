@@ -2,3 +2,5 @@
 /question
 /fiche_projet
 report-ci.json
+node_modules/
+package-lock.json

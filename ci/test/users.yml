@@ -14,6 +14,7 @@ test_back_users:
     - echo "PORT=3666" >> .env
     - echo "DB_DIALECT=$DB_DIALECT" >> .env
     - echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env
+    - echo "SECRET=3d9b49c92a9c4a7eac7461c34aa39bdb1b99d0c61d67081abdc3c8b9efcd06a85ad33c024cb76f32d4f9c7ef4e5b09decb2b6cf3e3f726c1e79f2c3b8f3bbab2" >> .env
     - cat .env
   script:
     - export NODE_ENV=development

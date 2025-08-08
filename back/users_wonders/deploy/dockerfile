@@ -14,6 +14,6 @@ RUN npm install --omit=dev && npm cache clean --force
 
 RUN mkdir config/
 RUN echo '{"development":{"username":"gpebackuseruser","password":"LBWQd3UEEAfHFKPKfzAEut6wX0RWk1hg","database":"gpebackuser","host":"163.5.107.36","port":"5432","dialect":"postgres"}}' > ./config/config.json
-RUN echo -e 'DB_NAME=gpebackuser \nDB_USER=gpebackuseruser \nDB_PASSWORD=LBWQd3UEEAfHFKPKfzAEut6wX0RWk1hg \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001' > .env
+RUN echo -e 'DB_NAME=gpebackuser \nDB_USER=gpebackuseruser \nDB_PASSWORD=LBWQd3UEEAfHFKPKfzAEut6wX0RWk1hg \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001 \nSECRET=3d9b49c92a9c4a7eac7461c34aa39bdb1b99d0c61d67081abdc3c8b9efcd06a85ad33c024cb76f32d4f9c7ef4e5b09decb2b6cf3e3f726c1e79f2c3b8f3bbab2' > .env
 CMD ["node", "dist/index.js"]
 EXPOSE 3001

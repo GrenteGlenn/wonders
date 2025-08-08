@@ -2,7 +2,7 @@ import User from '../../models/user';
 import * as jwt from 'jsonwebtoken';
 import { JwtPayload } from '../interfaces/Global';
 
-const SECRET_TOKEN = process.env.SECRET_TOKEN;
+const SECRET_TOKEN = process.env.JWT_SECRET_KEY;
 const SECRET = process.env.SECRET;
 
 export function createJWT(user: User) {
@@ -13,7 +13,7 @@ export function createJWT(user: User) {
         email: user?.email
       },
       SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '30m' }
     );
   } else {
     return 'Secret is undefined';
@@ -31,7 +31,7 @@ export function updateJWT(token: string) {
           email: decode.email
         },
         SECRET,
-        { expiresIn: '1h' }
+        { expiresIn: '30m' }
       );
     } else {
       return null;

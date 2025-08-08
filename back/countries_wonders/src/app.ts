@@ -10,7 +10,13 @@ import airportRoutes from './routes/airportRoutes';
 const app: Express = express();
 const jsonParser = bodyParser.json();
 
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 
 const port = process.env.PORT;
 
