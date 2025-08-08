@@ -93,11 +93,12 @@ export class ActivitiesComponent {
 
     // 🆕 Émission partielle de l'activité dès sélection de catégorie
     this.activitySelected.emit({
+      
       id: this.selectedCategory?.id,
       name: this.activityName || '',
       image: this.selectedPicture || '',
       description: this.selectedCity?.description || '',
-      category: this.selectedCategory?.name || '',
+      category: this.selectedCategory || '',
       country: this.cityName
     });
 

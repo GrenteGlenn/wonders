@@ -8,6 +8,7 @@ import { QuestionnaireService } from '../../app/service/questionnaire/questionna
 import { QuizQuestion, UserAnswerCreate } from '../../app/model/Question';
 import { AuthentificationService } from '../../app/service/auth/authentification.service';
 import { AIProposalCountry, AIQuizzCountry } from '../../app/model/AI';
+import { TranslateService } from '../../app/service/translate/translate.service';
 
 @Component({
   selector: 'app-question',
@@ -31,7 +32,9 @@ export class QuestionComponent implements OnInit {
   constructor(
     private router: Router,
     private questionnaireService: QuestionnaireService,
-    private authService: AuthentificationService
+    private authService: AuthentificationService,
+    public translateService: TranslateService
+    
   ) {}
 
   ngOnInit() {
@@ -47,12 +50,12 @@ export class QuestionComponent implements OnInit {
 
   // permet le switche de vers la page plan trip avec la suggestion
   onSelectProposal(suggestion: any) {
-    this.router.navigate(['/planTrip'], {
+     this.router.navigate(['/', this.translateService.currentLang, 'stepBody']), {
       queryParams: {
         image: suggestion.img_full,
         city: suggestion.pays
       }
-    });
+    };
   }
 
   loadUserAnswers() {
