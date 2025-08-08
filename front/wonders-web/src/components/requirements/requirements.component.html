@@ -23,14 +23,14 @@
   <ng-container *ngIf="currentStep >= 2">
     <div class="flex items-center gap-2 mb-2">
       <lucide-icon
-        [name]="selectedActivity?.category ? 'check' : 'circleX'"
-        [ngClass]="selectedActivity?.category ? 'text-green-500' : 'text-red-500'"
+        [name]="selectedActivity?.category.name ? 'check' : 'circleX'"
+        [ngClass]="selectedActivity?.category.name ? 'text-green-500' : 'text-red-500'"
         class="w-4 h-4"
       ></lucide-icon>
       <span>
         Catégorie :
         <ng-container *ngIf="selectedActivity?.category; else noCat">
-          {{ selectedActivity.category }}
+          {{ selectedActivity.category.name }}
         </ng-container>
         <ng-template #noCat>Non sélectionnée</ng-template>
       </span>

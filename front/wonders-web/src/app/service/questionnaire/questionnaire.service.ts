@@ -24,13 +24,14 @@ export class QuestionnaireService {
   getCountries(): Observable<Country[]> {
     return this.http.get<Country[]>(`${this.apiUrl}/api/countries`);
   }
-
   getQuizLines(): Observable<QuizLine[]> {
-    return this.http
-      .get<QuizLine[]>(`${this.apiUrl}/api/quiz-line`)
-      .pipe(
-        map((lines) => lines.filter((line) => line.Quiz.name === 'Type of vacation').sort((a, b) => a.step - b.step))
-      );
+    return this.http.get<QuizLine[]>(`${this.apiUrl}/api/quiz-line`).pipe(
+      map((lines) =>
+        lines
+          .filter((line) => line.Quiz && line.Quiz.name === 'Type of vacation') // ✅ Sécurisé
+          .sort((a, b) => a.step - b.step)
+      )
+    );
   }
 
   getQuizAnswers(): Observable<QuizAnswer[]> {

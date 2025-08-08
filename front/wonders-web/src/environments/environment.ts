@@ -8,7 +8,7 @@ export const environment = {
   UrlReservation: 'http://localhost:3003',
   countryImgUrl: 'http://localhost:3004',
   quizzApiUrl: '/quizz-api',
-  // quizzApiUrl: 'http://quizz.wonders-travel.fr',
+  // quizzApiUrl: 'https://quizz.wonders-travel.fr',
   // quizzApiUrl: 'http://localhost:3007/api',
   aiApiUrl: 'http://localhost:3004',
   API_GoogleMap: 'AIzaSyAdCTrUOHm3FP7IIvkZ0Y8BH1Mc7ukgM1k',

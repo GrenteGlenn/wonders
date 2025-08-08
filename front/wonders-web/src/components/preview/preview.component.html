@@ -32,10 +32,10 @@
   <div class="col-span-1 xl:col-span-1 space-y-6">
     <div class="bg-white p-6 rounded-xl shadow-md" *ngIf="activity">
       <div class="flex items-center gap-2">
-        <h2 class="text-xl font-bold">Activité sélectionnée</h2>
+        <h2 class="text-xl font-bold">Ville sélectionnée</h2>
       </div>
       <div>
-        {{ activity.category }}
+        {{ activity.name }}
       </div>
       <img [src]="activity?.image" class="w-full h-52 object-cover rounded-lg mb-4" alt="{{ activity?.city }}" />
       <h3 class="text-lg font-semibold">{{ activity?.city }}</h3>
