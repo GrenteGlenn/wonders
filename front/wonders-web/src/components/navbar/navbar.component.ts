@@ -60,7 +60,7 @@ export class NavbarComponent implements OnInit {
     this.usersService.getUserInfo().subscribe({
       next: (userData) => {
         this.user = userData;
-        
+
       },
       error: (error) => {
         console.error('Error while getting user data:', error);
@@ -110,7 +110,7 @@ export class NavbarComponent implements OnInit {
 
   disconnect() {
     this._authService.logout();
-    this.router.navigate(['/', this.translateService.currentLang, 'home']);
+    this.router.navigate(['/', this.translateService.currentLang, 'login']);
   }
 
   onLanguageChange(event: Event): void {

@@ -10,19 +10,16 @@ include:
   # Test jobs
   - local: 'ci/test/users.yml'
   - local: 'ci/test/countries.yml'
-  - local: 'ci/test/quizz.yml'
   - local: 'ci/test/activities.yml'
 
   # Build jobs
   - local: 'ci/build/users.yml'
   - local: 'ci/build/countries.yml'
-  - local: 'ci/build/quizz.yml'
   - local: 'ci/build/activities.yml'
 
   # Docker jobs
   # - local: 'ci/docker/users.yml'
   # - local: 'ci/docker/countries.yml'
-  # - local: 'ci/docker/quizz.yml'
   # - local: 'ci/docker/activities.yml'
 
 workflow:

@@ -52,7 +52,7 @@
     >
       S'inscrire
     </button>
-
+    <p *ngIf="error" class="text-red-600">{{ errorMessage }}</p>
     <p class="py-6 text-white">
       Vous avez déjà un compte ?
       <a href="" (click)="href($event)" class="text-cyan-300 underline">Se connecter maintenant</a>

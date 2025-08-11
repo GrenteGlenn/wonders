@@ -36,7 +36,7 @@ export class CityService {
 
   // Récupère une ville par son ID
   getCityById(id: number): Observable<City> {
-    return this.http.get<City>(`${this.apiUrl}/${id}`);
+    return this.http.get<City>(`${this.apiUrl}/api/cities/${id}`);
   }
   
 
