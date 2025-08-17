@@ -126,7 +126,7 @@ export class FlyComponent {
   loadNearbyAirports(lat: number, lon: number) {
     this.airportsService.getByGeo(lon, lat).subscribe({
       next: (airports) => {
-        console.log('🛫 Aéroports proches reçus :', airports);
+        // console.log('🛫 Aéroports proches reçus :', airports);
         this.destinationAirports = Array.isArray(airports) ? airports : [airports];
   
         if (this.destinationAirports.length > 0) {

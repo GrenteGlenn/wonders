@@ -1,58 +1,161 @@
-<div class="relative flex justify-center items-center min-h-screen bg-cover bg-center" style="background-image: url('assets/images/hero-home-3.jpg');">
-  <!-- filtre sombre pour lisibilité -->
+<div class="relative flex justify-center items-center min-h-screen bg-cover bg-center"
+     style="background-image: url('assets/images/hero-home-3.jpg');">
+  <!-- filtre sombre -->
   <div class="absolute inset-0 bg-black bg-opacity-30"></div>
 
-  <!-- fenêtre d'inscription avec effet glassmorphism -->
+  <!-- fenêtre d'inscription -->
   <div class="relative z-10 glass-card grid grid-cols-1 justify-items-center max-w-2xl w-full mx-4 my-10">
     <h1 class="text-2xl font-medium mb-6 text-white">S'enregistrer</h1>
     <p class="justify-self-end text-red-300 px-10 text-sm w-full text-right">Champs requis *</p>
-    <div class="justify-self-start px-6 w-full">
+
+    <form #f="ngForm" (ngSubmit)="clickRegister(f)" class="justify-self-start px-6 w-full">
+      <!-- EMAIL -->
       <div class="mb-4">
         <label for="lb_email" class="text-white">Adresse mail <i class="text-red-300">*</i></label><br />
-        <input type="text" [(ngModel)]="user.email" id="lb_email" class="w-full border border-gray-300 rounded-md p-2" />
+        <input
+          type="email"
+          id="lb_email"
+          name="email"
+          required
+          email
+          [(ngModel)]="user.email"
+          class="w-full border border-gray-300 rounded-md p-2"
+          #emailCtrl="ngModel"
+        />
+        <div *ngIf="emailCtrl.invalid && (emailCtrl.touched || f.submitted)" class="text-red-300 text-sm mt-1">
+          <div *ngIf="emailCtrl.errors?.['required']">L'email est requis.</div>
+          <div *ngIf="emailCtrl.errors?.['email']">Format d'email invalide.</div>
+        </div>
+        <div *ngIf="emailServerError" class="text-red-300 text-sm mt-1">{{ emailServerError }}</div>
       </div>
+
+      <!-- MOT DE PASSE -->
       <div class="mb-4">
         <label for="lb_password" class="text-white">Mot de passe <i class="text-red-300">*</i></label><br />
-        <input type="password" [(ngModel)]="user.password" id="lb_password" class="w-full border border-gray-300 rounded-md p-2" />
+        <input
+          type="password"
+          id="lb_password"
+          name="password"
+          required
+          minlength="8"
+          [(ngModel)]="user.password"
+          (input)="validatePassword()"
+          class="w-full border border-gray-300 rounded-md p-2"
+          #pwdCtrl="ngModel"
+        />
+        <div *ngIf="(pwdCtrl.invalid && (pwdCtrl.touched || f.submitted)) || passwordErrors.length"
+             class="text-red-300 text-sm mt-1">
+          <div *ngIf="pwdCtrl.errors?.['required']">Le mot de passe est requis.</div>
+          <div *ngIf="pwdCtrl.errors?.['minlength']">Au moins 8 caractères.</div>
+          <ul *ngIf="passwordErrors.length" class="list-disc ml-5">
+            <li *ngFor="let err of passwordErrors">{{ err }}</li>
+          </ul>
+        </div>
       </div>
+
+      <!-- PRENOM -->
       <div class="mb-4">
         <label for="lb_firstname" class="text-white">Prénom <i class="text-red-300">*</i></label><br />
-        <input type="text" [(ngModel)]="user.first_name" id="lb_firstname" class="w-full border border-gray-300 rounded-md p-2" />
+        <input
+          type="text"
+          id="lb_firstname"
+          name="first_name"
+          required
+          [(ngModel)]="user.first_name"
+          class="w-full border border-gray-300 rounded-md p-2"
+          #fnCtrl="ngModel"
+        />
+        <div *ngIf="fnCtrl.invalid && (fnCtrl.touched || f.submitted)" class="text-red-300 text-sm mt-1">
+          Le prénom est requis.
+        </div>
       </div>
+
+      <!-- NOM -->
       <div class="mb-4">
         <label for="lb_lastname" class="text-white">Nom <i class="text-red-300">*</i></label><br />
-        <input type="text" [(ngModel)]="user.last_name" id="lb_lastname" class="w-full border border-gray-300 rounded-md p-2" />
+        <input
+          type="text"
+          id="lb_lastname"
+          name="last_name"
+          required
+          [(ngModel)]="user.last_name"
+          class="w-full border border-gray-300 rounded-md p-2"
+          #lnCtrl="ngModel"
+        />
+        <div *ngIf="lnCtrl.invalid && (lnCtrl.touched || f.submitted)" class="text-red-300 text-sm mt-1">
+          Le nom est requis.
+        </div>
       </div>
+
+      <!-- DATE -->
       <div class="mb-4">
         <label for="lb_birthday" class="text-white">Date d'anniversaire <i class="text-red-300">*</i></label><br />
-        <input type="date" [(ngModel)]="user.birth_date" id="lb_birthday" class="w-full border border-gray-300 rounded-md p-2" />
+        <input
+          type="date"
+          id="lb_birthday"
+          name="birth_date"
+          required
+          [(ngModel)]="user.birth_date"
+          class="w-full border border-gray-300 rounded-md p-2"
+          #bdCtrl="ngModel"
+        />
+        <div *ngIf="bdCtrl.invalid && (bdCtrl.touched || f.submitted)" class="text-red-300 text-sm mt-1">
+          La date d'anniversaire est requise.
+        </div>
       </div>
+
+      <!-- PAYS -->
       <div class="mb-4">
         <label for="lb_country" class="text-white">Pays <i class="text-red-300">*</i></label><br />
-        <select (change)="onCountryChange($event)" id="lb_country" class="w-full border border-gray-300 rounded-md p-2">
+        <select
+          id="lb_country"
+          name="country_id"
+          required
+          [(ngModel)]="user.country_id"
+          class="w-full border border-gray-300 rounded-md p-2"
+          #countryCtrl="ngModel"
+        >
           <option value="">Sélectionnez un pays</option>
           <option *ngFor="let country of countries" [value]="country.id">
             {{ country.name }}
           </option>
         </select>
+        <div *ngIf="countryCtrl.invalid && (countryCtrl.touched || f.submitted)" class="text-red-300 text-sm mt-1">
+          Le pays est requis.
+        </div>
       </div>
+
+      <!-- LANGUE -->
       <div class="mb-4">
         <label for="lb_language" class="text-white">Langue <i class="text-red-300">*</i></label><br />
-        <select [(ngModel)]="user.language_id" id="lb_language" class="w-full border border-gray-300 rounded-md p-2">
+        <select
+          id="lb_language"
+          name="language_id"
+          required
+          [(ngModel)]="user.language_id"
+          class="w-full border border-gray-300 rounded-md p-2"
+          #langCtrl="ngModel"
+        >
           <option *ngFor="let language of languages" [value]="language.id">
             {{ language.name }}
           </option>
         </select>
+        <div *ngIf="langCtrl.invalid && (langCtrl.touched || f.submitted)" class="text-red-300 text-sm mt-1">
+          La langue est requise.
+        </div>
       </div>
-    </div>
 
-    <button
-      (click)="clickRegister()"
-      class="px-16 py-2 font-medium bg-blue-500 hover:bg-blue-600 rounded-md text-white mt-6"
-    >
-      S'inscrire
-    </button>
-    <p *ngIf="error" class="text-red-600">{{ errorMessage }}</p>
+      <button
+        type="submit"
+        [disabled]="submitting || f.invalid || passwordErrors.length > 0"
+        class="px-16 py-2 font-medium bg-blue-500 hover:bg-blue-600 rounded-md text-white mt-2 disabled:opacity-60 disabled:cursor-not-allowed"
+      >
+        S'inscrire
+      </button>
+
+      <p *ngIf="generalError" class="text-red-300 mt-3">{{ generalError }}</p>
+    </form>
+
     <p class="py-6 text-white">
       Vous avez déjà un compte ?
       <a href="" (click)="href($event)" class="text-cyan-300 underline">Se connecter maintenant</a>

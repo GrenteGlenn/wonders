@@ -24,19 +24,19 @@ export class QuestionnaireService {
   getCountries(): Observable<Country[]> {
     return this.http.get<Country[]>(`${this.apiUrl}/api/countries`);
   }
-  getQuizLines(): Observable<QuizLine[]> {
-    return this.http.get<QuizLine[]>(`${this.apiUrl}/api/quiz-line`).pipe(
-      map((lines) =>
-        lines
-          .filter((line) => line.Quiz && line.Quiz.name === 'Type of vacation') // ✅ Sécurisé
-          .sort((a, b) => a.step - b.step)
-      )
-    );
-  }
+  // getQuizLines(): Observable<QuizLine[]> {
+  //   return this.http
+  //     .get<QuizLine[]>(`${this.apiUrl}/api/quiz-line`)
+  //     .pipe(
+  //       map((lines) =>
+  //         lines.filter((line) => line.Quiz && line.Quiz.name === 'Type of vacation').sort((a, b) => a.step - b.step)
+  //       )
+  //     );
+  // }
 
-  getQuizAnswers(): Observable<QuizAnswer[]> {
-    return this.http.get<QuizAnswer[]>(`${this.apiUrl}/api/quiz-answer-text`);
-  }
+  // getQuizAnswers(): Observable<QuizAnswer[]> {
+  //   return this.http.get<QuizAnswer[]>(`${this.apiUrl}/api/quiz-answer-text`);
+  // }
 
   getPricingQuizWithAnswers(): Observable<QuizQuestion[]> {
     return forkJoin({
@@ -119,4 +119,53 @@ export class QuestionnaireService {
   getAIProposition(answerUser: AIQuizzCountry): Observable<AnswerAI> {
     return this.http.post<AnswerAI>(`${this.aiUrl}/api/countries/ai_get_country`, answerUser);
   }
+
+  getQuizLines(): Observable<QuizLine[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/api/quiz-line`).pipe(
+      map((lines) =>
+        (lines ?? [])
+          // ➜ garde uniquement le quiz id=1 (Type of vacation)
+          .filter((line: any) => Number(line?.quiz_id ?? line?.quiz?.id ?? line?.Quiz?.id) === 1)
+          // ➜ tri par étape (fallback 0)
+          .sort((a: any, b: any) => (a?.step ?? 0) - (b?.step ?? 0))
+      )
+    );
+  }
+
+  getQuizAnswers(): Observable<QuizAnswer[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/api/quiz-answer-text`).pipe(
+      // uniformise le champ texte (answer vs text selon ton backend)
+      map((answers) => (answers ?? []).map((a: any) => ({ ...a, answer: a.answer ?? a.text })))
+    );
+  }
+
+  // getPricingQuizWithAnswers(): Observable<QuizQuestion[]> {
+  //   return forkJoin({
+  //     lines: this.getQuizLines(),
+  //     answers: this.getQuizAnswers()
+  //   }).pipe(
+  //     map(({ lines, answers }) =>
+  //       (lines ?? []).map((line: any) => {
+  //         const lineAnswers = (answers ?? []).filter((a: any) => Number(a.quiz_line_id) === Number(line.id));
+
+  //         // fallback Oui/Non si question booléenne sans réponses configurées
+  //         const isBoolean = !!line.is_boolean || String(line?.response_kind?.type || '').toLowerCase() === 'boolean';
+  //         const finalAnswers =
+  //           lineAnswers.length > 0
+  //             ? lineAnswers
+  //             : isBoolean
+  //               ? [
+  //                   { id: 1, answer: 'Oui' },
+  //                   { id: 0, answer: 'Non' }
+  //                 ]
+  //               : [];
+
+  //         return {
+  //           questionData: line,
+  //           answers: finalAnswers
+  //         };
+  //       })
+  //     )
+  //   );
+  // }
 }

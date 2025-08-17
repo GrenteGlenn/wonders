@@ -14,13 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [
-    LucideAngularModule,
-    MatButtonModule,
-    MatTooltipModule,
-    CommonModule,
-    TranslateModule
-  ],
+  imports: [LucideAngularModule, MatButtonModule, MatTooltipModule, CommonModule, TranslateModule],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
 })
@@ -30,7 +24,7 @@ export class NavbarComponent implements OnInit {
   isAuthenticated = false;
   user: User | null = null;
   showBottomCTA = false;
-  genericAvatar = 'https://github.com/shadcn.png'
+  genericAvatar = 'https://github.com/shadcn.png';
 
   constructor(
     private router: Router,
@@ -40,27 +34,22 @@ export class NavbarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._authService.isAuthenticated$.subscribe(
-      (isAuth) => (this.isAuthenticated = isAuth)
-    );
+    this._authService.isAuthenticated$.subscribe((isAuth) => (this.isAuthenticated = isAuth));
 
     this.loadUserInfo();
 
-    this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.syncLanguageWithUrl();
-        this.closeMenu();
-        this.closeMobileMenu();
-        this.checkIfHomePage();
-      });
+    this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+      this.syncLanguageWithUrl();
+      this.closeMenu();
+      this.closeMobileMenu();
+      this.checkIfHomePage();
+    });
   }
 
   loadUserInfo() {
     this.usersService.getUserInfo().subscribe({
       next: (userData) => {
         this.user = userData;
-
       },
       error: (error) => {
         console.error('Error while getting user data:', error);
@@ -116,8 +105,12 @@ export class NavbarComponent implements OnInit {
   onLanguageChange(event: Event): void {
     const target = event.target as HTMLSelectElement;
     const lang = target.value;
+    console.log(lang, 'selected language');
+    
 
     this.translateService.currentLang = lang;
+    console.log('Language changed to:', this.translateService.currentLang);
+    
 
     const currentUrl = this.router.url.split('/').slice(2).join('/');
     this.router.navigate(['/' + lang, currentUrl]);

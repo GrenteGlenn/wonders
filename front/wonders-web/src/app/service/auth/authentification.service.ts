@@ -49,7 +49,6 @@ export class AuthentificationService {
     localStorage.removeItem('UserToken');
     this.userSubject.next('');
     this.isAuthenticatedSubject.next(false);
-    this.router.navigate(['/login']);
   }
 
   isAuthenticated(): boolean {
