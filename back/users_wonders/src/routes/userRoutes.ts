@@ -5,7 +5,6 @@ import { JwtPayload } from '../interfaces/Global';
 import { UserUpdateInterface } from '../interfaces/UserInterface';
 import requireAuth, { AuthedRequest } from '../middlewares/userCheck';
 
-
 const router = Router();
 
 const authController = new AuthController();
@@ -33,28 +32,6 @@ router.post('/batch', (async (req, res) => {
   }
 }) as RequestHandler);
 
-// router.get('/me', (async (req, res) => {
-//   const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
-
-//   try {
-//     let decrypt;
-
-//     if (token) decrypt = decryptJWT(token) as JwtPayload;
-//     else res.status(401).json('Not authorized');
-
-//     if (!decrypt) {
-//       res.status(401).json('Not authorized');
-//     } else {
-//       const client = await authController.getOneByEmail(decrypt.email);
-
-//       if (!client) return res.status(401).json('Not authorized');
-//       else res.status(200).json(client);
-//     }
-//   } catch (error: unknown) {
-//     res.status(500).json('Internal server error');
-//   }
-// }) as RequestHandler);
-
 router.get('/me', requireAuth, async (req: AuthedRequest, res) => {
   try {
     // req.user est rempli par le middleware
@@ -71,8 +48,7 @@ router.get('/me', requireAuth, async (req: AuthedRequest, res) => {
   }
 });
 
-
-router.get('/verify',requireAuth, (async (req, res) => {
+router.get('/verify', requireAuth, (async (req, res) => {
   const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
   try {
     if (!token) {
