@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
       next: (data: ReponseToken) => {
         if (data.success) {
           console.log(data, 'Connexion réussie');
-          
+
           this._authService.setAuthenticated(data.data.token);
           this.router.navigateByUrl(this.returnUrl);
         }
