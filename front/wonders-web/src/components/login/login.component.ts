@@ -42,7 +42,6 @@ export class LoginComponent implements OnInit {
     // const rawReturnUrl = this.route.snapshot.queryParams['returnUrl'] || 'home';
     this.returnUrl = `/${this.translateService.currentLang}/home`;
 
-    // ✅ Chargement conditionnel de Tauri platform
     if (isTauri()) {
       this.platformName = platform();
     }
@@ -66,7 +65,7 @@ export class LoginComponent implements OnInit {
       },
       error: (error) => {
         this.error = true
-        console.error('Erreur de connexion:', error)
+        console.error('Error while loging:', error)
         this.router.navigate(['/', this.translateService.currentLang, 'login'])
       }
     });

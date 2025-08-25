@@ -22,7 +22,6 @@ export default class TripHotelController {
     const tripHotel = await TripHotel.findByPk(id);
     if (tripHotel) {
       tripHotel.name = hotel.name;
-      tripHotel.trip_city_id = hotel.trip_city_id;
       tripHotel.from = hotel.from;
       tripHotel.price = hotel.price;
       tripHotel.to = hotel.to;

@@ -47,11 +47,12 @@
     </div>
   </section>
 
-  <!-- Voyage -->
-  <section *ngIf="trips.length > 0" class="mb-12">
-    <h3 class="text-2xl font-semibold mb-6 flex items-center gap-2"><span>Vos voyages</span></h3>
+  <!-- Voyages -->
+  <section *ngIf="(trips?.length ?? 0) > 0; else tripsEmpty" class="mb-12">
+    <h3 class="text-2xl font-semibold mb-6 flex items-center gap-2">
+      <span>Vos voyages</span>
+    </h3>
 
-    <!-- Carousel wrapper -->
     <div class="relative">
       <button
         class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow p-2 rounded-full z-10"
@@ -67,7 +68,6 @@
         ›
       </button>
 
-      <!-- Carousel container -->
       <div #carouselRef class="overflow-x-auto no-scrollbar scroll-smooth">
         <div class="flex gap-6 px-10">
           <div
@@ -91,6 +91,30 @@
       </div>
     </div>
   </section>
+
+  <!-- Placeholder si aucun voyage -->
+  <ng-template #tripsEmpty>
+    <!-- Chargement (hasTrips === null) : skeleton -->
+    <section *ngIf="hasTrips === null" class="mb-12">
+      <h3 class="text-2xl font-semibold mb-6 flex items-center gap-2"><span>Vos voyages</span></h3>
+      <div class="px-10">
+        <div class="w-80 h-48 rounded-xl bg-gray-100 animate-pulse"></div>
+      </div>
+    </section>
+
+    <!-- Aucun voyage (hasTrips === false) : placeholder + redirection -->
+    <section *ngIf="hasTrips === false" class="mb-12">
+      <h3 class="text-2xl font-semibold mb-6 flex items-center gap-2"><span>Vos voyages</span></h3>
+      <div class="px-10">
+        <div class="w-80 bg-white/80 backdrop-blur rounded-xl border border-dashed border-gray-300 p-6 text-center">
+          <div class="text-gray-500 mb-3">Aucun voyage pour le moment</div>
+          <button class="px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white" (click)="goPlanTrip()">
+            Planifier un voyage
+          </button>
+        </div>
+      </div>
+    </section>
+  </ng-template>
 </div>
 
 <!-- Modal : Edition -->

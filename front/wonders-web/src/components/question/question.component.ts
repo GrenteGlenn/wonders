@@ -9,6 +9,9 @@ import { QuizQuestion, UserAnswerCreate } from '../../app/model/Question';
 import { AuthentificationService } from '../../app/service/auth/authentification.service';
 import { AIProposalCountry, AIQuizzCountry } from '../../app/model/AI';
 import { TranslateService } from '../../app/service/translate/translate.service';
+import { Country } from '../../app/model/Country';
+import { forkJoin, map } from 'rxjs';
+import { CountryService } from '../../app/service/country/country.service';
 
 @Component({
   selector: 'app-question',
@@ -28,20 +31,21 @@ export class QuestionComponent implements OnInit {
   userAnswers: any[] = [];
   proposalCountries: AIProposalCountry[] = [];
   isProposalLoading: boolean = true;
+  private allCountries: Country[] = [];
 
   constructor(
     private router: Router,
     private questionnaireService: QuestionnaireService,
     private authService: AuthentificationService,
-    public translateService: TranslateService
-    
+    public translateService: TranslateService,
+    private countryService: CountryService
   ) {}
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
       // Charge d'abord les questions, puis les réponses
       this.loadQuizQuestions().then(() => {
-        // this.loadUserAnswers();
+        this.loadUserAnswers();
       });
     } else {
       this.loadQuizQuestions();
@@ -50,12 +54,13 @@ export class QuestionComponent implements OnInit {
 
   // permet le switche de vers la page plan trip avec la suggestion
   onSelectProposal(suggestion: any) {
-     this.router.navigate(['/', this.translateService.currentLang, 'stepBody']), {
-      queryParams: {
-        image: suggestion.img_full,
-        city: suggestion.pays
-      }
-    };
+    this.router.navigate(['/', this.translateService.currentLang, 'stepBody']),
+      {
+        queryParams: {
+          image: suggestion.img_full,
+          city: suggestion.pays
+        }
+      };
   }
 
   loadUserAnswers() {
@@ -234,54 +239,85 @@ export class QuestionComponent implements OnInit {
   }
 
   askProposalCountry() {
-    const answerUser: AIQuizzCountry = {
-      langue: [],
-      climat: '',
-      paysage: '',
-      activity: [],
-      populaire: false
-    };
+    const answerUser: AIQuizzCountry = { langue: [], climat: '', paysage: '', activity: [], populaire: false };
 
     this.userAnswers.forEach((answer) => {
       switch (answer.quiz_line_id) {
-        case 10: // Question langue
-          if (answer.text.toLowerCase().includes('non')) {
-            answerUser.langue = ['français'];
-          } else {
-            answerUser.langue = ['français', 'anglais'];
-          }
+        case 10:
+          answerUser.langue = answer.text.toLowerCase().includes('non') ? ['français'] : ['français', 'anglais'];
           break;
-
-        case 11: // Question climat
+        case 11:
           answerUser.climat = answer.text.toLowerCase();
-          // console.log( answerUser.climat, 'climat');
           break;
-
-        case 15: // Question activité
+        case 15:
           answerUser.activity = [answer.text.toLowerCase()];
-          // console.log(answerUser.activity, 'activité');
           break;
-
-        case 19: // Question paysage
+        case 19:
           answerUser.paysage = answer.text.toLowerCase();
-          // console.log( answerUser.paysage, 'paysage');
-
           break;
       }
     });
-    this.questionnaireService.getAIProposition(answerUser).subscribe({
-      next: (suggestion) => {
-        for (let i = 0; i < 3; i++) {
-          this.proposalCountries[i] = suggestion.data[i];
+
+    // On récupère en parallèle : suggestions IA + pays (BDD)
+    forkJoin({
+      suggestion: this.questionnaireService.getAIProposition(answerUser),
+      countries: this.countryService.getAllCountries()
+    })
+      .pipe(
+        map(({ suggestion, countries }) => {
+          this.allCountries = countries ?? [];
+          const top3 = (suggestion?.data ?? []).slice(0, 3);
+
+          // Enrichit chaque proposition avec l'image depuis la BDD si on trouve le pays
+          return top3.map((item: any) => {
+            const dbImg = this.findDbImageFor(item.pays);
+            return {
+              ...item,
+              img_full: dbImg || item?.img_full || 'assets/images/noimages.jpg'
+            };
+          });
+        })
+      )
+      .subscribe({
+        next: (enriched) => {
+          this.proposalCountries = enriched;
+          this.isProposalLoading = false;
+        },
+        error: () => {
+          this.proposalCountries = [];
+          this.isProposalLoading = false;
         }
-        this.isProposalLoading = false;
-        console.log('Suggestion:', suggestion);
-        console.log('Proposal:', this.proposalCountries);
-      },
-      error: (error) => {
-        console.log('Erreur lors de la récupération des propositions de pays');
-        console.log(error);
-      }
-    });
+      });
+  }
+
+  // Trouve l'URL de l'image en base pour un nom de pays (tolérant aux accents/casse)
+  private findDbImageFor(countryName: string): string | null {
+    if (!countryName) return null;
+    const target = this.normalize(countryName);
+
+    let match = this.allCountries.find((c) => this.normalize(c.name) === target);
+
+    if (!match) {
+      match = this.allCountries.find((c) => {
+        const n = this.normalize(c.name);
+        return n.includes(target) || target.includes(n);
+      });
+    }
+
+    // adapte ici le champ image exact de ta BDD: "image" ou "image_text"
+    const img = (match as any)?.image ?? (match as any)?.image_text ?? null;
+    return img && String(img).trim() ? String(img) : null;
+  }
+
+  // Normalise un libellé (sans accents, minuscules) pour comparer des noms //
+  private normalize(s: string): string {
+    return (
+      String(s)
+        .normalize('NFD')
+        // @ts-ignore - propriété Unicode RegExp
+        .replace(/\p{Diacritic}/gu, '')
+        .toLowerCase()
+        .trim()
+    );
   }
 }

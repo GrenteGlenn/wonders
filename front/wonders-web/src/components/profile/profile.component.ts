@@ -15,6 +15,7 @@ import { AvatarsService } from '../../app/service/users/avatars.service';
 import { TripService } from '../../app/service/trip/trip.service';
 import { ActivityService } from '../../app/service/activity/activity.service';
 import { CityService } from '../../app/service/city/city.service';
+import { TranslateService } from '../../app/service/translate/translate.service';
 
 interface r {
   image: string;
@@ -47,6 +48,8 @@ export class ProfileComponent implements OnInit {
   selectedTrip: any = null;
   categoryMap: Record<number, string> = {};
   citiesName: Record<number, string> = {};
+  isLoadingTrips = false;
+  hasTrips: boolean | null = null;
 
   constructor(
     private usersService: UsersService,
@@ -55,16 +58,14 @@ export class ProfileComponent implements OnInit {
     protected avatarsService: AvatarsService,
     public getUserFullTrip: TripService,
     private activityService: ActivityService,
-    private citiesService: CityService
+    private citiesService: CityService,
+    public router: Router,
+    public translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
     this.loadUserInfo();
-    const avatars = this.avatarsService.getAvatars();
-
-    // this.loadUserTrips()
-
-    //this.userAvatar = this.user.avatar
+    // const avatars = this.avatarsService.getAvatars();
   }
 
   getActivityCategoryName(activityId: number): string {
@@ -91,8 +92,6 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
-
-  // Charge le nom de la langue de l'user en fonction de l'id de ce dernier
   loadLanguageName(languageId: number) {
     this.languageService.getLanguageById(languageId).subscribe({
       next: (language) => {
@@ -187,30 +186,54 @@ export class ProfileComponent implements OnInit {
     this.closeDeleteModal();
   }
 
+  goPlanTrip() {
+    this.router.navigate(['/', this.translateService.currentLang, 'stepBody']);
+  }
+
   loadUserTrips(userId: number) {
+    this.isLoadingTrips = true;
+    this.hasTrips = null;
+
     this.getUserFullTrip.getUserFullTrip(userId).subscribe({
       next: (data) => {
-        const tripsArray = Array.isArray(data) ? data : [data];
+        const tripsArray = Array.isArray(data) ? data : data ? [data] : [];
+        if (tripsArray.length === 0) {
+          this.trips = [];
+          this.hasTrips = false;
+          this.isLoadingTrips = false;
+          return;
+        }
+
         this.trips = [];
+        this.hasTrips = true;
+        this.isLoadingTrips = false;
 
         tripsArray.forEach((trip) => {
+          if (!trip) return;
+
           this.countryService.getCountryById(trip.country_id).subscribe({
             next: (country) => {
               this.trips.push({
                 ...trip,
                 country,
-                countryImage: country.image || 'assets/images/noimages.jpg'
+                countryImage: country?.image || 'assets/images/noimages.jpg'
               });
               console.log('Trip loaded:', trip);
             },
             error: () => {
-              this.trips.push(trip);
+              this.trips.push({
+                ...trip,
+                country: null,
+                countryImage: 'assets/images/noimages.jpg'
+              });
             }
           });
         });
       },
-      error: (error) => {
-        console.error('Erreur lors de la récupération des voyages:', error);
+      error: () => {
+        this.trips = [];
+        this.hasTrips = false;
+        this.isLoadingTrips = false;
       }
     });
   }
@@ -232,7 +255,7 @@ export class ProfileComponent implements OnInit {
 
   scrollCarousel(direction: 'left' | 'right') {
     const carousel = this.carouselRef.nativeElement as HTMLElement;
-    const scrollAmount = 300; // pixels per click
+    const scrollAmount = 300;
 
     if (direction === 'left') {
       carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
