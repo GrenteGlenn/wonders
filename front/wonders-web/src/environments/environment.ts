@@ -10,7 +10,7 @@ export const environment = {
   quizzApiUrl: 'https://quizz.wonders-travel.fr',
   // quizzApiUrl: 'http://localhost:3007/api',
   aiApiUrl: 'http://localhost:3004',
-  API_GoogleMap: 'AIzaSyAdCTrUOHm3FP7IIvkZ0Y8BH1Mc7ukgM1k',
+  API_GoogleMap: 'AIzaSyBPPZxvLBEZ6B2mFzQsM6Wt0cqhPxSdR0U',
   diceBearApiUrl: 'https://api.dicebear.com/8.x',
   firebaseConfig: {
     apiKey: 'AIzaSyDFPmNMPGhHnkeivSQ99Uz5g6wWJMKZGro',
