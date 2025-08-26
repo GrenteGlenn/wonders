@@ -27,6 +27,9 @@
               "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": [
+               "html2canvas"
+],
             "assets": [
               {
                 "glob": "**/*",
