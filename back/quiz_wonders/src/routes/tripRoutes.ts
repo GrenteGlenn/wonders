@@ -66,6 +66,15 @@ router.get('/user-full-trip-detail/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
+router.get('/user-full-trip-detail/:id', (async (req, res) => {
+  try {
+    const trip = await tripController.fullTripDetail(parseInt(req.params.id, 10));
+    trip ? res.status(200).json(trip) : res.status(404).json({ code: '404', message: 'entry does not exists' });
+  } catch (error) {
+    res.status(500).json({ code: '500', message: error });
+  }
+}) as RequestHandler);
+
 router.post('/', (async (req, res) => {
   try {
     const body = <TripInterface>req.body;
