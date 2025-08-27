@@ -3,8 +3,6 @@ import Status from '../../models/status';
 export default class StatusController {
   async list() {
     const status = await Status.findAll();
-    console.log(status);
-
     return status;
   }
 

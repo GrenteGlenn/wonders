@@ -16,9 +16,13 @@ router.get('/', (async (req, res) => {
 }) as RequestHandler);
 
 router.get('/detail', (async (req, res) => {
+  const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+
   try {
-    const trips = await tripController.getAllTrips();
-    res.status(200).json(trips);
+    if (token) {
+      const trips = await tripController.getAllTrips(token);
+      res.status(200).json(trips);
+    } else res.status(403).json('Forbidden');
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }
@@ -48,15 +52,6 @@ router.get('/user-full-trip/:id', (async (req, res) => {
     trips.length
       ? res.status(200).json(trips)
       : res.status(404).json({ code: '404', message: 'Aucun voyage trouvé pour cet utilisateur' });
-  } catch (error) {
-    res.status(500).json({ code: '500', message: error });
-  }
-}) as RequestHandler);
-
-router.get('/user-full-trip-detail/:id', (async (req, res) => {
-  try {
-    const trip = await tripController.fullTripDetail(parseInt(req.params.id, 10));
-    trip ? res.status(200).json(trip) : res.status(404).json({ code: '404', message: 'entry does not exists' });
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }

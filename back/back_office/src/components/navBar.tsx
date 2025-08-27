@@ -6,8 +6,6 @@ export default function NavBar() {
     const {user} = useApp();
     const navigate = useNavigate();
 
-    console.log("user", user);
-
     return (
         <div className="flex items-center justify-between w-full">
             {/* Titre NavBar */}
@@ -23,7 +21,7 @@ export default function NavBar() {
                 <div className="flex items-center">
                     <li className="flex flex-row items-center justify-center gap-4 mr-2">
                         <NavLink to={"/dashboard"} end>Dashboard</NavLink>
-                        <NavLink to={"/trips"}>Trips</NavLink>
+                        <NavLink to={"/trip"}>Trips</NavLink>
                         <NavLink to={"/users"}>Users</NavLink>
                         <NavLink to={"/partenaires"}>Partenaires</NavLink>
                         <NavLink to={"/reservations"}>Réservations</NavLink>

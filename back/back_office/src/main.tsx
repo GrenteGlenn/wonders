@@ -4,11 +4,13 @@ import './index.css'
 import {BrowserRouter} from "react-router-dom";
 import App from "@/App.tsx";
 import {AppProvider} from "@/context/AppContext.tsx";
+import RouteInterceptor from "@/routeInterceptor.tsx";
 
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <AppProvider>
             <BrowserRouter>
+                <RouteInterceptor/>
                 <App/>
             </BrowserRouter>
         </AppProvider>

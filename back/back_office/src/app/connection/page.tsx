@@ -7,6 +7,7 @@ import {Eye, EyeOff} from "lucide-react";
 import {useState} from "react";
 import {useApp} from "@/context/AppContext.tsx";
 import {useNavigate} from "react-router-dom";
+import {instanceUser} from "@/lib/axiosInstance.ts";
 
 const FormSchema = z.object({
     email: z.string()
@@ -34,26 +35,24 @@ export default function TravelManagerLogin() {
         },
     })
 
-    function onSubmit(data: z.output<typeof FormSchema>) {
-        fetch("http://localhost:3005/api/auth/login",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            }
-        )
-            .then((res) => {
-                if (!res.ok) {
+    async function onSubmit(data: z.output<typeof FormSchema>) {
+
+        await instanceUser({
+            url: 'auth/loginAdmin',
+            method: 'POST',
+            data: {
+                email: data.email,
+                password: data.password
+            },
+        })
+            .then((response) => {
+                const data = response.data
+                if (!data.success) {
                     throw new Error('Erreur de chargement')
                 }
-                return res.json()
-            })
-            .then((data) => {
-                login({name: "Admin", email: data.email})
+                login({name: "Admin", email: data.data.email})
+                localStorage.setItem("token", data.data.token)
                 navigate("/dashboard")
-
             })
             .catch((error) => console.log(error));
     }
@@ -137,15 +136,6 @@ export default function TravelManagerLogin() {
                                         </FormItem>
                                     )
                                 }} name={"password"}/>
-
-                            <div className="text-left">
-                                <button
-                                    type="submit"
-                                    className="text-sm text-blue-600 hover:text-blue-700 focus:outline-none"
-                                >
-                                    Mot de passe oublié ?
-                                </button>
-                            </div>
 
                             <div className="pt-2">
                                 <button

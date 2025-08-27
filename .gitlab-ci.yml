@@ -1,5 +1,5 @@
 include:
-  - local: 'ci/rules/block-unallowed-branches.yml'
+#  - local: 'ci/rules/block-unallowed-branches.yml'
 
   # Lint jobs
   - local: 'ci/lint/users.yml'

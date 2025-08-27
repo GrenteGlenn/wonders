@@ -15,6 +15,7 @@ test_back_countries:
     - echo "DB_DIALECT=$DB_DIALECT" >> .env
     - echo "JWT_SECRET_KEY=$JWT_SECRET_KEY" >> .env
     - echo "OPENAI_API_KEY=afafaf" >> .env
+    - echo "ADDRESS_USER=https://users.wonders-travel.fr/api" >> .env
     - cat .env
   script:
     - export NODE_ENV=development

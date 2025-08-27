@@ -13,7 +13,7 @@ const addressUser = process.env.ADDRESS_USER;
 const addressActivity = process.env.ADDRESS_ACTIVITY;
 
 export default class TripController {
-  async getAllTrips() {
+  async getAllTrips(token: string) {
     const trips = await Trip.findAll({
       attributes: {
         exclude: ['created_at', 'updated_at', 'transportation_id']
@@ -38,7 +38,10 @@ export default class TripController {
 
     await fetch(`${addressCountry}/countries/batch`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ ids: countryIds })
     })
       .then(async (res) => {
@@ -52,7 +55,10 @@ export default class TripController {
 
     await fetch(`${addressUser}/users/batch`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ ids: userIds })
     })
       .then(async (res) => {
@@ -153,7 +159,6 @@ export default class TripController {
         created_at: new Date(),
         updated_at: new Date()
       });
-      // save city for trip
       if (!tripTransportResponse.id) {
         throw new Error('Missing transport response ID');
       }
@@ -161,6 +166,7 @@ export default class TripController {
         throw new Error('Missing trip ID');
       }
 
+      // save city for trip
       const tripCityResponse = await TripCity.create({
         city_id,
         transportation_id: tripTransportResponse.id,
@@ -249,6 +255,13 @@ export default class TripController {
             {
               model: TripTransportation,
               as: 'transportation',
+              attributes: {
+                exclude: ['created_at', 'updated_at']
+              }
+            },
+            {
+              model: TripHotel,
+              as: 'hotel',
               attributes: {
                 exclude: ['created_at', 'updated_at']
               }

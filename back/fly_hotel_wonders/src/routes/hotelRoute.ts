@@ -4,17 +4,6 @@ import { getHotelOffers, checkHotelOffers } from '../services/Amadeus';
 import { z } from 'zod';
 import { HotelOffersSchema, HotelSchema } from '../interface/Global';
 
-// Définition du schéma Zod pour HotelResponse
-// const HotelResponseSchema = z.object({
-//   latitude: z.number().optional(),
-//   longitude: z.number().optional(),
-//   radius: z.number().optional(),
-//   hotelScore: z.number().optional(),
-//   ratings: z.number().optional(),
-//   hotelIds: z.string().optional(),
-//   adults: z.string().optional()
-// });
-
 const HotelResponseSchema = z.object({
   latitude: z.coerce.number().optional(),
   longitude: z.coerce.number().optional(),
@@ -74,9 +63,14 @@ router.get('/offers', (async (req, res) => {
   const { hotelIds, adults } = validationResult.data;
 
   try {
-    const hotel = (await checkHotelOffers(hotelIds, adults)) as typeof HotelOffersSchema;
+    const hotels = (await checkHotelOffers(hotelIds, adults)) as typeof HotelOffersSchema;
 
-    res.json(hotel);
+    const hasTest = (s: unknown) => typeof s === 'string' && /test/i.test(s.normalize('NFKD').trim());
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const filtered = Array.isArray(hotels) ? hotels.filter((h) => !hasTest(h?.name)) : [];
+
+    res.json(filtered);
   } catch (error) {
     res.json({ error: error });
   }

@@ -7,11 +7,15 @@ meta {
 delete {
   url: {{base_url}}/countries/:id
   body: none
-  auth: none
+  auth: bearer
 }
 
 params:path {
   id: 6
+}
+
+auth:bearer {
+  token: {{tokenAdmin}}
 }
 
 tests {

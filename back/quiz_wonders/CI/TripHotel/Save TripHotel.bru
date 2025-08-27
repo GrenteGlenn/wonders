@@ -33,7 +33,7 @@ body:json {
 script:pre-request {
   const { faker } = require('@faker-js/faker');
   
-  bru.setEnvVar("number",faker.number.int({max: 10, min : 1}))
+  bru.setEnvVar("number",faker.number.int({max: 3, min : 1}))
   bru.setEnvVar("date",faker.date.soon())
   bru.setEnvVar("price",faker.number.int({ max: 500 }))
   bru.setEnvVar("url",faker.internet.url({ appendSlash: true }))

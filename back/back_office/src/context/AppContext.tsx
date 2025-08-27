@@ -34,6 +34,8 @@ export const AppProvider = ({children}: { children: ReactNode }) => {
     const logout = () => {
         setIsAuthenticated(false);
         setUser(null);
+        localStorage.removeItem("token");
+        window.location.href = '/';
     };
 
     const toggleTheme = () => {
