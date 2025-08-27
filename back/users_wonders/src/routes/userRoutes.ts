@@ -32,22 +32,29 @@ router.post('/batch', adminCheck, (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/me', requireAuth, (async (req: AuthedRequest, res) => {
+router.get('/me', (async (req, res) => {
+  const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+
   try {
-    const client = await authController.getOneByEmail(req.user!.email);
+    let decrypt;
 
-    if (!client) {
-      return res.status(401).json('Unauthorized');
+    if (token) decrypt = decryptJWT(token) as JwtPayload;
+    else res.status(401).json('Not authorized');
+
+    if (!decrypt) {
+      res.status(401).json('Not authorized');
+    } else {
+      const client = await authController.getOneByEmail(decrypt.email);
+
+      if (!client) return res.status(401).json('Not authorized');
+      else res.status(200).json(client);
     }
-
-    return res.status(200).json(client);
-  } catch (error) {
-    console.error('Error in /me route:', error);
-    return res.status(500).json('Internal server error');
+  } catch (error: unknown) {
+    res.status(500).json('Internal server error');
   }
 }) as RequestHandler);
 
-router.get('/verify', requireAuth, (async (req, res) => {
+router.get('/verify', (async (req, res) => {
   const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
   try {
     if (!token) {
