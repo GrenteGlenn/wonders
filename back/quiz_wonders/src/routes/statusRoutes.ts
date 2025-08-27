@@ -1,6 +1,5 @@
 import { RequestHandler, Router } from 'express';
 import StatusController from '../controllers/StatusController';
-import { adminCheck } from '../middlewares/adminCheck';
 
 interface Body {
   name: string;
@@ -50,7 +49,7 @@ router.put('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/:id', adminCheck, (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
     const status = await statusController.remove(parseInt(req.params.id, 10));
     if (status) {
