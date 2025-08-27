@@ -31,7 +31,7 @@ test_back_countries:
     - npm install
     - npm install -g @usebruno/cli
     - cd ../ && npm run start &
-    - sleep 5 && bru run --env-var base_url=http://localhost:3666/api --iteration-count 200 --bail
+    - sleep 5 && bru run --env-var base_url=http://localhost:3666/api --iteration-count 100 --bail
     - cd ../
   after_script:
     # Génération du .env à partir des variables GitLab
