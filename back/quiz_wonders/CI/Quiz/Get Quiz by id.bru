@@ -1,0 +1,15 @@
+meta {
+  name: Get Quiz by id
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/quiz/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 1
+}
