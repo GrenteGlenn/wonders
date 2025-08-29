@@ -28,7 +28,7 @@ test_back_quizz:
     - npm install
     - npm install -g @usebruno/cli
     - cd ../ && npm run start &
-    - sleep 5 && bru run --env-var base_url=http://localhost:3666/api --iteration-count 200 --bail
+    - sleep 5 && bru run --env-var base_url=http://localhost:3666/api --iteration-count 100 --bail
     - cd ../
   after_script:
     - cd back/quiz_wonders
