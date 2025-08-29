@@ -1,5 +1,5 @@
 include:
-  - local: 'ci/rules/block-unallowed-branches.yml'
+#  - local: 'ci/rules/block-unallowed-branches.yml'
 
   # Lint jobs
   - local: 'ci/lint/users.yml'
@@ -10,12 +10,15 @@ include:
   # Test jobs
   - local: 'ci/test/users.yml'
   - local: 'ci/test/countries.yml'
+  - local: 'ci/test/quizz.yml'
   - local: 'ci/test/activities.yml'
 
   # Build jobs
   - local: 'ci/build/users.yml'
   - local: 'ci/build/countries.yml'
+  - local: 'ci/build/quizz.yml'
   - local: 'ci/build/activities.yml'
+  - local: 'ci/build/front.yml'
 
   # Docker jobs
   # - local: 'ci/docker/users.yml'
@@ -24,7 +27,7 @@ include:
 
 workflow:
   rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/ 
+    - if: $CI_MERGE_REQUEST_TITLE =~ /^(\[Draft\]|\(Draft\)|Draft:)/
       when: never
     - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
@@ -34,3 +37,4 @@ stages:
   - test
   - build
   # - docker
+

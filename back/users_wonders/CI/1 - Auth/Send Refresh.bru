@@ -1,0 +1,25 @@
+meta {
+  name: Send Refresh
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{base_url}}/auth/refresh
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setGlobalEnvVar("refresh_token", response.token);
+}

@@ -19,7 +19,7 @@ module.exports = {
           country_id: 1,
           last_name: 'Doe',
           email: 'example@example.com',
-          role_id: 1,
+          role_id: 3,
           password: hashedPassword1,
           created_at: new Date(),
           updated_at: new Date(),

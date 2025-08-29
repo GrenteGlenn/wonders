@@ -19,8 +19,9 @@ export class LoginComponent implements OnInit {
   password: string = '';
   returnUrl: string = '';
   platformName: string | null = null;
-  error: boolean = false
-  errorMessage: string = 'Une erreur est survenue'
+  error: boolean = false;
+  errorMessage: string = 'Une erreur est survenue';
+  submitting: boolean = false;
 
   constructor(
     private _authService: AuthentificationService,
@@ -54,21 +55,24 @@ export class LoginComponent implements OnInit {
   clickLogin(): void {
     if (!this.email || !this.password) return;
 
+    this.submitting = true;
+
     this._authService.login(this.email, this.password).subscribe({
       next: (data: ReponseToken) => {
         if (data.success) {
           console.log(data, 'Connexion réussie');
-          
+
           this._authService.setAuthenticated(data.data.token);
           this.router.navigateByUrl(this.returnUrl);
         }
       },
       error: (error) => {
-        this.error = true
-        console.error('Error while loging:', error)
-        this.router.navigate(['/', this.translateService.currentLang, 'login'])
+        this.error = true;
+        console.error('Error while loging:', error);
+        this.router.navigate(['/', this.translateService.currentLang, 'login']);
       }
     });
+    this.submitting = false;
   }
 
   goToSafe() {

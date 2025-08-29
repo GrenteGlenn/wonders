@@ -49,15 +49,15 @@ router.get('/city/:id', (async (req, res) => {
 //   }
 // }) as RequestHandler;
 
-router.post('/geo', (async (req, res) => {
-  try {
-    const { longitude, latitude } = <Body>req.body;
-    const airport = await airportController.geo(longitude, latitude);
-    res.json(airport);
-  } catch (error) {
-    res.status(500).json({ error });
-  }
-}) as RequestHandler);
+// router.post('/geo', (async (req, res) => {
+//   try {
+//     const { longitude, latitude } = <Body>req.body;
+//     const airport = await airportController.geo(longitude, latitude);
+//     res.json(airport);
+//   } catch (error) {
+//     res.status(500).json({ error });
+//   }
+// }) as RequestHandler);
 
 // router.post('/geo', async (req, res) => {
 //   const { longitude, latitude } = req.body;

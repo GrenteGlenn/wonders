@@ -4,7 +4,6 @@ module.exports = {
       'trip_hotels',
       [
         {
-          id: 1,
           trip_city_id: 1,
           name: 'Hotel Sunshine',
           from: new Date('2024-01-01'),
@@ -20,7 +19,6 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: 2,
           trip_city_id: 2,
           name: 'Hotel Moonlight',
           from: new Date('2024-02-01'),
@@ -36,7 +34,6 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: 3,
           trip_city_id: 3,
           name: 'Hotel Starlight',
           from: new Date('2024-03-01'),

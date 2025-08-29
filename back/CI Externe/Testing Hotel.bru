@@ -1,0 +1,18 @@
+meta {
+  name: Testing Hotel
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url_fly}}/hotel/list?latitude=48.8566&longitude=2.3522&radius=10&showOnlyWithOffers=false
+  body: none
+  auth: inherit
+}
+
+params:query {
+  latitude: 48.8566
+  longitude: 2.3522
+  radius: 10
+  showOnlyWithOffers: false
+}

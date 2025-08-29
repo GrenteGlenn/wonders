@@ -1,7 +1,7 @@
 meta {
   name: Edit TripDay
   type: http
-  seq: 4
+  seq: 5
 }
 
 put {
@@ -20,7 +20,7 @@ body:json {
 script:pre-request {
   const { faker } = require('@faker-js/faker');
   
-  bru.setEnvVar("trip_city_id",faker.number.int({max: 10, min: 1}))
+  bru.setEnvVar("trip_city_id",faker.number.int({max: 3, min: 1}))
   bru.setEnvVar("date",faker.date.soon())
 }
 

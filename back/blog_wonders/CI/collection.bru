@@ -4,10 +4,15 @@ meta {
 }
 
 auth {
-  mode: none
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{tokenAdmin}}
 }
 
 vars:pre-request {
   base_url: http://localhost:3001/api
   base_url_prod: https://blog.wonders-travel.fr/
+  tokenAdmin: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZXhhbXBsZUBleGFtcGxlLmNvbSIsImlhdCI6MTc1NjMwNzcxMywiZXhwIjoxNzY0ODYxMzEzfQ.TCWKXU_k_bPO3y1cPMooG7Dy61n5RTbGqWRl_5GAoO0
 }

@@ -1,0 +1,18 @@
+meta {
+  name: Get TripDayActivity Detail
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{base_url}}/trip-day-activity/detail
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+}

@@ -1,95 +1,80 @@
-import {SiteHeader} from "@components/site-header.tsx";
 import Loader from "@components/loader.tsx";
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle
-} from "@components/ui/card.tsx";
-import type {TripCity} from "@/interface/Global.ts";
+import type {Activity, TripCityData, TripCityDay} from "@/interface/Global.ts";
+import {DataTableActivity} from "@components/data-table-activity.tsx";
+import {instanceQuiz} from "@/lib/axiosInstance.ts";
 
 export default function Page() {
-    const [data, setData] = useState([])
+    const [data, setData] = useState<Activity[] | null>(null)
+    const [loading, setLoading] = useState<boolean>(true);
     const {id} = useParams();
 
     useEffect(() => {
-        fetch(`http://localhost:3004/api/trip/user-full-trip-detail/${id}`
-            , {
-                method: 'GET',
+        setLoading(true)
+        if (id)
+            instanceQuiz(`trip/user-full-trip/${id}`, {
+                method: 'GET'
             })
-            .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Erreur de chargement')
-                }
-                return res.json()
+                .then((res) => {
+                    const data = res.data;
+                    console.log("data", data);
+                    data.cities.forEach((element: TripCityData) => {
+                        element.tripCityDays.forEach((element: TripCityDay) => {
+                            console.log(element)
+                            // setData((prevState) => [...(prevState || []), element.activities])
+                        })
+                    })
+                })
+                .finally(() => setLoading(false))
+                .catch(error => console.log(error))
+
+        else
+            instanceQuiz('trip-day-activity/detail', {
+                method: 'GET'
             })
-            .then((data) => {
-                setData(data)
-            })
-            .catch(error => console.log(error))
+                .then((res) => {
+                    const data = res.data;
+                    console.log("data", data);
+                    setData(data)
+                })
+                .finally(() => setLoading(false))
+                .catch(error => console.log(error))
     }, [])
-    console.log(data)
+    console.log("activity", data)
 
     return (
         <>
-            <SiteHeader title={"Trip Activity"}/>
             {
-                data.length > 0 ?
+                !loading && data ?
                     <div>
-                        <Card className="@container/card">
-                            <CardHeader>
-                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                    All Activity For Travel
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                {data.map((item: TripCity, i) => {
-                                    console.log(i, item)
-                                    return (
-                                        <Card key={i}>
-                                            <CardHeader>
-                                                <CardTitle
-                                                    className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                                    City
-                                                </CardTitle>
-                                                <CardContent>
-                                                    {item.tripCityDays.map((item, i) => {
-                                                        console.log(item)
-                                                        return (
-                                                            <Card key={i}>
-                                                                <CardTitle
-                                                                    className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                                                    Day
-                                                                </CardTitle>
-                                                                <CardContent>
-                                                                    {item.activities.map((item, i) => {
-                                                                        console.log(item)
-                                                                        return (
-                                                                            <Card key={i}>
-                                                                                <CardTitle
-                                                                                    className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                                                                    Activity 1
-                                                                                </CardTitle>
-                                                                            </Card>
-                                                                        )
-                                                                    })}
-                                                                </CardContent>
-                                                            </Card>
-                                                        )
-                                                    })}
-                                                </CardContent>
-                                            </CardHeader>
-                                        </Card>
-                                    )
-                                })}
-                            </CardContent>
-                            <CardFooter className="flex-col items-start gap-1.5 text-sm">
-
-                            </CardFooter>
-                        </Card>
+                        {/*{id ?*/}
+                        {/*    <Card className="@container/card">*/}
+                        {/*        <CardHeader>*/}
+                        {/*            <CardDescription>Total Revenue</CardDescription>*/}
+                        {/*            <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">*/}
+                        {/*                $1,250.00*/}
+                        {/*            </CardTitle>*/}
+                        {/*            <CardAction>*/}
+                        {/*                <Badge variant="outline">*/}
+                        {/*                    <IconTrendingUp/>*/}
+                        {/*                    +12.5%*/}
+                        {/*                </Badge>*/}
+                        {/*            </CardAction>*/}
+                        {/*        </CardHeader>*/}
+                        {/*        <CardFooter className="flex-col items-start gap-1.5 text-sm">*/}
+                        {/*            <div className="line-clamp-1 flex gap-2 font-medium">*/}
+                        {/*                Trending up this month <IconTrendingUp className="size-4"/>*/}
+                        {/*            </div>*/}
+                        {/*            <div className="text-muted-foreground">*/}
+                        {/*                Visitors for the last 6 months*/}
+                        {/*            </div>*/}
+                        {/*        </CardFooter>*/}
+                        {/*    </Card>*/}
+                        {/*    :*/}
+                        {/*    null*/}
+                        {/*}*/}
+                        <DataTableActivity data={data}/>
                     </div>
                     :
                     <Loader size={'large'}/>

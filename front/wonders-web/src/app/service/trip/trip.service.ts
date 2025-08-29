@@ -60,7 +60,7 @@ export interface FullTrip {
   providedIn: 'root'
 })
 export class TripService {
-  private baseUrl = 'http://localhost:3007/api/trip'; 
+  private baseUrl = 'https://quizz.wonders-travel.fr/api/trip'; 
 
   constructor(private http: HttpClient) {}
 

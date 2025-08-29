@@ -1,6 +1,6 @@
 <div class="login-wrapper">
   <!-- Image de fond -->
-  <img src="assets/images/hero-home-1.jpg" alt="Fond" class="background-image" />
+  <img src="assets/images/hero-home-1.jpg" alt="Fond" class="background-image"/>
 
   <!-- Overlay gris -->
   <div class="overlay"></div>
@@ -24,7 +24,7 @@
                 class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               />
             </div>
-            <div *ngIf="emailError" class="text-red-600 text-sm mt-1">{{ emailError }}</div>
+            <div *ngIf="errorMessage" class="text-red-600 text-sm mt-1">{{ errorMessage }}</div>
 
 
             <div>

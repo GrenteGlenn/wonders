@@ -13,7 +13,7 @@ export function createJWT(user: User) {
         email: user?.email
       },
       SECRET,
-      { expiresIn: '30m' }
+      { expiresIn: '1h' }
     );
   } else {
     return 'Secret is undefined';
@@ -31,7 +31,7 @@ export function updateJWT(token: string) {
           email: decode.email
         },
         SECRET,
-        { expiresIn: '30m' }
+        { expiresIn: '1h' }
       );
     } else {
       return null;

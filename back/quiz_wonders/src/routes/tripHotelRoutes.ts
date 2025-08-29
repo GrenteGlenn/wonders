@@ -26,7 +26,6 @@ router.get('/:id', (async (req, res) => {
 router.post('/', (async (req, res) => {
   try {
     const body = <TripHotelInterface>req.body;
-    console.log('body', body);
     const tripHotel = await tripHotelController.new(body, new Date(), new Date());
     tripHotel
       ? res.status(201).json(tripHotel)

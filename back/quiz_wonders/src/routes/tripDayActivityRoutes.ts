@@ -14,6 +14,15 @@ router.get('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
+router.get('/detail', (async (req, res) => {
+  try {
+    const tripDayActivity = await tripDayActivityController.listWithDay();
+    res.status(200).json(tripDayActivity);
+  } catch (error) {
+    res.status(500).json({ code: '500', message: error });
+  }
+}) as RequestHandler);
+
 router.get('/:id', (async (req, res) => {
   try {
     const tripDayActivity = await tripDayActivityController.one(parseInt(req.params.id, 10));

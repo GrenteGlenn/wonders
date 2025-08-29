@@ -1,0 +1,28 @@
+meta {
+  name: Login Admin
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "email": "example@example.com",
+      "password": "..."
+  }
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus()).to.equal(200);
+  });
+  
+  const response = res.getBody();
+  
+  bru.setEnvVar("tokenAdmin", response.data.token);
+}

@@ -1,9 +1,27 @@
 import TripDayActivity from '../../models/tripdayactivity';
 import { Status } from '../interfaces/Global';
+import TripDay from '../../models/tripday';
 
 export default class TripDayActivityController {
   async list() {
     return await TripDayActivity.findAll();
+  }
+
+  async listWithDay() {
+    return await TripDayActivity.findAll({
+      attributes: {
+        exclude: ['created_at', 'updated_at']
+      },
+      include: [
+        {
+          model: TripDay,
+          as: 'tripDay',
+          attributes: {
+            exclude: ['created_at', 'updated_at']
+          }
+        }
+      ]
+    });
   }
 
   async one(id: number) {

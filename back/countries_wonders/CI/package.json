@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "bruno": "bru run",
-    "test": "bru run --env-var base_url=http://localhost:3002/api --bail --iteration-count 200 "
+    "test": "bru run --env-var base_url=http://localhost:3002/api tokenAdmin=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImVtYWlsIjoiZXhhbXBsZUBleGFtcGxlLmNvbSIsImlhdCI6MTc1NjMwNzcxMywiZXhwIjoxNzY0ODYxMzEzfQ.TCWKXU_k_bPO3y1cPMooG7Dy61n5RTbGqWRl_5GAoO0 --bail --iteration-count 200 "
   },
   "type": "commonjs",
   "author": "",
