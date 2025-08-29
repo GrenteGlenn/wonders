@@ -3,7 +3,7 @@ import AuthController from '../controllers/AuthController';
 import { decryptJWT } from '../lib/JWT';
 import { JwtPayload } from '../interfaces/Global';
 import { UserUpdateInterface } from '../interfaces/UserInterface';
-import requireAuth, { AuthedRequest } from '../middlewares/userCheck';
+import adminCheck from '../middlewares/adminCheck';
 
 const router = Router();
 
@@ -22,7 +22,7 @@ router.get('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.post('/batch', (async (req, res) => {
+router.post('/batch', adminCheck, (async (req, res) => {
   const { ids } = <Body>req.body;
   try {
     const client = await authController.listId({ ids });
@@ -32,22 +32,29 @@ router.post('/batch', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/me', requireAuth, (async (req: AuthedRequest, res) => {
+router.get('/me', (async (req, res) => {
+  const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+
   try {
-    const client = await authController.getOneByEmail(req.user!.email);
+    let decrypt;
 
-    if (!client) {
-      return res.status(401).json('Unauthorized');
+    if (token) decrypt = decryptJWT(token) as JwtPayload;
+    else res.status(401).json('Not authorized');
+
+    if (!decrypt) {
+      res.status(401).json('Not authorized');
+    } else {
+      const client = await authController.getOneByEmail(decrypt.email);
+
+      if (!client) return res.status(401).json('Not authorized');
+      else res.status(200).json(client);
     }
-
-    return res.status(200).json(client);
-  } catch (error) {
-    console.error('Error in /me route:', error);
-    return res.status(500).json('Internal server error');
+  } catch (error: unknown) {
+    res.status(500).json('Internal server error');
   }
 }) as RequestHandler);
 
-router.get('/verify', requireAuth, (async (req, res) => {
+router.get('/verify', (async (req, res) => {
   const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
   try {
     if (!token) {
@@ -71,7 +78,7 @@ router.get('/verify', requireAuth, (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/:id', (async (req, res) => {
+router.get('/:id', adminCheck, (async (req, res) => {
   try {
     const client = await authController.getOne(parseInt(req.params.id, 10));
     res.status(200).json(client);
@@ -90,7 +97,7 @@ router.put('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/:id', (async (req, res) => {
+router.delete('/:id', adminCheck, (async (req, res) => {
   try {
     const client = await authController.remove(parseInt(req.params.id, 10));
     res.status(202).json(client);

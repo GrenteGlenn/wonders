@@ -3,9 +3,8 @@ module.exports = {
     await queryInterface.bulkInsert(
       'trip_day_activities',
       [
-        { id: 1, trip_day_id: 2, activity_id: 44, status: 'APayer', created_at: new Date(), updated_at: new Date() },
+        { trip_day_id: 2, activity_id: 44, status: 'APayer', created_at: new Date(), updated_at: new Date() },
         {
-          id: 2,
           trip_day_id: 2,
           activity_id: 17,
           status: 'EnAttenteDeReservation',
@@ -13,7 +12,6 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: 3,
           trip_day_id: 1,
           activity_id: 22,
           status: 'EnAttenteDeConfirmation',
@@ -21,14 +19,13 @@ module.exports = {
           updated_at: new Date()
         },
         {
-          id: 4,
           trip_day_id: 3,
           activity_id: 18,
           status: 'ProblemeDeReservation',
           created_at: new Date(),
           updated_at: new Date()
         },
-        { id: 5, trip_day_id: 4, activity_id: 9, status: 'Annuler', created_at: new Date(), updated_at: new Date() }
+        { trip_day_id: 4, activity_id: 9, status: 'Annuler', created_at: new Date(), updated_at: new Date() }
       ],
       {}
     );

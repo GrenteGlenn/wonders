@@ -1,15 +1,22 @@
 import { Request, Response, NextFunction } from 'express';
-import verifyUser from '../services/axios';
-const userCheck = async function (req: Request, res: Response, next: NextFunction) {
-  if (req.headers.authorization) {
-    const verify = await verifyUser(req.headers.authorization);
-    if (verify) {
-      next();
-    } else {
-      res.status(401).send('Unauthorized');
+
+const ADDRESS_USER = process.env.ADDRESS_USER;
+
+export const userCheck = function (req: Request, res: Response, next: NextFunction) {
+  const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+  if (!token) return res.status(401).send('Unauthorized');
+
+  fetch(`${ADDRESS_USER}/users/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
     }
-  } else {
-    res.status(401).send('Unauthorized');
-  }
+  })
+    .then(() => {
+      next();
+    })
+    .catch(() => {
+      res.status(401).send('Unauthorized');
+    });
 };
-export default userCheck;

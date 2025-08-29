@@ -17,9 +17,14 @@ interface Body {
   password: string;
 }
 
+interface Credentials {
+  email: string;
+  password: string;
+}
+
 router.post('/login', (async (req, res, next) => {
   try {
-    const body = <UserInterface>req.body;
+    const body = <Credentials>req.body;
     let token;
     let client;
     try {
@@ -55,13 +60,52 @@ router.post('/login', (async (req, res, next) => {
   }
 }) as RequestHandler);
 
-// DOTO check if work
+router.post('/loginAdmin', (async (req, res, next) => {
+  try {
+    const body = <Credentials>req.body;
+    let token;
+    let client;
+    try {
+      client = await authController.getOneByEmail(body.email);
+    } catch (err) {
+      console.log(err);
+      const error = new Error('Error! Something went wrong.0');
+      return next(error);
+    }
+
+    if (client) {
+      const isCorrect = await decryptPassword(client.password, body.password);
+      if (isCorrect && client.role_id > 1) {
+        try {
+          token = createJWT(client);
+          res.status(200).json({
+            success: true,
+            data: {
+              userId: client?.id,
+              email: client?.email,
+              token: token,
+              role: 'amdin'
+            }
+          });
+        } catch (err) {
+          console.log(err);
+          const error = new Error('Error! Something went wrong1.');
+          return next(error);
+        }
+      } else return res.status(401).json('password or identifiant incorrect');
+    } else return res.status(401).json('password or identifiant incorrect');
+  } catch (error) {
+    res.status(401).json('Error! Something went wrong.');
+  }
+}) as RequestHandler);
+
 router.post('/refresh', ((req, res) => {
   let refresh;
   const token = req.headers.authorization?.split(' ')[1];
+  console.log(token);
   if (token) refresh = updateJWT(token);
   if (refresh) res.status(200).json({ refresh });
-  else res.json('refresh fail');
+  else res.status(401).json('refresh fail');
 }) as RequestHandler);
 
 router.post('/register', (async (req, res) => {

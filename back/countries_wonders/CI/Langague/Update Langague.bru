@@ -1,5 +1,5 @@
 meta {
-  name: Update Langague c
+  name: Update Langague
   type: http
   seq: 5
 }
@@ -7,7 +7,11 @@ meta {
 put {
   url: {{base_url}}/languages/{{languageid}}
   body: json
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{tokenAdmin}}
 }
 
 body:json {

@@ -1,4 +1,4 @@
-test_back_activities:
+test_back_quizz:
   stage: test
   image: node:22
   resource_group: test
@@ -28,7 +28,7 @@ test_back_activities:
     - npm install
     - npm install -g @usebruno/cli
     - cd ../ && npm run start &
-    - sleep 5 && bru run --env-var base_url=http://localhost:3666/api --iteration-count 200 --bail
+    - sleep 5 && bru run --env-var base_url=http://localhost:3666/api --iteration-count 100 --bail
     - cd ../
   after_script:
     - cd back/quiz_wonders

@@ -111,7 +111,7 @@ TripHotel.belongsTo(TripCity, {
 
 TripCity.hasMany(TripHotel, {
   foreignKey: 'trip_city_id',
-  as: 'trip_city'
+  as: 'hotel'
 });
 
 export default TripHotel;

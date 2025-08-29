@@ -2,6 +2,7 @@ import {DataTableUser} from "@components/data-table-user.tsx";
 import {useEffect, useState} from "react";
 import Loader from "@components/loader.tsx";
 import {useApp} from "@/context/AppContext.tsx";
+import {instanceUser} from "@/lib/axiosInstance.ts";
 
 export default function Page() {
     const {trigger} = useApp()
@@ -9,21 +10,14 @@ export default function Page() {
 
     useEffect(() => {
         setUser([]);
-        fetch('http://localhost:3005/api/users'
-            , {
-                method: 'GET',
-            })
+        instanceUser('users', {
+            method: 'GET'
+        })
             .then((res) => {
-                if (!res.ok) {
-                    throw new Error('Erreur de chargement')
-                }
-                return res.json()
-            })
-            .then((data) => {
+                const data = res.data
                 setUser(data)
             })
             .catch(error => console.log(error))
-
     }, [trigger])
 
     return (

@@ -1,6 +1,7 @@
 import { RequestHandler, Router } from 'express';
 import SessionController from '../controllers/SessionController';
 import SessionInterface from '../interfaces/SessionInterface';
+import adminCheck from '../middlewares/adminCheck';
 
 const router = Router();
 
@@ -15,7 +16,7 @@ router.get('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/:id', (async (req, res) => {
+router.get('/:id', adminCheck, (async (req, res) => {
   try {
     const session = await sessionController.getOne(parseInt(req.params.id, 10));
     res.status(200).json(session);
@@ -24,7 +25,7 @@ router.get('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/user/:id', (async (req, res) => {
+router.get('/user/:id', adminCheck, (async (req, res) => {
   try {
     const session = await sessionController.getByUser(parseInt(req.params.id, 10));
     res.status(200).json(session);

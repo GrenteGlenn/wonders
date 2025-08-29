@@ -28,6 +28,9 @@ export class FlyComponent {
   destinationAirports: Airport[] = [];
   originAirports: Airport[] = [];
 
+  
+
+
   // Pour la pagination des résultats
   currentPage = 1;
   itemsPerPage = 5;

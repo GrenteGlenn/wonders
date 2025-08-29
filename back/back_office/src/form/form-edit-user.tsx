@@ -5,6 +5,7 @@ import {Button} from "@components/ui/button.tsx";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@components/ui/form.tsx";
 import {Input} from "@components/ui/input.tsx";
 import {DialogClose, DialogFooter} from "@components/ui/dialog.tsx";
+import {instanceUser} from "@/lib/axiosInstance.ts";
 
 
 const FormSchema = z.object({
@@ -40,18 +41,13 @@ export default function FormEditUser({
     })
 
     function onSubmit(data: z.output<typeof FormSchema>) {
-        console.log("trigger",  JSON.stringify(data))
-        fetch(`http://localhost:3005/api/users/${defaultValues?.id}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(data),
-            }
-        )
+        instanceUser(`users/${defaultValues?.id}`, {
+            method: "PUT",
+            data: data
+        })
             .then((res) => {
-                if (!res.ok) {
+                const data = res.data;
+                if (!data.ok) {
                     throw new Error('Erreur de chargement')
                 }
                 onSuccess?.()

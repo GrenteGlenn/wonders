@@ -16,9 +16,13 @@ router.get('/', (async (req, res) => {
 }) as RequestHandler);
 
 router.get('/detail', (async (req, res) => {
+  const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : null;
+
   try {
-    const trips = await tripController.getAllTrips();
-    res.status(200).json(trips);
+    if (token) {
+      const trips = await tripController.getAllTrips(token);
+      res.status(200).json(trips);
+    } else res.status(403).json('Forbidden');
   } catch (error) {
     res.status(500).json({ code: '500', message: error });
   }

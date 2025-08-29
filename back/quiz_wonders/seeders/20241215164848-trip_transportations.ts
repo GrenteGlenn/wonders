@@ -4,7 +4,6 @@ module.exports = {
       'trip_transportations',
       [
         {
-          id: 1,
           from_date: new Date(),
           to_date: new Date(),
           price: 175,
@@ -20,7 +19,6 @@ module.exports = {
       'trip_transportations',
       [
         {
-          id: 2,
           from_date: new Date(),
           to_date: new Date(),
           price: 225,
@@ -36,7 +34,6 @@ module.exports = {
       'trip_transportations',
       [
         {
-          id: 3,
           from_date: new Date(),
           to_date: new Date(),
           price: 95,

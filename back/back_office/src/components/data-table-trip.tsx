@@ -95,6 +95,12 @@ import {Form, FormField, FormItem, FormLabel, FormMessage} from "@components/ui/
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {toast} from "sonner";
+import {useApp} from "@/context/AppContext.tsx";
+import ResponsiveDialog from "@components/responsive-dialog.tsx";
+import FormDeleteFly from "@/form/form-delete-fly.tsx";
+import FormEditFly from "@/form/form-edit-fly.tsx";
+import {useNavigate} from "react-router-dom";
+import {instanceQuiz} from "@/lib/axiosInstance.ts";
 
 export const schema = z.object({
     id: z.number(),
@@ -133,20 +139,19 @@ function changeStatus({from_date, to_date, price, url, status, id}: {
     status: string,
     id: number
 }) {
-    fetch(`http://localhost:3004/api/trip-transportation/${id}`, {
+    instanceQuiz(`trip-transportation/${id}`, {
         method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
+        data: {
             from_date,
             to_date,
             price,
             url,
             status
-        })
+        }
     })
-        .then(r => console.log(r))
+        .then(r => {
+            console.log(r)
+        })
         .catch(e => console.log(e))
 }
 
@@ -281,7 +286,50 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
     },
     {
         id: "actions",
-        cell: ({row}) => (
+        cell: ({row}) => <RowActions row={row}/>,
+    },
+]
+
+function RowActions({row}: { row: Row<z.infer<typeof schema>> }) {
+    const {toggleTrigger} = useApp()
+    const navigate = useNavigate()
+    const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
+
+    return (
+        <>
+            <ResponsiveDialog
+                open={isEditDialogOpen}
+                onOpenChange={setIsEditDialogOpen}
+                title={"Are you absolutely sure?"}
+                description={`This action cannot be undone. Are you sure you want to 
+                permanently delete this file from our servers?`}>
+                <FormEditFly
+                    defaultValues={{
+                        from_date: row.original.trip_transportation.from_date,
+                        to_date: row.original.trip_transportation.to_date,
+                        price: row.original.trip_transportation.price,
+                        url: row.original.trip_transportation.url,
+                        status: row.original.trip_transportation.status,
+                        id: row.original.trip_transportation.id
+                    }}
+                    onSuccess={() => {
+                        setIsEditDialogOpen(false)
+                        toggleTrigger()
+                    }}/>
+            </ResponsiveDialog>
+            <ResponsiveDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}
+                              title={"Do you want to delete his user ?"} description={`This action cannot be undone. Are you sure you want to 
+                permanently delete this file from our servers?`}>
+                <FormDeleteFly
+                    defaultValues={{
+                        id: row.original.id
+                    }}
+                    onSuccess={() => {
+                        setIsDeleteDialogOpen(false)
+                        toggleTrigger()
+                    }}/>
+            </ResponsiveDialog>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
@@ -294,20 +342,20 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-32">
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
-                    <a href={`/trip/hotel/${row.original.id}`}>
-                        <DropdownMenuItem>Check Hotel</DropdownMenuItem>
-                    </a>
-                    <a href={`/trip/activity/${row.original.id}`}>
-                        <DropdownMenuItem>Check Activity</DropdownMenuItem>
-                    </a>
+                    <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>Edit</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate(`/trip/fly/${row.original.id}`)}>Fly</DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={() => navigate(`/trip/hotel/${row.original.id}`)}>Hotel</DropdownMenuItem>
+                    <DropdownMenuItem
+                        onClick={() => navigate(`/trip/activity/${row.original.id}`)}>Activity</DropdownMenuItem>
                     <DropdownMenuSeparator/>
-                    <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}
+                                      variant="destructive">Delete</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
-        ),
-    },
-]
+        </>
+    )
+}
 
 function DraggableRow({row}: { row: Row<z.infer<typeof schema>> }) {
     const {transform, transition, setNodeRef, isDragging} = useSortable({
@@ -628,6 +676,7 @@ export function DataTableTrip({
 
 function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
     const isMobile = useIsMobile()
+    const {toggleTrigger} = useApp()
 
     const FormSchema = z.object({
         status: z
@@ -640,6 +689,7 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
         resolver: zodResolver(FormSchema),
     })
 
+
     function onSubmit(data: z.infer<typeof FormSchema>) {
         changeStatus({
             from_date: item.trip_transportation.from_date,
@@ -649,6 +699,9 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
             status: data.status,
             id: item.trip_transportation.id
         })
+
+        toggleTrigger()
+
         toast("You submitted the following values", {
             description: (
                 <pre className="mt-2 w-[320px] rounded-md bg-neutral-950 p-4">

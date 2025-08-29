@@ -33,7 +33,7 @@ script:pre-request {
   bru.setEnvVar("duration",faker.number.int({ max: 10 }))
   bru.setEnvVar("from_date",faker.date.soon())
   bru.setEnvVar("to_date",faker.date.soon())
-  bru.setEnvVar("transportation_id",faker.number.int({ max: 5, min: 1 }))
+  bru.setEnvVar("transportation_id",faker.number.int({ max: 3, min: 1 }))
 }
 
 tests {
