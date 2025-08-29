@@ -3,7 +3,6 @@ module.exports = {
   up: async(queryInterface) => {
 
    await queryInterface.bulkInsert('trips', [{
-     id: 1,
      user_id: 1,
      country_id: 1,
      duration: 15,
@@ -14,7 +13,6 @@ module.exports = {
      updated_at: new Date(),
    }], {});
    await queryInterface.bulkInsert('trips', [{
-    id: 2,
     user_id: 1,
     country_id: 1,
     duration: 15,
@@ -25,7 +23,6 @@ module.exports = {
     updated_at: new Date(),
    }], {});
    await queryInterface.bulkInsert('trips', [{
-    id: 3,
     user_id: 1,
     country_id: 1,
     duration: 15,
