@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   platformName: string | null = null;
   error: boolean = false
   errorMessage: string = 'Une erreur est survenue'
+  submitting: boolean = false;
 
   constructor(
     private _authService: AuthentificationService,
@@ -54,6 +55,8 @@ export class LoginComponent implements OnInit {
   clickLogin(): void {
     if (!this.email || !this.password) return;
 
+    this.submitting = true;
+
     this._authService.login(this.email, this.password).subscribe({
       next: (data: ReponseToken) => {
         if (data.success) {
@@ -61,6 +64,7 @@ export class LoginComponent implements OnInit {
 
           this._authService.setAuthenticated(data.data.token);
           this.router.navigateByUrl(this.returnUrl);
+          this.submitting = false;
         }
       },
       error: (error) => {
