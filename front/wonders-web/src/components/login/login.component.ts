@@ -19,8 +19,8 @@ export class LoginComponent implements OnInit {
   password: string = '';
   returnUrl: string = '';
   platformName: string | null = null;
-  error: boolean = false
-  errorMessage: string = 'Une erreur est survenue'
+  error: boolean = false;
+  errorMessage: string = 'Une erreur est survenue';
   submitting: boolean = false;
 
   constructor(
@@ -64,15 +64,15 @@ export class LoginComponent implements OnInit {
 
           this._authService.setAuthenticated(data.data.token);
           this.router.navigateByUrl(this.returnUrl);
-          this.submitting = false;
         }
       },
       error: (error) => {
-        this.error = true
-        console.error('Error while loging:', error)
-        this.router.navigate(['/', this.translateService.currentLang, 'login'])
+        this.error = true;
+        console.error('Error while loging:', error);
+        this.router.navigate(['/', this.translateService.currentLang, 'login']);
       }
     });
+    this.submitting = false;
   }
 
   goToSafe() {
