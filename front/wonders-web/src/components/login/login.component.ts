@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { AuthentificationService, ReponseToken } from '../../app/service/auth/authentification.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
@@ -7,21 +7,22 @@ import { TranslateService } from '../../app/service/translate/translate.service'
 import { CommonModule } from '@angular/common';
 import { platform } from '@tauri-apps/plugin-os';
 import { isTauri } from '../../utils/tauri.utils';
+
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, LucideAngularModule, CommonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css'] // (styleUrl -> styleUrls si besoin)
 })
 export class LoginComponent implements OnInit {
-  email: string = '';
-  password: string = '';
-  returnUrl: string = '';
+  email = '';
+  password = '';
+  returnUrl = '';
   platformName: string | null = null;
-  error: boolean = false;
-  errorMessage: string = 'Une erreur est survenue';
-  submitting: boolean = false;
+
+  submitting = false;
+  authError: string | null = null; // Erreur d'authentification (serveur)
 
   constructor(
     private _authService: AuthentificationService,
@@ -31,16 +32,11 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // 🔐 Redirection si déjà connecté
     if (this._authService.isAuthenticated()) {
       this.router.navigate(['/', this.translateService.currentLang, 'home']);
       return;
     }
 
-    this.email = '';
-    this.password = '';
-
-    // const rawReturnUrl = this.route.snapshot.queryParams['returnUrl'] || 'home';
     this.returnUrl = `/${this.translateService.currentLang}/home`;
 
     if (isTauri()) {
@@ -52,27 +48,34 @@ export class LoginComponent implements OnInit {
     return ['ios', 'android', 'linux'].includes(this.platformName ?? '');
   }
 
-  clickLogin(): void {
-    if (!this.email || !this.password) return;
+  clickLogin(form: NgForm): void {
+    // Nettoie le message d'erreur serveur
+    this.authError = null;
+
+    // Si le formulaire est invalide, on marque les champs et on stoppe
+    if (form.invalid) {
+      Object.values(form.controls).forEach(c => c.markAsTouched());
+      return;
+    }
 
     this.submitting = true;
 
     this._authService.login(this.email, this.password).subscribe({
       next: (data: ReponseToken) => {
+        this.submitting = false;
         if (data.success) {
-          console.log(data, 'Connexion réussie');
-
           this._authService.setAuthenticated(data.data.token);
           this.router.navigateByUrl(this.returnUrl);
+        } else {
+          this.authError = 'Échec de la connexion.';
         }
       },
       error: (error) => {
-        this.error = true;
-        console.error('Error while loging:', error);
-        this.router.navigate(['/', this.translateService.currentLang, 'login']);
+        console.error('Error while logging in:', error);
+        this.submitting = false;
+        this.authError = 'Identifiants invalides ou erreur serveur.';
       }
     });
-    this.submitting = false;
   }
 
   goToSafe() {

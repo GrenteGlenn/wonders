@@ -81,8 +81,12 @@ export class NavbarComponent implements OnInit {
     this.router.navigate(['/', this.translateService.currentLang, 'forum']);
   }
 
+  // goChat() {
+  //   this.router.navigate(['/', this.translateService.currentLang, 'chat']);
+  // }
+
   goChat() {
-    this.router.navigate(['/', this.translateService.currentLang, 'chat']);
+    this.router.navigate([{ outlets: { chat: ['chat'] } }]);
   }
 
   goChoiceGuide() {
@@ -106,11 +110,9 @@ export class NavbarComponent implements OnInit {
     const target = event.target as HTMLSelectElement;
     const lang = target.value;
     console.log(lang, 'selected language');
-    
 
     this.translateService.currentLang = lang;
     console.log('Language changed to:', this.translateService.currentLang);
-    
 
     const currentUrl = this.router.url.split('/').slice(2).join('/');
     this.router.navigate(['/' + lang, currentUrl]);

@@ -21,6 +21,8 @@ const requireAuth = async (req: AuthedRequest, res: Response, next: NextFunction
     let payload: JwtPayload;
     try {
       payload = decryptJWT(token) as JwtPayload; // doit throw si expiré/incorrect
+      console.log('✅ Payload JWT:', payload);
+      
     } catch {
       return res.status(401).send('Token expired or invalid');
     }
@@ -35,6 +37,8 @@ const requireAuth = async (req: AuthedRequest, res: Response, next: NextFunction
     }
 
     req.user = payload;
+    console.log('✅ User authenticated:', req.user);
+    
     return next();
   } catch (err) {
     return res.status(500).send('Internal server error');

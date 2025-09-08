@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import html2canvas from 'html2canvas';
 import { ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import emailjs from '@emailjs/browser';
+import { ToastService } from '../../../app/service/toast/toast.service';
 
 @Component({
   selector: 'app-retour-bug',
@@ -19,6 +20,7 @@ export class RetourBugComponent {
   screenshot: string | null = null;
 
   @ViewChild('pageContent', { static: false }) pageContent!: ElementRef;
+  private toastService = inject(ToastService);
 
   constructor() {
     emailjs.init('-IlhmdFdw5MzdRDxs');
@@ -41,8 +43,6 @@ export class RetourBugComponent {
 
     const canvas = await html2canvas(document.body);
     this.screenshot = canvas.toDataURL('image/png');
-
-    // Réafficher la modale
     this.showModal = true;
   }
 
@@ -53,17 +53,14 @@ export class RetourBugComponent {
     };
 
     emailjs
-      .send(
-        'service_ebmh2n3',
-        'template_bzt9sco',
-        templateParams
-      )
+      .send('service_ebmh2n3', 'template_bzt9sco', templateParams)
       .then(() => {
-        alert('Email envoyé avec succès');
+        this.toastService.success(`Email envoyé avec succès !`);
+        this.closeModal();
       })
       .catch((err) => {
         console.error('Erreur EmailJS:', err);
-        alert('Erreur lors de l’envoi du mail');
+        this.toastService.error(`Erreur lors de l’envoi du mail !`);
       });
   }
 }

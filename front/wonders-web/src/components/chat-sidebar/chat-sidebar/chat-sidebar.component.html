@@ -1,0 +1,30 @@
+<div class="pointer-events-none">
+  <!-- Backdrop -->
+  <div
+    *ngIf="isOpen"
+    class="fixed inset-0 z-[1000] bg-black/40 pointer-events-auto"
+    (click)="close()"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Sidebar -->
+  <aside
+    class="fixed inset-y-0 left-0 z-[1001] w-full sm:max-w-md bg-white shadow-2xl transform transition-transform duration-300 pointer-events-auto flex flex-col"
+    [class.-translate-x-full]="!isOpen"
+    [class.translate-x-0]="isOpen"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Chat"
+  >
+    <!-- Barre supérieure (bouton fermer) -->
+    <div class="flex items-center justify-between px-4 py-3 border-b">
+      <div class="font-semibold">Chat</div>
+      <button (click)="close()" class="p-2 rounded hover:bg-gray-100" aria-label="Fermer le chat">✕</button>
+    </div>
+
+    <!-- Contenu du chat (outlet nommé) -->
+    <div class="min-h-0 flex-1 overflow-y-auto">
+      <router-outlet name="chat" (activate)="onActivate()" (deactivate)="onDeactivate()"> </router-outlet>
+    </div>
+  </aside>
+</div>

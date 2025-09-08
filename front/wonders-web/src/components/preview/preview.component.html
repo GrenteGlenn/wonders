@@ -24,7 +24,8 @@
       <div class="flex items-center mb-3 gap-2">
         <h3 class="text-base font-semibold">Localisation</h3>
       </div>
-      <app-google-map></app-google-map>
+
+      <app-google-map [lat]="centerLat" [lng]="centerLng" [markers]="markers" [autoFit]="false"> </app-google-map>
     </div>
   </div>
 
@@ -32,7 +33,7 @@
   <div class="col-span-1 xl:col-span-1 space-y-6">
     <div class="bg-white p-6 rounded-xl shadow-md" *ngIf="activity">
       <div class="flex items-center gap-2">
-        <h2 class="text-xl font-bold">Ville sélectionnée</h2>
+        <h2 class="text-xl font-bold">Ville </h2>
       </div>
       <div>
         {{ activity.name }}
@@ -47,7 +48,7 @@
     <!-- Vol -->
     <div class="bg-white p-6 rounded-xl shadow-md lg:col-span-2" *ngIf="flight">
       <div class="flex items-center mb-4 gap-2">
-        <h2 class="text-xl font-bold">Vol sélectionné</h2>
+        <h2 class="text-xl font-bold">Vol </h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
         <div>
@@ -70,7 +71,7 @@
     <!-- Hôtel -->
     <div class="bg-white p-6 rounded-xl shadow-md lg:col-span-2" *ngIf="hotel">
       <div class="flex items-center mb-4 gap-2">
-        <h2 class="text-xl font-bold">Hôtel sélectionné</h2>
+        <h2 class="text-xl font-bold">Hôtel</h2>
       </div>
       <h3 class="text-lg font-semibold">{{ hotel?.name }}</h3>
       <p class="text-gray-600 text-sm mb-2">{{ hotel?.country || 'Pays inconnu' }}</p>

@@ -1,11 +1,7 @@
 <div class="login-wrapper">
-  <!-- Image de fond -->
   <img src="assets/images/hero-home-1.jpg" alt="Fond" class="background-image"/>
-
-  <!-- Overlay gris -->
   <div class="overlay"></div>
 
-  <!-- Contenu login centré -->
   <div class="flex justify-center items-center min-h-screen">
     <div class="container mx-auto px-4">
       <div class="max-w-md mx-auto">
@@ -14,38 +10,70 @@
             <h1 class="text-3xl font-bold text-center mb-8">Connexion</h1>
           </div>
 
-          <div class="space-y-4">
+          <!-- Utiliser un formulaire ngForm -->
+          <form #loginForm="ngForm" (ngSubmit)="clickLogin(loginForm)" novalidate class="space-y-4">
             <div>
               <label for="lb_email" class="block text-sm font-medium text-gray-700 mb-1">Adresse mail</label>
               <input
-                type="text"
-                [(ngModel)]="email"
+                type="email"
                 id="lb_email"
+                name="email"
+                [(ngModel)]="email"
+                #emailCtrl="ngModel"
+                required
                 class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                [ngModelOptions]="{ updateOn: 'blur' }"
               />
+              <!-- Message affiché uniquement si invalide ET touché/déjà modifié -->
+              <div
+                *ngIf="emailCtrl.invalid && (emailCtrl.touched || emailCtrl.dirty)"
+                class="text-red-600 text-sm mt-1"
+              >
+                <ng-container *ngIf="emailCtrl.errors?.['required']">
+                  L'adresse e-mail est requise.
+                </ng-container>
+                <ng-container *ngIf="emailCtrl.errors?.['email']">
+                </ng-container>
+              </div>
             </div>
-            <div *ngIf="errorMessage" class="text-red-600 text-sm mt-1">{{ errorMessage }}</div>
-
 
             <div>
               <label for="lb_password" class="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
               <input
                 type="password"
-                [(ngModel)]="password"
                 id="lb_password"
+                name="password"
+                [(ngModel)]="password"
+                #passwordCtrl="ngModel"
+                required
+                minlength="8"
                 class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                [ngModelOptions]="{ updateOn: 'blur' }"
               />
+              <div
+                *ngIf="passwordCtrl.invalid && (passwordCtrl.touched || passwordCtrl.dirty)"
+                class="text-red-600 text-sm mt-1"
+              >
+                <ng-container *ngIf="passwordCtrl.errors?.['required']">
+                  Le mot de passe est requis.
+                </ng-container>
+                <ng-container *ngIf="passwordCtrl.errors?.['minlength']">
+                  Au moins 8 caractères.
+                </ng-container>
+              </div>
             </div>
 
-
             <button
-              (click)="clickLogin()"
-              class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-              [disabled]="submitting"
+              type="submit"
+              class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300 disabled:opacity-50"
             >
               Connexion
             </button>
 
+            <!-- Erreur serveur / authentification -->
+            <div *ngIf="authError" class="text-red-600 text-sm">
+              {{ authError }}
+            </div>
 
             <p class="text-center text-gray-600">
               Vous n'avez pas de compte ?
@@ -73,7 +101,8 @@
                 </button>
               </div>
             </div>
-          </div>
+          </form>
+
         </div>
       </div>
     </div>
