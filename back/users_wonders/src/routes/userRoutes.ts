@@ -97,7 +97,7 @@ router.put('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/:id', adminCheck, (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
     const client = await authController.remove(parseInt(req.params.id, 10));
     res.status(202).json(client);

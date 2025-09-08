@@ -1,11 +1,17 @@
 FROM node AS builder
 WORKDIR /app
 COPY ./back/fly_hotel_wonders .
+RUN rm -r deploy/ CI/
 RUN npm install
+RUN npm install -D esbuild && npm run build
 
 FROM node:18-alpine
 WORKDIR /app
-COPY --from=builder /app .
-RUN echo -e 'AMADEUS_CLIENT_ID=cAbwOdih8X8DGMikv62fRNBN4SgPgNBD \nAMADEUS_CLIENT_SECRET=JKdpteCwcVMxmQv1' >> .env
-CMD ["npm", "start"]
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/package.json ./
+
+RUN npm install --omit=dev && npm cache clean --force
+
+RUN echo -e 'AMADEUS_CLIENT_ID=cAbwOdih8X8DGMikv62fRNBN4SgPgNBD \nAMADEUS_CLIENT_SECRET=JKdpteCwcVMxmQv1 \nPORT=3001' >> .env
+CMD ["node", "dist/src/app.js"]
 EXPOSE 3001

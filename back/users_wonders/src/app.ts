@@ -28,6 +28,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', jsonParser, authRoutes);
+
 app.use('/api/users', [jsonParser, userCheck], userRoutes);
 app.use('/api/address', [jsonParser, userCheck], addressRoutes);
 app.use('/api/role', [jsonParser, userCheck], roleRoutes);
