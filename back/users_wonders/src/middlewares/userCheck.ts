@@ -21,7 +21,6 @@ const requireAuth = async (req: AuthedRequest, res: Response, next: NextFunction
     let payload: JwtPayload;
     try {
       payload = decryptJWT(token) as JwtPayload; // doit throw si expiré/incorrect
-
     } catch {
       return res.status(401).send('Token expired or invalid');
     }
