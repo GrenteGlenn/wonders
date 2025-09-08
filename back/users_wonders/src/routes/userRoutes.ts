@@ -78,7 +78,7 @@ router.get('/verify', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/:id', adminCheck, (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   try {
     const client = await authController.getOne(parseInt(req.params.id, 10));
     res.status(200).json(client);
@@ -97,7 +97,7 @@ router.put('/:id', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/:id', adminCheck, (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
     const client = await authController.remove(parseInt(req.params.id, 10));
     res.status(202).json(client);

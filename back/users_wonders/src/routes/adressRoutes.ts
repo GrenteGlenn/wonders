@@ -1,7 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import AddressController from '../controllers/AddressController';
 import AddressInterface from '../interfaces/AddressInterface';
-import adminCheck from '../middlewares/adminCheck';
 
 const router = Router();
 
@@ -16,7 +15,7 @@ router.get('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/:id', adminCheck, (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   try {
     const address = await addressController.getOne(parseInt(req.params.id, 10));
     res.status(200).json(address);
@@ -25,7 +24,7 @@ router.get('/:id', adminCheck, (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/user/:id', adminCheck, (async (req, res) => {
+router.get('/user/:id', (async (req, res) => {
   try {
     const address = await addressController.getByUser(parseInt(req.params.id, 10));
     res.status(200).json(address);

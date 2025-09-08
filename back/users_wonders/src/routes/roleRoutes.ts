@@ -1,7 +1,6 @@
 import { RequestHandler, Router } from 'express';
 import RoleController from '../controllers/RoleController';
 import RoleInterface from '../interfaces/RoleInterface';
-import adminCheck from '../middlewares/adminCheck';
 
 const router = Router();
 
@@ -16,7 +15,7 @@ router.get('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.get('/:id', adminCheck, (async (req, res) => {
+router.get('/:id', (async (req, res) => {
   try {
     const roles = await roleController.getOne(parseInt(req.params.id, 10));
     res.status(200).json(roles);
@@ -35,7 +34,7 @@ router.post('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.put('/:id', adminCheck, (async (req, res) => {
+router.put('/:id', (async (req, res) => {
   try {
     const body = <RoleInterface>req.body;
     const roles = await roleController.update(parseInt(req.params.id, 10), body);
@@ -45,7 +44,7 @@ router.put('/:id', adminCheck, (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.delete('/:id', adminCheck, (async (req, res) => {
+router.delete('/:id', (async (req, res) => {
   try {
     const roles = await roleController.delete(parseInt(req.params.id, 10));
     res.status(200).json(roles);
