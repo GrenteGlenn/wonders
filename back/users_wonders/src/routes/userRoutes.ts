@@ -81,8 +81,6 @@ router.get('/verify', (async (req, res) => {
 router.get('/:id', (async (req, res) => {
   try {
     const client = await authController.getOne(parseInt(req.params.id, 10));
-    console.log(client, 'client');
-    
     res.status(200).json(client);
   } catch (error) {
     res.status(404).json('Error! Something went wrong.');
