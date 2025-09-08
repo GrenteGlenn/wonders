@@ -6,7 +6,7 @@
       "PlanMyTrip": "Plan my trip"
     },
     "SearchDestinationComponent":{
-        "PlaceHolder": "Search by city or country",
+        "PlaceHolder": "Search country",
         "Search": "Search",
         "ResultNotFound": "No results found for"
     },

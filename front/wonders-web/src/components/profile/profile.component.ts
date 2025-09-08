@@ -218,7 +218,7 @@ export class ProfileComponent implements OnInit {
                 country,
                 countryImage: country?.image || 'assets/images/noimages.jpg'
               });
-              console.log('Trip loaded:', trip);
+              // console.log('Trip loaded:', trip);
             },
             error: () => {
               this.trips.push({

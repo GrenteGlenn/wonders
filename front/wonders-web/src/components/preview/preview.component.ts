@@ -3,6 +3,8 @@ import { Component, Input } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { GoogleMapComponent } from '../google-map/google-map.component';
 
+type Marker = { lat: number; lng: number };
+
 @Component({
   selector: 'app-preview',
   standalone: true,
@@ -16,35 +18,25 @@ export class PreviewComponent {
   @Input() flight: any;
   @Input() hotel: any;
 
+  showMore = false;
+
   get centerLat(): number | null {
+    // centre = ville si dispo, sinon pays
     return this.activity?.latitude ?? this.destination?.latitude ?? null;
   }
-
   get centerLng(): number | null {
     return this.activity?.longitude ?? this.destination?.longitude ?? null;
   }
 
-  // Liste des marqueurs à afficher
-  get markers(): { lat: number; lng: number; label: string }[] {
-    const result: { lat: number; lng: number; label: string }[] = [];
-
-    if (this.destination?.latitude && this.destination?.longitude) {
-      result.push({
-        lat: this.destination.latitude,
-        lng: this.destination.longitude,
-        label: this.destination.name ?? 'Pays'
-      });
+  // → 2 marqueurs : pays + ville (si dispo)
+  get markers(): Marker[] {
+    const out: Marker[] = [];
+    if (typeof this.destination?.latitude === 'number' && typeof this.destination?.longitude === 'number') {
+      out.push({ lat: this.destination.latitude, lng: this.destination.longitude });
     }
-
-    if (this.activity?.latitude && this.activity?.longitude) {
-      result.push({
-        lat: this.activity.latitude,
-        lng: this.activity.longitude,
-        label: this.activity.name ?? 'Ville'
-      });
+    if (typeof this.activity?.latitude === 'number' && typeof this.activity?.longitude === 'number') {
+      out.push({ lat: this.activity.latitude, lng: this.activity.longitude });
     }
-
-    return result;
+    return out;
   }
-  showMore = false;
 }

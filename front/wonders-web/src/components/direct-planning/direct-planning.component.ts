@@ -83,11 +83,11 @@ export class DirectPlanningComponent implements OnInit {
   onActivityAdded(activity: any) {
     this.activities.push(activity);
     this.isModalOpen = false;
-    console.log('Activité ajoutée avec succès:', activity);
+    // console.log('Activité ajoutée avec succès:', activity);
   }
 
   onCountryAdded(country: Country) {
-    console.log('[PlanTripComponent] Pays reçu:', country);
+    // console.log('[PlanTripComponent] Pays reçu:', country);
     this.countries.push(country);
 
     this.selectedCountry = country.name;

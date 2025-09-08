@@ -1,4 +1,4 @@
-<div class="max-w-3xl mx-auto py-12 px-4 sm:px-6 lg:px-8" *ngIf="!showResults && questions.length > 0">
+<div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8" *ngIf="!showResults && questions.length > 0">
   <!-- Image décorative -->
   <img
     [src]="'assets/images/hero-home-' + (currentQuestionIndex + 1) + '.jpg'"
@@ -57,10 +57,10 @@
       *ngIf="currentQuestionIndex < questions.length - 1"
       [disabled]="!selectedAnswers[currentQuestionIndex]"
       [ngClass]="{
-        'bg-blue-500 text-white hover:bg-blue-600': selectedAnswers[currentQuestionIndex],
+        'bg-blue-500 text-white hover:bg-[#FFA500]': selectedAnswers[currentQuestionIndex],
         'bg-gray-300 text-gray-500': !selectedAnswers[currentQuestionIndex]
       }"
-      class="px-5 py-2 rounded-md ml-auto"
+      class="px-5 py-2 rounded-md ml-auto "
       (click)="nextQuestion()"
     >
       Suivant

@@ -95,7 +95,7 @@ export class FirebaseService {
       const groupData = group;
 
       const userIds = groupData.users.map((user) => user.id);
-      console.log(userIds, currentUserId, groupData);
+      // console.log(userIds, currentUserId, groupData);
       // 3. Vérifier que l'utilisateur actuel fait partie du groupe
       if (!userIds.includes(currentUserId)) {
         throw new Error('Utilisateur non trouvé dans ce groupe');
@@ -104,7 +104,7 @@ export class FirebaseService {
       // 4. Créer les objets User avec les IDs seulement
       const users: any = groupData.users.map((user) => {
         const u = user;
-        console.log(u, groupData);
+        // console.log(u, groupData);
 
         return {
           id: u.id,

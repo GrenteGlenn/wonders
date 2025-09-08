@@ -1,139 +1,219 @@
-<div class="container mx-auto px-4">
-  <div class="navigation">
-    <h3 class="text-center">Mes groupes</h3>
-    <div>
+<!-- Conteneur plein-viewport du drawer -->
+<div class="flex h-full flex-col bg-white">
+  <!-- Header local (recherche + CTA) -->
+  <div class="sticky top-0 z-10 bg-white border-b">
+    <div class="px-4 pt-3 pb-2 space-y-3">
+      <!-- Barre de recherche -->
+      <div class="relative">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Rechercher un groupe ou un membre"
+          class="w-full rounded-full border border-slate-300 pl-10 pr-4 py-2 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+        <lucide-icon
+          name="search"
+          class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+        ></lucide-icon>
+      </div>
+
+      <!-- Ligne “Nouveau groupe” façon WhatsApp -->
       <button
         (click)="showGroupForm = !showGroupForm"
-        class="mr-5 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+        class="w-full flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-slate-100 transition"
       >
-        Nouveau groupe
-      </button>
-      <div *ngIf="showGroupForm">
-        <form
-          #groupForm="ngForm"
-          (ngSubmit)="submitGroupForm(groupForm)"
-          class="bg-white rounded-lg p-6 space-y-4 max-w-md mx-auto"
+        <div class="h-10 w-10 rounded-full bg-emerald-600 text-white flex items-center justify-center">
+          <lucide-icon name="plus" class="w-5 h-5"></lucide-icon>
+        </div>
+        <div class="text-left">
+          <div class="text-sm font-semibold">Nouveau groupe</div>
+          <div class="text-xs text-slate-500">Créer une nouvelle discussion</div>
+        </div>
+        <span class="ml-auto text-xs text-slate-500"
+          >{{ userGroups?.length || 0 }} groupe{{ (userGroups?.length || 0) > 1 ? 's' : '' }}</span
         >
-          <div class="space-y-2">
-            <label for="name" class="block text-sm font-medium text-gray-700"> Nom du groupe </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              [(ngModel)]="newGroupName"
-              #nameField="ngModel"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-              placeholder="Entrez le nom du groupe"
-              required
-            />
+      </button>
 
-            <!-- Affichage des erreurs -->
-            <div *ngIf="nameField.invalid && (nameField.dirty || nameField.touched)" class="text-red-600 text-sm mt-1">
-              <p *ngIf="nameField.errors?.['required']">Le nom du groupe est requis</p>
+      <!-- Formulaire de création compact -->
+      <form
+        *ngIf="showGroupForm"
+        #groupForm="ngForm"
+        (ngSubmit)="submitGroupForm(groupForm)"
+        class="rounded-xl border bg-white/90 backdrop-blur p-3 space-y-2"
+      >
+        <label for="name" class="text-xs text-slate-600">Nom du groupe</label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          [(ngModel)]="newGroupName"
+          #nameField="ngModel"
+          required
+          placeholder="Ex. Roadtrip Espagne"
+          class="w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <p *ngIf="nameField.invalid && (nameField.dirty || nameField.touched)" class="text-red-600 text-xs">
+          Le nom est requis
+        </p>
+
+        <div class="pt-1 flex gap-2 justify-end">
+          <button
+            type="button"
+            (click)="showGroupForm = false"
+            class="px-3 py-2 text-sm rounded-lg bg-slate-100 hover:bg-slate-200"
+          >
+            Annuler
+          </button>
+          <button
+            type="submit"
+            [disabled]="groupForm.invalid"
+            class="px-3 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:bg-slate-300"
+          >
+            Créer
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Liste des conversations -->
+  <div class="flex-1 overflow-y-auto">
+    <!-- SQUELETTE (quand ça charge) -->
+    <ul *ngIf="isLoading" class="divide-y divide-slate-100 animate-pulse">
+      <li *ngFor="let _ of skeletonCount" class="px-4 py-3">
+        <div class="flex items-center gap-3">
+          <div class="h-12 w-12 rounded-full bg-slate-200"></div>
+          <div class="min-w-0 flex-1">
+            <div class="h-3 w-2/3 rounded bg-slate-200 mb-2"></div>
+            <div class="h-2.5 w-1/2 rounded bg-slate-200"></div>
+          </div>
+          <div class="h-8 w-8 rounded-full bg-slate-200"></div>
+        </div>
+      </li>
+    </ul>
+    <!-- Empty state -->
+    <div *ngIf="! userGroups?.length" class="p-10 text-center text-slate-500">
+      Aucun groupe pour le moment.
+    </div>
+
+    <ul *ngIf="!isLoading && userGroups?.length" class="divide-y divide-slate-100">
+      <li
+        *ngFor="let group of userGroups"
+        [class.hidden]="!matchGroup(group, searchTerm)"
+        class="group cursor-pointer select-none"
+      >
+        <div
+          class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition"
+          (click)="!haveToAcceptToJoinToGroup(group.users) ? goToDiscussion(group.id) : null"
+        >
+          <!-- Avatar groupe (initiales) -->
+          <div class="relative shrink-0">
+            <div
+              class="h-12 w-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-semibold"
+            >
+              {{ getInitials(group.name) }}
             </div>
           </div>
 
-          <div class="pt-4">
+          <!-- Centre : nom + info -->
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-2">
+              <span class="truncate font-medium">{{ group.name }}</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-600">
+                {{ group.users?.length || 0 }} membre{{ (group.users?.length || 0) > 1 ? 's' : '' }}
+              </span>
+            </div>
+
+            <!-- Ligne participants (preview) -->
+            <div class="mt-0.5 text-xs text-slate-500 truncate">
+              <ng-container *ngIf="group.users?.length; else noUsers">
+                <!-- {{ (group.users | slice:0:3).map(u => u.first_name).join(', ') }} -->
+                <span *ngIf="group.users.length > 3">+{{ group.users.length - 3 }}</span>
+              </ng-container>
+              <ng-template #noUsers>Pas encore de membres</ng-template>
+            </div>
+          </div>
+
+          <!-- Droite : actions contextuelles -->
+          <div class="ml-2 flex items-center gap-1">
+            <!-- Invitation à accepter -->
             <button
-              type="submit"
-              [disabled]="groupForm.invalid"
-              class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              *ngIf="haveToAcceptToJoinToGroup(group.users)"
+              (click)="$event.stopPropagation(); acceptGroupInvitation(group)"
+              class="hidden sm:inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1.5 text-white text-xs hover:bg-emerald-700"
+              title="Accepter l'invitation"
             >
-              Créer le groupe
+              <lucide-icon name="check" class="w-3.5 h-3.5"></lucide-icon>
+              Accepter
+            </button>
+
+            <!-- Ajouter un membre -->
+            <button
+              *ngIf="!haveToAcceptToJoinToGroup(group.users)"
+              (click)="$event.stopPropagation(); showAddUserModal = true; userGroupId = group.id"
+              class="opacity-0 group-hover:opacity-100 inline-flex items-center justify-center rounded-md p-2 text-slate-600 hover:bg-slate-200 transition"
+              title="Ajouter un membre"
+            >
+              <lucide-icon name="user-plus" class="w-4 h-4"></lucide-icon>
+            </button>
+
+            <!-- Quitter -->
+            <button
+              *ngIf="!haveToAcceptToJoinToGroup(group.users)"
+              (click)="$event.stopPropagation(); removeUserFromGroup(group)"
+              class="opacity-0 group-hover:opacity-100 inline-flex items-center justify-center rounded-md p-2 text-slate-600 hover:bg-slate-200 transition"
+              title="Quitter le groupe"
+            >
+              <lucide-icon name="log-out" class="w-4 h-4"></lucide-icon>
+            </button>
+
+            <!-- Entrer -->
+            <button
+              *ngIf="!haveToAcceptToJoinToGroup(group.users)"
+              (click)="$event.stopPropagation(); goToDiscussion(group.id)"
+              class="inline-flex items-center justify-center rounded-md p-2 text-slate-600 hover:bg-slate-200"
+              title="Ouvrir la discussion"
+            >
+              <lucide-icon name="message-square" class="w-4 h-4"></lucide-icon>
             </button>
           </div>
-        </form>
-      </div>
-    </div>
-    <!-- Table -->
-    <div class="bg-white rounded-xl p-6">
-      <div *ngIf="userGroups" class="text-center text-gray-500">Aucun sujet trouvé.</div>
-
-      <div *ngIf="userGroups" class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50 text-left text-sm font-semibold text-gray-600">
-            <tr>
-              <th class="px-6 py-3 cursor-pointer">Nom</th>
-              <th class="cursor-pointer">Participants</th>
-              <th class="px-6 py-3 cursor-pointer">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200 text-sm text-gray-700">
-            <tr *ngFor="let group of userGroups" class="transition cursor-pointer hover:bg-slate-50 hover:text-black">
-              <td class="px-6 py-4 font-medium">{{ group.name }}</td>
-              <td class="px-6 py-4">
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    *ngFor="let user of group.users"
-                    [ngStyle]="{ background: userLabelColors(user) }"
-                    class="userlabel"
-                  >
-                    {{ user.first_name }}
-                    <span *ngIf="isUserOwner(group)" (click)="removeUserFromGroup(group)">X</span>
-                  </span>
-                </div>
-              </td>
-              <td>
-                <button (click)="showAddUserModal = !showAddUserModal && userGroupId = group.id" *ngIf="!haveToAcceptToJoinToGroup(group.users)" class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Ajouter</button>
-                <button
-                  *ngIf="haveToAcceptToJoinToGroup(group.users)"
-                  class="mr-5 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                  (click)="acceptGroupInvitation(group)"
-                >
-                  accepter
-                </button>
-                <button
-                  *ngIf="!haveToAcceptToJoinToGroup(group.users)"
-                  (click)="removeUserFromGroup(group)"
-                  class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-red-700"
-                >
-                  Sortir
-                </button>
-                <button
-                  *ngIf="!haveToAcceptToJoinToGroup(group.users)"
-                  (click)="goToDiscussion(group.id)"
-                  class="mr-5 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                >
-                  Entrer
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+        </div>
+      </li>
+    </ul>
   </div>
 </div>
 
-<div
-  *ngIf="showAddUserModal"
-  class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50"
->
-  <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg">
-    <h2 class="text-xl font-semibold mb-4">Ajouter un memebre au chat</h2>
+<!-- Modal Ajouter un membre (inchangé, un peu poli) -->
+<div *ngIf="showAddUserModal" class="fixed inset-0 z-[1100] bg-black/40 flex items-center justify-center p-4">
+  <div class="w-full max-w-md rounded-2xl border bg-white p-5 shadow-xl">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-lg font-semibold">Ajouter un membre</h3>
+      <button (click)="showAddUserModal = false" class="rounded-md p-2 hover:bg-gray-100" aria-label="Fermer">✕</button>
+    </div>
 
     <form (ngSubmit)="addUserToGroup()" class="space-y-4">
-      <input
-        type="email"
-        name="guest_email"
-        [(ngModel)]="guest_email"
-        placeholder="Email"
-        class="w-full p-2 border rounded"
-        required />
+      <div>
+        <label class="block text-sm text-gray-700 mb-1" for="guest_email">Email</label>
+        <input
+          id="guest_email"
+          type="email"
+          name="guest_email"
+          [(ngModel)]="guest_email"
+          placeholder="exemple@domaine.com"
+          required
+          class="w-full rounded-lg border border-gray-300 px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+        />
+      </div>
 
-      <div class="flex gap-2">
-        <button
-          type="submit"
-          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-          Sauvegarder
-        </button>
-
+      <div class="flex gap-2 justify-end">
         <button
           type="button"
           (click)="showAddUserModal = false"
-          class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+          class="rounded-lg bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300"
+        >
           Annuler
         </button>
+        <button type="submit" class="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">Sauvegarder</button>
       </div>
     </form>
   </div>

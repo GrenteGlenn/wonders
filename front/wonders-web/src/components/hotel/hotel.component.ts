@@ -18,6 +18,7 @@ export class HotelComponent implements OnInit {
   private fb = inject(FormBuilder);
   private hotelService = inject(HotelService);
   private cityService = inject(CityService);
+  private readonly SKIP_FIRST = 99;
   @Output() hotelSelected = new EventEmitter<any>();
   @Input() latitude!: number;
   @Input() longitude!: number;
@@ -129,6 +130,7 @@ export class HotelComponent implements OnInit {
     this.hotelService.searchHotels(params).subscribe({
       next: (data) => {
         // Ajoute les propriétés pour gérer les offres
+        console.log('Hôtels reçus :', data);
         this.hotels = (data || [])
           .filter((hotel: any) => !hotel.name?.toLowerCase().includes('test'))
           .map((hotel: any) => ({
@@ -138,7 +140,8 @@ export class HotelComponent implements OnInit {
             isLoadingOffers: false,
             offers: null,
             hasOffers: false
-          }));
+          }))
+          .slice(99);
 
         this.searchDone = true;
         this.currentPage = 1;

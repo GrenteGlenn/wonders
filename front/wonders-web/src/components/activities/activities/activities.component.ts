@@ -79,10 +79,8 @@ export class ActivitiesComponent {
   loadPicture(id: number) {
     this.activityService.getPictureById(id).subscribe({
       next: (picture) => {
-        console.log('Picture loaded:', picture);
       },
       error: (error) => {
-        console.error('Error loading picture:', error);
       }
     });
   }
@@ -111,7 +109,7 @@ export class ActivitiesComponent {
         })
         .subscribe({
           next: (response) => {
-            console.log('🏙️ Villes suggérées par l’IA :', response.data);
+            // console.log('🏙️ Villes suggérées par l’IA :', response.data);
 
             this.suggestedCities = response.data;
             this.isLoadingCities = false;
@@ -136,6 +134,7 @@ export class ActivitiesComponent {
     this.selectedCity = city;
     this.activityName = city.city;
     this.selectedPicture = city.img_full;
+    
 
     this.activitySelected.emit({
       id: this.selectedCategory?.id,
@@ -148,16 +147,16 @@ export class ActivitiesComponent {
       latitude: city.latitude
     });
 
-    console.log('🎯 Activité émise vers parent :', {
-      id: this.selectedCategory?.id,
-      name: city.city,
-      image: city.img_full,
-      description: city.description || '',
-      category: this.selectedCategory?.name || '',
-      country: this.cityName,
-      longitude: city.longitude,
-      latitude: city.latitude
-    });
+    // console.log('🎯 Activité émise vers parent :', {
+    //   id: this.selectedCategory?.id,
+    //   name: city.city,
+    //   image: city.img_full,
+    //   description: city.description || '',
+    //   category: this.selectedCategory?.name || '',
+    //   country: this.cityName,
+    //   longitude: city.longitude,
+    //   latitude: city.latitude
+    // });
   }
 
   // onSubmit() {
