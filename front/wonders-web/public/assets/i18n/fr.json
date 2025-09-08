@@ -6,7 +6,7 @@
       "PlanMyTrip": "Planifier mon voyage"
     },
     "SearchDestinationComponent":{
-        "PlaceHolder": "Ville ou pays",
+        "PlaceHolder": "Rechercher un Pays",
         "Search": "Rechercher",
         "ResultNotFound": "Aucun résultat trouvé pour"
     },

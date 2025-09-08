@@ -25,6 +25,8 @@ import { DiscussionComponent } from '../components/discussion/discussion.compone
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'fr/home' },
+  { path: 'chat', outlet: 'chat', component: ChatComponent },
+  { path: 'discussion/:id', outlet: 'chat', component: DiscussionComponent },
   {
     path: ':lang',
     children: [
@@ -54,7 +56,7 @@ export const routes: Routes = [
       { path: 'discussion/:id', component: DiscussionComponent, canActivate: [authGuard] },
       { path: 'discussion', component: DiscussionComponent, canActivate: [authGuard] },
       { path: 'privacy-policy', component: PrivacyPolicyComponent },
-      { path: 'terms-of-service', component: TermsOfServiceComponent },
+      { path: 'terms-of-service', component: TermsOfServiceComponent }
     ]
   }
 ];

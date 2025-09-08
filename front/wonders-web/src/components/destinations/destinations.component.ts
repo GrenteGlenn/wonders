@@ -123,7 +123,6 @@ export class DestinationsComponent implements OnInit {
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = Math.min(startIndex + this.itemsPerPage, this.searchResults.length);
     this.paginatedResults = this.searchResults.slice(startIndex, endIndex);
-    console.log(this.searchResults, 'searchResults');
   }
 
   goToPage(page: number) {

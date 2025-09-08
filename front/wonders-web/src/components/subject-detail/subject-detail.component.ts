@@ -48,7 +48,7 @@ export class SubjectDetailComponent implements OnInit {
   getMe(): void {
     this._userService.getUserInfo().subscribe({
       next: (data) => {
-        console.log(data, 'data');
+        // console.log(data, 'data');
 
         this.user_id = data.id;
       },

@@ -40,7 +40,7 @@ export class SecureSafeComponent {
       console.error(e)
     }
 
-    console.log('File selected:', this.selectedFileName);
+    // console.log('File selected:', this.selectedFileName);
 
     if (!this.selectedFileName) {
       console.error('No file selected.');

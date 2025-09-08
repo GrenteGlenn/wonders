@@ -11,11 +11,10 @@ import { Destination } from '../../../app/model/destination';
 import { PreviewComponent } from '../../preview/preview.component';
 import { RequirementsComponent } from '../../requirements/requirements.component';
 import { FullTrip, TripService } from '../../../app/service/trip/trip.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '../../../app/service/translate/translate.service';
 import { UsersService } from '../../../app/service/users/users.service';
-import { Country } from '../../../app/model/Country';
-import { identity } from 'rxjs';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-step-body',
@@ -62,11 +61,11 @@ export class StepBodyComponent {
     private countryService: CountryService,
     private router: Router,
     public translateService: TranslateService,
-    private user: UsersService
+    private user: UsersService,
+    private route: ActivatedRoute 
   ) {}
 
   handleDestinationSelected(destination: Destination) {
-    // this.selectedDestination = destination;
     this.selectedDestination = {
       id: destination.id,
       name: destination.name,
@@ -76,7 +75,6 @@ export class StepBodyComponent {
       latitude: destination.latitude,
       longitude: destination.longitude
     };
-    console.log(' Destination reçue 1 :', destination);
   }
   handleActivitySelected(activity: any) {
     this.selectedActivity = {
@@ -88,17 +86,13 @@ export class StepBodyComponent {
       latitude: activity.latitude,
       longitude: activity.longitude
     };
-
-    console.log(' Activité reçue 556 :', activity);
   }
   handleFlightSelected(flight: any) {
     this.selectedFlight = flight;
-    // console.log(' Vol reçu :', flight);
   }
 
   handleHotelSelected(hotel: any) {
     this.selectedHotel = hotel;
-    // console.log(' Hôtel reçu :', hotel);
   }
 
   // Fonction pour valider les étapes en fonction des requirements
@@ -120,22 +114,6 @@ export class StepBodyComponent {
   nextStep() {
     if (this.currentStep < this.steps.length) {
       this.currentStep++;
-
-      if (this.currentStep === 4) {
-        console.log('--- Informations accumulées avant Hôtel ---');
-        console.log('Destination :', this.selectedDestination);
-        console.log('Activité :', this.selectedActivity.category.id);
-        console.log('Vol :', this.selectedFlight);
-      }
-      if (this.currentStep === 5) {
-        console.log("📦 Résumé complet des données à l'étape 5 :");
-        console.log({
-          destination: this.selectedDestination,
-          activity: this.selectedActivity,
-          flight: this.selectedFlight,
-          hotel: this.selectedHotel
-        });
-      }
       this.toastService.success(`Données sauvegardées avec succès !`);
     }
   }
@@ -144,9 +122,26 @@ export class StepBodyComponent {
     if (this.currentStep > 1) this.currentStep--;
   }
 
+  // ngOnInit() {
+  //   this.loadCountries();
+  // }
+
   ngOnInit() {
-    this.loadCountries();
-  }
+  const countries$ = this.countryService.getAllCountries();
+  const qp$ = this.route.queryParams;
+
+  combineLatest([countries$, qp$]).subscribe({
+    next: ([countries, qp]) => {
+      this.countries = countries ?? [];
+
+      const preselected = qp['country'];
+      if (preselected) {
+        this.onCountrySelect(preselected);
+      }
+    },
+    error: (err) => console.error('Init step body failed', err),
+  });
+}
 
   submitTrip() {
     if (!this.selectedDestination || !this.selectedActivity || !this.selectedFlight || !this.selectedHotel) {

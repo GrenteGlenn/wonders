@@ -85,9 +85,9 @@ export class QuestionnaireService {
   }
 
   // Met à jour une réponse existante
-  updateUserAnswer(answerId: number, updatedAnswer: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/api/user-answer/${answerId}`, updatedAnswer);
-  }
+  // updateUserAnswer(answerId: number, updatedAnswer: any): Observable<any> {
+  //   return this.http.put(`${this.apiUrl}/api/user-answer/${answerId}`, updatedAnswer);
+  // }
 
   // Récupère les réponses d'un utilisateur pour un quiz spécifique
   getUserAnswers(quizResponseId: number): Observable<any> {
@@ -138,34 +138,4 @@ export class QuestionnaireService {
       map((answers) => (answers ?? []).map((a: any) => ({ ...a, answer: a.answer ?? a.text })))
     );
   }
-
-  // getPricingQuizWithAnswers(): Observable<QuizQuestion[]> {
-  //   return forkJoin({
-  //     lines: this.getQuizLines(),
-  //     answers: this.getQuizAnswers()
-  //   }).pipe(
-  //     map(({ lines, answers }) =>
-  //       (lines ?? []).map((line: any) => {
-  //         const lineAnswers = (answers ?? []).filter((a: any) => Number(a.quiz_line_id) === Number(line.id));
-
-  //         // fallback Oui/Non si question booléenne sans réponses configurées
-  //         const isBoolean = !!line.is_boolean || String(line?.response_kind?.type || '').toLowerCase() === 'boolean';
-  //         const finalAnswers =
-  //           lineAnswers.length > 0
-  //             ? lineAnswers
-  //             : isBoolean
-  //               ? [
-  //                   { id: 1, answer: 'Oui' },
-  //                   { id: 0, answer: 'Non' }
-  //                 ]
-  //               : [];
-
-  //         return {
-  //           questionData: line,
-  //           answers: finalAnswers
-  //         };
-  //       })
-  //     )
-  //   );
-  // }
 }

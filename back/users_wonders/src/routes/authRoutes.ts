@@ -3,7 +3,7 @@ import AuthController from '../controllers/AuthController';
 import ResetPasswordController from '../controllers/ResetPasswordController';
 import { UserInterface } from '../interfaces/UserInterface';
 import { checkPassword, decryptPassword, encryptPassword } from '../lib/CheckPassword';
-import { createJWT, createToken, updateJWT } from '../lib/JWT';
+import { createJWT, updateJWT } from '../lib/JWT';
 import { sendMail } from '../lib/Mailer';
 import { addHours } from '../lib/Date';
 
@@ -134,7 +134,7 @@ router.get('/send_mail', (async (req, res) => {
       return res.status(403).json('User not found');
     }
 
-    const token = createToken();
+    const token = 'koko';
     const expired_at = addHours(new Date());
 
     const resetPassword = { token, created_at: new Date(), expired_at, user_id: user.id };
