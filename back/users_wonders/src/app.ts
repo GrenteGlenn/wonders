@@ -28,14 +28,11 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', jsonParser, authRoutes);
-
-app.use(userCheck);
-
-app.use('/api/users', jsonParser, userRoutes);
-app.use('/api/address', jsonParser, addressRoutes);
-app.use('/api/role', jsonParser, roleRoutes);
-app.use('/api/session', jsonParser, sessionRoutes);
-app.use('/api/user-group', jsonParser, userGroupRoutes);
+app.use('/api/users', [jsonParser, userCheck], userRoutes);
+app.use('/api/address', [jsonParser, userCheck], addressRoutes);
+app.use('/api/role', [jsonParser, userCheck], roleRoutes);
+app.use('/api/session', [jsonParser, userCheck], sessionRoutes);
+app.use('/api/user-group', [jsonParser, userCheck], userGroupRoutes);
 
 app.listen(port, () => {
   console.log(`Example app User listening on port ${port}`);

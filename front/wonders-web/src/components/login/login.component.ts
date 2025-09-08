@@ -20,9 +20,11 @@ export class LoginComponent implements OnInit {
   password = '';
   returnUrl = '';
   platformName: string | null = null;
-
   submitting = false;
   authError: string | null = null; // Erreur d'authentification (serveur)
+  error: boolean = false;
+  errorMessage: string = 'Une erreur est survenue';
+
 
   constructor(
     private _authService: AuthentificationService,
@@ -60,10 +62,13 @@ export class LoginComponent implements OnInit {
 
     this.submitting = true;
 
+    this.submitting = true;
+
     this._authService.login(this.email, this.password).subscribe({
       next: (data: ReponseToken) => {
         this.submitting = false;
         if (data.success) {
+
           this._authService.setAuthenticated(data.data.token);
           this.router.navigateByUrl(this.returnUrl);
         } else {
@@ -76,6 +81,7 @@ export class LoginComponent implements OnInit {
         this.authError = 'Identifiants invalides ou erreur serveur.';
       }
     });
+    this.submitting = false;
   }
 
   goToSafe() {
