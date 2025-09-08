@@ -1,28 +1,18 @@
-<div class="w-full max-w-full h-[385px] md:h-[385px] lg:h-[385px]  overflow-hidden">
-	<google-map
-	  class="w-full h-full"
-	  [options]="options"
-	>
-	  <!-- Markers brésiliens -->
-	  <map-advanced-marker
-		*ngFor="let location of displayedMarkers; let i = index"
-		#markerElem="mapAdvancedMarker"
-		[position]="{ lat: location.lat, lng: location.lng }"
-		[content]="location.content"
-		(gmpClick)="onMarkerClick(markerElem)">
-	  </map-advanced-marker>
-  
-	  <!-- Markers canadiens -->
-	  <map-advanced-marker
-		*ngFor="let location of displayedMarkers; let i = index"
-		#markerElem="mapAdvancedMarker"
-		[position]="{ lat: location.lat, lng: location.lng }"
-		[content]="location.content"
-		[title]="'Canada Location ' + (i + 1)"
-		(mapClick)="onMarkerClick(markerElem)">
-	  </map-advanced-marker>
-  
-	  <map-info-window #infoWindow></map-info-window>
-	</google-map>
-  </div>
-  
+<div class="w-full max-w-full h-[385px] md:h-[385px] lg:h-[385px] overflow-hidden">
+  <ng-container *ngIf="mapsReady; else loading">
+    <google-map class="w-full h-full" [options]="options">
+      <map-advanced-marker
+        *ngFor="let m of displayedMarkers; let i = index"
+        #markerElem="mapAdvancedMarker"
+        [position]="{ lat: m.lat, lng: m.lng }"
+        >
+      </map-advanced-marker>
+
+      <map-info-window #infoWindow></map-info-window>
+    </google-map>
+  </ng-container>
+
+  <ng-template #loading>
+    <div class="w-full h-full bg-gray-100"></div>
+  </ng-template>
+</div>

@@ -2,7 +2,7 @@ import { MatTableModule } from '@angular/material/table';
 import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../../app/service/users/users.service';
 import { FetchableUser, User } from '../../app/model/User';
-import { ChatService } from '../../app/service/chat/chat.service'
+import { ChatService } from '../../app/service/chat/chat.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
 import { FormGroupDirective, FormsModule, NgForm } from '@angular/forms';
@@ -11,9 +11,9 @@ import { Router } from '@angular/router';
 import { TranslateService } from '../../app/service/translate/translate.service';
 
 interface UserGroupInterface {
-  id: number,
-  name: number,
-  users: User[]
+  id: number;
+  name: number;
+  users: User[];
 }
 
 interface UserTestInterface {
@@ -35,8 +35,8 @@ interface UserTestInterface {
 }
 
 interface CreateGroup {
-  name: string,
-  user_id: number
+  name: string;
+  user_id: number;
 }
 
 interface PeriodicElement {
@@ -55,7 +55,7 @@ const ELEMENT_DATA: PeriodicElement[] = [
   { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
   { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
   { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
+  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' }
 ];
 
 @Component({
@@ -71,12 +71,10 @@ export class ChatComponent {
     private _chatService: ChatService,
     private router: Router,
     public translateService: TranslateService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.getMe().then(
-      this.getUserGroups(this.user_id as number)
-    )
+    this.getMe();
   }
 
   user_id: number | null = null;
@@ -85,45 +83,69 @@ export class ChatComponent {
   displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
   dataSource = ELEMENT_DATA;
   isAccepted: boolean = false;
-  showGroupForm: boolean = false
-  newGroupName: string = ""
-  showAddUserModal: boolean = false
-  guest_email: string = ""
-  userGroupId: number = 0
+  showGroupForm: boolean = false;
+  newGroupName: string = '';
+  showAddUserModal: boolean = false;
+  guest_email: string = '';
+  userGroupId: number = 0;
+  isLoading = true;
+  skeletonCount = Array.from({ length: 8 });
 
   colors = [
-    "#FF0000", // rouge vif
-    "#007BFF", // bleu électrique
-    "#3EB489", // vert menthe
-    "#FFF700", // jaune citron
-    "#DA70D6", // violet orchidée
-    "#FF7F50", // orange corail
-    "#E30B5C", // rose framboise
-    "#40E0D0", // turquoise
-    "#2F4F4F", // gris anthracite
-    "#191970", // bleu nuit
-    "#808000", // vert olive
-    "#8B4513", // brun chocolat
-    "#E0FFFF", // cyan clair
-    "#FF00FF", // magenta
-    "#FFD700", // or
-    "#E6E6FA", // lavande
-    "#7FFFD4", // aigue-marine
-    "#FFDAB9", // pêche
-    "#A52A2A", // marron
-    "#00FA9A"  // vert mentholé
+    '#FF0000', // rouge vif
+    '#007BFF', // bleu électrique
+    '#3EB489', // vert menthe
+    '#FFF700', // jaune citron
+    '#DA70D6', // violet orchidée
+    '#FF7F50', // orange corail
+    '#E30B5C', // rose framboise
+    '#40E0D0', // turquoise
+    '#2F4F4F', // gris anthracite
+    '#191970', // bleu nuit
+    '#808000', // vert olive
+    '#8B4513', // brun chocolat
+    '#E0FFFF', // cyan clair
+    '#FF00FF', // magenta
+    '#FFD700', // or
+    '#E6E6FA', // lavande
+    '#7FFFD4', // aigue-marine
+    '#FFDAB9', // pêche
+    '#A52A2A', // marron
+    '#00FA9A' // vert mentholé
   ];
 
   private userColorCache = new Map<string, string>();
 
-  getMe(): any {
+  searchTerm = '';
+
+  matchGroup(group: any, q: string): boolean {
+    if (!q) return true;
+    q = q.toLowerCase();
+    const nameMatch = (group.name || '').toLowerCase().includes(q);
+    const usersMatch = (group.users || []).some(
+      (u: any) =>
+        `${u.first_name ?? ''} ${u.last_name ?? ''}`.trim().toLowerCase().includes(q) ||
+        (u.email ?? '').toLowerCase().includes(q)
+    );
+    return nameMatch || usersMatch;
+  }
+
+  getInitials(name: string): string {
+    if (!name) return 'G';
+    const parts = name.trim().split(/\s+/).slice(0, 2);
+    return parts.map((p) => p[0]?.toUpperCase() || '').join('') || 'G';
+  }
+
+ getMe(): void {
+    this.isLoading = true;
     this._userService.getUserInfo().subscribe({
       next: (data: FetchableUser) => {
         this.user_id = data.id;
-        this.user = data
-        this.getUserGroups(data.id)
+        this.user = data;
+        this.getUserGroups(data.id);
       },
       error: (error) => {
+        this.isLoading = false;
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
       }
     });
@@ -138,9 +160,8 @@ export class ChatComponent {
   }
 
   submitGroupForm(form: NgForm): void {
-
     if (!form.valid) {
-      console.error("Formulaire invalide");
+      console.error('Formulaire invalide');
       return;
     }
 
@@ -150,22 +171,19 @@ export class ChatComponent {
         user_id: this.user.id
       };
 
-      this._chatService.createGroup(
-        groupData.name,
-        groupData.user_id
-      ).subscribe({
+      this._chatService.createGroup(groupData.name, groupData.user_id).subscribe({
         next: (data) => {
           this.newGroupName = '';
           form.resetForm();
           this.getUserGroups(this.user_id as number);
-          this.showGroupForm = false
+          this.showGroupForm = false;
         },
         error: (error) => {
-          console.error("Erreur lors de la création du groupe:", error);
+          console.error('Erreur lors de la création du groupe:', error);
         }
       });
     } else {
-      console.error("Utilisateur non défini ou nom du groupe manquant.");
+      console.error('Utilisateur non défini ou nom du groupe manquant.');
     }
   }
 
@@ -181,68 +199,72 @@ export class ChatComponent {
   addUserToGroup(): void {
     this._chatService.addUserToGroup({ email: this.guest_email, group_id: this.userGroupId }).subscribe({
       next: () => {
-        this.showAddUserModal = false
-        this.getUserGroups(this.user_id as number)
+        this.showAddUserModal = false;
+        this.getUserGroups(this.user_id as number);
       },
       error: (error) => {
-        this.showAddUserModal = false
+        this.showAddUserModal = false;
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
       }
-    })
+    });
   }
-  showModal() {
-
-  }
+  showModal() {}
 
   removeUserFromGroup(group: any): void {
-
-    const userId = group.users.find((user: FetchableUser) => user.id === this.user_id).id
+    const userId = group.users.find((user: FetchableUser) => user.id === this.user_id).id;
     this._chatService.removeUserFromGroup(userId, Number(group.id)).subscribe({
       next: (data) => {
-        this.getUserGroups(userId)
+        this.getUserGroups(userId);
       },
       error: (error) => {
         console.error("Erreur lors de la récupération de l'utilisateur:", error);
       }
-    })
+    });
   }
 
   getUserGroups(user_id: number): void {
-
-    this._chatService.getAllGroups(user_id as number).subscribe({
+    this.isLoading = true;
+    this._chatService.getAllGroups(user_id).subscribe({
       next: (data) => {
         this.userGroups = data;
+        this.isLoading = false;
       },
       error: (error) => {
-        console.log(user_id);
-        console.error("Erreur lors de la récupération de l'utilisateur:", user_id);
+        this.isLoading = false;
+        console.error("Erreur lors de la récupération de l'utilisateur:", user_id, error);
       }
     });
   }
 
   acceptGroupInvitation(group: any) {
-    this._chatService.acceptToJoinToGroup({user_id: this.user?.id as number, group_id: group.id as number}).subscribe({
-      next: (data) => {
-        this.getUserGroups(Number(this.user?.id))
-      },
-      error: (error) => {
-        console.error(error);
-      }
-    });
+    this._chatService
+      .acceptToJoinToGroup({ user_id: this.user?.id as number, group_id: group.id as number })
+      .subscribe({
+        next: (data) => {
+          this.getUserGroups(Number(this.user?.id));
+        },
+        error: (error) => {
+          console.error(error);
+        }
+      });
   }
 
   haveToAcceptToJoinToGroup(users: UserTestInterface[]) {
     // const user = users.filter((user) => user.id == this.user_id);
-    const test = users.find((user) => user.id === this.user_id)
+    const test = users.find((user) => user.id === this.user_id);
     if (!test?.UserGroupLink.is_accepted) {
-      return true
+      return true;
     }
 
-    return false
+    return false;
   }
   // voir retour en arrière
+  // goToDiscussion(groupId: number): void {
+  //   console.log("voici l'id: ", groupId, this.translateService.currentLang)
+  //   this.router.navigate(['/', this.translateService.currentLang, 'discussion', groupId]);
+  // }
+
   goToDiscussion(groupId: number): void {
-    console.log("voici l'id: ", groupId, this.translateService.currentLang)
-    this.router.navigate(['/', this.translateService.currentLang, 'discussion', groupId]);
+    this.router.navigate([{ outlets: { chat: ['discussion', groupId] } }]);
   }
 }

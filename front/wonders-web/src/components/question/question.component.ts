@@ -43,7 +43,6 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit() {
     if (this.authService.isAuthenticated()) {
-      // Charge d'abord les questions, puis les réponses
       this.loadQuizQuestions().then(() => {
         this.loadUserAnswers();
       });
@@ -52,21 +51,21 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  // permet le switche de vers la page plan trip avec la suggestion
   onSelectProposal(suggestion: any) {
-    this.router.navigate(['/', this.translateService.currentLang, 'stepBody']),
+    this.router.navigate(
+      ['/', this.translateService.currentLang, 'stepBody'],
       {
         queryParams: {
-          image: suggestion.img_full,
-          city: suggestion.pays
+          country: suggestion.pays, 
+          image: suggestion.img_full 
         }
-      };
+      }
+    );
   }
 
   loadUserAnswers() {
     this.questionnaireService.getUserAllAnswers().subscribe({
       next: (answers) => {
-        console.log('Réponses utilisateur chargées:', answers);
         // Filtre les réponses pour ne garder que celles du quiz actuel
         this.userAnswers = answers.filter((answer: { quiz_line_id: number }) =>
           this.questions.some((q) => q.questionData.id === answer.quiz_line_id)
@@ -142,12 +141,9 @@ export class QuestionComponent implements OnInit {
     if (!this.selectedAnswers[this.currentQuestionIndex] || !this.quizResponseId) return;
 
     const currentQuestion = this.questions[this.currentQuestionIndex];
-    console.log('Question actuelle:', currentQuestion); // Debug
-
     const selectedAnswer = currentQuestion.answers.find(
       (answer) => answer.answer === this.selectedAnswers[this.currentQuestionIndex]
     );
-    console.log('Réponse sélectionnée:', selectedAnswer); // Debug
 
     if (!selectedAnswer) return;
 
@@ -162,7 +158,7 @@ export class QuestionComponent implements OnInit {
     // Sauvegarder directement dans userAnswers
     const newAnswer = {
       ...answerData,
-      id: Date.now(), // ID temporaire pour les nouvelles réponses
+      id: Date.now(),
       text: selectedAnswer.answer,
       quiz_line_id: currentQuestion.questionData.id
     };
@@ -178,26 +174,22 @@ export class QuestionComponent implements OnInit {
       this.userAnswers.push(newAnswer);
     }
 
-    console.log('userAnswers mis à jour:', this.userAnswers); // Debug
-
     // Continuer avec la sauvegarde API comme avant
     const existingAnswer = this.userAnswers.find((answer) => answer.quiz_line_id === currentQuestion.questionData.id);
 
-    if (existingAnswer && existingAnswer.id) {
-      this.questionnaireService.updateUserAnswer(existingAnswer.id, answerData).subscribe({
-        next: (response) => {
-          console.log('Réponse mise à jour avec succès:', response);
-        },
-        error: (error) => console.error('Erreur mise à jour:', error)
-      });
-    } else {
-      this.questionnaireService.saveUserAnswer(answerData).subscribe({
-        next: (response) => {
-          console.log('Nouvelle réponse sauvegardée avec succès:', response);
-        },
-        error: (error) => console.error('Erreur sauvegarde:', error)
-      });
-    }
+    // if (existingAnswer && existingAnswer.id) {
+    //   this.questionnaireService.updateUserAnswer(existingAnswer.id, answerData).subscribe({
+    //     next: (response) => {
+    //     },
+    //     error: (error) => console.error('Erreur mise à jour:', error)
+    //   });
+    // } else {
+    //   this.questionnaireService.saveUserAnswer(answerData).subscribe({
+    //     next: (response) => {
+    //     },
+    //     error: (error) => console.error('Erreur sauvegarde:', error)
+    //   });
+    // }
   }
 
   previousQuestion() {
