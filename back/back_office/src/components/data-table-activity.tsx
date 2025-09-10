@@ -100,6 +100,7 @@ import {toast} from "sonner";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import {instanceQuiz} from "@/lib/axiosInstance.ts";
+import {formatDate} from "@/lib/utils.ts";
 
 export const schema = z.object({
     id: z.number(),
@@ -189,7 +190,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.tripDay.date}
+                    {formatDate(row.original.tripDay.date)}
                 </Badge>
             </div>
         ),
@@ -599,8 +600,7 @@ export function DataTableActivity({
 
 function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
     const isMobile = useIsMobile()
-    const {toggleTrigger} = useApp()
-
+    const [status, setStatus] = React.useState(item.status)
 
     const FormSchema = z.object({
         status: z
@@ -621,7 +621,7 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
             trip_day_id: item.trip_day_id
         })
 
-        toggleTrigger()
+        setStatus(data.status)
 
         toast("You submitted the following values", {
             description: (
@@ -652,7 +652,7 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
                             <div className="grid gap-2">
                                 <p className="text-muted-foreground">Id activity: {item.activity_id}</p>
                                 <p className="text-muted-foreground">Status du payement
-                                    : {item.status}</p>
+                                    : {status}</p>
                             </div>
                             <Separator/>
                             <Form {...form}>

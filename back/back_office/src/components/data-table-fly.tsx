@@ -95,8 +95,8 @@ import {Form, FormField, FormItem, FormLabel, FormMessage} from "@components/ui/
 import {toast} from "sonner";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {useApp} from "@/context/AppContext.tsx";
 import {instanceQuiz} from "@/lib/axiosInstance.ts";
+import {formatDate} from "@/lib/utils.ts";
 
 export const schema = z.object({
     id: z.number(),
@@ -188,7 +188,9 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.url}
+                    <a href={row.original.url} target="_blank">
+                        Lien
+                    </a>
                 </Badge>
             </div>
         ),
@@ -212,7 +214,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.from_date}
+                    {formatDate(row.original.from_date)}
                 </Badge>
             </div>
         ),
@@ -223,7 +225,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.to_date}
+                    {formatDate(row.original.to_date)}
                 </Badge>
             </div>
         ),
@@ -583,7 +585,7 @@ export function DataTableFly({data: initialData}: { data: z.infer<typeof schema>
 
 function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
     const isMobile = useIsMobile()
-    const {toggleTrigger} = useApp()
+    const [status, setStatus] = React.useState(item.status)
 
     const FormSchema = z.object({
         status: z
@@ -606,7 +608,7 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
             id: item.id
         })
 
-        toggleTrigger()
+        setStatus(data.status)
 
         toast("You submitted the following values", {
             description: (
@@ -621,12 +623,12 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
         <Drawer direction={isMobile ? "bottom" : "right"}>
             <DrawerTrigger asChild>
                 <Button variant="link" className="text-foreground w-fit px-0 text-left">
-                    {item.status}
+                    {status}
                 </Button>
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className="gap-1">
-                    <DrawerTitle>{item.status}</DrawerTitle>
+                    <DrawerTitle>{status}</DrawerTitle>
                     <DrawerDescription>
                         Showing total visitors for the last 6 months
                     </DrawerDescription>
@@ -644,7 +646,7 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
                                     : <a href={item.url} target={"_blank"}>Lien</a>
                                 </p>
                                 <p className="text-muted-foreground">Status du payement
-                                    : {item.status}</p>
+                                    : {status}</p>
                             </div>
                             <Separator/>
                             <Form {...form}>

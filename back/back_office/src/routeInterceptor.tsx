@@ -40,9 +40,14 @@ const RouteInterceptor = () => {
                 }
                 if (!token) navigate('/');
         }
+
         if (user?.email && token) {
+            console.log(token);
             instanceUser('auth/refresh', {
                 method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             })
                 .then(res => {
                     const data = res.data

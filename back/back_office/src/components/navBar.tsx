@@ -23,9 +23,9 @@ export default function NavBar() {
                         <NavLink to={"/dashboard"} end>Dashboard</NavLink>
                         <NavLink to={"/trip"}>Trips</NavLink>
                         <NavLink to={"/users"}>Users</NavLink>
-                        <NavLink to={"/partenaires"}>Partenaires</NavLink>
-                        <NavLink to={"/reservations"}>Réservations</NavLink>
-                        <NavLink to={"/reports"}>Reports</NavLink>
+                        {/*<NavLink to={"/partenaires"}>Partenaires</NavLink>*/}
+                        {/*<NavLink to={"/reservations"}>Réservations</NavLink>*/}
+                        {/*<NavLink to={"/reports"}>Reports</NavLink>*/}
                     </li>
                     <IconProfil/>
                 </div>

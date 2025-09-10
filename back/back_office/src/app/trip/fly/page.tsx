@@ -17,6 +17,7 @@ export default function Page() {
                 method: 'GET'
             })
                 .then((res) => {
+                    console.log(res)
                     const data = res.data;
                     data.forEach((element: TripState) => {
                         if (element.cities.length > 0 && element.cities) {
@@ -40,7 +41,9 @@ export default function Page() {
                 .catch(error => console.log(error))
     }, [])
 
-    console.log(data)
+    if (data === null) {
+        setData([])
+    }
 
     return (
         <>

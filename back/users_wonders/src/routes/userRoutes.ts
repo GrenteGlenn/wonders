@@ -3,7 +3,6 @@ import AuthController from '../controllers/AuthController';
 import { decryptJWT } from '../lib/JWT';
 import { JwtPayload } from '../interfaces/Global';
 import { UserUpdateInterface } from '../interfaces/UserInterface';
-import adminCheck from '../middlewares/adminCheck';
 
 const router = Router();
 
@@ -22,7 +21,7 @@ router.get('/', (async (req, res) => {
   }
 }) as RequestHandler);
 
-router.post('/batch', adminCheck, (async (req, res) => {
+router.post('/batch', (async (req, res) => {
   const { ids } = <Body>req.body;
   try {
     const client = await authController.listId({ ids });

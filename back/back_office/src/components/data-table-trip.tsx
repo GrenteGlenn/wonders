@@ -54,7 +54,6 @@ import {
     Drawer,
     DrawerClose,
     DrawerContent,
-    DrawerDescription,
     DrawerFooter,
     DrawerHeader,
     DrawerTitle,
@@ -101,6 +100,7 @@ import FormDeleteFly from "@/form/form-delete-fly.tsx";
 import FormEditFly from "@/form/form-edit-fly.tsx";
 import {useNavigate} from "react-router-dom";
 import {instanceQuiz} from "@/lib/axiosInstance.ts";
+import {formatDate} from "@/lib/utils.ts";
 
 export const schema = z.object({
     id: z.number(),
@@ -149,10 +149,8 @@ function changeStatus({from_date, to_date, price, url, status, id}: {
             status
         }
     })
-        .then(r => {
-            console.log(r)
-        })
         .catch(e => console.log(e))
+
 }
 
 // Create a separate component for the drag handle
@@ -249,7 +247,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.user.birth_date}
+                    {formatDate(row.original.user.birth_date)}
                 </Badge>
             </div>
         ),
@@ -261,7 +259,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.from_date}
+                    {formatDate(row.original.from_date)}
                 </Badge>
             </div>
         ),
@@ -272,7 +270,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.to_date}
+                    {formatDate(row.original.to_date)}
                 </Badge>
             </div>
         ),
@@ -676,7 +674,7 @@ export function DataTableTrip({
 
 function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
     const isMobile = useIsMobile()
-    const {toggleTrigger} = useApp()
+    const [status, setStatus] = React.useState(item.trip_transportation.status)
 
     const FormSchema = z.object({
         status: z
@@ -700,7 +698,7 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
             id: item.trip_transportation.id
         })
 
-        toggleTrigger()
+        setStatus(data.status)
 
         toast("You submitted the following values", {
             description: (
@@ -709,6 +707,7 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
         </pre>
             ),
         })
+
     }
 
     return (
@@ -721,24 +720,22 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
             <DrawerContent>
                 <DrawerHeader className="gap-1">
                     <DrawerTitle>{item.country.name}</DrawerTitle>
-                    <DrawerDescription>
-                        Showing total visitors for the last 6 months
-                    </DrawerDescription>
                 </DrawerHeader>
                 <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
                     {!isMobile && (
                         <>
                             <div className="grid gap-2">
                                 <p className="text-muted-foreground">Date de
-                                    départ: {item.trip_transportation.from_date}</p>
+                                    départ: {formatDate(item.trip_transportation.from_date)}</p>
                                 <p className="text-muted-foreground">Date de
-                                    retour: {item.trip_transportation.to_date}</p>
-                                <p className="text-muted-foreground">Prix du vol: {item.trip_transportation.price}</p>
+                                    retour: {formatDate(item.trip_transportation.to_date)}</p>
+                                <p className="text-muted-foreground">Prix du
+                                    vol: {item.trip_transportation.price} Euros</p>
                                 <p className="text-muted-foreground">Lien vers le Vol
                                     : <a href={item.trip_transportation.url} target={"_blank"}>Lien</a>
                                 </p>
                                 <p className="text-muted-foreground">Status du payement
-                                    : {item.trip_transportation.status}</p>
+                                    : {status}</p>
                             </div>
                             <Separator/>
                             <Form {...form}>
@@ -774,7 +771,9 @@ function TableCellViewer({item}: { item: z.infer<typeof schema> }) {
                                             </FormItem>
                                         )}
                                     />
-                                    <Button type="submit">Changer le Status</Button>
+                                    <DrawerClose asChild>
+                                        <Button type="submit">Changer le Status</Button>
+                                    </DrawerClose>
                                 </form>
                             </Form>
                             <Separator/>

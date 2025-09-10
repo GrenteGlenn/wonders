@@ -38,8 +38,9 @@ export default function Page() {
                 .catch(error => console.log(error))
     }, [])
 
-    console.log("hotel", data)
-
+    if (data === null) {
+        setData([])
+    }
     return (
         <>
             {

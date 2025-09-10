@@ -41,7 +41,10 @@ export default function Page() {
                 .finally(() => setLoading(false))
                 .catch(error => console.log(error))
     }, [])
-    console.log("activity", data)
+
+    if (data === null) {
+        setData([])
+    }
 
     return (
         <>

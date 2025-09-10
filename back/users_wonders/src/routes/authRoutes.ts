@@ -102,7 +102,6 @@ router.post('/loginAdmin', (async (req, res, next) => {
 router.post('/refresh', ((req, res) => {
   let refresh;
   const token = req.headers.authorization?.split(' ')[1];
-  console.log(token);
   if (token) refresh = updateJWT(token);
   if (refresh) res.status(200).json({ refresh });
   else res.status(401).json('refresh fail');

@@ -2,9 +2,13 @@ import {useEffect, useState} from "react";
 import {DataTableTrip} from "@components/data-table-trip.tsx";
 import Loader from "@components/loader.tsx";
 import {instanceQuiz} from "@/lib/axiosInstance.ts";
+import {useApp} from "@/context/AppContext.tsx";
 
 export default function Page() {
     const [trip, setTrip] = useState([])
+    const {trigger} = useApp()
+
+    console.log(trigger)
 
     useEffect(() => {
         instanceQuiz('trip/detail', {
@@ -15,7 +19,7 @@ export default function Page() {
                 setTrip(data)
             })
             .catch(error => console.log(error))
-    }, [])
+    }, [trigger])
 
     return (
         <>

@@ -1,13 +1,12 @@
 import {useState, useRef, useEffect} from 'react';
-import {User, Settings, LogOut, HelpCircle} from 'lucide-react';
-import {useNavigate} from "react-router-dom";
+import {LogOut} from 'lucide-react';
 import {useApp} from "@/context/AppContext.tsx";
 import {Switch} from "@components/ui/switch.tsx";
 import {Label} from "@components/ui/label.tsx"
 
 
 export default function IconProfil() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const {logout, theme, toggleTheme} = useApp()
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const menuRef = useRef<HTMLDivElement | null>(null);
@@ -80,34 +79,34 @@ export default function IconProfil() {
 
                     {/* Options du menu */}
                     <div className="py-1">
-                        <button
-                            onClick={() => navigate('/profile')}
-                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                            <User className="w-4 h-4 mr-3"/>
-                            Mon Profil
-                        </button>
+                        {/*<button*/}
+                        {/*    onClick={() => navigate('/profile')}*/}
+                        {/*    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"*/}
+                        {/*>*/}
+                        {/*    <User className="w-4 h-4 mr-3"/>*/}
+                        {/*    Mon Profil*/}
+                        {/*</button>*/}
 
-                        <button
-                            onClick={() => navigate('/settings')}
-                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                            <Settings className="w-4 h-4 mr-3"/>
-                            Paramètres
-                        </button>
+                        {/*<button*/}
+                        {/*    onClick={() => navigate('/settings')}*/}
+                        {/*    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"*/}
+                        {/*>*/}
+                        {/*    <Settings className="w-4 h-4 mr-3"/>*/}
+                        {/*    Paramètres*/}
+                        {/*</button>*/}
 
                         <div className={"flex items-center space-x-2 px-4 py-2"}>
                             <Switch onClick={() => toggleTheme()} id={"theme"}/>
                             <Label htmlFor={"theme"}>Theme Dark</Label>
                         </div>
 
-                        <button
-                            onClick={() => navigate('/help')}
-                            className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                        >
-                            <HelpCircle className="w-4 h-4 mr-3"/>
-                            Aide
-                        </button>
+                        {/*<button*/}
+                        {/*    onClick={() => navigate('/help')}*/}
+                        {/*    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"*/}
+                        {/*>*/}
+                        {/*    <HelpCircle className="w-4 h-4 mr-3"/>*/}
+                        {/*    Aide*/}
+                        {/*</button>*/}
                     </div>
 
                     <div className="border-t border-gray-100"></div>
