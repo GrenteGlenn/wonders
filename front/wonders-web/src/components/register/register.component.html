@@ -1,17 +1,16 @@
-<div class="relative flex justify-center items-center min-h-screen bg-cover bg-center"
-     style="background-image: url('assets/images/hero-home-3.jpg');">
-  <!-- filtre sombre -->
+<div
+  class="relative flex justify-center items-center min-h-screen bg-cover bg-center"
+  style="background-image: url('assets/images/hero-home-3.jpg')"
+>
   <div class="absolute inset-0 bg-black bg-opacity-30"></div>
-
-  <!-- fenêtre d'inscription -->
   <div class="relative z-10 glass-card grid grid-cols-1 justify-items-center max-w-2xl w-full mx-4 my-10">
     <h1 class="text-2xl font-medium mb-6 text-white">S'enregistrer</h1>
     <p class="justify-self-end text-red-300 px-10 text-sm w-full text-right">Champs requis *</p>
 
     <form #f="ngForm" (ngSubmit)="clickRegister(f)" class="justify-self-start px-6 w-full">
-      <!-- EMAIL -->
       <div class="mb-4">
-        <label for="lb_email" class="text-white">Adresse mail <i class="text-red-300">*</i></label><br />
+        <label for="lb_email" class="text-white">Adresse mail <i class="text-red-300">*</i></label
+        ><br />
         <input
           type="email"
           id="lb_email"
@@ -29,9 +28,9 @@
         <div *ngIf="emailServerError" class="text-red-300 text-sm mt-1">{{ emailServerError }}</div>
       </div>
 
-      <!-- MOT DE PASSE -->
       <div class="mb-4">
-        <label for="lb_password" class="text-white">Mot de passe <i class="text-red-300">*</i></label><br />
+        <label for="lb_password" class="text-white">Mot de passe <i class="text-red-300">*</i></label
+        ><br />
         <input
           type="password"
           id="lb_password"
@@ -43,8 +42,10 @@
           class="w-full border border-gray-300 rounded-md p-2"
           #pwdCtrl="ngModel"
         />
-        <div *ngIf="(pwdCtrl.invalid && (pwdCtrl.touched || f.submitted)) || passwordErrors.length"
-             class="text-red-300 text-sm mt-1">
+        <div
+          *ngIf="(pwdCtrl.invalid && (pwdCtrl.touched || f.submitted)) || passwordErrors.length"
+          class="text-red-300 text-sm mt-1"
+        >
           <div *ngIf="pwdCtrl.errors?.['required']">Le mot de passe est requis.</div>
           <div *ngIf="pwdCtrl.errors?.['minlength']">Au moins 8 caractères.</div>
           <ul *ngIf="passwordErrors.length" class="list-disc ml-5">
@@ -53,9 +54,9 @@
         </div>
       </div>
 
-      <!-- PRENOM -->
       <div class="mb-4">
-        <label for="lb_firstname" class="text-white">Prénom <i class="text-red-300">*</i></label><br />
+        <label for="lb_firstname" class="text-white">Prénom <i class="text-red-300">*</i></label
+        ><br />
         <input
           type="text"
           id="lb_firstname"
@@ -70,9 +71,9 @@
         </div>
       </div>
 
-      <!-- NOM -->
       <div class="mb-4">
-        <label for="lb_lastname" class="text-white">Nom <i class="text-red-300">*</i></label><br />
+        <label for="lb_lastname" class="text-white">Nom <i class="text-red-300">*</i></label
+        ><br />
         <input
           type="text"
           id="lb_lastname"
@@ -87,26 +88,31 @@
         </div>
       </div>
 
-      <!-- DATE -->
       <div class="mb-4">
-        <label for="lb_birthday" class="text-white">Date d'anniversaire <i class="text-red-300">*</i></label><br />
+        <label for="lb_birthday" class="text-white">Date d'anniversaire <i class="text-red-300">*</i></label
+        ><br />
         <input
           type="date"
           id="lb_birthday"
           name="birth_date"
           required
-          [(ngModel)]="user.birth_date"
+          [(ngModel)]="birthDateStr"
+          [min]="minBirthISO"
+          [max]="todayISO"
           class="w-full border border-gray-300 rounded-md p-2"
           #bdCtrl="ngModel"
         />
         <div *ngIf="bdCtrl.invalid && (bdCtrl.touched || f.submitted)" class="text-red-300 text-sm mt-1">
-          La date d'anniversaire est requise.
+          <ng-container *ngIf="bdCtrl.errors?.['required']">La date d'anniversaire est requise.</ng-container>
+          <ng-container *ngIf="!bdCtrl.errors?.['required']">
+            Date invalide (entre {{ minBirthISO }} et aujourd’hui).
+          </ng-container>
         </div>
       </div>
 
-      <!-- PAYS -->
       <div class="mb-4">
-        <label for="lb_country" class="text-white">Pays <i class="text-red-300">*</i></label><br />
+        <label for="lb_country" class="text-white">Pays <i class="text-red-300">*</i></label
+        ><br />
         <select
           id="lb_country"
           name="country_id"
@@ -125,9 +131,9 @@
         </div>
       </div>
 
-      <!-- LANGUE -->
       <div class="mb-4">
-        <label for="lb_language" class="text-white">Langue <i class="text-red-300">*</i></label><br />
+        <label for="lb_language" class="text-white">Langue <i class="text-red-300">*</i></label
+        ><br />
         <select
           id="lb_language"
           name="language_id"

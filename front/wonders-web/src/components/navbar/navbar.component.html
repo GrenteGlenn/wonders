@@ -36,7 +36,7 @@
       <img
         [src]="user?.img ?? genericAvatar"
         alt="User Avatar"
-        class="h-8 w-8 rounded-full cursor-pointer navbar-avatar border-[2px] border-blue-950"
+        class="h-8 w-8 rounded-full cursor-pointer navbar-avatar"
         (click)="toggleMenu()"
       />
       <div
@@ -154,41 +154,7 @@
           <lucide-icon name="message-square-text" class="mr-3 h-5 w-5"></lucide-icon>
           Chat
         </button>
-        <!-- A rajouter quand la fonctionnalitée sera disponible
-              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                <lucide-icon name="users" class="mr-3 h-5 w-5"></lucide-icon>
-                Communities
-              </a>
-              -->
-        <!-- A rajouter quand la fonctionnalitée sera disponible
-              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                <lucide-icon name="message-circle" class="mr-3 h-5 w-5"></lucide-icon>
-                Chat
-              </a>
-              -->
-        <!-- A rajouter quand la fonctionnalitée sera disponible
-              <a href="#" class=" px-4 py-2 text-sm text-red-700 hover:bg-gray-100 flex items-center">
-                <lucide-icon name="shield" class="mr-3 h-5 w-5"></lucide-icon>
-                Panel administrator
-              </a>
-              -->
         <div class="border-t my-1"></div>
-        <!-- A rajouter quand la fonctionnalitée sera disponible
-              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                <lucide-icon name="plane" class="mr-3 h-5 w-5"></lucide-icon>
-                Flights
-              </a>
-              -->
-        <!-- A rajouter quand la fonctionnalitée sera disponible
-              <a href="#" class=" px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-                <lucide-icon name="bed" class="mr-3 h-5 w-5"></lucide-icon>
-                Hotels
-              </a>
-              -->
-        <!-- <a href="activities" class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
-          <lucide-icon name="tree-palm" class="mr-3 h-5 w-5"></lucide-icon>
-          Activités
-        </a> -->
         <a
           class="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center cursor-pointer"
           (click)="isAuthenticated ? disconnect() : login()"
@@ -202,12 +168,4 @@
   </div>
 </nav>
 
-<!-- <div
-  *ngIf="showBottomCTA"
-  class="fixed bottom-0 left-0 right-0 z-50 md:hidden text-white px-4 py-3 bg-primary shadow-lg flex justify-center"
->
-  <button (click)="goChoiceGuide()" class="nav-button flex items-center gap-2 font-semibold text-lg">
-    <lucide-icon name="route" class="h-5 w-5"></lucide-icon>
-    {{ 'NavBar.ButtonTrip' | translate }}
-  </button>
-</div> -->
+

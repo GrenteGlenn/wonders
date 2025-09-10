@@ -4,7 +4,7 @@
     <div class="flex items-center gap-4">
       <img
         [src]="user?.img ?? genericAvatar"
-        class="w-24 h-24 rounded-full object-cover ring-4 ring-blue-500"
+        class="w-24 h-24 rounded-full object-cover ring-4 bg-[#1A87CC]"
         alt="profile"
       />
       <div>
@@ -15,13 +15,13 @@
     <div class="flex gap-4">
       <button
         (click)="openEditModal()"
-        class="px-5 py-2 bg-[#FFA500] text-white rounded-lg hover:bg-blue-700 transition"
+        class="px-5 py-2 bg-[#FFA500] text-black rounded-lg hover:bg-[#1A87CC] transition"
       >
         Modifier le profil
       </button>
       <button
         (click)="openDeleteModal()"
-        class="px-5 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+        class="px-5 py-2 bg-red-500 text-black rounded-lg hover:bg-red-600 transition"
       >
         Supprimer
       </button>
@@ -102,13 +102,12 @@
       </div>
     </section>
 
-    <!-- Aucun voyage (hasTrips === false) : placeholder + redirection -->
     <section *ngIf="hasTrips === false" class="mb-12">
       <h3 class="text-2xl font-semibold mb-6 flex items-center gap-2"><span>Vos voyages</span></h3>
       <div class="px-10">
         <div class="w-80 bg-white/80 backdrop-blur rounded-xl border border-dashed border-gray-300 p-6 text-center">
           <div class="text-gray-500 mb-3">Aucun voyage pour le moment</div>
-          <button class="px-4 py-2 rounded-md bg-blue-500 hover:bg-blue-600 text-white" (click)="goPlanTrip()">
+          <button class="px-4 py-2 rounded-md bg-[#1A87CC] hover:bg-[#FFA500] text-white" (click)="goPlanTrip()">
             Planifier un voyage
           </button>
         </div>
