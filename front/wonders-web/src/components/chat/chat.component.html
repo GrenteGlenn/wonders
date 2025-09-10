@@ -1,9 +1,6 @@
-<!-- Conteneur plein-viewport du drawer -->
 <div class="flex h-full flex-col bg-white">
-  <!-- Header local (recherche + CTA) -->
   <div class="sticky top-0 z-10 bg-white border-b">
     <div class="px-4 pt-3 pb-2 space-y-3">
-      <!-- Barre de recherche -->
       <div class="relative">
         <input
           type="text"
@@ -17,12 +14,11 @@
         ></lucide-icon>
       </div>
 
-      <!-- Ligne “Nouveau groupe” façon WhatsApp -->
       <button
         (click)="showGroupForm = !showGroupForm"
         class="w-full flex items-center gap-3 rounded-xl px-3 py-2 hover:bg-slate-100 transition"
       >
-        <div class="h-10 w-10 rounded-full bg-emerald-600 text-white flex items-center justify-center">
+        <div class="h-10 w-10 rounded-full bg-[#1A87CC] text-white flex items-center justify-center">
           <lucide-icon name="plus" class="w-5 h-5"></lucide-icon>
         </div>
         <div class="text-left">
@@ -34,7 +30,6 @@
         >
       </button>
 
-      <!-- Formulaire de création compact -->
       <form
         *ngIf="showGroupForm"
         #groupForm="ngForm"
@@ -76,7 +71,6 @@
     </div>
   </div>
 
-  <!-- Liste des conversations -->
   <div class="flex-1 overflow-y-auto">
     <!-- SQUELETTE (quand ça charge) -->
     <ul *ngIf="isLoading" class="divide-y divide-slate-100 animate-pulse">
@@ -91,10 +85,7 @@
         </div>
       </li>
     </ul>
-    <!-- Empty state -->
-    <div *ngIf="! userGroups?.length" class="p-10 text-center text-slate-500">
-      Aucun groupe pour le moment.
-    </div>
+    <div *ngIf="!userGroups?.length" class="p-10 text-center text-slate-500">Aucun groupe pour le moment.</div>
 
     <ul *ngIf="!isLoading && userGroups?.length" class="divide-y divide-slate-100">
       <li
@@ -106,7 +97,6 @@
           class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 transition"
           (click)="!haveToAcceptToJoinToGroup(group.users) ? goToDiscussion(group.id) : null"
         >
-          <!-- Avatar groupe (initiales) -->
           <div class="relative shrink-0">
             <div
               class="h-12 w-12 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-semibold"
@@ -115,7 +105,6 @@
             </div>
           </div>
 
-          <!-- Centre : nom + info -->
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2">
               <span class="truncate font-medium">{{ group.name }}</span>
@@ -124,19 +113,15 @@
               </span>
             </div>
 
-            <!-- Ligne participants (preview) -->
             <div class="mt-0.5 text-xs text-slate-500 truncate">
               <ng-container *ngIf="group.users?.length; else noUsers">
-                <!-- {{ (group.users | slice:0:3).map(u => u.first_name).join(', ') }} -->
                 <span *ngIf="group.users.length > 3">+{{ group.users.length - 3 }}</span>
               </ng-container>
               <ng-template #noUsers>Pas encore de membres</ng-template>
             </div>
           </div>
 
-          <!-- Droite : actions contextuelles -->
           <div class="ml-2 flex items-center gap-1">
-            <!-- Invitation à accepter -->
             <button
               *ngIf="haveToAcceptToJoinToGroup(group.users)"
               (click)="$event.stopPropagation(); acceptGroupInvitation(group)"
@@ -147,7 +132,6 @@
               Accepter
             </button>
 
-            <!-- Ajouter un membre -->
             <button
               *ngIf="!haveToAcceptToJoinToGroup(group.users)"
               (click)="$event.stopPropagation(); showAddUserModal = true; userGroupId = group.id"
@@ -157,7 +141,6 @@
               <lucide-icon name="user-plus" class="w-4 h-4"></lucide-icon>
             </button>
 
-            <!-- Quitter -->
             <button
               *ngIf="!haveToAcceptToJoinToGroup(group.users)"
               (click)="$event.stopPropagation(); removeUserFromGroup(group)"
@@ -167,7 +150,6 @@
               <lucide-icon name="log-out" class="w-4 h-4"></lucide-icon>
             </button>
 
-            <!-- Entrer -->
             <button
               *ngIf="!haveToAcceptToJoinToGroup(group.users)"
               (click)="$event.stopPropagation(); goToDiscussion(group.id)"
@@ -183,7 +165,6 @@
   </div>
 </div>
 
-<!-- Modal Ajouter un membre (inchangé, un peu poli) -->
 <div *ngIf="showAddUserModal" class="fixed inset-0 z-[1100] bg-black/40 flex items-center justify-center p-4">
   <div class="w-full max-w-md rounded-2xl border bg-white p-5 shadow-xl">
     <div class="flex items-center justify-between mb-3">

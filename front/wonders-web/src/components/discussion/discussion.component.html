@@ -1,10 +1,6 @@
-<!-- Container principal -->
 <div class="flex h-full flex-col bg-white">
-
-  <!-- Header sticky -->
   <div class="sticky top-0 z-10 bg-white/95 backdrop-blur border-b px-3 sm:px-4 py-2">
     <div class="flex items-center gap-3">
-      <!-- Avatar + nom du groupe -->
       <div class="flex items-center gap-3 min-w-0">
         <div class="h-10 w-10 rounded-full bg-slate-200 flex items-center justify-center text-slate-700 font-semibold">
           {{ getInitials(currentGroup?.name) }}
@@ -16,8 +12,6 @@
           <div class="text-xs text-slate-500">Discussion</div>
         </div>
       </div>
-
-      <!-- Back (à droite) -->
       <button
         class="flex flex-1 justify-end items-end p-2 rounded hover:bg-slate-100"
         aria-label="Retour"
@@ -28,9 +22,7 @@
     </div>
   </div>
 
-  <!-- Zone messages -->
   <div #messagesContainer class="flex-1 overflow-y-auto px-2 sm:px-4 py-3 bg-slate-50">
-
     <!-- SQUELETTE pendant chargement -->
     <div *ngIf="isLoading" class="space-y-3 animate-pulse">
       <div class="flex justify-start">
@@ -53,11 +45,8 @@
       </div>
     </div>
 
-    <!-- LISTE réelle -->
     <ng-container *ngIf="!isLoading">
-      <!-- Séparateurs de jour -->
       <ng-container *ngFor="let message of messages; let i = index; trackBy: trackByMessage">
-        <!-- Divider de date -->
         <div
           *ngIf="i === 0 || !isSameDay(messages[i - 1]?.timestamp, message.timestamp)"
           class="my-3 flex justify-center"
@@ -77,19 +66,14 @@
               class="relative rounded-2xl px-3 py-2 shadow-sm break-words"
               [ngClass]="
                 isOwnMessage(message)
-                  ? 'bg-blue-600 text-white rounded-br-md'
-                  : 'bg-white text-slate-900 border rounded-bl-md'
+                  ? 'bg-[#1A87CC] text-white rounded-br-md'
+                  : 'bg-[#FFA500] text-slate-900 border rounded-bl-md'
               "
             >
-              <!-- Header expéditeur (autres uniquement) -->
               <div *ngIf="!isOwnMessage(message)" class="flex items-center gap-2 mb-1">
                 <span class="text-xs font-semibold text-slate-700 truncate">{{ message.username }}</span>
               </div>
-
-              <!-- Texte -->
               <div class="whitespace-pre-line leading-relaxed">{{ message.text }}</div>
-
-              <!-- Heure -->
               <div class="mt-1 text-[10px] opacity-70 text-right">
                 {{ formatTime(message.timestamp) }}
               </div>
@@ -107,12 +91,9 @@
     </ng-container>
   </div>
 
-  <!-- Barre d'input collée en bas -->
   <div class="sticky bottom-0 z-10 bg-white/95 backdrop-blur border-t px-2 sm:px-3 py-2">
-    <!-- Pill -->
     <div
-      class="flex w-full items-center gap-2 rounded-full border border-slate-300 bg-white px-2 py-1
-             focus-within:ring-2 focus-within:ring-blue-500"
+      class="flex w-full items-center gap-2 rounded-full border border-slate-300 bg-white px-2 py-1 focus-within:ring-2 focus-within:ring-blue-500"
     >
       <textarea
         [(ngModel)]="newMessage"
@@ -121,15 +102,13 @@
         rows="1"
         [disabled]="isLoading || isSending"
         [placeholder]="isLoading ? 'Chargement de la discussion…' : 'Tapez votre message…'"
-        class="block w-full resize-none bg-transparent px-2 py-1 leading-[1.4]
-               min-h-[40px] max-h-28 outline-none disabled:cursor-not-allowed disabled:text-slate-400"
+        class="block w-full resize-none bg-transparent px-2 py-1 leading-[1.4] min-h-[40px] max-h-28 outline-none disabled:cursor-not-allowed disabled:text-slate-400"
       ></textarea>
 
       <button
         (click)="sendMessage()"
         [disabled]="isLoading || !newMessage.trim() || isSending"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FFC46A] text-white
-               hover:brightness-95 disabled:opacity-50"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[#FFC46A] text-white hover:brightness-95 disabled:opacity-50"
         aria-label="Envoyer"
       >
         <lucide-icon name="send" class="w-4 h-4"></lucide-icon>
@@ -138,32 +117,3 @@
   </div>
 </div>
 
-<!-- Modal Quiz -->
-<div
-  *ngIf="openQuizModal"
-  class="fixed inset-0 bg-black/40 flex items-center justify-center z-[1100] p-4"
->
-  <div class="bg-white rounded-2xl p-6 w-full max-w-md shadow-xl">
-    <div class="flex items-center justify-between mb-3">
-      <h4 class="text-lg font-semibold">Ajouter un questionnaire au groupe</h4>
-      <button
-        type="button"
-        (click)="openQuizModal = false"
-        class="p-2 rounded hover:bg-slate-100"
-        aria-label="Fermer">
-        ✕
-      </button>
-    </div>
-    <div class="text-sm text-slate-600">
-      (Place ton contenu ici)
-    </div>
-    <div class="mt-4 text-right">
-      <button
-        type="button"
-        (click)="openQuizModal = false"
-        class="px-4 py-2 rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300">
-        Fermer
-      </button>
-    </div>
-  </div>
-</div>

@@ -1,9 +1,6 @@
 <div class="login-wrapper">
+  <img src="assets/images/hero-home-1.jpg" alt="Fond" class="background-image" />
 
-  <!-- Image de fond -->
-  <img src="assets/images/hero-home-1.jpg" alt="Fond" class="background-image"/>
-
-  <!-- Overlay gris -->
   <div class="overlay"></div>
 
   <div class="flex justify-center items-center min-h-screen">
@@ -14,7 +11,6 @@
             <h1 class="text-3xl font-bold text-center mb-8">Connexion</h1>
           </div>
 
-          <!-- Utiliser un formulaire ngForm -->
           <form #loginForm="ngForm" (ngSubmit)="clickLogin(loginForm)" novalidate class="space-y-4">
             <div>
               <label for="lb_email" class="block text-sm font-medium text-gray-700 mb-1">Adresse mail</label>
@@ -28,16 +24,12 @@
                 class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
                 [ngModelOptions]="{ updateOn: 'blur' }"
               />
-              <!-- Message affiché uniquement si invalide ET touché/déjà modifié -->
               <div
                 *ngIf="emailCtrl.invalid && (emailCtrl.touched || emailCtrl.dirty)"
                 class="text-red-600 text-sm mt-1"
               >
-                <ng-container *ngIf="emailCtrl.errors?.['required']">
-                  L'adresse e-mail est requise.
-                </ng-container>
-                <ng-container *ngIf="emailCtrl.errors?.['email']">
-                </ng-container>
+                <ng-container *ngIf="emailCtrl.errors?.['required']"> L'adresse e-mail est requise. </ng-container>
+                <ng-container *ngIf="emailCtrl.errors?.['email']"> </ng-container>
               </div>
             </div>
 
@@ -58,12 +50,7 @@
                 *ngIf="passwordCtrl.invalid && (passwordCtrl.touched || passwordCtrl.dirty)"
                 class="text-red-600 text-sm mt-1"
               >
-                <ng-container *ngIf="passwordCtrl.errors?.['required']">
-                  Le mot de passe est requis.
-                </ng-container>
-                <ng-container *ngIf="passwordCtrl.errors?.['minlength']">
-                  Au moins 8 caractères.
-                </ng-container>
+                <ng-container *ngIf="passwordCtrl.errors?.['required']"> Le mot de passe est requis. </ng-container>
               </div>
             </div>
 
@@ -73,8 +60,6 @@
             >
               Connexion
             </button>
-
-            <!-- Erreur serveur / authentification -->
             <div *ngIf="authError" class="text-red-600 text-sm">
               {{ authError }}
             </div>
@@ -106,7 +91,6 @@
               </div>
             </div>
           </form>
-
         </div>
       </div>
     </div>

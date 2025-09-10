@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { AuthentificationService, ReponseToken } from '../../app/service/auth/authentification.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { TranslateService } from '../../app/service/translate/translate.service';
 import { CommonModule } from '@angular/common';
@@ -13,7 +13,7 @@ import { isTauri } from '../../utils/tauri.utils';
   standalone: true,
   imports: [FormsModule, LucideAngularModule, CommonModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'] // (styleUrl -> styleUrls si besoin)
+  styleUrls: ['./login.component.css'] 
 })
 export class LoginComponent implements OnInit {
   email = '';
@@ -21,14 +21,13 @@ export class LoginComponent implements OnInit {
   returnUrl = '';
   platformName: string | null = null;
   submitting = false;
-  authError: string | null = null; // Erreur d'authentification (serveur)
+  authError: string | null = null;
   error: boolean = false;
   errorMessage: string = 'Une erreur est survenue';
 
 
   constructor(
     private _authService: AuthentificationService,
-    private route: ActivatedRoute,
     private router: Router,
     public translateService: TranslateService
   ) {}
@@ -51,9 +50,7 @@ export class LoginComponent implements OnInit {
   }
 
   clickLogin(form: NgForm): void {
-    // Nettoie le message d'erreur serveur
     this.authError = null;
-
     // Si le formulaire est invalide, on marque les champs et on stoppe
     if (form.invalid) {
       Object.values(form.controls).forEach(c => c.markAsTouched());

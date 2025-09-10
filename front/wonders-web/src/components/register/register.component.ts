@@ -20,11 +20,13 @@ export class RegisterComponent implements OnInit {
   returnUrl = '';
   countries: Country[] = [];
   languages: any[] = [];
-
   passwordErrors: string[] = [];
   emailServerError: string | null = null;
   generalError: string | null = null;
   submitting = false;
+  todayISO = new Date().toISOString().slice(0, 10);
+  minBirthISO = '1900-01-01';
+  birthDateStr = '';
 
   user: User = {
     email: '',
@@ -32,7 +34,7 @@ export class RegisterComponent implements OnInit {
     first_name: '',
     last_name: '',
     role_id: 1,
-    birth_date: new Date(), 
+    birth_date: null as any,
     country_id: 0,
     language_id: 1
   };
@@ -81,24 +83,29 @@ export class RegisterComponent implements OnInit {
     this.passwordErrors = errs;
   }
 
-  clickRegister(f: NgForm): void {
+ clickRegister(f: NgForm): void {
     this.emailServerError = null;
     this.generalError = null;
 
-    if (this.user.birth_date && typeof this.user.birth_date === 'string') {
-      const d = new Date(this.user.birth_date);
-      if (!isNaN(d.getTime())) this.user.birth_date = d as any;
-    }
     if (f?.invalid || this.passwordErrors.length > 0) {
-      if (f?.controls) {
-        Object.values(f.controls).forEach((c: any) => c.control?.markAsTouched?.());
-      }
+      if (f?.controls) Object.values(f.controls).forEach((c: any) => c.control?.markAsTouched?.());
       return;
     }
 
-    this.submitting = true;
+    if (!this.birthDateStr ||
+        this.birthDateStr < this.minBirthISO ||
+        this.birthDateStr > this.todayISO) {
+      this.generalError = "Date d'anniversaire invalide.";
+      return;
+    }
 
-    this._authService.register(this.user).subscribe({
+    const payload: User = {
+      ...this.user,
+      birth_date: new Date(this.birthDateStr) as any
+    };
+
+    this.submitting = true;
+    this._authService.register(payload).subscribe({
       next: (data: any) => {
         if (data && typeof data === 'object' && ('user' in data || data?.message === 'client created successfully.')) {
           this.router.navigate(['/', this.translateService.currentLang, 'login'], {
@@ -115,7 +122,6 @@ export class RegisterComponent implements OnInit {
         this.submitting = false;
         const raw = (error?.error ?? '').toString();
         const msg = raw.toLowerCase();
-
         if (error.status === 403 && (msg.includes('already') || msg.includes('registered'))) {
           this.emailServerError = 'Un compte existe déjà avec cet email.';
         } else if (error.status === 400 || msg.includes('password') || msg.includes('weak')) {
