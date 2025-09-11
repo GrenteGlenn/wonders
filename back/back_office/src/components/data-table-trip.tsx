@@ -124,8 +124,8 @@ export const schema = z.object({
     }),
     user: z.object({
         id: z.number(),
-        first_name: z.string(),
-        last_name: z.string(),
+        first_name: z.string().optional(),
+        last_name: z.string().optional(),
         email: z.string(),
         birth_date: z.string()
     }),
@@ -211,7 +211,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.user.first_name}
+                    {row.original.user.first_name ? row.original.user.first_name : "inconnu"}
                 </Badge>
             </div>
         ),
@@ -223,7 +223,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
         cell: ({row}) => (
             <div className="w-32">
                 <Badge variant="outline" className="text-muted-foreground px-1.5">
-                    {row.original.user.last_name}
+                    {row.original.user.last_name ? row.original.user.last_name : "inconnu"}
                 </Badge>
             </div>
         ),
