@@ -155,23 +155,9 @@ export class ActivitiesComponent {
     //   category: this.selectedCategory?.name || '',
     //   country: this.cityName,
     //   longitude: city.longitude,
-    //   latitude: city.latitude
+    //   latitude: city.latitude,
     // });
   }
 
-  // onSubmit() {
-  //   if (this.selectedCategory && this.selectedCity) {
-  //     const activity = {
-  //       name: this.selectedCity.city,
-  //       category: this.selectedCategory.name,
-  //       image: this.selectedCity.img_full,
-  //       date: new Date(),
-  //       pays: this.cityName,
-  //       description: this.selectedCity.description
-  //     };
-
-  //     this.toastService.success('Activité ajoutée avec succès !');
-
-  //   }
-  // }
+ 
 }

@@ -141,7 +141,7 @@ export class HotelComponent implements OnInit {
             offers: null,
             hasOffers: false
           }))
-          .slice(99);
+          
 
         this.searchDone = true;
         this.currentPage = 1;

@@ -32,6 +32,16 @@ export class QuestionComponent implements OnInit {
   proposalCountries: AIProposalCountry[] = [];
   isProposalLoading: boolean = true;
   private allCountries: Country[] = [];
+  private cleanCountryName(s: string | null | undefined): string {
+    return (
+      String(s ?? '')
+        // retire guillemets droits et typographiques
+        .replace(/["“”«»]/g, '')
+        // compacte les espaces
+        .replace(/\s+/g, ' ')
+        .trim()
+    );
+  }
 
   constructor(
     private router: Router,
@@ -52,16 +62,11 @@ export class QuestionComponent implements OnInit {
   }
 
   onSelectProposal(suggestion: any) {
-    this.router.navigate(
-      ['/', this.translateService.currentLang, 'stepBody'],
-      {
-        queryParams: {
-          country: suggestion.pays, 
-          image: suggestion.img_full 
-        }
-      }
-    );
-  }
+  const pays = this.cleanCountryName(suggestion.pays);
+  this.router.navigate(['/', this.translateService.currentLang, 'stepBody'], {
+    queryParams: { country: pays, image: suggestion.img_full }
+  });
+}
 
   loadUserAnswers() {
     this.questionnaireService.getUserAllAnswers().subscribe({
@@ -259,12 +264,12 @@ export class QuestionComponent implements OnInit {
         map(({ suggestion, countries }) => {
           this.allCountries = countries ?? [];
           const top3 = (suggestion?.data ?? []).slice(0, 3);
-
-          // Enrichit chaque proposition avec l'image depuis la BDD si on trouve le pays
           return top3.map((item: any) => {
-            const dbImg = this.findDbImageFor(item.pays);
+            const paysClean = this.cleanCountryName(item.pays);
+            const dbImg = this.findDbImageFor(paysClean);
             return {
               ...item,
+              pays: paysClean,
               img_full: dbImg || item?.img_full || 'assets/images/noimages.jpg'
             };
           });

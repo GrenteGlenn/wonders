@@ -30,12 +30,12 @@ export const routes: Routes = [
   {
     path: ':lang',
     children: [
-      { path: 'home', component: HomePageComponent, canActivate: [authGuard] },
+      { path: 'home', component: HomePageComponent},
       { path: 'question', component: QuestionComponent, canActivate: [authGuard] },
       { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
-      { path: 'destination', component: DestinationsComponent, canActivate: [authGuard] },
+      { path: 'destination', component: DestinationsComponent },
       { path: 'activities', component: ActivitiesComponent, canActivate: [authGuard] },
       { path: 'choice-guide', component: ChoiceGuideComponent, canActivate: [authGuard] },
       { path: 'direct-planning', component: DirectPlanningComponent, canActivate: [authGuard] },
