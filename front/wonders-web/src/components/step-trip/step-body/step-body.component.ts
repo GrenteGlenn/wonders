@@ -14,7 +14,8 @@ import { FullTrip, TripService } from '../../../app/service/trip/trip.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '../../../app/service/translate/translate.service';
 import { UsersService } from '../../../app/service/users/users.service';
-import { combineLatest } from 'rxjs';
+import { catchError, combineLatest, map, of, switchMap } from 'rxjs';
+import { CityService } from '../../../app/service/city/city.service';
 
 @Component({
   selector: 'app-step-body',
@@ -38,6 +39,47 @@ export class StepBodyComponent {
 
   private toastService = inject(ToastService);
   private tripService = inject(TripService);
+  private norm(s: string | null | undefined): string {
+    return (
+      String(s ?? '')
+        .normalize('NFD')
+        // @ts-ignore (unicode classes)
+        .replace(/\p{Diacritic}/gu, '')
+        .replace(/["“”«»']/g, '')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+        .trim()
+    );
+  }
+
+  private findCountryByName(rawName: string) {
+    const target = this.norm(rawName);
+    let m = this.countries.find((c) => this.norm(c.name) === target);
+    if (m) return m;
+    m = this.countries.find((c) => {
+      const n = this.norm(c.name);
+      return n.includes(target) || target.includes(n);
+    });
+    if (m) return m;
+
+    //synonymes
+    const syn: Record<string, string> = {
+      marroc: 'maroc',
+      cotedivoire: 'cote divoire',
+      royaumeuni: 'royaume uni',
+      emiratsarabesunis: 'emirats arabes unis',
+      republiquetcheque: 'tchequie',
+      etatsunis: 'etats unis'
+    };
+    const s = syn[target];
+    if (s) {
+      const target2 = this.norm(s);
+      m = this.countries.find((c) => this.norm(c.name) === target2);
+      if (m) return m;
+    }
+
+    return null;
+  }
 
   countries: any[] = [];
   selectedCountry: string = '';
@@ -62,8 +104,31 @@ export class StepBodyComponent {
     private router: Router,
     public translateService: TranslateService,
     private user: UsersService,
-    private route: ActivatedRoute 
+    private route: ActivatedRoute,
+    private cityService: CityService
   ) {}
+
+  private findCityIdByName(name: string, countryName?: string) {
+    const target = this.norm(name);
+    const country = countryName ? this.norm(countryName) : null;
+
+    return this.cityService.getAllCities().pipe(
+      map((cities) => {
+        const arr = (cities || []).filter((c) => c?.name && (!country || this.norm(c.country?.name) === country));
+
+        // match exact normalisé
+        let hit = arr.find((c) => this.norm(c.name) === target);
+        if (hit?.id) return hit.id;
+
+        // match partiel tolérant
+        hit = arr.find((c) => {
+          const n = this.norm(c.name);
+          return n.includes(target) || target.includes(n);
+        });
+        return hit?.id ?? null;
+      })
+    );
+  }
 
   handleDestinationSelected(destination: Destination) {
     this.selectedDestination = {
@@ -84,7 +149,8 @@ export class StepBodyComponent {
       description: activity.description,
       image: activity.image,
       latitude: activity.latitude,
-      longitude: activity.longitude
+      longitude: activity.longitude,
+      city_id: activity.city_id
     };
   }
   handleFlightSelected(flight: any) {
@@ -122,26 +188,22 @@ export class StepBodyComponent {
     if (this.currentStep > 1) this.currentStep--;
   }
 
-  // ngOnInit() {
-  //   this.loadCountries();
-  // }
-
   ngOnInit() {
-  const countries$ = this.countryService.getAllCountries();
-  const qp$ = this.route.queryParams;
+    const countries$ = this.countryService.getAllCountries();
+    const qp$ = this.route.queryParams;
 
-  combineLatest([countries$, qp$]).subscribe({
-    next: ([countries, qp]) => {
-      this.countries = countries ?? [];
-
-      const preselected = qp['country'];
-      if (preselected) {
-        this.onCountrySelect(preselected);
-      }
-    },
-    error: (err) => console.error('Init step body failed', err),
-  });
-}
+    combineLatest([countries$, qp$]).subscribe({
+      next: ([countries, qp]) => {
+        this.countries = countries ?? [];
+        const preselectedRaw = qp['country'];
+        if (preselectedRaw) {
+          const preselected = this.norm(preselectedRaw);
+          this.onCountrySelect(preselectedRaw);
+        }
+      },
+      error: (err) => console.error('Init step body failed', err)
+    });
+  }
 
   submitTrip() {
     if (!this.selectedDestination || !this.selectedActivity || !this.selectedFlight || !this.selectedHotel) {
@@ -150,14 +212,36 @@ export class StepBodyComponent {
     }
 
     const activityId = this.selectedActivity?.id;
-
     if (!activityId) {
       this.toastService.error('Aucune activité sélectionnée.');
       return;
     }
 
-    this.user.getUserInfo().subscribe({
-      next: (user) => {
+    const nameFromActivity = this.selectedActivity?.name as string | undefined;
+    const cityId$ = this.selectedActivity?.city_id
+      ? of(Number(this.selectedActivity.city_id))
+      : this.findCityIdByName(nameFromActivity ?? '', this.selectedDestination?.name).pipe(
+          switchMap((id) => (id != null ? of(id) : this.findCityIdByName(nameFromActivity ?? '')))
+        );
+
+    this.user
+      .getUserInfo()
+      .pipe(
+        switchMap((user) => cityId$.pipe(map((cityId) => ({ user, cityId })))),
+        catchError((err) => {
+          this.toastService.error('Impossible de préparer le voyage.');
+          return of(null);
+        })
+      )
+      .subscribe((ctx) => {
+        if (!ctx) return;
+        const { user, cityId } = ctx;
+
+        if (!cityId) {
+          this.toastService.error('Ville introuvable dans la base (nom et coordonnées).');
+          return;
+        }
+
         const payload: FullTrip = {
           trip: {
             user_id: user.id,
@@ -175,7 +259,7 @@ export class StepBodyComponent {
           },
           trip_cities: [
             {
-              city_id: 1,
+              city_id: Number(cityId), 
               transportations: {
                 from_date: this.selectedFlight.departureTime,
                 to_date: this.selectedFlight.arrivalTime,
@@ -184,14 +268,9 @@ export class StepBodyComponent {
                 status: 'APayer'
               },
               tripCityDays: [{ date: '2025-08-02' }, { date: '2025-08-03' }],
-              tripDayActivities: [
-                {
-                  activity_id: activityId,
-                  status: 'Reserve'
-                }
-              ],
+              tripDayActivities: [{ activity_id: activityId, status: 'Reserve' }],
               tripCityHotel: {
-                trip_city_id: 1,
+                trip_city_id: Number(cityId),
                 name: this.selectedHotel.name,
                 price: 100,
                 from: '2025-08-02',
@@ -220,22 +299,7 @@ export class StepBodyComponent {
             this.isSubmitting = false;
           }
         });
-      },
-      error: () => {
-        this.toastService.error("Impossible de récupérer l'utilisateur connecté.");
-      }
-    });
-
-    // this.tripService.createFullTrip(payload).subscribe({
-    //   next: () => {
-    //     this.toastService.success('Voyage enregistré avec succès !');
-    //     this.currentStep = 1;
-    //   },
-    //   error: (err) => {
-    //     console.error('Erreur lors de la création du voyage :', err);
-    //     this.toastService.error('Erreur lors de la création du voyage');
-    //   }
-    // });
+      });
   }
 
   loadCountries() {
@@ -249,19 +313,21 @@ export class StepBodyComponent {
     });
   }
   onCountrySelect(countryName: string) {
-    if (!countryName || !this.countries || this.countries.length === 0) return;
+    if (!countryName || !this.countries?.length) return;
 
     this.isLoading = true;
+    const cleaned = this.norm(countryName);
+    const countryData = this.findCountryByName(cleaned);
+
     this.selectedCountry = countryName;
     this.destinationParams = { country: countryName };
-
-    const countryData = this.countries.find((c) => c.name.toLowerCase() === countryName.toLowerCase());
 
     if (countryData) {
       this.countryImage = countryData.image || 'assets/images/noimages.jpg';
       this.countryDescription = countryData.description || 'Aucune description disponible.';
 
       this.selectedDestination = {
+        id: countryData.id,
         name: countryData.name,
         image: countryData.image,
         description: countryData.description,
@@ -270,10 +336,10 @@ export class StepBodyComponent {
         longitude: countryData.longitude
       };
     } else {
-      this.countryImage = 'assets/images/noimages.jpg';
+      this.countryImage = this.countryImage || 'assets/images/noimages.jpg';
       this.countryDescription = 'Information non disponible.';
+      this.selectedDestination = null;
     }
-
     this.isLoading = false;
   }
 }
