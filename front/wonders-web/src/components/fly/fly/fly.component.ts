@@ -1,5 +1,14 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
+} from '@angular/forms';
 import { FlightOffersResponse, FlightSearchParams, FlyService } from '../../../app/service/fly/fly.service';
 import { LucideAngularModule } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
@@ -27,9 +36,6 @@ export class FlyComponent {
   destinationAirports: Airport[] = [];
   originAirports: Airport[] = [];
   allAirports: Airport[] = [];
-
-  
-
 
   // Pour la pagination des résultats
   currentPage = 1;
@@ -75,23 +81,34 @@ export class FlyComponent {
     { code: 'FCO', name: 'Rome' }
   ];
 
+  private requireTravellers(): ValidatorFn {
+    return (group: AbstractControl): ValidationErrors | null => {
+      const a = +(group.get('adults')?.value ?? 0);
+      const c = +(group.get('children')?.value ?? 0);
+      return a + c >= 1 ? null : { travellerCount: true };
+    };
+  }
+
   constructor(
     private fb: FormBuilder,
     private flyService: FlyService,
     private airportsService: AirportsService
   ) {
-    this.searchForm = this.fb.group({
-      originLocationCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-      destinationLocationCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-      departureDate: ['', [Validators.required, Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]],
-      returnDate: ['', [Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]],
-      adults: ['2', [Validators.required, Validators.min(1)]],
-      children: ['0'],
-      nonStop: [false],
-      includeNearbyAirports: [false],
-      travelClass: ['ECONOMY'],
-      maxPrice: [null, [Validators.min(1)]]
-    });
+    this.searchForm = this.fb.group(
+      {
+        originLocationCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        destinationLocationCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
+        departureDate: ['', [Validators.required, Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]],
+        returnDate: ['', [Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]],
+        adults: [null, [Validators.required, Validators.min(1)]],
+        children: [0, [Validators.min(0)]],
+        nonStop: [false],
+        includeNearbyAirports: [false],
+        travelClass: ['ECONOMY'],
+        maxPrice: [null, [Validators.required, Validators.min(1)]]
+      },
+      { validators: [this.requireTravellers()] }
+    );
   }
 
   ngOnInit(): void {
@@ -146,7 +163,7 @@ export class FlyComponent {
           });
         }
 
-        this.refreshOriginAirports(); 
+        this.refreshOriginAirports();
       },
       error: (err) => {
         console.error('Erreur lors du chargement des aéroports par géo :', err);
@@ -256,31 +273,30 @@ export class FlyComponent {
       DL: 'Delta',
       UA: 'United Airlines',
       AA: 'American Airlines',
-      '6X': 'AirMock' 
+      '6X': 'AirMock'
     };
 
     return airlineMap[code] || code;
   }
 
-onCitySelected(cityName: string) {
-  this.selectedCityName = cityName;
+  onCitySelected(cityName: string) {
+    this.selectedCityName = cityName;
 
-  this.airportsService.getAirportsByCityName(cityName).subscribe({
-    next: (airports) => {
-      this.destinationAirports = airports ?? [];
-      if (airports.length) {
-        this.searchForm.patchValue({ destinationLocationCode: airports[0].code });
+    this.airportsService.getAirportsByCityName(cityName).subscribe({
+      next: (airports) => {
+        this.destinationAirports = airports ?? [];
+        if (airports.length) {
+          this.searchForm.patchValue({ destinationLocationCode: airports[0].code });
+        }
+        this.refreshOriginAirports();
+      },
+      error: (err) => {
+        console.error('Erreur chargement aéroports:', err);
+        this.destinationAirports = [];
+        this.refreshOriginAirports();
       }
-      this.refreshOriginAirports(); 
-    },
-    error: (err) => {
-      console.error('Erreur chargement aéroports:', err);
-      this.destinationAirports = [];
-      this.refreshOriginAirports(); 
-    }
-  });
-}
-
+    });
+  }
 
   // Déterminer le prix minimum et maximum
   setMinMaxPrices(): void {
@@ -419,12 +435,21 @@ onCitySelected(cityName: string) {
 
   resetSearch(): void {
     this.searchForm.reset({
-      adults: '2',
-      children: '0',
+      originLocationCode: '',
+      destinationLocationCode: '',
+      departureDate: '',
+      returnDate: '',
+      adults: null,
+      children: 0,
       nonStop: false,
       includeNearbyAirports: false,
-      travelClass: 'ECONOMY'
+      travelClass: 'ECONOMY',
+      maxPrice: null
     });
+    this.searchCompleted = false;
+    this.flights = [];
+    this.filteredFlights = [];
+
     const today = new Date();
     const returnDate = new Date();
     returnDate.setDate(today.getDate() + 7);

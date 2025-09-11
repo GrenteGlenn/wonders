@@ -15,7 +15,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
           <!-- Origine -->
           <div class="form-group">
-            <label for="origin" class="block text-sm font-medium text-gray-700 mb-1">Départ</label>
+            <label for="origin" class="block text-sm font-medium text-gray-700 mb-1">Départ <span class="text-red-500">*</span></label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <lucide-icon name="plane-takeoff" class="h-5 w-5 text-gray-400"></lucide-icon>
@@ -35,7 +35,7 @@
 
           <!-- Destination -->
           <div class="form-group">
-            <label for="destination" class="block text-sm font-medium text-gray-700 mb-1">Destination</label>
+            <label for="destination" class="block text-sm font-medium text-gray-700 mb-1">Destination <span class="text-red-500">*</span></label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <lucide-icon name="plane-landing" class="h-5 w-5 text-gray-400"></lucide-icon>
@@ -89,7 +89,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <!-- Nombre de voyageurs -->
           <div class="form-group">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Voyageurs</label>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Voyageurs <span class="text-red-500">*</span></label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <lucide-icon name="users" class="h-5 w-5 text-gray-400"></lucide-icon>
@@ -139,7 +139,7 @@
 
           <!-- Prix max -->
           <div class="form-group">
-            <label for="maxPrice" class="block text-sm font-medium text-gray-700 mb-1">Budget maximum</label>
+            <label for="maxPrice" class="block text-sm font-medium text-gray-700 mb-1">Budget maximum <span class="text-red-500">*</span></label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <lucide-icon name="euro" class="h-5 w-5 text-gray-400"></lucide-icon>
@@ -169,15 +169,6 @@
               />
               <label for="nonStop" class="ml-2 block text-sm text-gray-700">Vol direct uniquement</label>
             </div>
-            <!-- <div class="flex items-center">
-              <input
-                type="checkbox"
-                id="includeNearbyAirports"
-                formControlName="includeNearbyAirports"
-                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-              />
-              <label for="includeNearbyAirports" class="ml-2 block text-sm text-gray-700">Aéroports à proximité</label>
-            </div> -->
           </div>
 
           <div class="flex space-x-3">
@@ -191,7 +182,7 @@
             </button>
             <button
               type="submit"
-              [disabled]="isSearching"
+              [disabled]="isSearching || searchForm.invalid"
               class="py-2.5 px-6 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 flex items-center"
             >
               <lucide-icon name="search" class="h-4 w-4 mr-2" *ngIf="!isSearching"></lucide-icon>
