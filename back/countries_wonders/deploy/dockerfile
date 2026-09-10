@@ -14,7 +14,7 @@ RUN npm install --omit=dev && npm cache clean --force
 
 RUN mkdir config/
 RUN echo '{"development":{"username":"gpebackcountriesuser","password":"MGH3hYgicRtZAhe2ELJMK5Qn5lF7BhS3","database":"gpebackcountries","host":"163.5.107.36","port":"5432","dialect":"postgres"}}' > ./config/config.json
-RUN echo -e 'DB_NAME=gpebackcountries \nDB_USER=gpebackcountriesuser \nDB_PASSWORD=MGH3hYgicRtZAhe2ELJMK5Qn5lF7BhS3 \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001 \nOPENAI_API_KEY=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 \nGOOGLE_KEY=AIzaSyAdCTrUOHm3FP7IIvkZ0Y8BH1Mc7ukgM1k \nSECRET_KEY_OPEN_TRIP_MAP=5ae2e3f221c38a28845f05b6b136e5518f64bb90fb2fc6e2d28763b5 \nCX=f7fb2634f2ac0412b' > .env
+RUN echo -e 'DB_NAME=gpebackcountries \nDB_USER=gpebackcountriesuser \nDB_PASSWORD="" \nDB_HOST=163.5.107.36 \nDB_DIALECT=postgres \nJWT_SECRET_KEY=1223456789abcdef \nPORT=3001 \nOPENAI_API_KEY="" \nGOOGLE_KEY="" \nSECRET_KEY_OPEN_TRIP_MAP="" \nCX=f7fb2634f2ac0412b' > .env
 RUN cat .env
 CMD ["node", "dist/index.js"]
 EXPOSE 3001
