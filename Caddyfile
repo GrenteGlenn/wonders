@@ -1,10 +1,10 @@
 *.wonders-travel.fr {
     tls {
         dns ovh {
-                      endpoint "ovh-eu"
-                      application_key 49680bf7dbdfa0b1
-                      application_secret cee9054bbe88af81e4ceb9f0276bc6ca
-                      consumer_key f3e9a8d17f33ebdeab0adf384fd5861f
+                    endpoint "ovh-eu"
+                    application_key {env.OVH_APPLICATION_KEY}
+                    application_secret {env.OVH_APPLICATION_SECRET}
+                    consumer_key {env.OVH_CONSUMER_KEY}
                 }
     }
 

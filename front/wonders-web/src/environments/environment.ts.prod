@@ -10,6 +10,6 @@ export const environment = {
   countryImgUrl: 'https://countries.wonders-travel.fr',
   quizzApiUrl: 'https://quizz.wonders-travel.fr',
   aiApiUrl: 'https://countries.wonders-travel.fr',
-  API_GoogleMap : 'AIzaSyAdCTrUOHm3FP7IIvkZ0Y8BH1Mc7ukgM1k'
+  API_GoogleMap : 'YOUR_GOOGLE_MAPS_KEY'
 };
 
